@@ -1,0 +1,348 @@
+<template>
+  <div class="app-container">
+         
+        <div class="query">
+      <el-row>
+        <el-form :inline="true" label-width="100px">
+           
+           <el-col :span="8">
+            <el-form-item label="玩家渠道">
+                <el-select v-model="formInline.id" clearable>
+                <el-option
+                  v-for="item in statuslist"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="玩家账号">
+                <el-input v-model="formInline.number" placeholder="请输入要查询的关键词" clearable></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+                <el-form-item label="常规开奖时间">
+                <el-date-picker
+                    v-model="formInline.time1"
+                    type="datetimerange"
+                    :editable="false"
+                    range-separator="-"
+                    start-placeholde="开始日期"
+                    end-placeholde="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+          </el-col>
+
+          
+        </el-form>
+      </el-row>
+      <el-row>
+        <el-form :inline="true" label-width="100px">
+            <el-col :span="8">
+                <el-form-item label="比倍开奖时间">
+                <el-date-picker
+                    v-model="formInline.time2"
+                    type="datetimerange"
+                    :editable="false"
+                    range-separator="-"
+                    start-placeholde="开始日期"
+                    end-placeholde="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+          </el-col>
+          <el-col :span="8">
+                <el-form-item label="彩金开奖时间">
+                <el-date-picker
+                    v-model="formInline.time3"
+                    type="datetimerange"
+                    :editable="false"
+                    range-separator="-"
+                    start-placeholde="开始日期"
+                    end-placeholde="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+          </el-col>
+            <el-col :span="2">
+            <el-button type="primary" icon="el-icon-search" @click='query()' v-if="gamewmgplayrecgetlist">查询</el-button>
+          </el-col>
+        </el-form>
+      </el-row>
+        </div>
+          <el-table
+        :data="tableData"
+        border
+        style="width: 100%;">
+        <el-table-column
+          width="50"
+          label="ID"
+          prop="id">
+        </el-table-column>
+        <el-table-column
+          label="玩家渠道"
+          prop="org_name">
+        </el-table-column>
+        <el-table-column
+          label="玩家账号"
+          prop="user_account">
+        </el-table-column>
+        <el-table-column
+              label="常规下注金额">
+              <template slot-scope="scope">
+                {{scope.row.co_bet_money}}
+              </template>
+            </el-table-column>
+        <el-table-column
+          label="比倍下注金额"
+          prop="cm_bet_money">
+        </el-table-column>
+        <el-table-column
+          label="比倍下注代码"
+          prop="cm_bet_code">
+        </el-table-column>
+        <el-table-column
+          label="比倍方式"
+          prop="cm_mode">
+        </el-table-column>
+        <el-table-column
+          label="常规奖励金额"
+          prop="co_reward">
+        </el-table-column>
+        <el-table-column
+          label="彩金奖励金额"
+          prop="tg_reward">
+        </el-table-column>
+        <el-table-column
+          label="比倍奖励金额"
+          prop="cm_reward">
+        </el-table-column>
+        <el-table-column
+          label="常规开奖时间"
+          prop="co_open_time">
+        </el-table-column>
+        <el-table-column
+          label="比倍开奖时间"
+          prop="cm_open_time">
+        </el-table-column>
+        <el-table-column
+          label="彩金开奖时间"
+          prop="tg_open_time">
+        </el-table-column>
+        <el-table-column
+          label="比倍骰子点数"
+          prop="cm_dice_points">
+        </el-table-column>
+        <el-table-column
+          label="常规开奖图案"
+          prop="co_open_pattern">
+        </el-table-column>
+        <el-table-column
+          label="彩金开奖次数"
+          prop="tg_num">
+        </el-table-column>
+        <el-table-column
+          label="彩金开奖图案"
+          prop="tg_open_pattern">
+        </el-table-column>
+      </el-table>
+
+      
+<div class="pagingbox">
+    <div class="paging" style="margin-top: 20px;">
+      <el-pagination
+        :current-page.sync="currentPage"
+        :page-size="pagesize"
+        :page-sizes="[50,100,200]"
+        :total="total"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+        background
+        layout="sizes, prev, pager, next, jumper">
+      </el-pagination>
+    </div>
+  </div>
+
+    
+  
+
+
+
+
+      
+  </div>
+</template>
+
+<script>
+import request from '@/utils/request'
+import { mapGetters } from 'vuex'
+import { getToken } from '../../utils/auth';
+  export default {
+    name: "accountchange",
+    data() {
+      return {
+        total: 0,
+        pagesize: 50,
+        currentPage: 1,
+        tableData: [],
+        formInline: {
+            number: '',
+            time1: [],
+            time2: [],
+            time3: [],
+            id: ''
+        },
+        statuslist: []
+      }
+    },
+    created () {
+      let that = this
+      getaccount(this)
+      if (!this.gamerecord.length && this.gamerecord.length != 0) {
+        that.formInline.id = this.gamerecord.id
+        that.formInline.number = this.gamerecord.number
+        that.formInline.time1 = this.gamerecord.time1
+        that.formInline.time2 = this.gamerecord.time2
+        that.formInline.time3 = this.gamerecord.time3
+        that.currentPage = this.gamerecord.currentPage
+        that.pagesize = this.gamerecord.pagesize
+        getlist(that)
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'gamewmgplayrecgetlist',
+        'gamerecord'
+      ])
+    },
+    filters: {
+    },
+    methods: {
+      handleCurrentChange(val) {
+        let that = this
+        this.currentPage = val *1
+        getlist(this)
+        let setgamerecord = {
+        'id': that.formInline.id,
+        'currentPage': that.currentPage,
+        'pagesize': that.pagesize,
+        'number': that.formInline.number,
+        'time1': that.formInline.time1,
+        'time2': that.formInline.time2,
+        'time3': that.formInline.time3,
+      }
+      this.$store.commit('setgamerecord', setgamerecord)
+      },
+      handleSizeChange(val) {
+        let that = this
+        this.pagesize = val
+        this.currentPage = 1
+        getlist(this)
+        let setgamerecord = {
+        'id': that.formInline.id,
+        'currentPage': that.currentPage,
+        'pagesize': that.pagesize,
+        'number': that.formInline.number,
+        'time1': that.formInline.time1,
+        'time2': that.formInline.time2,
+        'time3': that.formInline.time3,
+      }
+      this.$store.commit('setgamerecord', setgamerecord)
+      },
+      query () {
+        let that = this
+        getlist(this)
+        let setgamerecord = {
+        'id': that.formInline.id,
+        'currentPage': that.currentPage,
+        'pagesize': that.pagesize,
+        'number': that.formInline.number,
+        'time1': that.formInline.time1,
+        'time2': that.formInline.time2,
+        'time3': that.formInline.time3,
+      }
+      this.$store.commit('setgamerecord', setgamerecord)
+      },
+    }
+  }
+
+  function getlist (that) {
+    var start = ''
+    var end = '' 
+    var start2 = ''
+    var end2 = '' 
+    var start3 = ''
+    var end3 = '' 
+    if (that.formInline.time1 && that.formInline.time1.length > 0) {
+      start = parseTime(that.formInline.time1[0].getTime() /1000)
+      end = parseTime(that.formInline.time1[1].getTime() /1000)
+    }
+    if (that.formInline.time2 && that.formInline.time2.length > 0) {
+      start2 = parseTime(that.formInline.time2[0].getTime() /1000)
+      end2 = parseTime(that.formInline.time2[1].getTime() /1000)
+    }
+    if (that.formInline.time3 && that.formInline.time3.length > 0) {
+      start3 = parseTime(that.formInline.time3[0].getTime() /1000)
+      end3 = parseTime(that.formInline.time3[1].getTime() /1000)
+    }
+    request({
+      url: that.public.url + '/backend/gamewmgplayrec/getlist',
+      method: 'post',
+      data: {
+        org_id: that.formInline.id,
+        user_account: that.formInline.number,
+        co_open_time_from: start,
+        co_open_time_to: end,
+        cm_open_time_from: start2,
+        cm_open_time_to: end2,
+        tg_open_time_from: start3,
+        tg_open_time_to: end3,
+        pageno: that.currentPage,
+        pagerows: that.pagesize
+      }
+    }).then(res => {
+      that.tableData = res.data.list
+      that.total = res.data.rownum *1
+      that.currentPage = res.data.pageno * 1
+    }).catch(error => {
+    })
+  }
+
+
+  function parseTime(time) {
+    var date = new Date(time *1000);
+    let y = date.getFullYear() + '-'
+    let m = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-'
+    let d = (date.getDate()<10?'0'+(date.getDate()):date.getDate()) + ' ';
+    let h = (date.getHours()<10?'0'+(date.getHours()):date.getHours()) + ':';
+    let i = (date.getMinutes()<10?'0'+(date.getMinutes()):date.getMinutes())+':';
+    let s = (date.getSeconds()<10?'0'+(date.getSeconds()):date.getSeconds());
+    return y+m+d+h+i+s
+}
+
+
+function getaccount (that) {
+  request({
+    url: that.public.url + '/backend/org/getorglist',
+    method: 'post',
+    data: {
+    }
+  }).then(res => {
+    let all = {id: "", name: "全部"}
+    that.statuslist = res.data
+    that.statuslist.unshift(all)
+  }).catch(error => {
+  })
+}
+</script>
+
+<style>
+  .paging {
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+</style>

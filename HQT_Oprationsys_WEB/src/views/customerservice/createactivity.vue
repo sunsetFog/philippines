@@ -1,0 +1,392 @@
+<template>
+  <div class="app-container">
+    <div class="query">
+      <el-row>
+        <el-form :inline="true" label-width="80px">
+          <el-col :span="3">
+            <el-button type="info" round @click="add" v-if="gameactivityadd">添加活动 </el-button>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="主题">
+                <el-input v-model="formInline.user" placeholder="主题" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="发送日期">
+              <el-date-picker
+              v-model="formInline.time"
+              type="datetimerange"
+              :editable="false"
+              range-separator="-"
+              start-placeholde="开始日期"
+              end-placeholde="结束日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameactivitygetlist">查询</el-button>
+          </el-col>
+        </el-form>
+      </el-row>
+    </div>
+    <div class="pagingbox">
+    <div class="paging">
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-size="pagesize"
+      background
+      layout="prev, next, jumper"
+      :total="total">
+    </el-pagination>
+    </div>
+    </div>
+
+    <el-table
+    :data="tableData"
+    border
+    style="width: 100%">
+    <el-table-column
+      prop="creator_name"
+      label="创建人">
+    </el-table-column>
+    <el-table-column
+      prop="title"
+      label="活动主题">
+    </el-table-column>
+    <el-table-column
+      prop="content"
+      label="活动内容">
+    </el-table-column>
+     <el-table-column
+      prop="validtime"
+      width="300"
+      label="有效时间">
+    </el-table-column>
+    <el-table-column
+      prop="create_time"
+      label="创建时间">
+    </el-table-column>
+    <el-table-column
+      fixed="right"
+      label="操作">
+      <template slot-scope="scope">
+        <el-button @click="edit(scope.row)" type="text" size="small" v-if="gameactivityupdate">修改</el-button>
+        <el-button type="text" size="small" @click="delet(scope.row)" v-if='gameactivitydel'>删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+
+<div class="pagingbox">
+  <div class="paging">
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-sizes="[50,100,200]"
+      :page-size="pagesize"
+      background
+      layout="sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
+  </div>
+</div>
+
+
+  <el-dialog :title='title'  :visible.sync="dialogFormVisible" :before-close="reset">
+    <el-form :model="form" :rules="rules" ref="form">
+      <el-form-item label="主题" :label-width="formLabelWidth" prop="name">
+        <el-input v-model="form.name"></el-input>
+      </el-form-item>
+      <el-form-item label="有效时间" :label-width="formLabelWidth" prop="time">
+      <el-radio-group v-model="form.time"  @change="time">
+        <el-radio label="1">指定时间</el-radio>
+        <el-radio label="2">永久有效</el-radio>
+      </el-radio-group>
+      </el-form-item>
+      <el-form-item label="" :label-width="formLabelWidth" prop="time1" v-if="timeshow">
+        <el-date-picker
+              v-model="form.time1"
+              type="daterange"
+              range-separator="-"
+              start-placeholde="开始日期"
+              end-placeholde="结束日期">
+              </el-date-picker>
+      </el-form-item>
+      <el-form-item label="内容" :label-width="formLabelWidth" prop="desc">
+        <el-input v-model="form.desc" type="textarea"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="reset(form)">取 消</el-button>
+      <el-button type="primary" @click="sure(form)">确 定</el-button>
+    </div>
+
+  </el-dialog>
+
+  </div>
+</template>
+
+<script>
+import request from '@/utils/request'
+import { mapGetters } from 'vuex'
+export default {
+  filters: {
+  },
+  data() {
+    return {
+      formInline: {
+        user: '',
+        time: ''
+      },
+      currentPage: 1,
+      tableData: [],
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        desc: '',
+        time: '1',
+        time1: []
+      },
+      rules: {
+        name: [
+          {required: true, message: '请输入主题', trigger: 'blur'}
+          // {min: 2, max:11, message: '长度大于六个字符小于11个字符', trigger: 'blur'}
+        ],
+        time: [
+          {required: true, message: '请选类型', trigger: 'change'}
+        ],
+        desc: [
+          {required: true, message: '请输入说明', trigger: 'blur'}
+        ],
+        time1: [
+          {required: true, message: '请选类型', trigger: 'change'}
+        ]
+      },
+      formLabelWidth: '120px',
+      title: '',
+      total: 0,
+      pagesize: 50,
+      id: '',
+      timeshow: true
+    }
+  },
+  created() {
+    let that = this
+    if (!this.createactivity.length && this.createactivity.length != 0) {
+      that.formInline.user = this.createactivity.user
+      that.currentPage = this.createactivity.currentPage
+      that.pagesize = this.createactivity.pagesize
+      that.formInline.time = this.createactivity.time
+      getlist(that, that.formInline.user, that.currentPage, that.pagesize, that.formInline.time)
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'gameactivityupdate',
+      'gameactivityadd',
+      'gameactivitydel',
+      'gameactivitygetlist',
+      'createactivity'
+    ])
+  },
+  watch: {
+  },
+  methods: {
+    reset (form) {
+      this.dialogFormVisible = false
+      this.$refs.form.resetFields()
+    },
+    time () {
+      if (this.form.time === '1') {
+        this.timeshow = true
+      } else {
+        this.timeshow = false
+      }
+    },
+    edit(row) {
+      this.title = '编辑创建活动'
+      this.dialogFormVisible = true
+      let that = this
+      request({
+            url: that.public.url + '/gameactivity/getinfo',
+            method: 'post',
+            data: {
+                id: row.id
+            }
+          }).then(res => {
+            that.form.name = res.data.title
+            that.form.desc = res.data.content
+            if (res.data.validtime_from === '-1') {
+              that.form.time = '2'
+              that.timeshow = false
+            } else {
+              that.form.time = '1'
+              that.timeshow = true
+              let startdate = new Date(res.data.validtime_from)
+              let enddate = new Date(res.data.validtime_to)
+              that.form.time1 = [startdate, enddate]
+            }
+            that.id = res.data.id
+          }).catch(error => {
+          })
+    },
+    add () {
+      this.title = '新增创建活动'
+      this.dialogFormVisible = true
+      this.timeshow = true
+    },
+    query () {
+      let that = this
+      this.currentPage = 1
+      getlist(that, that.formInline.user, that.currentPage, that.pagesize, that.formInline.time)
+      let setcreateactivity = {
+          'user': that.formInline.user,
+          'currentPage': that.currentPage,
+          'pagesize': that.pagesize,
+          'time': that.formInline.time
+        }
+      this.$store.commit('setcreateactivity', setcreateactivity)
+    },
+    sure (form) {
+      let that = this
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          var start = ''
+          var end = '' 
+          if (this.form.time === '1') {  
+            if (this.form.time1 && this.form.time1.length > 0) {
+              start = this.form.time1[0].getTime() /1000
+              end = this.form.time1[1].getTime() /1000
+            }
+          } else {
+            start = '-1'
+            end = ''
+            this.form.time1 = []
+          }
+          if (this.title === '编辑创建活动') {
+             request({
+              url: that.public.url + '/gameactivity/update',
+              method: 'post',
+              data: {
+                    title: this.form.name,
+                    content: this.form.desc,
+                    validtime_from: start,
+                    validtime_to: end,
+                    id: this.id
+              }
+            }).then(res => {
+              that.dialogFormVisible = false
+              that.$refs.form.resetFields()
+              getlist(that, that.formInline.user, that.currentPage, that.pagesize, that.formInline.time)
+            }).catch(error => {
+            })
+          } else {
+            request({
+            url: that.public.url + '/gameactivity/add',
+            method: 'post',
+            data: {
+                  title: this.form.name,
+                  content: this.form.desc,
+                  validtime_from: start,
+                  validtime_to: end
+            }
+          }).then(res => {
+            that.dialogFormVisible = false
+            that.$refs.form.resetFields()
+            getlist(that, that.formInline.user, that.currentPage, that.pagesize, that.formInline.time)
+          }).catch(error => {
+          })
+          }
+        } else {
+          return false
+        }
+      })
+    },
+    delet (row) {
+      let that = this
+      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        request({
+            url: that.public.url + '/gameactivity/del',
+            method: 'post',
+            data: {
+                id: row.id
+            }
+          }).then(res => {
+            getlist(that, that.formInline.user, that.currentPage, that.pagesize, that.formInline.time)
+          }).catch(error => {
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    handleSizeChange(val) {
+      this.pagesize = val
+      this.currentPage = 1
+      getlist(this, this.formInline.user, this.currentPage, this.pagesize, this.formInline.time)
+      let setcreateactivity = {
+          'user': that.formInline.user,
+          'currentPage': that.currentPage,
+          'pagesize': that.pagesize,
+          'time': that.formInline.time
+        }
+      this.$store.commit('setcreateactivity', setcreateactivity)
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val *1
+      getlist(this, this.formInline.user, this.currentPage, this.pagesize, this.formInline.time)
+      let setcreateactivity = {
+          'user': that.formInline.user,
+          'currentPage': that.currentPage,
+          'pagesize': that.pagesize,
+          'time': that.formInline.time
+        }
+      this.$store.commit('setcreateactivity', setcreateactivity)
+    }
+  }
+}
+
+
+function getlist (that, user, currentPage, pagesize, time) {
+  let data = {
+    title: user.trim(),
+    pageno: currentPage,
+    pagerows: pagesize
+  }
+  if (time && time.length > 0) {
+    var start = time[0].getTime() /1000
+    data.time_from = start
+    var end = time[1].getTime() /1000
+    data.time_to = end
+  }
+  request({
+    url: that.public.url + '/gameactivity/getlist',
+    method: 'post',
+    data: data
+  }).then(res => {
+    that.tableData = res.data.list
+    that.total = res.data.rownum *1
+    that.currentPage = res.data.pageno * 1
+  }).catch(error => {
+  })
+}
+
+</script>
+
+<style>
+  .paging {
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+</style>

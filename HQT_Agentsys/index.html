@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>代理系统</title>
+  </head>
+  <body onresize="resizeFresh()">
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+  <script>
+      var x=window.innerWidth;
+      function resizeFresh(){
+          if(x!=window.innerWidth)
+              location.reload();
+      }
+  </script>
+</html>
