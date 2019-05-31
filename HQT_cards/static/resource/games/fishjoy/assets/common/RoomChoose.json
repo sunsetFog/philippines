@@ -1,0 +1,11 @@
+{"file":"RoomChoose.png","frames":{
+"grabfish_ui_chooseback":{"x":874,"y":1,"w":91,"h":68,"offX":0,"offY":0,"sourceW":91,"sourceH":68},
+"grabfish_ui_choosedown":{"x":733,"y":436,"w":269,"h":54,"offX":0,"offY":0,"sourceW":269,"sourceH":54},
+"grabfish_ui_choosehelp":{"x":781,"y":1,"w":91,"h":68,"offX":0,"offY":0,"sourceW":91,"sourceH":68},
+"grabfish_ui_choosename":{"x":1,"y":835,"w":415,"h":113,"offX":0,"offY":0,"sourceW":415,"sourceH":113},
+"grabfish_ui_choosetop":{"x":418,"y":835,"w":452,"h":103,"offX":0,"offY":0,"sourceW":452,"sourceH":103},
+"grabfish_ui_fuhao":{"x":1,"y":1,"w":383,"h":452,"offX":0,"offY":0,"sourceW":396,"sourceH":452},
+"grabfish_ui_guibing":{"x":386,"y":1,"w":393,"h":433,"offX":3,"offY":12,"sourceW":396,"sourceH":452},
+"grabfish_ui_xinshou":{"x":386,"y":436,"w":345,"h":397,"offX":25,"offY":48,"sourceW":396,"sourceH":452},
+"grabfish_ui_Bangzhu":{"x":781,"y":71,"w":95,"h":39,"offX":0,"offY":0,"sourceW":95,"sourceH":39},
+"icon_pub":{"x":967,"y":1,"w":34,"h":36,"offX":0,"offY":0,"sourceW":34,"sourceH":36}}}

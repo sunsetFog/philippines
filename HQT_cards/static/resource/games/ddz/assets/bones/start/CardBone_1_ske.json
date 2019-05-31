@@ -1,0 +1,315 @@
+{
+    "frameRate": 24,
+    "name": "CardBone_1",
+    "version": "5.5",
+    "compatibleVersion": "5.5",
+    "armature": [
+        {
+            "type": "Armature",
+            "frameRate": 24,
+            "name": "Armature",
+            "aabb": {
+                "x": -1412,
+                "y": -76.4,
+                "width": 2824,
+                "height": 153
+            },
+            "bone": [
+                {
+                    "inheritScale": false,
+                    "name": "图层 2",
+                    "transform": {
+                        "y": 0.1
+                    }
+                }
+            ],
+            "slot": [
+                {
+                    "name": "图层 2",
+                    "parent": "图层 2"
+                }
+            ],
+            "skin": [
+                {
+                    "slot": [
+                        {
+                            "name": "图层 2",
+                            "display": [
+                                {
+                                    "name": "start0001.png"
+                                },
+                                {
+                                    "name": "start0002.png"
+                                },
+                                {
+                                    "name": "start0003.png"
+                                },
+                                {
+                                    "name": "start0004.png"
+                                },
+                                {
+                                    "name": "start0005.png"
+                                },
+                                {
+                                    "name": "start0006.png"
+                                },
+                                {
+                                    "name": "start0007.png"
+                                },
+                                {
+                                    "name": "start0008.png"
+                                },
+                                {
+                                    "name": "start0009.png"
+                                },
+                                {
+                                    "name": "start0010.png"
+                                },
+                                {
+                                    "name": "start0011.png"
+                                },
+                                {
+                                    "name": "start0012.png"
+                                },
+                                {
+                                    "name": "start0013.png"
+                                },
+                                {
+                                    "name": "start0014.png"
+                                },
+                                {
+                                    "name": "start0015.png"
+                                },
+                                {
+                                    "name": "start0016.png"
+                                },
+                                {
+                                    "name": "start0017.png"
+                                },
+                                {
+                                    "name": "start0018.png"
+                                },
+                                {
+                                    "name": "start0019.png"
+                                },
+                                {
+                                    "name": "start0020.png"
+                                },
+                                {
+                                    "name": "start0021.png"
+                                },
+                                {
+                                    "name": "start0022.png"
+                                },
+                                {
+                                    "name": "start0023.png"
+                                },
+                                {
+                                    "name": "start0024.png"
+                                },
+                                {
+                                    "name": "start0025.png"
+                                },
+                                {
+                                    "name": "start0026.png"
+                                },
+                                {
+                                    "name": "start0027.png"
+                                },
+                                {
+                                    "name": "start0028.png"
+                                },
+                                {
+                                    "name": "start0029.png"
+                                },
+                                {
+                                    "name": "start0030.png"
+                                },
+                                {
+                                    "name": "start0031.png"
+                                },
+                                {
+                                    "name": "start0032.png"
+                                },
+                                {
+                                    "name": "start0033.png"
+                                },
+                                {
+                                    "name": "start0034.png"
+                                },
+                                {
+                                    "name": "start0035.png"
+                                },
+                                {
+                                    "name": "start0036.png"
+                                },
+                                {
+                                    "name": "start0037.png"
+                                },
+                                {
+                                    "name": "start0038.png"
+                                },
+                                {
+                                    "name": "start0039.png"
+                                },
+                                {
+                                    "name": "start0040.png"
+                                },
+                                {
+                                    "name": "start0041.png"
+                                },
+                                {
+                                    "name": "start0042.png"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "animation": [
+                {
+                    "duration": 41,
+                    "fadeInTime": 0.3,
+                    "name": "newAnimation",
+                    "slot": [
+                        {
+                            "name": "图层 2",
+                            "displayFrame": [
+                                {},
+                                {
+                                    "value": 1
+                                },
+                                {
+                                    "value": 2
+                                },
+                                {
+                                    "value": 3
+                                },
+                                {
+                                    "value": 4
+                                },
+                                {
+                                    "value": 5
+                                },
+                                {
+                                    "value": 6
+                                },
+                                {
+                                    "value": 7
+                                },
+                                {
+                                    "value": 8
+                                },
+                                {
+                                    "value": 9
+                                },
+                                {
+                                    "value": 10
+                                },
+                                {
+                                    "value": 11
+                                },
+                                {
+                                    "value": 12
+                                },
+                                {
+                                    "value": 13
+                                },
+                                {
+                                    "value": 14
+                                },
+                                {
+                                    "value": 15
+                                },
+                                {
+                                    "value": 16
+                                },
+                                {
+                                    "value": 17
+                                },
+                                {
+                                    "value": 18
+                                },
+                                {
+                                    "value": 19
+                                },
+                                {
+                                    "value": 20
+                                },
+                                {
+                                    "value": 21
+                                },
+                                {
+                                    "value": 22
+                                },
+                                {
+                                    "value": 23
+                                },
+                                {
+                                    "value": 24
+                                },
+                                {
+                                    "value": 25
+                                },
+                                {
+                                    "value": 26
+                                },
+                                {
+                                    "value": 27
+                                },
+                                {
+                                    "value": 28
+                                },
+                                {
+                                    "value": 29
+                                },
+                                {
+                                    "value": 30
+                                },
+                                {
+                                    "value": 31
+                                },
+                                {
+                                    "value": 32
+                                },
+                                {
+                                    "value": 33
+                                },
+                                {
+                                    "value": 34
+                                },
+                                {
+                                    "value": 35
+                                },
+                                {
+                                    "value": 36
+                                },
+                                {
+                                    "value": 37
+                                },
+                                {
+                                    "value": 38
+                                },
+                                {
+                                    "value": 39
+                                },
+                                {
+                                    "value": 40
+                                },
+                                {
+                                    "duration": 0,
+                                    "value": 41
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "defaultActions": [
+                {
+                    "gotoAndPlay": "newAnimation"
+                }
+            ]
+        }
+    ]
+}

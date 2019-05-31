@@ -1,0 +1,25 @@
+{
+    "groups":[
+        {
+            "keys":"global,simple_config,error_config",
+            "name":"game_config"
+        }
+    ],
+    "resources":[
+        {
+            "name":"global",
+            "type":"json",
+            "url":"config/global.json"
+        },
+        {
+            "name":"simple_config",
+            "type":"json",
+            "url":"config/simple.json"
+        },
+        {
+            "name":"error_config",
+            "type":"json",
+            "url":"config/error_config.json"
+        }
+    ]
+}

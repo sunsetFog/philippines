@@ -1,0 +1,90 @@
+{
+    "SubTexture": [
+        {
+            "y": 1,
+            "frameX": -2,
+            "frameHeight": 378,
+            "frameY": -2,
+            "width": 374,
+            "frameWidth": 378,
+            "height": 376,
+            "name": "圆底拷贝",
+            "x": 1
+        },
+        {
+            "width": 35,
+            "y": 155,
+            "height": 109,
+            "name": "图层396",
+            "x": 459
+        },
+        {
+            "y": 379,
+            "frameX": 0,
+            "frameHeight": 200,
+            "frameY": -1,
+            "width": 365,
+            "frameWidth": 365,
+            "height": 198,
+            "name": "图层394",
+            "x": 1
+        },
+        {
+            "width": 77,
+            "y": 716,
+            "height": 164,
+            "name": "zhaun2",
+            "x": 390
+        },
+        {
+            "width": 77,
+            "y": 760,
+            "height": 162,
+            "name": "zhaun1",
+            "x": 1
+        },
+        {
+            "width": 80,
+            "y": 155,
+            "height": 167,
+            "name": "shui2",
+            "x": 377
+        },
+        {
+            "width": 80,
+            "y": 548,
+            "height": 166,
+            "name": "shui1",
+            "x": 390
+        },
+        {
+            "width": 90,
+            "y": 1,
+            "height": 152,
+            "name": "hu2",
+            "x": 377
+        },
+        {
+            "width": 90,
+            "y": 379,
+            "height": 167,
+            "name": "hu1",
+            "x": 368
+        },
+        {
+            "y": 579,
+            "frameX": -1,
+            "frameHeight": 181,
+            "frameY": -1,
+            "width": 387,
+            "frameWidth": 390,
+            "height": 179,
+            "name": "字",
+            "x": 1
+        }
+    ],
+    "width": 512,
+    "imagePath": "shzEntranceAnim_tex.png",
+    "height": 1024,
+    "name": "shzEntranceAnim"
+}

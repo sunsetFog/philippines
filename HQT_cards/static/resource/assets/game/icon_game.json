@@ -1,0 +1,17 @@
+{"file":"icon_game.png","frames":{
+"icon_progress_bg":{"x":2,"y":892,"w":155,"h":29,"offX":0,"offY":0,"sourceW":155,"sourceH":29},
+"icon_progress_bar":{"x":161,"y":892,"w":145,"h":19,"offX":5,"offY":5,"sourceW":155,"sourceH":29},
+"icon_updata":{"x":232,"y":451,"w":84,"h":50,"offX":0,"offY":0,"sourceW":84,"sourceH":50},
+"icon_download":{"x":232,"y":505,"w":84,"h":50,"offX":0,"offY":0,"sourceW":84,"sourceH":50},
+"icon_game_waterMargin":{"x":462,"y":672,"w":226,"h":216,"offX":0,"offY":7,"sourceW":226,"sourceH":223},
+"icon_game_redBlack":{"x":789,"y":669,"w":226,"h":218,"offX":0,"offY":5,"sourceW":226,"sourceH":223},
+"icon_game_landlord":{"x":692,"y":891,"w":226,"h":215,"offX":0,"offY":8,"sourceW":226,"sourceH":223},
+"icon_game_hundredsCrow":{"x":329,"y":445,"w":226,"h":223,"offX":0,"offY":0,"sourceW":226,"sourceH":223},
+"icon_game_fish":{"x":789,"y":446,"w":226,"h":219,"offX":0,"offY":4,"sourceW":226,"sourceH":223},
+"icon_game_expect":{"x":2,"y":451,"w":226,"h":218,"offX":0,"offY":5,"sourceW":226,"sourceH":223},
+"icon_game_baccarat":{"x":559,"y":446,"w":226,"h":222,"offX":0,"offY":1,"sourceW":226,"sourceH":223},
+"icon_game_hundredsCrow_hot":{"x":653,"y":2,"w":299,"h":440,"offX":0,"offY":0,"sourceW":299,"sourceH":440},
+"icon_game_landlord_hot":{"x":2,"y":2,"w":323,"h":445,"offX":0,"offY":0,"sourceW":323,"sourceH":445},
+"icon_game_fish_hot":{"x":329,"y":2,"w":320,"h":439,"offX":0,"offY":0,"sourceW":320,"sourceH":439},
+"icon_game_fruit":{"x":232,"y":672,"w":226,"h":216,"offX":0,"offY":7,"sourceW":226,"sourceH":223},
+"icon_game_animalFight":{"x":2,"y":673,"w":226,"h":215,"offX":0,"offY":8,"sourceW":226,"sourceH":223}}}

@@ -1,0 +1,210 @@
+{
+    "frameRate": 24,
+    "name": "CardBone_5",
+    "version": "5.5",
+    "compatibleVersion": "5.5",
+    "armature": [
+        {
+            "type": "Armature",
+            "frameRate": 24,
+            "name": "Armature",
+            "aabb": {
+                "x": -155.5,
+                "y": -28.5,
+                "width": 311,
+                "height": 57
+            },
+            "bone": [
+                {
+                    "inheritScale": false,
+                    "name": "图层 1"
+                }
+            ],
+            "slot": [
+                {
+                    "name": "图层 1",
+                    "parent": "图层 1"
+                }
+            ],
+            "skin": [
+                {
+                    "slot": [
+                        {
+                            "name": "图层 1",
+                            "display": [
+                                {
+                                    "name": "shunzi0001.png"
+                                },
+                                {
+                                    "name": "shunzi0002.png"
+                                },
+                                {
+                                    "name": "shunzi0003.png"
+                                },
+                                {
+                                    "name": "shunzi0004.png"
+                                },
+                                {
+                                    "name": "shunzi0005.png"
+                                },
+                                {
+                                    "name": "shunzi0006.png"
+                                },
+                                {
+                                    "name": "shunzi0007.png"
+                                },
+                                {
+                                    "name": "shunzi0008.png"
+                                },
+                                {
+                                    "name": "shunzi0009.png"
+                                },
+                                {
+                                    "name": "shunzi0010.png"
+                                },
+                                {
+                                    "name": "shunzi0011.png"
+                                },
+                                {
+                                    "name": "shunzi0012.png"
+                                },
+                                {
+                                    "name": "shunzi0013.png"
+                                },
+                                {
+                                    "name": "shunzi0014.png"
+                                },
+                                {
+                                    "name": "shunzi0015.png"
+                                },
+                                {
+                                    "name": "shunzi0016.png"
+                                },
+                                {
+                                    "name": "shunzi0017.png"
+                                },
+                                {
+                                    "name": "shunzi0018.png"
+                                },
+                                {
+                                    "name": "shunzi0019.png"
+                                },
+                                {
+                                    "name": "shunzi0020.png"
+                                },
+                                {
+                                    "name": "shunzi0021.png"
+                                },
+                                {
+                                    "name": "shunzi0022.png"
+                                },
+                                {
+                                    "name": "shunzi0023.png"
+                                },
+                                {
+                                    "name": "shunzi0024.png"
+                                },
+                                {
+                                    "name": "shunzi0025.png"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "animation": [
+                {
+                    "duration": 24,
+                    "fadeInTime": 0.3,
+                    "name": "newAnimation",
+                    "slot": [
+                        {
+                            "name": "图层 1",
+                            "displayFrame": [
+                                {},
+                                {
+                                    "value": 1
+                                },
+                                {
+                                    "value": 2
+                                },
+                                {
+                                    "value": 3
+                                },
+                                {
+                                    "value": 4
+                                },
+                                {
+                                    "value": 5
+                                },
+                                {
+                                    "value": 6
+                                },
+                                {
+                                    "value": 7
+                                },
+                                {
+                                    "value": 8
+                                },
+                                {
+                                    "value": 9
+                                },
+                                {
+                                    "value": 10
+                                },
+                                {
+                                    "value": 11
+                                },
+                                {
+                                    "value": 12
+                                },
+                                {
+                                    "value": 13
+                                },
+                                {
+                                    "value": 14
+                                },
+                                {
+                                    "value": 15
+                                },
+                                {
+                                    "value": 16
+                                },
+                                {
+                                    "value": 17
+                                },
+                                {
+                                    "value": 18
+                                },
+                                {
+                                    "value": 19
+                                },
+                                {
+                                    "value": 20
+                                },
+                                {
+                                    "value": 21
+                                },
+                                {
+                                    "value": 22
+                                },
+                                {
+                                    "value": 23
+                                },
+                                {
+                                    "duration": 0,
+                                    "value": 24
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "defaultActions": [
+                {
+                    "gotoAndPlay": "newAnimation"
+                }
+            ]
+        }
+    ]
+}

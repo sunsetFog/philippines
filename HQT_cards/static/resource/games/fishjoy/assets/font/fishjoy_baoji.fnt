@@ -1,0 +1,14 @@
+{"file":"fishjoy_baoji.png","frames":{
+"X":{"x":1,"y":134,"w":31,"h":31,"offX":5,"offY":6,"sourceW":41,"sourceH":42},
+".":{"x":109,"y":133,"w":18,"h":16,"offX":9,"offY":26,"sourceW":41,"sourceH":42},
+"+":{"x":72,"y":133,"w":35,"h":32,"offX":3,"offY":5,"sourceW":41,"sourceH":42},
+"0":{"x":1,"y":45,"w":38,"h":43,"offX":2,"offY":0,"sourceW":41,"sourceH":43},
+"1":{"x":39,"y":133,"w":31,"h":42,"offX":5,"offY":0,"sourceW":41,"sourceH":42},
+"2":{"x":1,"y":1,"w":40,"h":42,"offX":0,"offY":0,"sourceW":41,"sourceH":42},
+"3":{"x":81,"y":89,"w":37,"h":42,"offX":1,"offY":0,"sourceW":41,"sourceH":42},
+"4":{"x":43,"y":1,"w":39,"h":42,"offX":0,"offY":0,"sourceW":41,"sourceH":42},
+"5":{"x":84,"y":1,"w":39,"h":42,"offX":1,"offY":0,"sourceW":41,"sourceH":42},
+"6":{"x":41,"y":45,"w":38,"h":42,"offX":2,"offY":0,"sourceW":41,"sourceH":42},
+"7":{"x":1,"y":90,"w":36,"h":42,"offX":5,"offY":0,"sourceW":41,"sourceH":42},
+"8":{"x":81,"y":45,"w":38,"h":42,"offX":1,"offY":0,"sourceW":41,"sourceH":42},
+"9":{"x":41,"y":89,"w":38,"h":42,"offX":1,"offY":0,"sourceW":41,"sourceH":42}}}

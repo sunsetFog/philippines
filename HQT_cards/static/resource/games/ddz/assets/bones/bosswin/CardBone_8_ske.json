@@ -1,0 +1,234 @@
+{
+    "frameRate": 24,
+    "name": "CardBone_8",
+    "version": "5.5",
+    "compatibleVersion": "5.5",
+    "armature": [
+        {
+            "type": "Armature",
+            "frameRate": 24,
+            "name": "Armature",
+            "aabb": {
+                "x": -846,
+                "y": -250.5,
+                "width": 1692,
+                "height": 501
+            },
+            "bone": [
+                {
+                    "inheritScale": false,
+                    "name": "图层 2"
+                }
+            ],
+            "slot": [
+                {
+                    "name": "图层 2",
+                    "parent": "图层 2"
+                }
+            ],
+            "skin": [
+                {
+                    "slot": [
+                        {
+                            "name": "图层 2",
+                            "display": [
+                                {
+                                    "name": "dzsl0001.png"
+                                },
+                                {
+                                    "name": "dzsl0002.png"
+                                },
+                                {
+                                    "name": "dzsl0003.png"
+                                },
+                                {
+                                    "name": "dzsl0004.png"
+                                },
+                                {
+                                    "name": "dzsl0005.png"
+                                },
+                                {
+                                    "name": "dzsl0006.png"
+                                },
+                                {
+                                    "name": "dzsl0007.png"
+                                },
+                                {
+                                    "name": "dzsl0008.png"
+                                },
+                                {
+                                    "name": "dzsl0009.png"
+                                },
+                                {
+                                    "name": "dzsl0010.png"
+                                },
+                                {
+                                    "name": "dzsl0011.png"
+                                },
+                                {
+                                    "name": "dzsl0012.png"
+                                },
+                                {
+                                    "name": "dzsl0013.png"
+                                },
+                                {
+                                    "name": "dzsl0014.png"
+                                },
+                                {
+                                    "name": "dzsl0015.png"
+                                },
+                                {
+                                    "name": "dzsl0016.png"
+                                },
+                                {
+                                    "name": "dzsl0017.png"
+                                },
+                                {
+                                    "name": "dzsl0018.png"
+                                },
+                                {
+                                    "name": "dzsl0019.png"
+                                },
+                                {
+                                    "name": "dzsl0020.png"
+                                },
+                                {
+                                    "name": "dzsl0021.png"
+                                },
+                                {
+                                    "name": "dzsl0022.png"
+                                },
+                                {
+                                    "name": "dzsl0023.png"
+                                },
+                                {
+                                    "name": "dzsl0024.png"
+                                },
+                                {
+                                    "name": "dzsl0025.png"
+                                },
+                                {
+                                    "name": "dzsl0026.png"
+                                },
+                                {
+                                    "name": "dzsl0027.png"
+                                },
+                                {
+                                    "name": "dzsl0028.png"
+                                },
+                                {
+                                    "name": "dzsl0029.png"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "animation": [
+                {
+                    "duration": 28,
+                    "fadeInTime": 0.3,
+                    "name": "newAnimation",
+                    "slot": [
+                        {
+                            "name": "图层 2",
+                            "displayFrame": [
+                                {},
+                                {
+                                    "value": 1
+                                },
+                                {
+                                    "value": 2
+                                },
+                                {
+                                    "value": 3
+                                },
+                                {
+                                    "value": 4
+                                },
+                                {
+                                    "value": 5
+                                },
+                                {
+                                    "value": 6
+                                },
+                                {
+                                    "value": 7
+                                },
+                                {
+                                    "value": 8
+                                },
+                                {
+                                    "value": 9
+                                },
+                                {
+                                    "value": 10
+                                },
+                                {
+                                    "value": 11
+                                },
+                                {
+                                    "value": 12
+                                },
+                                {
+                                    "value": 13
+                                },
+                                {
+                                    "value": 14
+                                },
+                                {
+                                    "value": 15
+                                },
+                                {
+                                    "value": 16
+                                },
+                                {
+                                    "value": 17
+                                },
+                                {
+                                    "value": 18
+                                },
+                                {
+                                    "value": 19
+                                },
+                                {
+                                    "value": 20
+                                },
+                                {
+                                    "value": 21
+                                },
+                                {
+                                    "value": 22
+                                },
+                                {
+                                    "value": 23
+                                },
+                                {
+                                    "value": 24
+                                },
+                                {
+                                    "value": 25
+                                },
+                                {
+                                    "value": 26
+                                },
+                                {
+                                    "value": 27
+                                },
+                                {
+                                    "duration": 0,
+                                    "value": 28
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "defaultActions": [
+                {
+                    "gotoAndPlay": "newAnimation"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+	"initial": [
+		"./static/js/egret.min.js",
+		"./static/js/egret.web.min.js",
+		"./static/js/eui.min.js",
+		"./static/js/assetsmanager.min.js",
+		"./static/js/tween.min.js",
+		"./static/js/dragonBones.min.js",
+		"./static/js/socket.min.js",
+		"./static/js/game.min.js",
+		"./static/js/promise.min.js",
+		"./static/js/particle.min.js"
+	],
+	"game": [
+		"./static/js/default.thm.js",
+		"./static/js/api.min.js",
+		"./static/js/protobuf-library.min.js",
+		"./static/js/protobuf-bundles.min.js",
+		"./static/js/main.min.js"
+	]
+}
