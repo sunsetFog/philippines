@@ -37,12 +37,8 @@ export default{
         border-top: 3px solid #8bc6ee;
         margin-bottom: 45px;
         .cards_title{
-            width: 100%;
-            height: 70px;
-            color: white;
-            line-height: 70px;
+            .mixin_div(100%,70px,#2C4564,white,left);
             text-indent: 20px;
-            background: #2C4564;
             font-weight: 600;
             font-size: 16px;
         }
@@ -53,25 +49,14 @@ export default{
             padding: 50px 0px 0px 62.5px;
             box-sizing: border-box;
             .classification{
-                width: 345px;
-                height: 155px;
-                float: left;
+                .mixin_float(345px,155px,left);
                 margin: 0px 25px 25px 0px;
                 .detailed_theme{
-                    width: 100%;
-                    height: 45px;
-                    background: #324c6d;
-                    color: #edf7f8;
-                    line-height: 45px;
+                    .mixin_div(100%,45px,#324c6d,#edf7f8,left);
                     text-indent: 30px;
                 }
                 .detailed_content{
-                    width: 100%;
-                    height: 110px;
-                    background: #2c4564;
-                    text-align: center;
-                    line-height: 110px;
-                    color: #1dfa5f;
+                    .mixin_div(100%,110px,#2c4564,#1dfa5f,center);
                     font-size: 48px;
                 }
 

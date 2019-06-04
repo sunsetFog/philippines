@@ -86,12 +86,8 @@ export default{
         height: 220px;
         border-top: 3px solid #8bc6ee;
         .cards_title{
-            width: 100%;
-            height: 70px;
-            color: white;
-            line-height: 70px;
+            .mixin_div(100%,70px,#2C4564,white,left);
             text-indent: 20px;
-            background: #2C4564;
             font-weight: 600;
             font-size: 16px;
         }
@@ -105,9 +101,7 @@ export default{
                 width: 100%;
                 height: 30px;
                 .recharge{
-                    width: 50%;
-                    height: 30px;
-                    float: left;
+                    .mixin_float(50%,30px,left);
                     span:nth-of-type(1){
                         color: #99adc8;
                         margin-left: 20px;
@@ -123,20 +117,12 @@ export default{
                     }
                 }
                 .cash_withdrawal{
-                    width: 50%;
-                    height: 30px;
-                    float: right;
+                    .mixin_float(50%,30px,right);
                     button{
-                        width: 120px;
-                        height: 35px;
-                        line-height: 35px;
-                        outline: none;
+                        .mixin_button(120px,35px,#276699,#edebf0);
                         border: 1px solid #209fec;
-                        background: #276699;
-                        color: #edebf0;
                         float: right;
                         margin-right: 20px;
-                        cursor: pointer;
                     }
                 }
 
@@ -209,11 +195,8 @@ export default{
                 height: 35px;
                 margin-top: 20px;
                 .agent_span_y{
-                    color: #94a8c1;
-                    display: inline-block;
+                    .mixin_span(auto,35px,none,#94a8c1,center);
                     float: left;
-                    height: 35px;
-                    line-height: 35px;
                 }
                 .agent_span_e{
                     width: 90px;
@@ -225,23 +208,14 @@ export default{
                     box-sizing: border-box;
                 }
                 .agent_span_s{
-                    color: #1ca3ff;
+                    .mixin_span(auto,35px,none,#1ca3ff,center);
                     margin-left: 10px;
-                    display: inline-block;
                     float: left;
-                    height: 35px;
-                    line-height: 35px;
                 }
                 button:nth-of-type(1){
-                    width: 120px;
-                    height: 35px;
-                    line-height: 35px;
-                    outline: none;
+                    .mixin_button(120px,35px,#276699,#edebf0);
                     border: 1px solid #209fec;
-                    background: #276699;
-                    color: #edebf0;
                     float: right;
-                    cursor: pointer;
                 }
 
             }
@@ -253,30 +227,22 @@ export default{
             padding: 0px 20px;
             box-sizing: border-box;
             ul{
-                .mixin_li(){
-                    width: 26.6%;
-                    height: 40px;
-                    float: left;
-                    line-height: 40px;
-                    text-align: center;
-                }
                 li:nth-of-type(1){
-                    .mixin_li();
+                    .mixin_li(26.6%,40px);
                     width: 10%;
                     text-align: left;
                 }
                 li:nth-of-type(2){
-                    .mixin_li();
+                    .mixin_li(26.6%,40px);
                 }
                 li:nth-of-type(3){
-                    .mixin_li();
+                    .mixin_li(26.6%,40px);
                 }
                 li:nth-of-type(4){
-                    .mixin_li();
+                    .mixin_li(26.6%,40px);
                 }
                 li:nth-of-type(5){
-                    .mixin_li();
-                    width: 10%;
+                    .mixin_li(10%,40px);
                     text-align: right;
                 }
             }
@@ -292,42 +258,31 @@ export default{
                 width: 100%;
                 background: #2c4564;
                 height: 40px;
-                .mixin_li(){
-                    width: 26.6%;
-                    height: 40px;
-                    float: left;
-                    line-height: 40px;
-                    text-align: center;
-                }
                 li:nth-of-type(1){
-                    .mixin_li();
+                    .mixin_li(26.6%,40px);
                     width: 10%;
                     text-align: left;
                     text-indent: 20px;
                 }
                 li:nth-of-type(2){
-                    .mixin_li();
+                    .mixin_li(26.6%,40px);
                 }
                 li:nth-of-type(3){
-                    .mixin_li();
+                    .mixin_li(26.6%,40px);
                 }
                 li:nth-of-type(4){
-                    .mixin_li();
+                    .mixin_li(26.6%,40px);
                     input{
-                        width: 70px;
-                        height: 20px;
-                        line-height: 20px;
-                        outline: none;
+                        .mixin_input(70px,20px);
                         border: 1px solid #209fec;
                         background: #000000;
                         color: #edebf0;
-                        cursor: pointer;
                         text-align: center;
+                        text-indent: 0px;
                     }
                 }
                 li:nth-of-type(5){
-                    .mixin_li();
-                    width: 10%;
+                    .mixin_li(10%,40px);
                     text-align: right;
                     padding-right: 15px;
                     box-sizing: border-box;

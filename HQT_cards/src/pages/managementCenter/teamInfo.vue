@@ -34,12 +34,8 @@ export default{
         border-top: 3px solid #8bc6ee;
         margin-bottom: 45px;
         .cards_title{
-            width: 100%;
-            height: 70px;
-            color: white;
-            line-height: 70px;
+            .mixin_div(100%,70px,#2C4564,white,left);
             text-indent: 20px;
-            background: #2C4564;
             font-weight: 600;
             font-size: 16px;
         }
@@ -86,18 +82,15 @@ export default{
                 }
             }
             .see_agent{
-                width: 150px;
-                height: 150px;
-                line-height: 150px;
+                .mixin_div(150px,150px,none,#f8fdff,center);
                 border-radius: 50%;
                 border: 4px solid #84c4ea;
-                text-align: center;
                 font-size: 25px;
-                color: #f8fdff;
                 text-decoration: underline;
                 position: absolute;
                 top: 55px;
                 right: 110px;
+                cursor: pointer;
             }
         }
     }

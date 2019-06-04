@@ -1,7 +1,7 @@
 <template>
 <section id="lotteryReport">
     <div class="quota">
-        <div class="quota_titile"><span>彩票报表</span></div>
+        <div class="quota_titile">彩票报表</div>
         <div class="agent_modify">
             <div class="agent_profit">
                 <!-- <div class="agent_profit_title"><i class="el-icon-search"></i>查询:</div> -->
@@ -110,17 +110,10 @@ export default{
         background: #243851;
         border-top: 3px solid #8bc6ee;
         .quota_titile{
-            width: 100%;
-            height: 70px;
-            line-height: 70px;
+            .mixin_div(100%,70px,#2C4564,#f2fafc,left);
             padding-left: 20px;
-            background: #2C4564;
-            span:nth-of-type(1){
-                color: #f2fafc;
-                font-weight: 600;
-                font-size: 16px;
-                display: block;
-            }
+            font-weight: 600;
+            font-size: 16px;
         }
         .agent_modify{
             width: 100%;
@@ -171,50 +164,31 @@ export default{
                         .mixin_label();
                     }
                     input{
-                        width: 120px;
-                        height: 28px;
-                        line-height: 28px;
-                        outline: none;
+                        .mixin_input(120px,28px);
                         border: 1px solid #0d78bc;
                         background: #000000;
                         color: #edebf0;
-                        cursor: pointer;
-                        text-align: left;
-                        text-indent: 10px;
-                        border-radius: 4px;
                     }    
                 }
                 
-                .mixin_button(){
-                    width: 60px;
-                    height: 35px;
-                    line-height: 35px;
-                    outline: none;
-                    border: 1px solid #209fec;
-                    position: absolute;
-                    cursor: pointer;
-                    color: #edebf0;
-                }
                 button:nth-of-type(1){
-                    .mixin_button();
-                    width: 95px;
-                    background: #24a8e9;
+                    .mixin_button(95px,35px,#24a8e9,#edebf0);
                     border: 1px solid #a3cbe5;
+                    position: absolute;
                     right: 0px;
                     top: 0px;
                 }
                 button:nth-of-type(2){
-                    .mixin_button();
-                    width: 45px;
-                    background: #226791;
+                    .mixin_button(45px,35px,#226791,#edebf0);
+                    border: 1px solid #209fec;
+                    position: absolute;
                     right: 110px;
                     top: 0px;
                 }
                 button:nth-of-type(3){
-                    .mixin_button();
-                    width: 45px;
-                    background: #24a8e9;
+                    .mixin_button(45px,35px,#24a8e9,#edebf0);
                     border: 1px solid #a3cbe5;
+                    position: absolute;
                     right: 162px;
                     top: 0px;
                 }
@@ -256,44 +230,35 @@ export default{
                 width: 100%;
                 height: 40px;
                 background: #415877;
-                .mixin_li(){
-                    height: 40px;
-                    float: left;
-                    line-height: 40px;
-                    text-align: center;
-                    color: #f1f0f8;
-                    font-weight: 600;
-                    font-size: 12px;
-                    width: 10%;
-                }
+                color: #f1f0f8;
+                font-weight: 600;
+                font-size: 12px;
                 li:nth-of-type(1){
-                    .mixin_li();
-                    width: 14%;
+                    .mixin_li(14%,40px);
                 }
                 li:nth-of-type(2){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(3){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(4){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(5){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(6){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(7){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(8){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(9){
-                    .mixin_li();
-                    width: 14%;
+                    .mixin_li(14%,40px);
                 }
             }
         }
@@ -310,63 +275,48 @@ export default{
                 .margin_list{
                     margin: 2px 2px 0px 0px;
                 }
-                .mixin_li(){
-                    width: 33.3%;
-                    height: 40px;
-                    float: left;
-                    line-height: 40px;
-                    text-align: center;
+                li{
                     background: #2c4564;
-                    width: 10%;
                 }
                 li:nth-of-type(1){
-                    .mixin_li();
-                    width: 14%;
+                    .mixin_li(14%,40px);
                 }
                 li:nth-of-type(2){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(3){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(4){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(5){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(6){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(7){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(8){
-                    .mixin_li();
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(9){
-                    .mixin_li();
-                    width: 14%;
+                    .mixin_li(14%,40px);
                 }
             }
         }
-        .mixin_reminder(){
-            width: 100%;
-            height: 25px;
-            text-align: left;
-            line-height: 25px; 
-            text-indent: 20px;
-        }
         .reminder{
-            .mixin_reminder();
+            .mixin_div(100%,25px,none,#e02f66,left);
             margin-top: 15px;
-            color: #e02f66;
             font-size: 15px;
             font-weight: 600;
+            text-indent: 20px;
         }
         .statistical_time{
-            .mixin_reminder();
-            color: #89a2c1;
+            .mixin_div(100%,25px,none,#89a2c1,left);
+            text-indent: 20px;
         }
     }
 

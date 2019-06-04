@@ -1,7 +1,7 @@
 <template>
 <section id="gamePlayer">
     <div class="quota">
-        <div class="quota_titile"><span>玩家信息</span></div>
+        <div class="quota_titile">玩家信息</div>
         <div class="agent_modify">
             <div class="agent_name"><span>今日活跃玩家:</span><span>20</span><span>今日新增玩家:</span><span>50</span></div>
             <div class="agent_profit"><span class="agent_span_s">玩家ID:</span><input placeholder="请输入玩家ID"></input><button>搜索</button></div>
@@ -69,17 +69,10 @@ export default{
         background: #243851;
         border-top: 3px solid #8bc6ee;
         .quota_titile{
-            width: 100%;
-            height: 70px;
-            line-height: 70px;
+            .mixin_div(100%,70px,#2C4564,#f2fafc,left);
             padding-left: 20px;
-            background: #2C4564;
-            span:nth-of-type(1){
-                color: #f2fafc;
-                font-weight: 600;
-                font-size: 16px;
-                display: block;
-            }
+            font-weight: 600;
+            font-size: 16px;
         }
         .agent_modify{
             width: 100%;
@@ -90,17 +83,11 @@ export default{
                 width: 100%;
                 height: 25px;
                 span:nth-of-type(1){
-                    width: 90px;
-                    height: 25px;
-                    display: inline-block;
-                    color: #94a8c1;
+                    .mixin_span(90px,25px,none,#94a8c1,center);
                 }
                 span:nth-of-type(2){
-                    color: #f4fbff;
+                    .mixin_span(50px,25px,none,#f4fbff,center);
                     margin-left: 10px;
-                    width: 50px;
-                    height: 25px;
-                    display: inline-block;
                 }
                 span:nth-of-type(3){
                     color: #94a8c1;
@@ -116,36 +103,20 @@ export default{
                 height: 35px;
                 margin-top: 20px;
                 .agent_span_s{
-                    color: #94a8c1;
-                    display: inline-block;
+                    .mixin_span(auto,35px,none,#94a8c1,center);
                     float: left;
-                    height: 35px;
-                    line-height: 35px;
                 }
                 input{
-                    width: 120px;
-                    height: 28px;
-                    line-height: 28px;
-                    outline: none;
+                    .mixin_input(120px,28px);
                     border: 1px solid #209fec;
                     background: #000000;
                     color: #edebf0;
-                    cursor: pointer;
-                    text-align: left;
-                    text-indent: 10px;
                     margin: 5px 0px 0px 10px;
-                    border-radius: 4px;
                 }
                 button:nth-of-type(1){
-                    width: 120px;
-                    height: 35px;
-                    line-height: 35px;
-                    outline: none;
+                    .mixin_button(120px,35px,#276699,#edebf0);
                     border: 1px solid #209fec;
-                    background: #276699;
-                    color: #edebf0;
                     float: right;
-                    cursor: pointer;
                 }
 
             }
@@ -157,23 +128,16 @@ export default{
             padding: 0px 20px;
             box-sizing: border-box;
             ul{
-                .mixin_li(){
-                    width: 33.3%;
-                    height: 40px;
-                    float: left;
-                    line-height: 40px;
-                    text-align: center;
-                }
                 li:nth-of-type(1){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                     text-align: left;
                     text-indent: 20px;
                 }
                 li:nth-of-type(2){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                 }
                 li:nth-of-type(3){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                     text-align: right;
                     padding-right: 15px;
                     box-sizing: border-box;
@@ -191,23 +155,16 @@ export default{
                 width: 100%;
                 background: #2c4564;
                 height: 40px;
-                .mixin_li(){
-                    width: 33.3%;
-                    height: 40px;
-                    float: left;
-                    line-height: 40px;
-                    text-align: center;
-                }
                 li:nth-of-type(1){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                     text-align: left;
                     text-indent: 20px;
                 }
                 li:nth-of-type(2){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                 }
                 li:nth-of-type(3){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                     text-align: right;
                     padding-right: 15px;
                     box-sizing: border-box;
@@ -220,38 +177,22 @@ export default{
             margin-top: 15px;
             position: relative;
             button:nth-of-type(1){
-                width: 120px;
-                height: 35px;
-                line-height: 35px;
-                outline: none;
+                .mixin_button(120px,35px,#276699,#edebf0);
                 border: 1px solid #209fec;
-                background: #276699;
-                color: #edebf0;
                 float: right;
-                cursor: pointer;
                 position: absolute;
                 left: 200px;
                 top: 0px;
             }
             div:nth-of-type(1){
-                width: 200px;
-                height: 35px;
-                line-height: 35px;
-                text-align: center;
+                .mixin_div(200px,35px,none,#edebf0,center);
                 position: absolute;
                 left: 320px;
-                color: #edebf0;
             }
             button:nth-of-type(2){
-                width: 120px;
-                height: 35px;
-                line-height: 35px;
-                outline: none;
+                .mixin_button(120px,35px,#276699,#edebf0);
                 border: 1px solid #209fec;
-                background: #276699;
-                color: #edebf0;
                 float: right;
-                cursor: pointer;
                 position: absolute;
                 top: 0px;
                 left: 520px;

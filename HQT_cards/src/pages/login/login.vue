@@ -101,8 +101,11 @@ export default{
   },
   created(){
       if(sessionStorage.getItem('checked')){
+          if(sessionStorage.getItem('counts')==1){
+              location.reload();
+              sessionStorage.setItem('counts',2);
+          }
           this.remember_checked = sessionStorage.getItem('checked');
-          sessionStorage.removeItem('checked');
       }
   },
   methods: {
@@ -114,6 +117,7 @@ export default{
             web.game_login(this.account_number,this.password_number,function() { 
                 var val = web.game_getPlayer();
                 sessionStorage.setItem('token',val.token);
+                sessionStorage.removeItem('checked');
                 that.$router.push({path: '/home'});
             });
             
@@ -142,12 +146,7 @@ export default{
             height: 40px;
             position: relative;
             .mixin_service(){
-                width: 100px;
-                height: 30px;
-                text-align: center;
-                line-height: 30px;
-                background: #0069b7;
-                color: #f8ffff;
+                .mixin_div(100px,30px,#0069b7,#f8ffff,center);
                 border-radius: 4px;
                 border: 1px solid #b98f39;
             }
@@ -176,20 +175,13 @@ export default{
                 border-radius: 4px;
                 border: 1px solid #b1923f;
                 span{
-                    width: 20%;
-                    height: 50px;
-                    line-height: 50px;
-                    display: inline-block;
+                    .mixin_span(20%,50px,none,auto,center);
                     font-weight: 600;
                     font-size: 16px;
                     float: left;
                 }
                 input{
-                    width: 80%;
-                    height: 48px;
-                    line-height: 48px;
-                    border: none;
-                    outline: none;
+                    .mixin_input(80%,48px);
                     background: #dedede;
                 }
             }
@@ -201,6 +193,7 @@ export default{
                 height: 35px;
                 position: relative;
                 input{
+                    .mixin_input(15px,15px);
                     width: 15px;
                     height: 15px;
                     background: #dedede;
@@ -212,23 +205,17 @@ export default{
                     margin-top: -7.5px;
                 }
                 span:nth-of-type(1){
-                    height: 35px;
-                    display: inline-block;
-                    line-height: 35px;
+                    .mixin_span(auto,35px,none,#eaedfe,center);
                     position: absolute;
                     top: 0px;
                     left: 30px;
-                    color: #eaedfe;
                 }
                 span:nth-of-type(2){
-                    height: 25px;
-                    display: inline-block;
-                    line-height: 25px;
+                    .mixin_span(auto,25px,none,#eaedfe,center);
                     position: absolute;
                     top: 50%;
                     right: 0px;
                     margin-top: -12.5px;
-                    color: #eaedfe;
                     cursor: pointer;
                 }
                 .rapid_registration{
@@ -243,46 +230,31 @@ export default{
                 }
             }
             .sign_in{
-                width: 100%;
-                height: 50px;
-                background: #b5913b;
+                .mixin_button(100%,50px,#b5913b,auto);
                 border: 1px solid #fffcf7;
                 border-radius: 4px;
-                text-align: center;
-                line-height: 50px;
                 font-size: 16px;
                 font-weight: 600;
             }
             .recommend{
-                width: 100%;
-                height: 50px;
-                text-align: center;
-                line-height: 50px;
-                color: #c5b869;
+                .mixin_div(100%,50px,none,#c5b869,center);
             }
             .optimal{
-                width: 100%;
-                height: 50px;
-                background: #00a0ed;
+                .mixin_div(100%,50px,#00a0ed,#fef5ee,center);
+                cursor: pointer;
                 border: 1px solid #fffcf7;
                 border-radius: 4px;
-                text-align: center;
-                line-height: 50px;
                 font-size: 16px;
                 font-weight: 600; 
-                color: #fef5ee;
             }
             .shortcut{
-                width: 100%;
-                height: 35px;
+                .mixin_div(100%,35px,none,#fef5ee,center);
+                cursor: pointer;
                 border: 1px solid #019eed;
                 border-radius: 8px;
-                text-align: center;
-                line-height: 35px;
                 font-size: 16px;
                 font-weight: 600;
                 margin-top: 20px;
-                color: #fef5ee;
             }
         }
     }
@@ -303,10 +275,7 @@ export default{
             height: 70px;
             position: relative;
             .theme_title{
-                width: 200px;
-                height: 70px;
-                line-height: 70px;
-                color: #e3aa27;
+                .mixin_div(200px,70px,none,#e3aa27,center);
                 font-weight: 600;
                 font-size: 28px;
                 position: absolute;
@@ -314,12 +283,7 @@ export default{
                 left: 0px;
             }
             .customer_service{
-                width: 100px;
-                height: 30px;
-                text-align: center;
-                line-height: 30px;
-                background: #0069b7;
-                color: #f8ffff;
+                .mixin_div(100px,30px,#0069b7,#f8ffff,center);
                 border-radius: 4px;
                 border: 1px solid #b98f39;
                 position: absolute;
@@ -331,33 +295,22 @@ export default{
             width: 100%;
             height: 50px;
             .user_name_left{
-                width: 55%;
-                height: 50px;
-                float: left;
+                .mixin_float(55%,50px,left);
                 background: #dedede;
                 border-radius: 4px;
                 border: 1px solid #b1923f;
                 span{
-                    width: 25%;
-                    height: 50px;
-                    line-height: 50px;
-                    display: inline-block;
+                    .mixin_span(25%,50px,none,auto,center);
                     font-weight: 600;
                     font-size: 16px;
                     float: left;
                 }
                 input{
-                    width: 75%;
-                    height: 48px;
-                    line-height: 48px;
-                    border: none;
-                    outline: none;
+                    .mixin_input(75%,48px);
                     background: #dedede;
                 }
                 .very_code{
-                    width: 80px;
-                    height: 48px;
-                    float: right;
+                    .mixin_float(80px,48px,right);
                 }
             }
             .user_name_right{
@@ -378,13 +331,9 @@ export default{
             height: 50px;
             margin-top: 15px;
             button{
-                width: 405px;
-                height: 50px;
-                background: #b5913b;
+                .mixin_button(405px,50px,#b5913b,auto);
                 border: 1px solid #fffcf7;
                 border-radius: 4px;
-                text-align: center;
-                line-height: 50px;
                 font-size: 16px;
                 font-weight: 600;
                 margin: 0 auto;
@@ -394,10 +343,7 @@ export default{
             width: 100%;
             height: 45px;
             span{
-                height: 30px;
-                line-height: 30px;
-                display: inline-block;
-                color: #d9c46b;
+                .mixin_span(auto,30px,none,#d9c46b,center);
                 margin-top: 10px;
                 cursor: pointer;
             }
@@ -431,19 +377,11 @@ export default{
                 }
             }
         }
-        .mixin_download(){
-            width: 100%;
-            height: 25px;
-            line-height: 25px;
-            text-align: center;
-            color: #f9ffff;
-        }
         .download_title{
-            .mixin_download();
+            .mixin_div(100%,25px,none,#f9ffff,center);
         }
         .download_explain{
-            .mixin_download();
-            color: #888ca7;
+            .mixin_div(100%,25px,none,#888ca7,center);
             font-size: 12px;
         }
     }
@@ -455,9 +393,7 @@ export default{
         top: 885px;
         background: #979ca0;
         border-top: 1px solid #b49239;
-        background-image: url('../../assets/cards/bottom.png');
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
+        .mixin_image(url('../../../static/cards/bottom.png'));
     }
 }
 </style>

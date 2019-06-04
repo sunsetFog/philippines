@@ -12,6 +12,8 @@
                 text-color="#f8faff"
                 active-text-color="#ffd04b"
                   >
+                
+                <el-menu-item index="/mcenter/crux"><div style="width: 100%;height: 100%;border-bottom: 1px solid #3d434f;"><i class="el-icon-setting"></i>管理中心</div></el-menu-item>
 
                   <el-submenu :index="item.key" :key="item.key" v-for="(item,index) in menuList">
                     <template slot="title">
@@ -58,26 +60,26 @@ export default{
     data(){
         return{
             menuList: [{key: '1',label: '七宝棋牌',icon: 'el-icon-star-off',effect:[
-                {key:'1-2-1',label: '棋牌信息',path:'/chesscard',effect:[]},
+                {key:'1-2-1',label: '棋牌信息',path:'/mcenter/chesscard',effect:[]},
                 {key:'1-2-2',label: '团队信息',effect:[
-                    {key:'1-3-1',label: '团队信息',path: '/teaminfo',effect:[]},
-                    {key:'1-3-2',label: '代理',path: '/agent',effect:[]},
-                    {key:'1-3-3',label: '玩家',path: '/player',effect:[]}
+                    {key:'1-3-1',label: '团队信息',path: '/mcenter/teaminfo',effect:[]},
+                    {key:'1-3-2',label: '代理',path: '/mcenter/agent',effect:[]},
+                    {key:'1-3-3',label: '玩家',path: '/mcenter/player',effect:[]}
                 ]},
-                {key:'1-2-3',label: '财务信息',path: '/finance',effect:[]},
-                {key:'1-2-4',label: '收益',path: '/profit',effect:[]},
-                {key:'1-2-5',label: '推广',path: '/extension',effect:[]},
-                {key:'1-2-6',label: '公告',path: '/notice',effect:[]}
+                {key:'1-2-3',label: '财务信息',path: '/mcenter/finance',effect:[]},
+                {key:'1-2-4',label: '收益',path: '/mcenter/profit',effect:[]},
+                {key:'1-2-5',label: '推广',path: '/mcenter/extension',effect:[]},
+                {key:'1-2-6',label: '公告',path: '/mcenter/notice',effect:[]}
                 ]},
 
                 {key: '2',label: '彩票游戏',icon: 'el-icon-refresh',effect: [
-                {key: '2-2-1',label: '彩票信息',path: '/lotteryinfo',effect:[]},
-                {key: '2-2-2',label: '团队信息',path: '/lotteryteam',effect:[]},
+                {key: '2-2-1',label: '彩票信息',path: '/mcenter/lotteryinfo',effect:[]},
+                {key: '2-2-2',label: '团队信息',path: '/mcenter/lotteryteam',effect:[]},
                 {key: '2-2-3',label: '彩票报表',path: '',effect:[
-                    {key: '2-3-1',label: '彩票报表',path: '/lotteryreport',effect:[]},
-                    {key: '2-3-2',label: '真人电子体育',path: '/electronicsports',effect:[]}
+                    {key: '2-3-1',label: '彩票报表',path: '/mcenter/lotteryreport',effect:[]},
+                    {key: '2-3-2',label: '真人电子体育',path: '/mcenter/electronicsports',effect:[]}
                 ]},
-                {key: '2-2-4',label: '公告',path: '/lotterynotice',effect:[]},
+                {key: '2-2-4',label: '公告',path: '/mcenter/lotterynotice',effect:[]},
                 ]}
             ],
         }
@@ -104,16 +106,12 @@ export default{
         padding: 45px 40px 0px 40px;
         box-sizing: border-box;
         .manage_content_left{
-            width: 270px;
-            height: 905px;
-            float: left;
+            .mixin_float(270px,905px,left);
             padding-right: 40px;
             box-sizing: border-box;
         }
         .manage_content_right{
-            width: 840px;
-            height: 905px;
-            float: right;
+            .mixin_float(840px,905px,right);
         }
     }
 }

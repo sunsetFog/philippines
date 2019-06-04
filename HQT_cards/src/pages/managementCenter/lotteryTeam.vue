@@ -1,7 +1,7 @@
 <template>
 <section id="lotteryTeam">
     <div class="quota">
-        <div class="quota_titile"><span>团队管理</span></div>
+        <div class="quota_titile">团队管理</div>
         <div class="agent_modify">
             <div class="agent_profit">
                 <input placeholder="请输入用户名查找"></input>
@@ -69,17 +69,10 @@ export default{
         background: #243851;
         border-top: 3px solid #8bc6ee;
         .quota_titile{
-            width: 100%;
-            height: 70px;
-            line-height: 70px;
+            .mixin_div(100%,70px,#2C4564,#f2fafc,left);
             padding-left: 20px;
-            background: #2C4564;
-            span:nth-of-type(1){
-                color: #f2fafc;
-                font-weight: 600;
-                font-size: 16px;
-                display: block;
-            }
+            font-weight: 600;
+            font-size: 16px;
         }
         .agent_modify{
             width: 100%;
@@ -92,20 +85,13 @@ export default{
                 border-bottom: 1px solid #435674;
                 position: relative;
                 input{
-                    width: 160px;
-                    height: 28px;
-                    line-height: 28px;
-                    outline: none;
+                    .mixin_input(160px,28px);
                     border: 1px solid #0d78bc;
                     background: #000000;
                     color: #edebf0;
-                    cursor: pointer;
-                    text-align: left;
-                    text-indent: 10px;
                     position: absolute;
                     top: 3px;
                     left: 0px;
-                    border-radius: 4px;
                 }
                 i{
                     width: 15px;
@@ -118,14 +104,9 @@ export default{
                     cursor: pointer;
                 }
                 .mixin_button(){
-                    width: 120px;
-                    height: 35px;
-                    line-height: 35px;
-                    outline: none;
+                    .mixin_button(120px,35px,none,#edebf0);
                     border: 1px solid #209fec;
                     position: absolute;
-                    cursor: pointer;
-                    color: #edebf0;
                 }
                 button:nth-of-type(1){
                     .mixin_button();
@@ -177,46 +158,32 @@ export default{
                 width: 100%;
                 height: 40px;
                 background: #415877;
-                .mixin_li(){
-                    height: 40px;
-                    float: left;
-                    line-height: 40px;
-                    text-align: center;
-                    color: #f1f0f8;
-                    font-weight: 600;
-                    font-size: 12px;
-                }
+                font-weight: 600;
+                font-size: 12px;
+                color: #f1f0f8;
                 li:nth-of-type(1){
-                    .mixin_li();
-                    width: 15%;
+                    .mixin_li(15%,40px);
                 }
                 li:nth-of-type(2){
-                    .mixin_li();
-                    width: 8%;
+                    .mixin_li(8%,40px);
                 }
                 li:nth-of-type(3){
-                    .mixin_li();
-                    width: 8%;
+                    .mixin_li(8%,40px);
                 }
                 li:nth-of-type(4){
-                    .mixin_li();
-                    width: 10%;
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(5){
-                    .mixin_li();
-                    width: 10%;
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(6){
-                    .mixin_li();
-                    width: 15%;
+                    .mixin_li(15%,40px);
                 }
                 li:nth-of-type(7){
-                    .mixin_li();
-                    width: 15%;
+                    .mixin_li(15%,40px);
                 }
                 li:nth-of-type(8){
-                    .mixin_li();
-                    width: 17.2%;
+                    .mixin_li(17.2%,40px);
                 }
             }
         }
@@ -233,45 +200,32 @@ export default{
                 .margin_list{
                     margin: 2px 2px 0px 0px;
                 }
-                .mixin_li(){
-                    width: 33.3%;
-                    height: 40px;
-                    float: left;
-                    line-height: 40px;
-                    text-align: center;
+                li{
                     background: #2c4564;
                 }
                 li:nth-of-type(1){
-                    .mixin_li();
-                    width: 15%;
+                    .mixin_li(15%,40px);
                 }
                 li:nth-of-type(2){
-                    .mixin_li();
-                    width: 8%;
+                    .mixin_li(8%,40px);
                 }
                 li:nth-of-type(3){
-                    .mixin_li();
-                    width: 8%;
+                    .mixin_li(8%,40px);
                 }
                 li:nth-of-type(4){
-                    .mixin_li();
-                    width: 10%;
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(5){
-                    .mixin_li();
-                    width: 10%;
+                    .mixin_li(10%,40px);
                 }
                 li:nth-of-type(6){
-                    .mixin_li();
-                    width: 15%;
+                    .mixin_li(15%,40px);
                 }
                 li:nth-of-type(7){
-                    .mixin_li();
-                    width: 15%;
+                    .mixin_li(15%,40px);
                 }
                 li:nth-of-type(8){
-                    .mixin_li();
-                    width: 17.2%;
+                    .mixin_li(17.2%,40px);
                 }
             }
         }
@@ -285,36 +239,33 @@ export default{
                 margin: 0 auto;
                 color: #efffff;
                 position: relative;
-                .mixin_span(){
-                    height: 35px;
-                    line-height: 35px;
-                    display: inline-block;
+                .mixin_spans(){
+                    .mixin_span(auto,35px,none,auto,center);
                     float: left;
                     position: absolute;
                 }
                 span:nth-of-type(1){
-                    .mixin_span();
+                    .mixin_spans();
                     left: 0px;
                     top: 0px;
                 }
                 span:nth-of-type(2){
-                    .mixin_span();
+                    .mixin_spans();
                     width: 24px;
                     height: 24px;
                     border-radius: 50%;
                     background: #2da5f1;
-                    text-align: center;
                     line-height: 24px;
                     left: 210px;
                     top: 6px;
                 }
                 span:nth-of-type(3){
-                    .mixin_span();
+                    .mixin_spans();
                     left: 240px;
                     top: 0px;
                 }
                 span:nth-of-type(4){
-                    .mixin_span();
+                    .mixin_spans();
                     width: 34px;
                     height: 24px;
                     background: #2da5f1;
@@ -324,19 +275,12 @@ export default{
                     top: 6px;
                 }
                 span:nth-of-type(5){
-                    .mixin_span();
+                    .mixin_spans();
                     left: 310px;
                     top: 0px;
                 }
                 button{
-                    width: 45px;
-                    height: 24px;
-                    background: #21abec;
-                    color: #f9efee;
-                    border: none;
-                    outline: none;
-                    border-radius: 4px;
-                    cursor: pointer;
+                    .mixin_button(45px,24px,#21abec,#f9efee);
                     position: absolute;
                     left: 330px;
                     top: 6px;

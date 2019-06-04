@@ -1,6 +1,6 @@
 <template>
     <section id="home_page">
-       <div class="theme_picture"><img src="../../assets/cards/theme.png"/></div>
+       <div class="theme_picture"><img src="../../../static/cards/theme.png"/></div>
        <div class="business_frame">
             <div class="business_content">
                 <div class="business_news"><img src=""/><span>是考虑到解放路卡就是代理费</span></div>
@@ -66,8 +66,7 @@ export default{
         width: 100%;
         height: 430px;
         img{
-            width: 100%;
-            height: 100%;
+            .mixin_img(100%,100%);
         }
     }
     .business_frame{
@@ -80,8 +79,7 @@ export default{
                 height: 30px;
                 line-height: 30px;
                 img{
-                    width: 20px;
-                    height: 20px;
+                    .mixin_img(20px,20px);
                 }
                 span{
                     margin-left: 15px;
@@ -109,20 +107,13 @@ export default{
                     width: 100%;
                     height: 400px;
                     .prize_list{
-                        width: 230px;
-                        height: 380px;
+                        .mixin_float(230px,380px,left);
                         border-radius: 4px;
                         border: 1px solid #20a1e5;
-                        float: left;
                         margin: 10px 0px 0px 10px;
                         position: relative;
                         .location{
-                            width: 75px;
-                            height: 35px;
-                            background: #161a37;
-                            text-align: center;
-                            line-height: 35px;
-                            color: #f2f3ee;
+                            .mixin_div(75px,35px,#161a37,#f2f3ee,center);
                             position: absolute;
                             left: 0px;
                             top: 0px;
@@ -172,24 +163,17 @@ export default{
                     width: 100%;
                     height: 440px;
                     .pattern_list{
-                        width: 400px;
-                        height: 200px;
+                        .mixin_float(400px,200px,left);
                         background: #293a4e;
                         margin: 10px 0px 0px 10px;
-                        float: left;
                         .pattern_left{
-                            width: 200px;
-                            height: 200px;
-                            float: left;
+                            .mixin_float(200px,200px,left);
                             img{
-                                width: 100%;
-                                height: 100%;
+                                .mixin_img(100%,100%);  
                             }
                         }
                         .pattern_right{
-                            width: 200px;
-                            height: 200px;
-                            float: right;
+                            .mixin_float(200px,200px,right);
                             color: #f5fffa;
                             padding: 0px 10px 0px 10px;
                             box-sizing: border-box;
@@ -220,13 +204,10 @@ export default{
                     width: 100%;
                     height: 430px;
                     .tradition_list{
-                        width: 390px;
-                        height: 410px;
-                        float: left;
+                        .mixin_float(390px,410px,left);
                         margin: 10px 0px 0px 10px;
                         img{
-                            width: 100%;
-                            height: 100%;
+                            .mixin_img(100%,100%);
                         }
                     }
                 }

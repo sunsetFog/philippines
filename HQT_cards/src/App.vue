@@ -17,6 +17,7 @@ export default {
         document.title = to.meta.title;
         if(to.path != '/login'&&from.path == '/'){
           sessionStorage.setItem('checked',true);
+          sessionStorage.setItem('counts',1);
           this.$router.push({path: '/login'});
           return;
         }else if(to.path == '/cards'){
@@ -56,7 +57,7 @@ body {
   color:#333 !important;
 }
 h1, h2, h3, h4, h5, h6{font-weight:normal;}
-ul,ol {
+ul, ol, li{
   list-style: none;
 }
 img {
@@ -74,7 +75,7 @@ table {
   table-layout: fixed;
 }
 
-input, textarea {
+input, textarea,button{
   outline: none;
   border: none;
 }

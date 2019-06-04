@@ -49,12 +49,8 @@ export default{
         height: 220px;
         border-top: 3px solid #8bc6ee;
         .cards_title{
-            width: 100%;
-            height: 70px;
-            color: white;
-            line-height: 70px;
+            .mixin_div(100%,70px,#2C4564,white,left);
             text-indent: 20px;
-            background: #2C4564;
             font-weight: 600;
             font-size: 16px;
         }
@@ -68,9 +64,7 @@ export default{
                 width: 100%;
                 height: 30px;
                 .recharge{
-                    width: 50%;
-                    height: 30px;
-                    float: left;
+                    .mixin_float(50%,30px,left);
                     span:nth-of-type(1){
                         color: #99adc8;
                         margin-left: 20px;
@@ -110,9 +104,7 @@ export default{
             margin: 0px 0px 10px 10px;
         }
         .balance_list{
-            width: 415px;
-            height: 110px;
-            float: left;
+            .mixin_float(415px,110px,left);
             border-top: 3px solid #8bc6ee;
             .theme{
                 width: 100%;
@@ -121,20 +113,13 @@ export default{
                 padding: 0px 10px 0px 10px;
                 box-sizing: border-box;
                 .theme_left{
-                    width: 50%;
-                    height: 40px;
+                    .mixin_div(50%,40px,none,#8cc3ec,left);
                     float: left;
-                    color: #8cc3ec;
-                    line-height: 40px;
                     font-weight: 600;
                 }
                 .theme_right{
-                    width: 50%;
-                    height: 40px;
+                    .mixin_div(50%,40px,none,#f5fdff,right);
                     float: right;
-                    color: #f5fdff;
-                    line-height: 40px;
-                    text-align: right;
                 }
             }
             .balance_info{
@@ -150,21 +135,13 @@ export default{
                     top: 50%;
                     margin: -15px 0px 0px -125px;
                     .count_left{
-                        width: 160px;
-                        height: 30px;
+                        .mixin_div(160px,30px,none,#f5fdff,center);
                         float: left;
-                        color: #f5fdff;
                         font-weight: 600;
-                        text-align: center;
-                        line-height: 30px;
                     }
                     .count_right{
-                        width: 30px;
-                        height: 30px;
+                        .mixin_div(30px,30px,none,#f5fdff,center);
                         float: right;
-                        color: #f5fdff;
-                        text-align: center;
-                        line-height: 30px;
                     }
                 }
             }
@@ -177,15 +154,9 @@ export default{
             margin: 0px 15px 0px 0px;
         }
             button{
-                width: 198.75px;
-                height: 35px;
-                line-height: 35px;
-                outline: none;
+                .mixin_button(198.75px,35px,#276699,#edebf0);
                 border: 1px solid #209fec;
-                background: #276699;
-                color: #edebf0;
                 float: left;
-                cursor: pointer;
             }
     }
 

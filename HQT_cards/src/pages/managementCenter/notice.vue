@@ -72,12 +72,8 @@ export default{
         border-top: 3px solid #8bc6ee;
         margin-bottom: 25px;
         .cards_title{
-            width: 100%;
-            height: 70px;
-            color: white;
-            line-height: 70px;
+            .mixin_div(100%,70px,#2C4564,white,left);
             text-indent: 20px;
-            background: #2C4564;
             font-weight: 600;
             font-size: 16px;
         }
@@ -86,9 +82,7 @@ export default{
             height: 530px;
             background: #243851;
             .system_notice_left{
-                width: 275px;
-                height: 530px;
-                float: left;
+                .mixin_float(275px,530px,left);
                 border-right: 1px solid #435772;
                 .notice_active{
                     background: #2c4564;
@@ -118,20 +112,13 @@ export default{
                     padding: 2px 10px 0px 10px;
                     box-sizing: border-box;
                         .mixin_carouse(){
-                            width: 24px;
-                            height: 24px;
+                            .mixin_span(24px,24px,none,white,center);
                             border-radius: 50%;
-                            display: inline-block;
                             float: left;
-                            color: white;
                             border: 1px solid #03a2dc;
-                            text-align: center;
-                            line-height: 24px; 
                         }
                     .carousel_left{
-                        width: 55px;
-                        height: 30px;
-                        float: left;
+                        .mixin_float(55px,30px,left);
                         span:nth-of-type(1){
                             .mixin_carouse();
                         }
@@ -141,9 +128,7 @@ export default{
                         }
                     }
                     .carousel_list{
-                        width: 145px;
-                        height: 30px;
-                        float: left;
+                        .mixin_float(145px,30px,left);
                         ul{
                             width: 112px;
                             height: 30px;
@@ -155,9 +140,7 @@ export default{
                         }
                     }
                     .carouse_right{
-                            width: 55px;
-                            height: 30px;
-                            float: right;
+                            .mixin_float(55px,30px,right);
                         span:nth-of-type(1){
                             .mixin_carouse();
                             float: right;
@@ -171,28 +154,19 @@ export default{
                 }
             }
             .system_notice_right{
-                width: 565px;
-                height: 530px;
-                float: right;
+                .mixin_float(565px,530px,right);
                 padding: 20px 25px 0px 25px;
                 box-sizing: border-box;
                 .notice_title{
-                     width: 100%;
-                     height: 50px;
+                    .mixin_div(100%,50px,none,#f1f5f6,center);
                      border-bottom: 1px solid #435772;
-                     text-align: center;
-                     line-height: 50px;
                      font-size: 18px;
-                     color: #f1f5f6;
                 }
                 .notice_content{
                     width: 100%;
                     height: 460px;
                     .greet{
-                        width: 100%;
-                        height: 30px;
-                        color: #f1f5f6;
-                        line-height: 30px;
+                        .mixin_div(100%,30px,none,#f1f5f6,left);
                         margin-top: 10px;
                     }
                     .notice_information{
@@ -202,18 +176,10 @@ export default{
                         color: #f1f5f6;
                     }
                     .sender{
-                        width: 100%;
-                        height: 25px;
-                        line-height: 25px;
-                        color: #f1f5f6;
-                        text-align: right;
+                        .mixin_div(100%,25px,none,#f1f5f6,right);
                     }
                     .sender_date{
-                        width: 100%;
-                        height: 25px;
-                        text-align: right;
-                        line-height: 25px;
-                        color: #f1f5f6;
+                        .mixin_div(100%,25px,none,#f1f5f6,right);
                     }                    
                 }
             }

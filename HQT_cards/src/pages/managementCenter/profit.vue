@@ -1,7 +1,7 @@
 <template>
 <section id="profit">
     <div class="quota">
-        <div class="quota_titile"><span>收益信息</span></div>
+        <div class="quota_titile">收益信息</div>
         <div class="agent_modify">
             <div class="agent_name">
                     <div class="query_title">查询日期:</div>
@@ -102,17 +102,10 @@ export default{
         background: #243851;
         border-top: 3px solid #8bc6ee;
         .quota_titile{
-            width: 100%;
-            height: 70px;
-            line-height: 70px;
+            .mixin_div(100%,70px,#2C4564,#f2fafc,left);
             padding-left: 20px;
-            background: #2C4564;
-            span:nth-of-type(1){
-                color: #f2fafc;
-                font-weight: 600;
-                font-size: 16px;
-                display: block;
-            }
+            font-weight: 600;
+            font-size: 16px;
         }
         .agent_modify{
             width: 100%;
@@ -123,14 +116,11 @@ export default{
                 width: 100%;
                 height: 35px;
                 .query_title{
-                    height: 35px;
-                    float: left;
+                    .mixin_float(auto,35px,left);
                     color: #94a8c1;
                 }
                 .query_date{
-                    width: 270px;
-                    height: 35px;
-                    float: left;
+                    .mixin_float(270px,35px,left);
                     padding-left: 10px;
                     box-sizing: border-box;
                 }
@@ -140,49 +130,29 @@ export default{
                 height: 35px;
                 margin-top: 20px;
                 .agent_span_s{
-                    color: #94a8c1;
-                    display: inline-block;
+                    .mixin_span(auto,35px,none,#94a8c1,center);
                     float: left;
-                    height: 35px;
-                    line-height: 35px;
                 }
                 .select_type{
-                    width: 130px;
-                    height: 35px;
-                    float: left;
+                    .mixin_float(130px,35px,left);
                     padding: 5px 0px 0px 10px;
                     box-sizing: border-box;
                 }
                 .query_role{
-                    width: 140px;
-                    height: 35px;
-                    float: left;
+                    .mixin_float(140px,35px,left);
                     input{
-                        width: 120px;
-                        height: 28px;
-                        line-height: 28px;
-                        outline: none;
+                        .mixin_input(120px,28px);
                         border: 1px solid #209fec;
                         background: #000000;
                         color: #edebf0;
-                        cursor: pointer;
-                        text-align: left;
-                        text-indent: 10px;
                         margin: 5px 0px 0px 20px;
-                        border-radius: 4px;
                      }
                 }
                 
                 button:nth-of-type(1){
-                    width: 120px;
-                    height: 35px;
-                    line-height: 35px;
-                    outline: none;
+                    .mixin_button(120px,35px,#276699,#edebf0);
                     border: 1px solid #209fec;
-                    background: #276699;
-                    color: #edebf0;
                     float: right;
-                    cursor: pointer;
                 }
 
             }
@@ -194,23 +164,16 @@ export default{
             padding: 0px 20px;
             box-sizing: border-box;
             ul{
-                .mixin_li(){
-                    width: 33.3%;
-                    height: 40px;
-                    float: left;
-                    line-height: 40px;
-                    text-align: center;
-                }
                 li:nth-of-type(1){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                     text-align: left;
                     text-indent: 20px;
                 }
                 li:nth-of-type(2){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                 }
                 li:nth-of-type(3){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                     text-align: right;
                     padding-right: 15px;
                     box-sizing: border-box;
@@ -228,23 +191,16 @@ export default{
                 width: 100%;
                 background: #2c4564;
                 height: 40px;
-                .mixin_li(){
-                    width: 33.3%;
-                    height: 40px;
-                    float: left;
-                    line-height: 40px;
-                    text-align: center;
-                }
                 li:nth-of-type(1){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                     text-align: left;
                     text-indent: 20px;
                 }
                 li:nth-of-type(2){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                 }
                 li:nth-of-type(3){
-                    .mixin_li();
+                    .mixin_li(33.3%,40px);
                     text-align: right;
                     padding-right: 15px;
                     box-sizing: border-box;
@@ -257,38 +213,20 @@ export default{
             margin-top: 15px;
             position: relative;
             button:nth-of-type(1){
-                width: 120px;
-                height: 35px;
-                line-height: 35px;
-                outline: none;
+                .mixin_button(120px,35px,#276699,#edebf0);
                 border: 1px solid #209fec;
-                background: #276699;
-                color: #edebf0;
-                float: right;
-                cursor: pointer;
                 position: absolute;
                 left: 200px;
                 top: 0px;
             }
             div:nth-of-type(1){
-                width: 200px;
-                height: 35px;
-                line-height: 35px;
-                text-align: center;
+                .mixin_div(200px,35px,none,#edebf0,center);
                 position: absolute;
                 left: 320px;
-                color: #edebf0;
             }
             button:nth-of-type(2){
-                width: 120px;
-                height: 35px;
-                line-height: 35px;
-                outline: none;
+                .mixin_button(120px,35px,#276699,#edebf0);
                 border: 1px solid #209fec;
-                background: #276699;
-                color: #edebf0;
-                float: right;
-                cursor: pointer;
                 position: absolute;
                 top: 0px;
                 left: 520px;

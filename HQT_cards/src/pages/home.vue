@@ -121,16 +121,11 @@
         margin-left: 2px;
         text-align: center;
         img{
-          width: 30px;
-          height: 30px;
+          .mixin_img(30px,30px);
           margin-top: 6px;
         }
         span{
-          width: 100%;
-          height: 25px;
-          line-height: 25px;
-          color: white;
-          display: inline-block;
+          .mixin_span(100%,25px,none,white,center);
         }
       }
     }
@@ -146,16 +141,13 @@
       width: 1020px;
       height: 35px;
       margin: 0 auto;
-      -background: white;
       color: white;
       line-height: 35px;
       .welcome{
-        width: 180px;
-        float: left;
+        .mixin_float(180px,100%,left);
       }
       .reserve{
-        width: 150px;
-        float: left;
+        .mixin_float(150px,100%,left);
         margin-left: 20px;
         span:nth-of-type(2){
           margin-left: 15px;
@@ -163,30 +155,25 @@
         }
       }
       .balance{
-        width: 110px;
-        float: left;
+        .mixin_float(110px,100%,left);
         margin-left: 270px;
       }
       .refresh{
-        width: 65px;
-        float: left;
+        .mixin_float(65px,100%,left);
         margin-left: 10px;
       }
       .rechange{
-        width: 55px;
-        float: left;
+        .mixin_float(55px,100%,left);
         margin-left: 15px;
         text-align: center;
       }
       .drawing{
-        width: 55px;
-        float: left;
+        .mixin_float(55px,100%,left);
         margin-left: 10px;
         text-align: center;
       }
       .customer_service{
-        width: 60px;
-        float: left;
+        .mixin_float(60px,100%,left);
         margin-left: 15px;
       }
     }
@@ -200,32 +187,23 @@
       height: 60px;
       margin: 0 auto;
       .tabs_left{
-        width: 15%;
-        height: 60px;
-        float: left;
+        .mixin_float(15%,60px,left);
         img{
-          width: 100px;
-          height: 60px;
+          .mixin_img(100px,60px);
           float: right;
           margin-right: 50px;
         }
       }
       .tabs_right{
-        width: 85%;
-        height: 60px;
-        float: right;
+        .mixin_float(85%,60px,right);
         ul{
           color: white;
           li{
-            width: 12.5%;
-            height: 60px;
-            line-height: 60px;
-            text-align: center;
-            float: left;
+            .mixin_li(12.5%,60px);
+            cursor: pointer;
             span{
-              width: 100%;
-              height: 100%;
-              display: inline-block;
+              .mixin_span(100%,100%,none,auto,center);
+              display: inline;
             }
             a{
               color: white;
