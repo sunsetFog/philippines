@@ -115,7 +115,7 @@ export default{
       signIn(){
             var that = this;
             web.game_login(this.account_number,this.password_number,function() { 
-                var val = web.game_getPlayer();
+                let val = web.game_getPlayer();
                 sessionStorage.setItem('token',val.token);
                 sessionStorage.removeItem('checked');
                 that.$router.push({path: '/home'});

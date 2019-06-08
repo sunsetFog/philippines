@@ -44,7 +44,7 @@
 
                 </div>
                 <div class="payment">
-                    <button v-for="(item,index) in pay_btn"><i style="margin-right: 10px;" class="el-icon-picture-outline-round"></i>{{item.title}}</button>
+                    <button v-for="(item,index) in pay_btn" @click="payMeans(index)"><i style="margin-right: 10px;" class="el-icon-picture-outline-round"></i>{{item.title}}</button>
                 </div>
             </div>
         </div>
@@ -60,11 +60,16 @@
                 </div>
             </div>
         </div>
+
+        <recharge ref="recharge"></recharge>
     </section>
 </template>
 
 <script>
+import recharge from '../../components/recharge.vue';
 export default{
+    name: 'parent',
+    components: {recharge},
     data(){
         return{
             nickname_state: false,
@@ -97,12 +102,17 @@ export default{
             console.log('home====',this.player_info);
         }
     },
-    methods: {
+    methods:{
         nickname_determine(){
             this.nickname_state = false;
         },
         reverse_determine(){
             this.reserve_state = false
+        },
+        payMeans(index){
+            if(index==0){
+                this.$refs.recharge.changeMeans();
+            }
         }
     }
 }
@@ -162,6 +172,7 @@ export default{
                         .mixin_span(auto,30px,none,@color_white,center);
                         float: right;
                         text-decoration: underline;
+                        cursor: pointer;
                     }
                 }
                 .nickname,.reserve{
@@ -197,6 +208,7 @@ export default{
                         .mixin_span(auto,30px,none,#e52346,center);
                         float: right;
                         text-decoration: underline;
+                        cursor: pointer;
                     }
                 }
             }

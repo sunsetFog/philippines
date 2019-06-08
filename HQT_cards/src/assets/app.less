@@ -28,7 +28,7 @@
     }
 }
 
-#lottery{
+#lottery,#recharge{
     .el-dialog__header{
         background: #cc9727;
         color: @color_white;
@@ -45,4 +45,34 @@
             }
         } 
     }
+}
+#recharge{
+    .el-dialog__header{
+        background: #032042;
+    }
+}
+
+#home_page{
+    .el-carousel__container{
+        height: 740px;
+    }
+    .el-carousel__arrow--left{
+        .mixin_image(url('../../static/dream/left_nomal.png'));
+        .el-icon-arrow-left{
+            display: none;
+        }
+    }
+    .el-carousel__arrow--left:hover{
+        .mixin_image(url('../../static/dream/left_hover.png'));
+    }
+    .el-carousel__arrow--right{
+        .mixin_image(url('../../static/dream/right_nomal.png'));
+        .el-icon-arrow-right{
+            display: none;
+        }
+    }
+    .el-carousel__arrow--right:hover{
+        .mixin_image(url('../../static/dream/right_hover.png'));
+    }
+
 }

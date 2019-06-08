@@ -167,7 +167,7 @@
                     {stage: '0314-195期',number: [6,6,5,4,5],configuration: '组三'},
                 ],
                 activeName: '/lottery/afteryards',
-                varyActive: true,//添加彩种
+                varyActive: false,//添加彩种
                 separation_list: [//分分彩
                     {title: '河内五分彩',active: false},
                     {title: '泰国300秒',active: false},
