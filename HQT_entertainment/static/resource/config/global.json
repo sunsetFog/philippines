@@ -1,0 +1,14 @@
+{
+    "WebVer": "1.12.0",
+    "IsDebug": true,
+    "IsTest": true,
+    "IsSimulate": false,
+    "HttpSerever": "http://www.baidu.com",
+    "SocketServerNative": "ws://testenv-game.networkws.com:12001",
+    "SocketServer": "ws://10.1.101.59:12001",
+    "ResoureServerUrlNative": "http://testenv-source.networkws.com:8081",
+    "ResoureServerUrl": "http://10.1.101.48:8081",
+    "ProtoConfig": "simple_config",
+    "ErrorConfig": "error_config",
+    "Games": "gamecfg"
+}
