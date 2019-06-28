@@ -38,7 +38,7 @@ export default {
   name: 'login',
   data () {
     // 开头是字母 后面可以是数字 字母 下划线 总长度为 4到20
-    const valid = /^[a-zA-Z]\w{4,19}$/
+    const valid = /^[a-zA-Z]\w{3,19}$/
     const validateUsername = (rule, value, callback) => {
       if (value.length === 0) {
         callback(new Error('请输入用户名'))

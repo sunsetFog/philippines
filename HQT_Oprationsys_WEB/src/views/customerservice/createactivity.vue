@@ -151,8 +151,8 @@ export default {
       },
       rules: {
         name: [
-          {required: true, message: '请输入主题', trigger: 'blur'}
-          // {min: 2, max:11, message: '长度大于六个字符小于11个字符', trigger: 'blur'}
+          {required: true, message: '请输入主题', trigger: 'blur'},
+          {min: 0, max:16, message: '长度应在16个字符以内', trigger: 'blur'}
         ],
         time: [
           {required: true, message: '请选类型', trigger: 'change'}

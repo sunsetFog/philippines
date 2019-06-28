@@ -265,10 +265,11 @@ export default {
     query () {
       let that = this
       this.currentPage = 1
+      this.num = 1
       getlist(this)
       let setorder = {
           'value': that.formInline.value,
-          'currentPage': that.currentPage,
+          'currentPage': that.num,
           'pagesize': that.pagesize,
           'termno': that.formInline.termno,
           'type': that.formInline.type,

@@ -1,6 +1,7 @@
 <template>
 <section id="management">
     <div class="example_frame">
+        <img class="big_fish" src="../../../static/dream/login/fish.png"/>
         <div class="manage_content">
             <router-view v-if="!manage_state"></router-view>
             <div class="manage_content_left" v-if="manage_state">
@@ -113,14 +114,24 @@ export default{
     .example_frame{
         width: 100%;
         height: 1120px;
-        .mixin_image(url('../../../static/dream/center/bg-guanli.png'));
+        .mixin_image(url('../../../static/dream/center/bg-guanli.jpg'));
+        position: relative;
+        .big_fish{
+            .mixin_img(426px;487px);
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+        }
         .manage_content{
             width: 1200px;
             height: 1120px;
             background: rgba(88,51,82,0.6);
             border-left: 1px solid @color_blueviolet;
             border-right: 1px solid @color_blueviolet;
-            margin: 0 auto;
+            position: absolute;
+            left: 50%;
+            top: 0px;
+            margin-left: -600px;
             padding: 45px 43px 0px 43px;
             box-sizing: border-box;
             .manage_content_left{

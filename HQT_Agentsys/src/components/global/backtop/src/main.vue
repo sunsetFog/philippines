@@ -93,7 +93,7 @@ export default {
     width: 0;
     height: 0;
     border: 12px solid transparent;
-    border-bottom-color: #dfe6ec;
+    border-bottom-color: #2e163d;
     text-align: center;
   }
   .hover {

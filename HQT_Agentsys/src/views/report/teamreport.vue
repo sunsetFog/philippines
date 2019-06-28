@@ -21,30 +21,30 @@
           
       </mt-cell>
       <div style="display: flex">
-        <mt-cell title="团队总流水" :label="team_total_flow"  class="threecell fontcolorb">
+        <mt-cell title="团队总流水（总计）" :label="team_flow"  class="threecell fontcolorb">
         </mt-cell>
-        <mt-cell title="个人税收收益" :label="team_total_tax"  class="threecell fontcolorr">
+        <mt-cell title="个人税收收益" :label="team_tax"  class="threecell fontcolorr">
         </mt-cell>
       </div>
     </div>
 
      <p style="color:red;text-align:center;">∗ 仅展示近一个月内的报表数据</p>
 
-      <div class="card namestyle">
+      <!-- <div class="card namestyle">
         <mt-cell :title="name" is-link :to="'/teaminfo?'+id">
         </mt-cell>
         <div class="boxposition">
-          <p>团队总流水：<span class="fontcolorb">{{team_total_flow}}</span></p>
-          <p>个人税收收益：<span class="fontcolorr">{{team_total_tax}}</span></p>
+          <p>团队总流水：<span class="fontcolorb">{{team_flow}}</span></p>
+          <p>个人税收收益：<span class="fontcolorr">{{team_tax}}</span></p>
         </div>
-      </div>
+      </div> -->
   <div v-infinite-scroll='loadmore'>
      <div class="card namestyle" v-for="(item, index) in newlist" :key="index">
         <mt-cell :title="item.agent_name" is-link :to="'/teaminfo?'+item.agent_id">
         </mt-cell>
         <div class="boxposition">
           <p>团队总流水：<span class="fontcolorb">{{item.team_flow}}</span></p>
-          <p>个人税收收益：<span class="fontcolorr">{{item.agent_tax}}</span></p>
+          <p>个人税收收益：<span class="fontcolorr">{{item.self_tax}}</span></p>
         </div>
       </div>
   </div>
@@ -66,8 +66,8 @@ export default {
   data () {
     return {
       value: '',
-      team_total_flow: '',
-      team_total_tax: '',
+      team_flow: '',
+      team_tax: '',
       list: [],
       newlist: [],
       pageno: 1,
@@ -83,18 +83,7 @@ export default {
   components: { otherheader },
   created() {
     let that = this
-    request({
-        url: this.public.url + '/teamreport/getteamincome',
-        method: 'post',
-        data: {
-        }
-      }).then(res => {
-        that.team_total_flow = res.data.team_total_flow
-        that.team_total_tax = res.data.team__total_tax.toString()
-        // that.id = res.data.
-      }).catch(error => {
-      })
-    getlist(this)
+    getlist(this,1)
   },
   methods: {
     back () {
@@ -120,10 +109,9 @@ function getlist (that, pageno) {
         pagerows: 15
       }
     }).then(res => {
-      that.list = res.data.list
-        that.list.map ((item)=>{
-          that.newlist.push(item)
-        }) 
+      that.team_flow = res.data.list[0].team_flow
+      that.team_tax = res.data.list[0].team_tax.toString()
+      that.newlist= res.data.list
       that.pageno = res.data.pageno
       that.pagenum = res.data.pagenum
     }).catch(error => {
@@ -134,10 +122,10 @@ function getlist (that, pageno) {
 <style rel="stylesheet/scss" lang="scss">
   .card {
     margin: 10px;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    border-left: 2px solid #d9d9d9;
-    border-right: 2px solid #d9d9d9;
+    border-top: 1px solid #2e163d;
+    border-bottom: 1px solid #2e163d;
+    border-left: 2px solid #2e163d;
+    border-right: 2px solid #2e163d;
     border-radius: 12px;
     position: relative;
   }
@@ -149,7 +137,7 @@ function getlist (that, pageno) {
   .threecell {
     float: left;
     flex: 1;
-    border-right: 1px solid #d9d9d9;
+    border-right: 1px solid #2e163d;
     text-align: center;
   }
   .teamreport {
@@ -157,7 +145,7 @@ function getlist (that, pageno) {
       height: 70px;
     }
     .fontcolorb .mint-cell-label {
-      color: blue;
+       color: #ffea00;
     }
     .fontcolorr .mint-cell-label {
       color: red;
@@ -166,8 +154,8 @@ function getlist (that, pageno) {
       font-size: 20px;
     }
     .namestyle .mint-cell-text {
-      background: blue;
-      color: white;
+      background: #2e163d;
+      color: #855aa1;
       padding: 20px 10px;
     }
     .boxposition {
@@ -178,7 +166,7 @@ function getlist (that, pageno) {
     }
   }
   .mint-header {
-  background-color: #304156!important;
+  background-color: #513663!important;
   height: 60px!important;
   font-size: 21px!important;
 }

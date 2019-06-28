@@ -21,7 +21,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -36,7 +36,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -118,7 +118,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline2.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -133,7 +133,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -216,7 +216,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline3.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -231,7 +231,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -313,7 +313,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline4.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -328,7 +328,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -410,7 +410,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline5.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -425,7 +425,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -507,7 +507,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline6.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -522,7 +522,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -604,7 +604,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline7.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -619,7 +619,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -701,7 +701,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline8.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -716,7 +716,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -798,7 +798,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline9.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -813,7 +813,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -895,7 +895,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline10.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -910,7 +910,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -972,7 +972,7 @@
           </el-table>
 
         </el-tab-pane>
-         <el-tab-pane label="龙虎斗">
+         <el-tab-pane label="龙虎斗经典场">
           <div class="query">
               <el-row>
                 <el-form :inline="true" label-width="80px">
@@ -992,7 +992,7 @@
                     <el-form-item label="日期">
                       <el-date-picker
                       v-model="formInline11.time"
-                      type="datetimerange"
+                      type="daterange"
                       :editable="false"
                       range-separator="-"
                       start-placeholde="开始日期"
@@ -1007,7 +1007,7 @@
                               v-for="(item, key) in modellist"
                               :key="key"
                               :label="item.name"
-                              :value="item.id">
+                              :value="item.code">
                             </el-option>
                           </el-select>
                     </el-form-item>
@@ -1024,6 +1024,200 @@
             :data="tableData11"
             :cell-class-name='cell'
             :span-method="objectmethod11"
+            border
+            style="width: 100%">
+              <el-table-column
+                label="所属模块"
+                prop="module_name">
+              </el-table-column>
+              <el-table-column
+              prop="event_name"
+              label="点击事件">
+            </el-table-column>
+            <el-table-column
+              :prop="seven"
+              :label='seven'>
+            </el-table-column>
+            <el-table-column
+              :prop="six"
+              :label="six">
+            </el-table-column>
+            <el-table-column
+              :prop="five"
+              :label="five">
+            </el-table-column>
+             <el-table-column
+              :prop="four"
+              :label="four">
+            </el-table-column>
+             <el-table-column
+              :prop="three"
+              :label="three">
+            </el-table-column>
+             <el-table-column
+              :prop="two"
+              :label="two">
+            </el-table-column>
+             <el-table-column
+              :prop="one"
+              :label="one">
+            </el-table-column>
+            <el-table-column
+              prop="sum"
+              label="合计">
+            </el-table-column>
+          </el-table>
+
+        </el-tab-pane>
+        <el-tab-pane label="龙虎斗彩票场">
+          <div class="query">
+              <el-row>
+                <el-form :inline="true" label-width="80px">
+                   <el-col :span="6">
+                      <el-form-item label="玩家渠道">
+                          <el-select v-model="formInline12.org" clearable>
+                            <el-option
+                              v-for="item in statuslist"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                      </el-form-item>
+                    </el-col>
+                   <el-col :span="8">
+                    <el-form-item label="日期">
+                      <el-date-picker
+                      v-model="formInline12.time"
+                      type="daterange"
+                      :editable="false"
+                      range-separator="-"
+                      start-placeholde="开始日期"
+                      end-placeholde="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="所属模块">
+                        <el-select v-model="formInline12.model" clearable>
+                            <el-option
+                              v-for="(item, key) in modellist"
+                              :key="key"
+                              :label="item.name"
+                              :value="item.code">
+                            </el-option>
+                          </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="3">
+                    <el-button type="primary" icon="el-icon-search" @click="query12" v-if="gameclickstatgetlist">查询</el-button>
+                    <el-button type="primary" icon="el-icon-search" @click="excel12"  v-if="gameclickstatdownloadlist">导出</el-button>
+                  </el-col>
+                </el-form>
+              </el-row>
+            </div>
+            <span>备注：列表仅展示最后7天，可导出90天的记录。</span>
+            <el-table
+            :data="tableData12"
+            :cell-class-name='cell'
+            :span-method="objectmethod12"
+            border
+            style="width: 100%">
+              <el-table-column
+                label="所属模块"
+                prop="module_name">
+              </el-table-column>
+              <el-table-column
+              prop="event_name"
+              label="点击事件">
+            </el-table-column>
+            <el-table-column
+              :prop="seven"
+              :label='seven'>
+            </el-table-column>
+            <el-table-column
+              :prop="six"
+              :label="six">
+            </el-table-column>
+            <el-table-column
+              :prop="five"
+              :label="five">
+            </el-table-column>
+             <el-table-column
+              :prop="four"
+              :label="four">
+            </el-table-column>
+             <el-table-column
+              :prop="three"
+              :label="three">
+            </el-table-column>
+             <el-table-column
+              :prop="two"
+              :label="two">
+            </el-table-column>
+             <el-table-column
+              :prop="one"
+              :label="one">
+            </el-table-column>
+            <el-table-column
+              prop="sum"
+              label="合计">
+            </el-table-column>
+          </el-table>
+
+        </el-tab-pane>
+         <el-tab-pane label="红包扫雷">
+          <div class="query">
+              <el-row>
+                <el-form :inline="true" label-width="80px">
+                   <el-col :span="6">
+                      <el-form-item label="玩家渠道">
+                          <el-select v-model="formInline13.org" clearable>
+                            <el-option
+                              v-for="item in statuslist"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                      </el-form-item>
+                    </el-col>
+                   <el-col :span="8">
+                    <el-form-item label="日期">
+                      <el-date-picker
+                      v-model="formInline13.time"
+                      type="daterange"
+                      :editable="false"
+                      range-separator="-"
+                      start-placeholde="开始日期"
+                      end-placeholde="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="所属模块">
+                        <el-select v-model="formInline13.model" clearable>
+                            <el-option
+                              v-for="(item, key) in modellist"
+                              :key="key"
+                              :label="item.name"
+                              :value="item.code">
+                            </el-option>
+                          </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="3">
+                    <el-button type="primary" icon="el-icon-search" @click="query13" v-if="gameclickstatgetlist">查询</el-button>
+                    <el-button type="primary" icon="el-icon-search" @click="excel13"  v-if="gameclickstatdownloadlist">导出</el-button>
+                  </el-col>
+                </el-form>
+              </el-row>
+            </div>
+            <span>备注：列表仅展示最后7天，可导出90天的记录。</span>
+            <el-table
+            :data="tableData13"
+            :cell-class-name='cell'
+            :span-method="objectmethod13"
             border
             style="width: 100%">
               <el-table-column
@@ -1161,15 +1355,23 @@ export default {
       },
       tableData11: [
       ],
+      formInline12: {
+        model: '',
+        time: '',
+        org: ''
+      },
+      tableData12: [
+      ],
+      formInline13: {
+        model: '',
+        time: '',
+        org: ''
+      },
+      tableData13: [
+      ],
       id: '',
       statuslist: [],
       modellist: [
-        {name: '全部',id: ''},
-        {name: '下载',id: '下载'},
-        {name: '安装',id: '安装'},
-        {name: '注册',id: '注册'},
-        {name: '登录',id: '登录'},
-        {name: '打开app',id: '打开app'},
       ],
       one: '',
       two: '',
@@ -1200,17 +1402,44 @@ export default {
       num10: 0,
       spanarry10: [],
       num11: 0,
-      spanarry11: []
+      spanarry11: [],
+      num12: 0,
+      spanarry12: [],
+      num13: 0,
+      spanarry13: []
     }
   },
   created() {
     getaccount(this)
     getlist(this)
+    // let one = new Date();
+    // one.setTime(one.getTime() - 24*60*60*1000);
+    // this.one = one.getFullYear()+'-'+(one.getMonth()+1 < 10 ? '0'+(one.getMonth()+1) : one.getMonth()+1)+'-'+(one.getDate()<10?'0'+(one.getDate()):one.getDate())
+    // let two = new Date();
+    // two.setTime(two.getTime() - 24*60*60*1000*2);
+    // this.two = two.getFullYear()+'-'+(two.getMonth()+1 < 10 ? '0'+(two.getMonth()+1) : two.getMonth()+1)+'-'+(two.getDate()<10?'0'+(two.getDate()):two.getDate())
+    // let three = new Date();
+    // three.setTime(three.getTime() - 24*60*60*1000*3);
+    // this.three = three.getFullYear()+'-'+(three.getMonth()+1 < 10 ? '0'+(three.getMonth()+1) : three.getMonth()+1)+'-'+(three.getDate()<10?'0'+(three.getDate()):three.getDate())
+    // let four = new Date();
+    // four.setTime(four.getTime() - 24*60*60*1000*4);
+    // this.four = four.getFullYear()+'-'+(four.getMonth()+1 < 10 ? '0'+(four.getMonth()+1) : four.getMonth()+1)+'-'+(four.getDate()<10?'0'+(four.getDate()):four.getDate())
+    // let five = new Date();
+    // five.setTime(five.getTime() - 24*60*60*1000*5);
+    // this.five = five.getFullYear()+'-'+(five.getMonth()+1 < 10 ? '0'+(five.getMonth()+1) : five.getMonth()+1)+'-'+(five.getDate()<10?'0'+(five.getDate()):five.getDate())
+    // let six = new Date();
+    // six.setTime(six.getTime() - 24*60*60*1000*6);
+    // this.six = six.getFullYear()+'-'+(six.getMonth()+1 < 10 ? '0'+(six.getMonth()+1) : six.getMonth()+1)+'-'+(six.getDate()<10?'0'+(six.getDate()):six.getDate())
+    // let seven = new Date();
+    // seven.setTime(seven.getTime() - 24*60*60*1000*7);
+    // this.seven = seven.getFullYear()+'-'+(seven.getMonth()+1 < 10 ? '0'+(seven.getMonth()+1) : seven.getMonth()+1)+'-'+(seven.getDate()<10?'0'+(seven.getDate()):seven.getDate())
+    
+
     let one = new Date();
     one.setTime(one.getTime());
     this.one = one.getFullYear()+'-'+(one.getMonth()+1 < 10 ? '0'+(one.getMonth()+1) : one.getMonth()+1)+'-'+(one.getDate()<10?'0'+(one.getDate()):one.getDate())
     let two = new Date();
-    two.setTime(two.getTime() - 24*60*60*1000);
+    two.setTime(two.getTime() - 24*60*60*1000*1);
     this.two = two.getFullYear()+'-'+(two.getMonth()+1 < 10 ? '0'+(two.getMonth()+1) : two.getMonth()+1)+'-'+(two.getDate()<10?'0'+(two.getDate()):two.getDate())
     let three = new Date();
     three.setTime(three.getTime() - 24*60*60*1000*2);
@@ -1327,7 +1556,26 @@ export default {
         getlist11(this)
       }
     },
+    query12 () {
+      let that = this
+      if (that.formInline12.time && this.formInline12.time.length > 0) {
+        this.$message.warning('列表仅展示最后7天，可导出90天的记录,请不要输入时间查询')
+      }else {
+        getlist12(this)
+      }
+    },
+    query13 () {
+      let that = this
+      if (that.formInline13.time && this.formInline13.time.length > 0) {
+        this.$message.warning('列表仅展示最后7天，可导出90天的记录,请不要输入时间查询')
+      }else {
+        getlist13(this)
+      }
+    },
     tabclick () {
+      if (this.actionname == 0) {
+        getlist(this)
+      }
       if (this.actionname == 1) {
         getlist2(this)
       }
@@ -1357,6 +1605,12 @@ export default {
       }
       if (this.actionname == 10) {
         getlist11(this)
+      }
+      if (this.actionname == 11) {
+        getlist12(this)
+      }
+      if (this.actionname == 12) {
+        getlist13(this)
       }
     },
     arry () {
@@ -1557,6 +1811,42 @@ export default {
         }
       })
     },
+    arry12 () {
+      this.spanarry12 = []
+      this.tableData12.forEach((item,index) => {
+        item.index = index
+        if (index === 0) {
+          this.spanarry12.push(1)
+          this.num12 = 0
+        } else {
+          if (item.module_name === this.tableData12[index - 1].module_name) {
+            this.spanarry12[this.num12] += 1;
+            this.spanarry12.push(0)
+          } else {
+            this.spanarry12.push(1)
+            this.num12 = index
+          }
+        }
+      })
+    },
+    arry13 () {
+      this.spanarry13 = []
+      this.tableData13.forEach((item,index) => {
+        item.index = index
+        if (index === 0) {
+          this.spanarry13.push(1)
+          this.num13 = 0
+        } else {
+          if (item.module_name === this.tableData13[index - 1].module_name) {
+            this.spanarry13[this.num13] += 1;
+            this.spanarry13.push(0)
+          } else {
+            this.spanarry13.push(1)
+            this.num13 = index
+          }
+        }
+      })
+    },
     objectmethod ({row, column, rowIndex, columnIndex}) {
       if (columnIndex === 0) {
         let _row = this.spanarry[rowIndex]
@@ -1667,13 +1957,33 @@ export default {
         }
       }
     },
+    objectmethod12 ({row, column, rowIndex, columnIndex}) {
+      if (columnIndex === 0) {
+        let _row = this.spanarry12[rowIndex]
+        let _col = _row>0?1:0
+        return {
+          rowspan: _row,
+          colspan: _col
+        }
+      }
+    },
+    objectmethod13 ({row, column, rowIndex, columnIndex}) {
+      if (columnIndex === 0) {
+        let _row = this.spanarry13[rowIndex]
+        let _col = _row>0?1:0
+        return {
+          rowspan: _row,
+          colspan: _col
+        }
+      }
+    },
     excel () {
       let that = this
       var start = ''
       var end = ''  
       if (that.formInline.time && that.formInline.time.length > 0) {
         start = parseTime(that.formInline.time[0].getTime() /1000)
-        end = parseTime(that.formInline.time[1].getTime() /1000)
+        end = parseTime((that.formInline.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1696,7 +2006,7 @@ export default {
       var end = ''  
       if (that.formInline2.time && that.formInline2.time.length > 0) {
         start = parseTime(that.formInline2.time[0].getTime() /1000)
-        end = parseTime(that.formInline2.time[1].getTime() /1000)
+        end = parseTime((that.formInline2.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1719,7 +2029,7 @@ export default {
       var end = ''  
       if (that.formInline3.time && that.formInline3.time.length > 0) {
         start = parseTime(that.formInline3.time[0].getTime() /1000)
-        end = parseTime(that.formInline3.time[1].getTime() /1000)
+        end = parseTime((that.formInline3.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1742,7 +2052,7 @@ export default {
       var end = ''  
       if (that.formInline4.time && that.formInline4.time.length > 0) {
         start = parseTime(that.formInline4.time[0].getTime() /1000)
-        end = parseTime(that.formInline4.time[1].getTime() /1000)
+        end = parseTime((that.formInline4.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1765,7 +2075,7 @@ export default {
       var end = ''  
       if (that.formInline5.time && that.formInline5.time.length > 0) {
         start = parseTime(that.formInline5.time[0].getTime() /1000)
-        end = parseTime(that.formInline5.time[1].getTime() /1000)
+        end = parseTime((that.formInline5.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1788,7 +2098,7 @@ export default {
       var end = ''  
       if (that.formInline6.time && that.formInline6.time.length > 0) {
         start = parseTime(that.formInline6.time[0].getTime() /1000)
-        end = parseTime(that.formInline6.time[1].getTime() /1000)
+        end = parseTime((that.formInline6.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1811,7 +2121,7 @@ export default {
       var end = ''  
       if (that.formInline7.time && that.formInline7.time.length > 0) {
         start = parseTime(that.formInline7.time[0].getTime() /1000)
-        end = parseTime(that.formInline7.time[1].getTime() /1000)
+       end = parseTime((that.formInline7.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1834,7 +2144,7 @@ export default {
       var end = ''  
       if (that.formInline8.time && that.formInline8.time.length > 0) {
         start = parseTime(that.formInline8.time[0].getTime() /1000)
-        end = parseTime(that.formInline8.time[1].getTime() /1000)
+        end = parseTime((that.formInline8.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1857,7 +2167,7 @@ export default {
       var end = ''  
       if (that.formInline9.time && that.formInline9.time.length > 0) {
         start = parseTime(that.formInline9.time[0].getTime() /1000)
-        end = parseTime(that.formInline9.time[1].getTime() /1000)
+        end = parseTime((that.formInline9.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1880,7 +2190,7 @@ export default {
       var end = ''  
       if (that.formInline10.time && that.formInline10.time.length > 0) {
         start = parseTime(that.formInline10.time[0].getTime() /1000)
-        end = parseTime(that.formInline10.time[1].getTime() /1000)
+        end = parseTime((that.formInline10.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1903,7 +2213,7 @@ export default {
       var end = ''  
       if (that.formInline11.time && that.formInline11.time.length > 0) {
         start = parseTime(that.formInline11.time[0].getTime() /1000)
-        end = parseTime(that.formInline11.time[1].getTime() /1000)
+        end = parseTime((that.formInline11.time[1].getTime() + (24*60*60*1000 - 1))/1000)
       }
       request({
         url: that.public.url + '/gameclickstat/downloadlist',
@@ -1914,6 +2224,52 @@ export default {
           enddate: end,
           org_id: that.formInline11.org,
           module: that.formInline11.model,
+        }
+      }).then(res => {
+        window.location.href = that.public.url + res.data
+      }).catch(error => {
+      })
+    },
+    excel12 () {
+      let that = this
+      var start = ''
+      var end = ''  
+      if (that.formInline12.time && that.formInline12.time.length > 0) {
+        start = parseTime(that.formInline12.time[0].getTime() /1000)
+        end = parseTime((that.formInline12.time[1].getTime() + (24*60*60*1000 - 1))/1000)
+      }
+      request({
+        url: that.public.url + '/gameclickstat/downloadlist',
+        method: 'post',
+        data: {
+          mid: 802,
+          begindate: start,
+          enddate: end,
+          org_id: that.formInline12.org,
+          module: that.formInline12.model,
+        }
+      }).then(res => {
+        window.location.href = that.public.url + res.data
+      }).catch(error => {
+      })
+    },
+    excel13 () {
+      let that = this
+      var start = ''
+      var end = ''  
+      if (that.formInline13.time && that.formInline13.time.length > 0) {
+        start = parseTime(that.formInline13.time[0].getTime() /1000)
+        end = parseTime((that.formInline13.time[1].getTime() + (24*60*60*1000 - 1))/1000)
+      }
+      request({
+        url: that.public.url + '/gameclickstat/downloadlist',
+        method: 'post',
+        data: {
+          mid: 91,
+          begindate: start,
+          enddate: end,
+          org_id: that.formInline13.org,
+          module: that.formInline13.model,
         }
       }).then(res => {
         window.location.href = that.public.url + res.data
@@ -1942,7 +2298,8 @@ function getlist (that) {
       module: that.formInline.model,
     }
   }).then(res => {
-    that.tableData = res.data
+    that.tableData = res.data.data
+    that.modellist = res.data.modellist
     that.arry()
   }).catch(error => {
   })
@@ -1959,7 +2316,8 @@ function getlist2 (that) {
       module: that.formInline2.model,
     }
   }).then(res => {
-    that.tableData2 = res.data
+    that.tableData2 = res.data.data
+    that.modellist = res.data.modellist
     that.arry2()
   }).catch(error => {
   })
@@ -1974,7 +2332,8 @@ function getlist3 (that) {
       module: that.formInline3.model,
     }
   }).then(res => {
-    that.tableData3 = res.data
+    that.tableData3 = res.data.data
+    that.modellist = res.data.modellist
     that.arry3()
   }).catch(error => {
   })
@@ -1989,7 +2348,8 @@ function getlist4 (that) {
       module: that.formInline4.model,
     }
   }).then(res => {
-    that.tableData4 = res.data
+    that.tableData4 = res.data.data
+    that.modellist = res.data.modellist
     that.arry4()
   }).catch(error => {
   })
@@ -2004,7 +2364,8 @@ function getlist5 (that) {
       module: that.formInline5.model,
     }
   }).then(res => {
-    that.tableData5 = res.data
+    that.tableData5 = res.data.data
+    that.modellist = res.data.modellist
     that.arry5()
   }).catch(error => {
   })
@@ -2019,7 +2380,8 @@ function getlist6 (that) {
       module: that.formInline6.model,
     }
   }).then(res => {
-    that.tableData6 = res.data
+    that.tableData6 = res.data.data
+    that.modellist = res.data.modellist
     that.arry6()
   }).catch(error => {
   })
@@ -2034,7 +2396,8 @@ function getlist7 (that) {
       module: that.formInline7.model,
     }
   }).then(res => {
-    that.tableData7 = res.data
+    that.tableData7 = res.data.data
+    that.modellist = res.data.modellist
     that.arry7()
   }).catch(error => {
   })
@@ -2049,7 +2412,8 @@ function getlist8 (that) {
       module: that.formInline8.model,
     }
   }).then(res => {
-    that.tableData8 = res.data
+    that.tableData8 = res.data.data
+    that.modellist = res.data.modellist
     that.arry8()
   }).catch(error => {
   })
@@ -2064,7 +2428,8 @@ function getlist9 (that) {
       module: that.formInline9.model,
     }
   }).then(res => {
-    that.tableData9 = res.data
+    that.tableData9 = res.data.data
+    that.modellist = res.data.modellist
     that.arry9()
   }).catch(error => {
   })
@@ -2079,7 +2444,8 @@ function getlist10 (that) {
       module: that.formInline10.model,
     }
   }).then(res => {
-    that.tableData10 = res.data
+    that.tableData10 = res.data.data
+    that.modellist = res.data.modellist
     that.arry10()
   }).catch(error => {
   })
@@ -2094,13 +2460,46 @@ function getlist11 (that) {
       module: that.formInline11.model,
     }
   }).then(res => {
-    that.tableData11 = res.data
+    that.tableData11 = res.data.data
+    that.modellist = res.data.modellist
     that.arry11()
   }).catch(error => {
   })
 }
 
+function getlist12 (that) {
+  request({
+    url: that.public.url + '/gameclickstat/getlist',
+    method: 'post',
+    data: {
+      mid: 802,
+      org_id: that.formInline12.org,
+      module: that.formInline12.model,
+    }
+  }).then(res => {
+    that.tableData12 = res.data.data
+    that.modellist = res.data.modellist
+    that.arry12()
+  }).catch(error => {
+  })
+}
 
+function getlist13 (that) {
+  request({
+    url: that.public.url + '/gameclickstat/getlist',
+    method: 'post',
+    data: {
+      mid: 91,
+      org_id: that.formInline13.org,
+      module: that.formInline13.model,
+    }
+  }).then(res => {
+    that.tableData13 = res.data.data
+    that.modellist = res.data.modellist
+    that.arry13()
+  }).catch(error => {
+  })
+}
 
 function parseTime(time) {
     var date = new Date(time *1000);

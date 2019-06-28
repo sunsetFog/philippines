@@ -114,7 +114,7 @@ export const constantRouterMap = [
         name: 'agentaccountindex_tax',
         hidden: true,
         component: () => import('@/views/player/tax'),
-        meta: {title: '税收待遇', icon: 'guide', parent: 'gameusermgr/tax'}
+        meta: {title: '总代管理', icon: 'guide', parent: 'gameusermgr/tax'}
       }
 
     ]
@@ -171,6 +171,13 @@ export const constantRouterMap = [
         meta: { title: '渠道数据报表', icon: 'clipboard', parent: 'analysisdatamgr/agentorgday' }
       },
       {
+        path: 'agentteam',
+        name: 'agentteamreportindex',
+        hidden: true,
+        component: () => import('@/views/datashow/agentteam'),
+        meta: { title: '代理人员团队报表', icon: 'clipboard', parent: 'analysisdatamgr/agentteam' }
+      },
+      {
         path: 'agentaccountday',
         name: 'agentdatareportindex',
         hidden: true,
@@ -219,13 +226,13 @@ export const constantRouterMap = [
         component: () => import('@/views/game/paywithdraw'),
         meta: { title: '玩家提款记录列表', icon: 'guide', parent: 'analysisdatamgr/paywithdraw' }
       },
-      {
-        path: 'income',
-        name: 'incomeindex',
-        hidden: true,
-        component: () => import('@/views/promoters/income'),
-        meta: { title: '代理收益管理', icon: 'theme', parent: 'analysisdatamgr/income' }
-      },
+      // {
+      //   path: 'income',
+      //   name: 'incomeindex',
+      //   hidden: true,
+      //   component: () => import('@/views/promoters/income'),
+      //   meta: { title: '代理收益管理', icon: 'theme', parent: 'analysisdatamgr/income' }
+      // },
       {
         path: 'gameuserchg',
         name: 'gameuserchgindex',
@@ -330,13 +337,20 @@ export const constantRouterMap = [
         component: () => import('@/views/customerservice/diversions'),
         meta: { title: '跑马灯', icon: 'guide', parent: 'gamemsgmgr/diversions' }
       },
-      // {
-      //   path: 'gameuser',
-      //   name: 'gameuserindex',
-      //   hidden: true,
-      //   component: () => import('@/views/customerservice/gameuser'),
-      //   meta: { title: '玩家管理', icon: 'guide', parent: 'customerservice/gameuser' }
-      // }
+      {
+        path: 'customer',
+        name: 'csmmessageindex',
+        hidden: true,
+        component: () => import('@/views/customerservice/customer'),
+        meta: { title: '客服消息管理', icon: 'guide', parent: 'customerservice/customer' }
+      },
+      {
+        path: 'mailtemplate',
+        name: 'csmreplytemplateindex',
+        hidden: true,
+        component: () => import('@/views/customerservice/mailtemplate'),
+        meta: { title: '邮件模板管理', icon: 'guide', parent: 'customerservice/mailtemplate' }
+      }
     ]
   },
   {
@@ -374,7 +388,7 @@ export const constantRouterMap = [
         name: 'gameopenawardindex',
         hidden: true,
         component: () => import('@/views/game/lottery'),
-        meta: { title: '彩票开奖查询', icon: 'guide', parent: 'gameconfmgr/lottery' }
+        meta: { title: '开奖记录', icon: 'guide', parent: 'gameconfmgr/lottery' }
       },
       {
         path: 'catchno',
@@ -612,15 +626,18 @@ export const constantRouterMap = [
   },
 
   // {
-  //   path: '/system',
+  //   path: '/customer',
   //   component: Layout,
-  //   name: 'chantexpand',
-  //   redirect: 'noredirect',
-  //   hidden: true,
-  //   alwaysShow: true,
-  //   meta: { title: '', icon: 'example' },
-  //   children: [
-  //   ]
+  //   redirect: '/customerservice',
+  //   name: 'customer',
+  //   hidden: false,
+  //   meta: { title: '客服', icon: '' },
+  //   children: [{
+  //     path: 'customerservice',
+  //     component: () => import('@/views/customer/index'),
+  //     hidden: false,
+  //     meta: { title: '客服', icon: 'example', parent: '' }
+  //   }]
   // },
 
 

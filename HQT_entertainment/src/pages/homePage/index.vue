@@ -1,12 +1,23 @@
 <template>
     <section id="home_index">
-       <div class="theme_picture"></div>
+       <div class="theme_picture">
+                <el-carousel :interval="5000" arrow="always" :autoplay="false">
+                    <el-carousel-item v-for="(item,index) in card_picture" :key="index">
+                        <div class="example_picture">
+                            <img :src="item.url"/>
+                        </div>
+                    </el-carousel-item>
+                </el-carousel>
+       </div>
        <div class="enter_game">
+           <img class="big_fish" src="../../../static/dream/login/fish.png"/>
            <div class="advertisement">
                <div class="message_tips">
-                   <span><img src="../../../static/dream/home/laba.png"/></span>
-                   <span>最新广告&nbsp;:</span>
-                   <span>注册即送8.88元赢了可首存100%，最高红利可达3888元平台&nbsp;&nbsp;&nbsp;千款游戏&nbsp;&nbsp;&nbsp;万人在线&nbsp;亿元奖池,首存送3888元,笔笔存送3888元史上最高救援金,周末全体20%......</span>
+                   <span v-show="play_info" class="laba_quality"><img src="../../../static/dream/home/laba.png"/></span>
+                   <span v-show="play_info" class="word_quality">最新广告&nbsp;:</span>
+                   <div class="flash_quality" v-show="play_info">
+                       <div v-html="move_content" class="move_left" :style="{width:move_width+'px'}"></div>
+                   </div>
                </div>
            </div>
            <div class="game_contain">
@@ -37,6 +48,10 @@ export default{
     data(){
         return{
             vip_foot: true,
+            card_picture: [
+                {url: '../../../static/dream/home/banner.jpg'},
+                {url: '../../../static/dream/home/background.jpg'}
+            ],
             game_list: [
                 {pages: [
                     {url: '../../../static/dream/home/longhudou.png',margin: '0px 5px 60px 0px',height: '100%',top: '0px'},
@@ -54,13 +69,27 @@ export default{
                     {url: '../../../static/dream/home/bairenniuniu.png',margin: '0px 5px 60px 0px',height: '340px',top: '-60px'}
                 ]}
             ],
+            timerKey: '',
+            move_width: -300,
+            move_content: "赌侠<font color='#23f0fd'> testN20005 </font>赢得<font color='#ffe400'> 194 </font>奖金，大吉大利 今晚吃鸡!",
+            play_info: false
         }
     },
     created(){
         this.variableChange();
         this.variableChange2();
+        // this.timerKey = setInterval(this.timerMeans,200);
     },
     methods: {
+        timerMeans(){
+            if(this.move_width>1500){
+                clearInterval(this.timerKey);
+                this.move_width = 0;
+                this.play_info = false;
+            }else{
+                this.move_width+=20;
+            }
+        },
         variableChange(){
             var that = this;
             Object.defineProperty(sceneWeb, 'type', {
@@ -70,6 +99,9 @@ export default{
                 set: function(value) {
                     if(value=='999992'){
                         that.$router.push({path: '/home'});
+                    }else if(value=='999991'||value=='999993'||value=='999994'||value=='999995'){
+                        that.$router.push({path: '/game'});
+                        that.openFullScreen().close();
                     }
                 }
             });
@@ -77,180 +109,34 @@ export default{
         variableChange2(){
             var that = this;
             Object.defineProperties(errorCodeGame,{
-                InternalServerError:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1001){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                ServerMaintain:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1002){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                UnavailableService:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1101){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                InvalidToken:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1102){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                InvalidArgument:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1103){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                GateOverload:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1104){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                ClientIpAbnormal:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1105){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                AccountFrozen:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1201){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                LoggedOnAnotherDevice:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1202){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                PlayerInScene:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1203){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                PlayerNotInScene:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1204){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                NotEnoughMoney:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1301){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                NoAvailableScene:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1302){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
-                TooMuchBetMoney:{
-                    configurable: true,
-                    get:function(){
-
-                    },
-                    set:function(value){
-                    if(value==1303){
-                        that.$router.push({path: '/home'});
-                    }
-                    }
-                },
                 code:{
                     configurable: true,
                     get:function(){
 
                     },
                     set:function(value){
-                    if(value==1){
-                        that.$router.push({path: '/home'});
-                    }
+                        if(value==1001||value==1002||value==1101||value==1102||value==1103||value==1104||value==1105||value==1201||value==1202||value==1203||value==1204||value==1301||value==1302||value==1303||value==1||value==2||value=="chaoshi"){
+                            that.$router.push({path: '/home'});
+                            that.openFullScreen().close();
+                            if(value=='chaoshi'){
+                                that.$message.error('请求超时!');
+                            }
+                        }
                     }
                 },
-                description:{
+                move:{
                     configurable: true,
                     get:function(){
 
                     },
                     set:function(value){
-                    if(value==2){
-                        that.$router.push({path: '/home'});
-                    }
+                        value = value.replace(" size='26'",'');
+                        value = value.replace(" size='26'",'');
+                        value = value.replace(" size='26'",'');
+                        that.move_content = value;
+                        that.play_info = true;
+                        that.timerKey = setInterval(that.timerMeans,200);
+                        console.log('string#####@',that.move_content);
                     }
                 }
             });
@@ -276,12 +162,21 @@ export default{
         },
         encapsulation(value){
             if(sessionStorage.getItem('token')){
-                this.$router.push({path: '/game'});
+                // this.$router.push({path: '/game'});
                 web.game_startGame(value);
                 web.game_back2GameFromLobby(false);
+                this.openFullScreen();
             }else{
                 this.$message.error('请先登录');
             }
+        },
+        openFullScreen() {
+            return this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+            });
         }
     }
 }
@@ -292,13 +187,25 @@ export default{
     .theme_picture{
         width: 100%;
         height: 500px;
-        .mixin_image(url('../../../static/dream/home/banner.png'));
+        .example_picture{
+            width: 100%;
+            height: 500px;
+            img{
+                .mixin_img(100%,500px);
+            }
+        }
     }
     .enter_game{
         width: 100%;
         height: 1010px;
-         .mixin_image(url('../../../static/dream/home/background.png'));
+         .mixin_image(url('../../../static/dream/home/background.jpg'));
          position: relative;
+        .big_fish{
+            .mixin_img(426px;487px);
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+        }
          .advertisement{
              width: 100%;
              height: 35px;
@@ -310,7 +217,7 @@ export default{
                  width: 1200px;
                  height: 35px;
                  margin: 0 auto;
-                 span:nth-of-type(1){
+                 .laba_quality{
                      .mixin_span(25px,35px,none,auto,center);
                      margin-right: 16px;
                      line-height: 0px;
@@ -321,13 +228,22 @@ export default{
                         .mixin_img(25px,25px);
                     }
                 }
-                span:nth-of-type(2){
+                .word_quality{
                     .mixin_span(70px,35px,none,@color_orange,left);
                     float: left;
                 }
-                span:nth-of-type(3){
-                    .mixin_span(auto,35px,none,@color_white,left);
+                .flash_quality{
+                    .mixin_span(1000px,35px,none,@color_white,left);
                     float: left;
+                    margin-left: 20px;
+                    overflow: hidden;
+                    .move_left{
+                        width: 0px;
+                        height: 35px;
+                        float: right;
+                        text-align: left;
+                        overflow: hidden;
+                    }
                 }
              }
          }

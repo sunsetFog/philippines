@@ -116,6 +116,7 @@
 
     <el-table
       :data="tableData"
+      :cell-style='cell1'
       border
       style="width: 100%"
     >
@@ -139,7 +140,7 @@
             <el-table-column prop="value" label="异常值"  width='200'></el-table-column>
             <el-table-column prop="remark" label="备注信息"  width='200'></el-table-column>
           </el-table>
-            <el-button @click="wj(scope.row)" type="text" size="small" class="applyuser_account" slot="reference" v-if="withdrawpostexceptionlist">{{scope.row.user_account}}</el-button>
+            <el-button @click="wj(scope.row)" type="text" size="small" slot="reference" v-if="withdrawpostexceptionlist" style="color:black">{{scope.row.user_account}}</el-button>
           </el-popover>
           
         </template>
@@ -629,19 +630,21 @@ export default {
       window.clearInterval(this.timer)
     },
     order () {
-      this.formInline.order = this.formInline.order * 1
-      if (Number.isInteger(this.formInline.order) && this.formInline.order >=10 && this.formInline.order <=100) {
-        this.num = this.formInline.order 
-        this.cancel()
-        this.timer = window.setInterval(()=>{
-            this.num--
-            if (this.num === 0) {
-              getlist(this)
-              this.num = this.formInline.order 
-            }
-        },1000)
-      } else {
-        this.$message.warning('请输入10-100的整数')
+      if (this.formInline.checked) {
+        this.formInline.order = this.formInline.order * 1
+        if (Number.isInteger(this.formInline.order) && this.formInline.order >=10 && this.formInline.order <=100) {
+          this.num = this.formInline.order 
+          this.cancel()
+          this.timer = window.setInterval(()=>{
+              this.num--
+              if (this.num === 0) {
+                getlist(this)
+                this.num = this.formInline.order 
+              }
+          },1000)
+        } else {
+          this.$message.warning('请输入10-100的整数')
+        }
       }
       
     },
@@ -675,9 +678,17 @@ export default {
       .catch(error => {});
     },
     cell ({row, column, rowIndex, columnIndex}) {
-      if (columnIndex === 0) {
+      if (columnIndex === 0 && row.color!='') {
         let color = {
           'background': '#'+row.color
+        }
+        return color
+      }
+    },
+    cell1 ({row, column, rowIndex, columnIndex}) {
+      if (columnIndex === 2 && row.warn_color!='') {
+        let color = {
+          'background': '#'+row.warn_color
         }
         return color
       }
@@ -924,10 +935,6 @@ function parseTime(time) {
   line-height: 50px;
   text-align: center;
   font-size: 18px
-}
-.applyuser_account {
-  background: red;
-  color: black;
 }
 table{
     table-layout: fixed;

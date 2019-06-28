@@ -15,8 +15,8 @@
     <mt-button slot="right"
                @click="menuShow();show=!show">
                
-      <i class="icon iconfont icon-menu"></i>
-      <span style="font-size:12px;">菜单</span>
+      <i class="icon iconfont icon-menu" style="color: #dbcbb7;"></i>
+      <span style="font-size:12px;color: #dbcbb7;">菜单</span>
     </mt-button>
     <!-- 菜单栏 -->
     <ul ref="leftmenu"
@@ -27,42 +27,42 @@
         </div>
 
       <div class="menubox">
-        <mt-cell title="团队报表" is-link  to="/teamreport">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
+        <mt-cell title="团队报表" is-link  to="/teamreport" style="background: #735885;">
+        <img slot="icon" src="../../../../static/tuiduibaobiao.png" width="20" height="20">
       </mt-cell>
-       <mt-cell title="日度报表" is-link  to="/daydegrees">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
+       <mt-cell title="日度报表" is-link  to="/daydegrees" style="background: #735885;">
+        <img slot="icon" src="../../../../static/ridubaobiao.png" width="20" height="20">
       </mt-cell>
-       <mt-cell title="游戏报表" is-link  to="/game">
+       <!-- <mt-cell title="游戏报表" is-link  to="/game">
         <img slot="icon" src="../../../../static/user.png" width="20" height="20">
-      </mt-cell>
-       <mt-cell title="玩家报表" is-link  to="/plaverreport">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
+      </mt-cell> -->
+       <mt-cell title="玩家报表" is-link  to="/plaverreport" style="background: #735885;">
+        <img slot="icon" src="../../../../static/wanjiabaobiao.png" width="20" height="20">
       </mt-cell>
       </div>
         
        <div class="menubox">
-        <mt-cell title="注册下级" is-link  to="/lowerlevel">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
-      </mt-cell><mt-cell title="提款记录" is-link  to="/record">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
+        <mt-cell title="注册下级" is-link  to="/lowerlevel" style="background: #735885;">
+        <img slot="icon" src="../../../../static/zhucexiaji .png" width="20" height="20">
+      </mt-cell><mt-cell title="提款记录" is-link  to="/record" style="background: #735885;">
+        <img slot="icon" src="../../../../static/tikuanjilu.png" width="20" height="20">
       </mt-cell>
       <!-- <mt-cell title="玩家后置注册链接" is-link  to="/personal">
         <img slot="icon" src="../../../../static/user.png" width="20" height="20">
       </mt-cell> -->
-      <mt-cell title="玩家前置注册链接" is-link  to="/http">
+      <!-- <mt-cell title="玩家前置注册链接" is-link  to="/http">
         <img slot="icon" src="../../../../static/user.png" width="20" height="20">
-      </mt-cell>
+      </mt-cell> -->
       <!-- <mt-cell title="玩家转代理" is-link  to="/personal">
         <img slot="icon" src="../../../../static/user.png" width="20" height="20">
       </mt-cell> -->
       </div>
 
       <div class="menubox">
-        <mt-cell title="代理管理" is-link  to="/agent">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
-      </mt-cell><mt-cell title="提现管理" is-link  to="/withdrawal">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
+        <mt-cell title="代理管理" is-link  to="/agent" style="background: #735885;">
+        <img slot="icon" src="../../../../static/dailiguanli.png" width="20" height="20">
+      </mt-cell><mt-cell title="提现管理" is-link  to="/withdrawal" style="background: #735885;">
+        <img slot="icon" src="../../../../static/tikuanjilu.png" width="20" height="20">
       </mt-cell>
       </div>
 
@@ -72,6 +72,29 @@
         <img slot="icon" src="../../../../static/user.png" width="20" height="20">
       </mt-cell>
       </div> -->
+        <div class="menubox" style="border-top:1px solid #2e163d">
+        <mt-cell title="个人信息" is-link  to="/personal" style="background: #735885;">
+        <img slot="icon" src="../../../../static/gerenxinxi.png" width="20" height="20">
+      </mt-cell>
+       <mt-cell title="邮箱绑定" is-link  to="/email" style="background: #735885;">
+        <img slot="icon" src="../../../../static/youxiangbangding.png" width="20" height="20">
+      </mt-cell>
+       <!-- <mt-cell title="登录密码" is-link  to="/pwd">
+        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
+      </mt-cell> -->
+       <mt-cell title="资金密码" is-link  to="/settlement" style="background: #735885;">
+        <img slot="icon" src="../../../../static/zijinmima.png" width="20" height="20">
+      </mt-cell>
+      </div>
+
+      <div class="menubox">
+        <mt-cell title="银行卡管理" is-link  to="/bankcard" style="background: #735885;">
+        <img slot="icon" src="../../../../static/yinhangka.png" width="20" height="20">
+      </mt-cell>
+      </div>
+
+
+
     </ul>
   </div>
 </template>
@@ -101,7 +124,6 @@ export default {
           container.style.left = 0
           container.style.right = 0
         } else {
-          console.log(3333)
           var container = document.getElementById('container')
           container.style.position = 'static'
         }
@@ -169,23 +191,24 @@ export default {
   }
   .menu {
     line-height: 50px;
-    background: #304156;
+    background: #735885;
   }
   .whitetitle {
     margin: 0;
     padding: 5px 10px;
-    color:white;
   }
   .menubox {
     background: white;
-    margin: 20px 0;
-    a:not(:last-child) {
-      border-bottom: 1px solid #eadfdf;
+    // margin: 20px 0;
+    // a:not(:last-child) {
+    //   border-bottom: 1px solid #2e163d;
       
-    }
+    // }
     .mint-cell-title {
-      color: black;
       font-size: 14px;
+    }
+    .mint-cell-wrapper {
+      border:0!important;
     }
   }
 
@@ -198,7 +221,7 @@ export default {
     left: -235px;
     padding: 0 0;
     min-width: 235px;
-    background: #f2f2f3;
+    background: #735885;
     z-index: 1200;
     transition: all ease 0.4s;
     overflow: auto;

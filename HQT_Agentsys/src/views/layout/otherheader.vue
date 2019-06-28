@@ -28,7 +28,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .mint-header {
-  background-color: #304156!important;
+  background-color: #513663!important;
   height: 60px!important;
   font-size: 21px!important;
 }

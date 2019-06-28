@@ -105,14 +105,14 @@ export default{
             }
             .logo_example{
                 width: 100%;
-                height: 40px;
+                height: 30px;
                 margin-top: 10px;
                 .logo_margin{
                     margin-right: 24.2px;
                 }
                 ul{
                     li{
-                        .mixin_li(auto,40px);
+                        .mixin_li(auto,30px);
                         background-repeat: no-repeat;
                         background-size: 100% 100%;
                     }

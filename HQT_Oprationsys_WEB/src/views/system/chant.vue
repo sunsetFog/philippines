@@ -250,8 +250,8 @@ export default {
       if(value === ''){
         callback(new Error('输入不能为空'));
       }else {
-        var integer = /^(([1-9]*)|(([0]\.\d{1,2}|[1-9]*\.\d{1,2})))$/ //金额保留两位小数
-        if(integer.test(value)) {
+        var integer = /^[1-9]\d*$|^[1-9]\d*\.\d\d?$|^0\.\d\d?$/ //金额保留两位小数
+        if(integer.test(value)  || value == '0') {
           callback();
         } else {
            callback(new Error('保留两位小数'));

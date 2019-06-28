@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>梦丝棋牌</title>
+    <title>派趣娱乐</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="full-screen" content="true" />
@@ -106,7 +106,7 @@
         }
     </style>
     <div id="preloading">
-        <div class="spinner9" >
+        <div class="spinner9" style="position: relative;left: -2000px;top: 0px;">
             <div class="rect1">&nbsp;</div>
             <div class="rect2">&nbsp;</div>
             <div class="rect3">&nbsp;</div>
@@ -144,6 +144,7 @@
   <script>
     var sceneWeb = {type:0};
     var errorCodeGame = {};
+    var refreshWeb = {state: 0};
     var zoomGames = document.getElementsByClassName('egret-player')[0];
     function purpleMagic(parameter){
         if(parameter==2){
@@ -160,11 +161,11 @@
         zoomGames.style.marginLeft = -value/0.5625/2 +'px';
         zoomGames.style.left = '50%';
     }
-
+    //平台信息 web平台1 否则0
     function web_platform() {
         return 1;
     }
-
+    //弹窗提示 code=1 进入大厅提示未完成的游戏
     function web_showPrompt(c){
 
     }
@@ -174,6 +175,7 @@
     }
     
     function web_gameInited() {
+        refreshWeb.state = 'init';
         console.info("GameInited")
         // loginTest();
     }
@@ -182,62 +184,54 @@
         web.game_login("test031","123456",webLoginCallback);
         web.game_exit()
     }
-
+    //进入场景
     function web_enterScene(type){
         console.info("enterScene",type)
-        if(type=='999992'){
-            sceneWeb.type = type;
-        }
+        sceneWeb.type = type;
     }
- 
+    //服务器错误信息提示
     function web_errorCallBack(data){
         console.info("errorCallBack ***",data)
-        if(data.description){
+        errorCodeGame.code = data.code;
+        if(data.description!="请求超时！"){
             alert("Error:" + data.description);
+        }else if(data.description=="请求超时！"){
+            errorCodeGame.code = 'chaoshi';
         }
-
-        if(data.InternalServerError == 1001){// 服务器内部错误(服务器繁忙，稍后再试)
-            errorCodeGame.InternalServerError = data.InternalServerError;
-        }else if(data.ServerMaintain == 1002){// 游戏维护中
-            errorCodeGame.ServerMaintain = data.ServerMaintain;
-        }else if(data.UnavailableService == 1101){// 服务暂时不可用(客户端可以忽略掉)
-            errorCodeGame.UnavailableService = data.UnavailableService;
-        }else if(data.InvalidToken == 1102){// 登陆认证时 token 已经失效
-            errorCodeGame.InvalidToken = data.InvalidToken;
-        }else if(data.InvalidArgument == 1103){// 参数无效
-            errorCodeGame.InvalidArgument = data.InvalidArgument;
-        }else if(data.GateOverload == 1104){// 网关过载
-            errorCodeGame.GateOverload = data.GateOverload;
-        }else if(data.ClientIpAbnormal == 1105){// ip异常
-            errorCodeGame.ClientIpAbnormal = data.ClientIpAbnormal;
-        }else if(data.AccountFrozen == 1201){// 玩家账号已被冻结
-            errorCodeGame.AccountFrozen = data.AccountFrozen;
-        }else if(data.LoggedOnAnotherDevice == 1202){// 已在其他设备上登录
-            errorCodeGame.LoggedOnAnotherDevice = data.LoggedOnAnotherDevice;
-        }else if(data.PlayerInScene == 1203){// 玩家已在场景中
-            errorCodeGame.PlayerInScene = data.PlayerInScene;
-        }else if(data.PlayerNotInScene == 1204){// 玩家不在场景中(客户端可忽略)
-            errorCodeGame.PlayerNotInScene = data.PlayerNotInScene;
-        }else if(data.NotEnoughMoney == 1301){// 入场金币不足
-            errorCodeGame.NotEnoughMoney = data.NotEnoughMoney;
-        }else if(data.NoAvailableScene == 1302){// 没有场景可用(游戏服务器过载)
-            errorCodeGame.NoAvailableScene = data.NoAvailableScene;
-        }else if(data.TooMuchBetMoney == 1303){// 投注限红
-            errorCodeGame.TooMuchBetMoney = data.TooMuchBetMoney;
-        }else if(data.code == 1){// 错误码
-            errorCodeGame.code = data.code;
-        }else if(data.description == 2){// 错误详细描述(可选)
-            errorCodeGame.description = data.description;
-        }
-
+        // 1001 服务器内部错误(服务器繁忙，稍后再试)
+        // 1002 游戏维护中
+        // 1101 服务暂时不可用(客户端可以忽略掉)
+        // 1102 登陆认证时 token 已经失效
+        // 1103 参数无效
+        // 1104 网关过载
+        // 1105 ip异常
+        // 1201 玩家账号已被冻结
+        // 1202 已在其他设备上登录
+        // 1203 玩家已在场景中
+        // 1204 玩家不在场景中(客户端可忽略)
+        // 1301 入场金币不足
+        // 1302 没有场景可用(游戏服务器过载)
+        // 1303 投注限红
+        // 1 错误码
+        // 2 错误详细描述(可选)
     }
-
+    //加载游戏的进度条
     function web_easyLoading(progress){
         console.info("easyLoading",progress)
     }
-
+    //跑马灯
     function web_broadcast(data){
+        errorCodeGame.move = data.mTxtMsg;
         console.log("web_broadcast",data)
+    }
+    // 游戏断开连接
+    function web_socketClose(){
+        let network =  confirm('服务器连接已断开，是否重连？');
+        if(network==true){
+            web.game_relogin();
+        }else{
+            web.game_clear();
+        }
     }
 
 
@@ -280,7 +274,7 @@
         var xhr = new XMLHttpRequest();
         xhr.open('GET', './static/manifest.json?v=' + Math.random(), true);
         xhr.addEventListener("load", function () {
-            console.log('xml',xhr)
+            // console.log('xml',xhr)
             var manifest = JSON.parse(xhr.response);
             var list = manifest.initial.concat(manifest.game);
             loadScript(list, function () {

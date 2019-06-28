@@ -10,12 +10,12 @@
     <div class="card">
       <mt-cell title="账户余额" :value="balance">
       </mt-cell>
-      <mt-field label="提现金额" v-model="money" placeholder="金额不少于100元" type='number'></mt-field>
+      <mt-field label="提现金额" v-model="money" placeholder="" type='number'></mt-field>
     </div>
 
     <div class="card">
       <mt-cell title="银行信息">
-          <span style="color: #2196f3" @click="change">更换银行卡</span>
+          <span style="color: #9f14a5" @click="change">更换银行卡</span>
       </mt-cell>
 
       <mt-cell title="银行名称">
@@ -31,7 +31,7 @@
     </div>
 
     <div class="card">
-        <mt-field label="结算密码" v-model="pwd" placeholder="请输入结算密码" type='password'></mt-field>
+        <mt-field label="资金密码" v-model="pwd" placeholder="请输入资金密码" type='password'></mt-field>
     </div>
 
      <div class="card">
@@ -110,7 +110,13 @@ export default {
         })
         return
       }
-      if (this.balance < this.money) {
+      if (this.money.indexOf('.') > -1 || this.money *1 < 0) {
+        Toast({
+          message: '提现金额必须为正整数'
+        })
+        return
+      }
+      if (this.balance*1 < this.money *1) {
         Toast({
           message: '提现金额不能大于账户余额'
         })
@@ -124,7 +130,7 @@ export default {
       }
       if (this.pwd === '') {
         Toast({
-          message: '请输入结算密码'
+          message: '请输入资金密码'
         })
         return
       }
@@ -158,17 +164,8 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .card {
-    margin: 10px;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    border-left: 2px solid #d9d9d9;
-    border-right: 2px solid #d9d9d9;
-    border-radius: 12px;
-    position: relative;
-  }
     .mint-header {
-  background-color: #304156!important;
+  background-color: #513663!important;
   height: 60px!important;
   font-size: 21px!important;
 }

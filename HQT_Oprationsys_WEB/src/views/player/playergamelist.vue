@@ -1,6 +1,6 @@
 <template>
   <div class="app-container playergamelist">
-    <div class="tree" style="width:12%;overflow: auto;">
+    <div class="tree" style="width:14%;overflow: auto;">
       <div class="pchannel"  v-if="gameusergetchildusers">
         <span class="sizetext">玩家渠道:</span>
         <el-select clearable v-model="selectId" class="channel">
@@ -19,6 +19,7 @@
         :load="loadNode1"
         :props="props1"
         @node-click='nodeclick'
+        :render-content="rendercontent"
         lazy
         >
       </el-tree>
@@ -89,26 +90,13 @@
 
             <el-col :span="6">
               <el-form-item label="玩家层级:" label-width="73px" prop="playerlevel">
-                <el-select v-model="ruleForm.playerlevel" placeholder="全部">
-                  <el-option label="全部" value=""></el-option>
-                  <el-option label="总代" value="1"></el-option>
-                  <el-option label="一级" value="2"></el-option>
-                  <el-option label="二级" value="3"></el-option>
-                  <el-option label="三级" value="4"></el-option>
-                  <el-option label="四级" value="5"></el-option>
-                  <el-option label="五级" value="6"></el-option>
-                  <el-option label="六级" value="7"></el-option>
-                  <el-option label="七级" value="8"></el-option>
-                  <el-option label="八级" value="9"></el-option>
-                  <el-option label="九级" value="10"></el-option>
-                  <el-option label="十级" value="11"></el-option>
-                  <el-option label="十一级" value="12"></el-option>
-                  <el-option label="十二级" value="13"></el-option>
-                  <el-option label="十三级" value="14"></el-option>
-                  <el-option label="十四级" value="15"></el-option>
-                  <el-option label="十五级" value="16"></el-option>
-                  <el-option label="会员" value="0"></el-option>
-                  <el-option label="游客" value="-1"></el-option>
+                <el-select v-model="ruleForm.playerlevel" placeholder="请选择玩家层级" clearable>
+                    <el-option
+                      v-for="(item,index) in playerlevellist"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.value">
+                    </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -277,11 +265,11 @@
         </el-table-column>
         <el-table-column
         fixed='right'
-        width='150'
+        width='180'
           label="查看"
           prop="viewinfo">
           <template slot-scope="scope">
-            <!-- <el-button @click="" type="text" size="small" v-if="">团队</el-button> -->
+            <el-button @click="team(scope.row)" type="text" size="small">团队</el-button>
             <el-button type="text" size="small" @click="ct">充提</el-button>
             <el-button type="text" size="small" @click="zb">账变</el-button>
             <el-button type="text" size="small" @click="tax(scope.row)" v-if="fundchangeagentfundlinklist">税收</el-button>
@@ -289,12 +277,12 @@
         </el-table-column>
         <el-table-column
         fixed='right'
-        width='350'
+        width='380'
           label="操作" class="operate">
           <template slot-scope="scope">
             <el-button @click="znx" type="text" size="small">站内信</el-button>
             <el-button type="text" @click="wj(scope.row)" size="small" v-if="gameusergetimpinfo">玩家信息</el-button>
-            <!-- <el-button type="text" size="small" @click="" v-if="">踢号</el-button> -->
+            <el-button type="text" size="small" @click="th(scope.row)">踢号</el-button>
             <!--冻结-->
             <el-button type="text" @click="dj(scope.row)" size="small" v-if="scope.row.status==='1' && gameuserfrozeuser">
               冻结
@@ -308,7 +296,7 @@
             </el-button>
             <!--提现-->
             <el-button type="text" @click="tx(scope.row)" size="small" v-if="paychgmoneysubmoney">
-              提现
+              扣减
             </el-button>
             <el-button type="text" size="small" @click="bz(scope.row)" v-if="gameuserchangeuserremark">备注</el-button>
              <el-button type="text" @click="zdl(scope.row)" size="small" v-if="scope.row.type !='2' && gameuserchangeuseragent">
@@ -355,7 +343,7 @@
           </el-pagination>
         </div>
       </div>
-      <el-dialog title="人工提现" :visible.sync="dialogFormVisible4" :before-close="reset4">
+      <el-dialog title="人工扣减" :visible.sync="dialogFormVisible4" :before-close="reset4">
               <el-form :model="form4" :rules="rules4" ref="form4">
                 <el-form-item label="玩家渠道:" :label-width="formLabelWidth">
                   <span>{{gameuser.org_name}}</span>
@@ -483,7 +471,7 @@
                   <el-input v-model="form6.name"></el-input>
                 </el-form-item>
                 <el-form-item label="玩家层级:" :label-width="formLabelWidth">
-                  <span>{{gameuser.level}}</span>
+                  <span>{{gameuser.old_level}}</span>
                 </el-form-item>
                 <el-form-item label="修改类型:" :label-width="formLabelWidth" prop="radio6">
                   <el-radio v-model="form6.radio6" label="1" size="mini">代理</el-radio>
@@ -612,7 +600,7 @@
                       label="操作" class="operate">
                       <template slot-scope="scope">
                         <el-button @click="fc(scope.row)" type="text" size="small" style="margin-left:10px">银行反查</el-button>
-                        <el-button @click="cacelcard(scope.row)" type="text" size="small" v-if="gameuserbankunbind">取消绑定</el-button>
+                        <el-button @click="cacelcard(scope.row)" type="text" size="small" v-if="gameuserbankunbind && scope.row.status !='已取消绑定'">取消绑定</el-button>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -667,7 +655,7 @@
                       <el-form-item label="设备ID:" :label-width="formLabelWidth" prop="name">
                         <span>{{userdatainfo.device_id}}</span>
                       </el-form-item>
-                      <el-form-item label="角色名称:" :label-width="formLabelWidth" prop="name" class="positionside">
+                      <el-form-item label="昵称:" :label-width="formLabelWidth" prop="name" class="positionside">
                         <span>{{userdatainfo.name}}</span>
                       </el-form-item>
                       <el-form-item label="性别:" :label-width="formLabelWidth" prop="name" class="positionside">
@@ -749,10 +737,11 @@
                 </el-form-item>
                 <el-form-item label="转移上级:" :label-width="formLabelWidth" prop="radio1">
                   <div>
-                    <el-radio v-model="form8.radio1" label="1" size="mini">成为总代</el-radio>
+                    <el-radio v-model="form8.radio1" label="1" size="mini" v-if="zdflag">成为总代</el-radio>
                     <el-radio v-model="form8.radio1" label="2" size="mini">换上级</el-radio>
-                    <el-radio v-model="form8.radio1" label="3" size="mini">成为代理</el-radio>
+                    <el-radio v-model="form8.radio1" label="3" size="mini">成为代理</el-radio><br/>
                     <el-input  v-model="form8.desc" v-if='upshow' placeholder='请输入转换到的上级账号'></el-input>
+                    <span v-if="upshow2 && zdflag">玩家抽水的</span><el-input v-model="form8.top" type="number" style="width: 30%;" v-if="upshow2 && zdflag"></el-input><span v-if="upshow2 && zdflag">%</span>
                   </div>
                 </el-form-item>
               </el-form>
@@ -780,7 +769,7 @@
                       >
                       <template slot-scope="scope">
                         <div class="parenti" v-for="(item,key) in scope.row.up" :key="key">
-                          <span>{{item.name}}</span>
+                          <span>{{item}}</span>
                           <i class="el-icon-d-arrow-right"></i>
                         </div>
                       </template>
@@ -812,9 +801,6 @@
         if (value === '') {
           callback(new Error('请输入密码'));
         } else {
-          if (value !== this.form1.code) {
-            this.$refs.form1.validateField('code');
-          }
           callback();
         }
       };
@@ -830,12 +816,7 @@
       var validatePass3 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));
-        }else if(!validatNumber(value)){
-            callback(new Error('请输入6位数字'));
-        }else {
-          if (value !== this.form5.safecode) {
-            this.$refs.form5.validateField('safecode');
-          }
+        } else {
           callback();
         }
       };
@@ -856,12 +837,12 @@
             this.text = ''
             callback(new Error('输入的值不能小于0'));
           } else {
-            var integer = /^(([1-9]*)|(([0]\.\d{1,2}|[1-9]*\.\d{1,2})))$/ //金额保留两位小数
-            if(integer.test(value)) {
+            var integer = /^[1-9]\d*$|^[1-9]\d*\.\d\d?$|^0\.\d\d?$/ //金额保留两位小数
+            if(integer.test(value) || value == '0') {
               callback();
             } else {
               this.text = ''
-              callback(new Error('充值金额小数点后最大输入两位数字'));
+              callback(new Error('小数点后最大输入两位数字'));
             }
           }
         }
@@ -874,6 +855,8 @@
       orgid: '',
       nav: [],
       upshow: false,
+      upshow2: false,
+      playerlevellist: [],
       rules2: {
         radio1: [
           {required: true, message: '请选择冻结范围', trigger: 'change'},
@@ -1035,7 +1018,7 @@
       options6: [],
       props1: {
         value: 'user_id',
-        label: 'user_account',
+        label: 'login_name',
         isLeaf: 'isLeaf'
       },
       activeName2: 'first',
@@ -1062,7 +1045,8 @@
       },
       form8: {
          radio1: '',
-         desc: ''
+         desc: '',
+         top: ''
       },
       dialogFormVisible3: false,
       form3: {
@@ -1091,11 +1075,13 @@
       agentline: [],
       dlshow: false,
       czshow: false,
-      datalist: []
+      datalist: [],
+      zdflag: true
     }
   },
     created(){
       getplayergamechannel(this)
+      getplayerlevellist(this)
       let that = this
       if (!this.playergamelist.length && this.playergamelist.length != 0) {
         that.ruleForm.info = this.playergamelist.info
@@ -1124,6 +1110,11 @@
           this.upshow = true
         } else {
           this.upshow = false
+        }
+        if (val === '1') {
+          this.upshow2 = true
+        } else {
+          this.upshow2 = false
         }
       },
       'ruleForm.selectchannel': function (val) {
@@ -1183,6 +1174,43 @@
       }
     }, 
     methods: {
+      team(row) {
+        this.$router.push({path: '/analysisdatamgr/agentteam',query:{org:row.org_id,name:row.login_name}})
+      },
+      th (row) {
+         let that = this
+        this.$confirm('二次确认', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          request({
+              url: that.public.url + '/gameuser/blocknum',
+              method: 'post',
+              data: {
+                  user_id: row.id
+              }
+            }).then(res => {
+              that.$message.success(res.message)
+              playergamelist(that)
+            }).catch(error => {
+            })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      rendercontent (h,{node,data,store}) {
+        let num = node.label + '('+ data.sum +')'
+        return (
+          <span class='custom-tree-node'>
+            <span>{num}</span>
+          </span>
+        )
+      },
       rowclass ({row, rowIndex}) {
         if (row.status === '2') {
           return 'rowdjstatus'
@@ -1232,7 +1260,7 @@
             url:that.public.url + '/gameuser/getlist',
             method:'post',
             data:{
-              agent_user_id: row.agent_account_id
+              agent_user_id: row.id
             }
           }).then(res => {
             let tableData = res.data.list
@@ -1366,14 +1394,24 @@
           }
         }).then(res => {
           that.gameuser = res.data
-          that.agentline = res.data.agent_line.map (val => {
-            return {'name': val}
-          })
+          if (res.data.agent_line!='') {
+            that.agentline = res.data.agent_line.map (val => {
+              return {'name': val}
+            })
+          } else {
+            that.agentline = []
+          }
+          
         }).catch(error => {
         })
       },
       zdl (row) {
         let that = this
+        if (row.level == '会员') {
+          this.zdflag = false
+        } else {
+          this.zdflag = true
+        }
         this.dialogFormVisible8 = true
         this.userid = row.id
         request({
@@ -1385,9 +1423,14 @@
           }
         }).then(res => {
           that.gameuser = res.data
-          that.agentline = res.data.agent_line.map (val => {
-            return {'name': val}
-          })
+          if (res.data.agent_line!='') {
+            that.agentline = res.data.agent_line.map (val => {
+              return {'name': val}
+            })
+          } else {
+            that.agentline = []
+          }
+      
         }).catch(error => {
         })
       },
@@ -1495,29 +1538,33 @@
         }
       },
       // 转换算法主函数
-      NumberToChinese(m){
-        m *= 100;
-        m += "";
-        var length = m.length;
-
-        var result = "";
-        for (var i = 0; i < length; i++) {
-          if (i == 2) {
-            result = "元" + result;
-          } else if (i == 6) {
-            result = "万" + result;
-          }
-          if (m.charAt(length - i - 1) == 0) {
-            if (i != 0 && i != 1) {
-              if (result.charAt(0) != '零' && result.charAt(0) != '元' && result.charAt(0) != '万') {
-                result = "零" + result;
-              }
-            }
-            continue;
-          }
-          result = this.toDx(m.charAt(length - i - 1)) + this.unit[this.unit.length - i - 1] + result;
+      NumberToChinese(n){
+        var fraction = ['角', '分'];
+        var digit = [
+            '零', '壹', '贰', '叁', '肆',
+            '伍', '陆', '柒', '捌', '玖'
+        ];
+        var unit = [
+            ['元', '万', '亿'],
+            ['', '拾', '佰', '仟']
+        ];
+        var head = n < 0 ? '负' : '';
+        n = Math.abs(n);
+        var s = '';
+        for (var i = 0; i < fraction.length; i++) {
+            s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
         }
-        result += result.charAt(result.length - 1) == '元' ? "整" : "";
+        s = s || '整';
+        n = Math.floor(n);
+        for (var i = 0; i < unit[0].length && n > 0; i++) {
+            var p = '';
+            for (var j = 0; j < unit[1].length && n > 0; j++) {
+                p = digit[n % 10] + unit[1][j] + p;
+                n = Math.floor(n / 10);
+            }
+            s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+        }
+        let result = head + s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整');
         this.text=result;
       },
       handleClick(tab, event) {
@@ -1746,78 +1793,72 @@
             })
             return false
           } else {
+            if (this.upshow2 && this.form8.top === '') {
+              that.$message({
+                type: 'warning',
+                message: '请输入玩家抽水的百分比'
+              })
+              return false
+            }
             if (this.upshow) {
               request({
                 url:that.public.url + '/gameuser/getagentline',
                 method:'post',
                 data:{
+                  type: 2,
                   agent_account: this.form8.desc,
                   user_account:this.gameuser.login_name,
                   user_id:this.userid,
                   org_id:this.gameuser.agent_org_id
                 }
               }).then(res => {
-                if (res.data.agent_line.length > 0) {
-                  var agent_line = res.data.agent_line.map(val => {
-                    return {'name': val}
-                  })
+                if (res.data.old_agent_line.length > 0) {
+                 var old_agent_line = res.data.old_agent_line
                 } else {
-                  var agent_line = []
+                  var old_agent_line = []
+                }
+                if (res.data.new_agent_line.length > 0) {
+                 var new_agent_line = res.data.new_agent_line
+                } else {
+                  var new_agent_line = []
                 }
                 that.datalist = [
-                  {'status': '原代理线', 'up': that.agentline, 'level': that.gameuser.level},
-                  {'status': '转移到', 'up': agent_line, 'level': res.data.cengji}
+                  {'status': '原代理线', 'up': old_agent_line, 'level': res.data.old_level},
+                  {'status': '转移到', 'up': new_agent_line, 'level': res.data.new_level}
                 ]
                 this.dialogFormVisible9 = true
               }).catch(error => {
               })
             } else {
-              if (that.form8.radio1 === '1') {
-                let up = [
-                  {'name':that.gameuser.org_name},
-                  {'name':that.gameuser.login_name},
-                ]
-                that.datalist = [
-                  {'status': '原代理线', 'up': that.agentline, 'level': that.gameuser.level},
-                  {'status': '转移到', 'up': up, 'level': '一级'}
-                ]
-                this.dialogFormVisible9 = true
-              }
-              if (that.form8.radio1 === '3') {
-                var level = ''
-                if (that.gameuser.level === '总代') {
-                  level = '二级'
+                request({
+                url:that.public.url + '/gameuser/getagentline',
+                method:'post',
+                data:{
+                  type: that.form8.radio1,
+                  agent_account: '',
+                  user_account:this.gameuser.login_name,
+                  user_id:this.userid,
+                  org_id:this.gameuser.agent_org_id
                 }
-                if (that.gameuser.level === '一级') {
-                  level = '二级'
+              }).then(res => {
+                if (res.data.old_agent_line.length > 0) {
+                 var old_agent_line = res.data.old_agent_line
+                } else {
+                  var old_agent_line = []
                 }
-                if (that.gameuser.level === '二级') {
-                  level = '三级'
-                }
-                if (that.gameuser.level === '三级') {
-                  level = '四级'
-                }
-                if (that.gameuser.level === '四级') {
-                  level = '五级'
-                }
-                if (that.gameuser.level === '五级') {
-                  level = '六级'
-                }
-                if (that.gameuser.level === '六级') {
-                  level = '七级'
-                }
-                if (that.gameuser.level === '七级') {
-                  level = '八级'
-                }
-                if (that.gameuser.level === '八级') {
-                  level = '九级'
+                if (res.data.new_agent_line.length > 0) {
+                 var new_agent_line = res.data.new_agent_line
+                } else {
+                  var new_agent_line = []
                 }
                 that.datalist = [
-                  {'status': '原代理线', 'up': that.agentline, 'level': that.gameuser.level},
-                  {'status': '转移到', 'up': that.agentline, 'level': level}
+                  {'status': '原代理线', 'up': old_agent_line, 'level': res.data.old_level},
+                  {'status': '转移到', 'up': new_agent_line, 'level': res.data.new_level}
                 ]
                 this.dialogFormVisible9 = true
-              }
+              }).catch(error => {
+              })
+                
             }
           }
         } else {
@@ -1831,13 +1872,18 @@
         } else {
           that.form8.desc = ''
         }
+        if (this.upshow2) {
+        } else {
+          that.form8.top = ''
+        }
         request({
             url:that.public.url + '/gameuser/changeuseragent',
             method:'post',
             data:{
               user_id: that.userid,
               user_account: that.form8.desc,
-              type: that.form8.radio1
+              type: that.form8.radio1,
+              reward_top: that.form8.top
             }
           }).then(res => {
             that.$message({
@@ -1846,6 +1892,7 @@
             })
             that.$refs.form8.resetFields()
             that.form8.desc = ''
+            that.form8.top = ''
             that.dialogFormVisible8 = false
             that.dialogFormVisible9 = false
             playergamelist(that)
@@ -1916,7 +1963,7 @@
                   type: 'success',
                   message: res.message
                 })
-                that.dialogFormVisible = false
+                that.dialogFormVisible3 = false
                 that.$refs.form3.resetFields()
                 that.text = ''
                 getplayergamelist(that)
@@ -2055,8 +2102,10 @@
               type: 'success',
               message: res.message
             })
+            that.dialogFormVisible10 = false
             that.$refs.form4.resetFields()
             that.dialogFormVisible4 = false
+            that.text = ''
             getplayergamelist(that)
           }).catch(error => {
           })
@@ -2082,15 +2131,18 @@
       reset3 (form) {
         this.dialogFormVisible3 = false
         this.$refs.form3.resetFields()
+        this.text = ''
       },
       reset4 (form) {
         this.dialogFormVisible4 = false
         this.$refs.form4.resetFields()
+        this.text = ''
       },
       reset10 (form) {
         this.dialogFormVisible10 = false
         this.dialogFormVisible4 = false
         this.$refs.form4.resetFields()
+        this.text = ''
       },
       reset6 (form) {
         this.dialogFormVisible6 = false
@@ -2103,6 +2155,7 @@
       reset8 (form) {
         this.dialogFormVisible8 = false
         this.form8.desc = ''
+        this.form8.top = ''
         this.$refs.form8.resetFields()
       },
       reset9 (form) {
@@ -2299,6 +2352,18 @@
     let s = (date.getSeconds()<10?'0'+(date.getSeconds()):date.getSeconds());
     return y+m+d+h+i+s
   }
+
+  function getplayerlevellist (that) {
+    request({
+      url: that.public.url + '/backend/gameuser/getlevellist',
+      method: 'post',
+      data: {
+      }
+    }).then(res => {
+      that.playerlevellist = res.data
+    }).catch(error => {
+    })
+  }
 </script>
 
 <style>
@@ -2404,5 +2469,13 @@
   }
   .playergamelistquery .el-form-item {
     margin-bottom: 5px !important;
+  }
+  .playergamelist .el-tree{
+    width: 100%;
+    overflow: auto;
+  }
+  .playergamelist .el-tree>.el-tree-node{
+    min-width: 100%;
+    display: inline-block!important;
   }
 </style>

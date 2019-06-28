@@ -246,6 +246,7 @@ export default {
                     id: this.id
               }
             }).then(res => {
+              that.$message.success(res.message)
               that.dialogFormVisible = false
               that.$refs.form.resetFields()
               gettreelist(that)
@@ -265,6 +266,7 @@ export default {
                   depict: this.form.desc
             }
           }).then(res => {
+            that.$message.success(res.message)
             that.dialogFormVisible = false
             that.$refs.form.resetFields()
             gettreelist(that)

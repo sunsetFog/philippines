@@ -360,7 +360,10 @@ export default {
         status: {required: true, message: '请选择状态', trigger: 'change'},
       },
       rules1: {
-        table: {required: true, message: '请填写桌子名称', trigger: 'blur'},
+        table: [
+          {required: true, message: '请填写桌子名称', trigger: 'blur'},
+          {min: 0, max:6, message: '桌子名称应为6个字符以内', trigger: 'blur'}
+        ],
         number: {required: true, validator: number, trigger: 'blur'},
         status: {required: true, message: '请选择状态', trigger: 'change'},
         sort: [{required: true, validator: solts, trigger: 'blur'}],

@@ -60,32 +60,32 @@
             </td>
             <td crowspan="1" colspan="1">
               <div class="cell">
-                <el-input v-if="name" v-model="fishlist.royalty"></el-input>
-                <span v-else>{{fishlist.royalty}}</span>
+                <el-input v-if="name" v-model="royalty"></el-input>
+                <span v-else>{{fishlist.royalty | rate}}</span>
               </div>
             </td>
             <td crowspan="1" colspan="1">
              <div class="cell">
-                <el-input v-if="name" v-model="fishlist.tri_pn_offset"></el-input>
-                <span v-else>{{fishlist.tri_pn_offset}}</span>
+                <el-input v-if="name" v-model="tri_pn_offset"></el-input>
+                <span v-else>{{fishlist.tri_pn_offset | rate}}</span>
               </div>
             </td>
              <td crowspan="1" colspan="1">
               <div class="cell">
-                <el-input v-if="name" v-model="fishlist.sys_pn_correct"></el-input>
-                <span v-else>{{fishlist.sys_pn_correct}}</span>
+                <el-input v-if="name" v-model="sys_pn_correct"></el-input>
+                <span v-else>{{fishlist.sys_pn_correct | rate}}</span>
               </div>
             </td>
             <td crowspan="1" colspan="1">
               <div class="cell">
-                <el-input v-if="name" v-model="fishlist.tri_nn_offset"></el-input>
-                <span v-else>{{fishlist.tri_nn_offset}}</span>
+                <el-input v-if="name" v-model="tri_nn_offset"></el-input>
+                <span v-else>{{fishlist.tri_nn_offset | rate}}</span>
               </div>
             </td>
             <td crowspan="1" colspan="1">
               <div class="cell">
-                <el-input v-if="name" v-model="fishlist.sys_nn_correct"></el-input>
-                <span v-else>{{fishlist.sys_nn_correct}}</span>
+                <el-input v-if="name" v-model="sys_nn_correct"></el-input>
+                <span v-else>{{fishlist.sys_nn_correct | rate}}</span>
               </div>
             </td>
             <td crowspan="1" colspan="1" style="width:20%">
@@ -142,7 +142,12 @@ export default {
       actionname: '',
       name: false,
       formLabelWidth: '180px',
-      fishlist: {}
+      fishlist: {},
+      sys_nn_correct: '',
+      tri_nn_offset: '',
+      sys_pn_correct: '',
+      tri_pn_offset: '',
+      royalty: ''
     }
   },
   created() {
@@ -158,6 +163,9 @@ export default {
   watch: {
   },
   filters: {
+    rate: function (val) {
+      return val* 1 + '%'
+    }
   },
   methods: {
     tabclick () {
@@ -193,15 +201,15 @@ export default {
     },
     sure2 () {
       let that = this
-      if (this.fishlist.royalty * 1 > 1 || this.fishlist.royalty * 1 < -1 || this.fishlist.tri_nn_offset* 1 > 1 || this.fishlist.tri_nn_offset* 1 < -1) {
+      if (this.royalty * 1 > 1 || this.royalty * 1 < -1 || this.tri_nn_offset* 1 > 1 || this.tri_nn_offset* 1 < -1) {
         that.$message.error('修改时，请填写-1到1之间，系统将小数转化为百分比。')
         return false
       }
-      if (this.fishlist.tri_pn_offset * 1 > 1 || this.fishlist.tri_pn_offset * 1 < -1 || this.fishlist.sys_nn_correct* 1 > 1 || this.fishlist.sys_nn_correct* 1 < -1) {
+      if (this.tri_pn_offset * 1 > 1 || this.tri_pn_offset * 1 < -1 || this.sys_nn_correct* 1 > 1 || this.sys_nn_correct* 1 < -1) {
         that.$message.error('修改时，请填写-1到1之间，系统将小数转化为百分比。')
         return false
       }
-      if (this.fishlist.sys_pn_correct * 1 > 1 || this.fishlist.sys_pn_correct * 1 < -1 ) {
+      if (this.sys_pn_correct * 1 > 1 || this.sys_pn_correct * 1 < -1 ) {
         that.$message.error('修改时，请填写-1到1之间，系统将小数转化为百分比。')
         return false
       }
@@ -216,11 +224,11 @@ export default {
             method: 'post',
             data: {
                   game_id: 502,
-                  royalty: this.fishlist.royalty,
-                  tri_nn_offset: this.fishlist.tri_nn_offset,
-                  tri_pn_offset: this.fishlist.tri_pn_offset,
-                  sys_nn_correct: this.fishlist.sys_nn_correct,
-                  sys_pn_correct: this.fishlist.sys_pn_correct
+                  royalty: this.royalty,
+                  tri_nn_offset: this.tri_nn_offset,
+                  tri_pn_offset: this.tri_pn_offset,
+                  sys_nn_correct: this.sys_nn_correct,
+                  sys_pn_correct: this.sys_pn_correct
             }
           }).then(res => {
             that.$message({
@@ -275,10 +283,15 @@ function getlist (that) {
       url: that.public.url + '/gamefishset/getgamefishinfo',
       method: 'post',
       data: {
-        id: 2
+        game_id: 502
       }
     }).then(res => {
       that.fishlist = res.data
+      that.sys_nn_correct = res.data.sys_nn_correct *1 / 100
+      that.tri_nn_offset = res.data.tri_nn_offset *1 / 100
+      that.sys_pn_correct = res.data.sys_pn_correct *1 / 100
+      that.tri_pn_offset = res.data.tri_pn_offset *1 / 100
+      that.royalty = res.data.royalty / 100
     }).catch(error => {
     })
 }

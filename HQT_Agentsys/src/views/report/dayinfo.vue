@@ -38,17 +38,17 @@
         >
         个人税收收益：团队税收收益总额-所有直属代理团队税收收益总额
         </mt-popup>
-        <span>{{agent_tax}}</span>
+        <span>{{self_tax}}</span>
       </mt-cell>
     </div>
 
     <div class="card">
       <mt-cell title='充值信息'>
       </mt-cell>
-      <mt-cell title='总充值' :value="recharge_money">
+      <mt-cell title='团队玩家总充值额' :value="team_recharge_money">
       </mt-cell>
-       <mt-cell title="总提现" :value="withdraw_money">
-      </mt-cell>
+       <!-- <mt-cell title="总提现" :value="withdraw_money">
+      </mt-cell> -->
     </div>
 
      <div class="card">
@@ -64,7 +64,7 @@
        <div style="display: flex">
         <mt-cell title="代理"  class="twocelll">
         </mt-cell>
-        <mt-cell :title="agent_total_num"  class="twocelll">
+        <mt-cell :title="team_agent_num"  class="twocelll">
         </mt-cell>
         <mt-cell :title="add_agent_num"  class="twocelll">
         </mt-cell>
@@ -72,7 +72,7 @@
       <div style="display: flex">
         <mt-cell title="玩家" class="twocelll">
         </mt-cell>
-        <mt-cell :title="user_total_num"  class="twocelll">
+        <mt-cell :title="team_user_num"  class="twocelll">
         </mt-cell>
         <mt-cell :title="add_user_num"  class="twocelll">
         </mt-cell>
@@ -94,16 +94,16 @@ export default {
       id: '',
       team_flow: '',
       team_tax: '',
-      agent_tax: '',
-      recharge_money: '',
+      self_tax: '',
+      team_recharge_money: '',
       withdraw_money: '',
       date: '',
       show1: false,
       show2: false,
       show3: false,
-      agent_total_num: '',
+      team_agent_num: '',
       add_agent_num: '',
-      user_total_num: '',
+      team_user_num: '',
       add_user_num: ''
     }
   },
@@ -123,12 +123,12 @@ export default {
       }).then(res => {
         that.team_flow = res.data.team_flow
         that.team_tax = res.data.team_tax
-        that.agent_tax = res.data.agent_tax
-        that.recharge_money = res.data.recharge_money
+        that.self_tax = res.data.self_tax
+        that.team_recharge_money = res.data.team_recharge_money
         that.withdraw_money = res.data.withdraw_money
-        that.agent_total_num = res.data.agent_total_num
+        that.team_agent_num = res.data.team_agent_num
         that.add_agent_num = res.data.add_agent_num
-        that.user_total_num = res.data.user_total_num
+        that.team_user_num = res.data.team_user_num
         that.add_user_num = res.data.add_user_num
       }).catch(error => {
       })
@@ -151,10 +151,10 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
   .dayinfo .card {
     margin: 10px;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    border-left: 2px solid #d9d9d9;
-    border-right: 2px solid #d9d9d9;
+    border-top: 1px solid #2e163d;
+    border-bottom: 1px solid #2e163d;
+    border-left: 2px solid #2e163d;
+    border-right: 2px solid #2e163d;
     border-radius: 12px;
     position: relative;
     .mint-popup {
@@ -172,21 +172,14 @@ export default {
     opacity:0;
   }
   }
-  .buttonposition {
-    position: absolute!important;
-    left: 86px;
-    top: 7px;
-    z-index: 200;
-  }
   .mark {
     position: absolute;
     left: 120px;
-    top: 15px;
+    top: 14px;
   }
   .smallcell {
     width: 50%;
     float: left;
-    border-right: 1px solid #d9d9d9;
   }
   .smallcell .mint-cell-text{
     font-size: 12px;

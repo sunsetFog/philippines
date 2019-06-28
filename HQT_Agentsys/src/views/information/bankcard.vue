@@ -12,7 +12,7 @@
     </mt-header>
 
     <div class="card" v-for="(item, index) in list" :key="index">
-      <mt-cell title="银行卡" style="background:#26a2ff;color:white;">
+      <mt-cell title="银行卡" style="background:#874488;color:white;">
         <img src="../../../static/moren.png" style="width:30px;height:30px" @click="change(item.bank_id)" v-if="id!=item.bank_id">
         <img src="../../../static/moren1.png" style="width:30px;height:30px" @click="change(item.bank_id)" v-if="id===item.bank_id">
         <span :class="id===item.bank_id?'morencard': 'white'" @click="change(item.bank_id)">默认</span>
@@ -114,15 +114,15 @@ function getlist (that) {
 <style rel="stylesheet/scss" lang="scss">
   .card {
     margin: 10px;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    border-left: 2px solid #d9d9d9;
-    border-right: 2px solid #d9d9d9;
+    border-top: 1px solid #2e163d;
+    border-bottom: 1px solid #2e163d;
+    border-left: 2px solid #2e163d;
+    border-right: 2px solid #2e163d;
     border-radius: 12px;
     position: relative;
   }
   .mint-header {
-  background-color: #304156!important;
+  background-color: #513663!important;
   height: 60px!important;
   font-size: 21px!important;
 }

@@ -58,6 +58,18 @@
       <el-row>
         <el-form :inline="true" label-width="70px">
           <el-col :span="6">
+            <el-form-item label="游戏名称">
+                <el-select v-model="formInline.id"  filterable clearable>
+                <el-option
+                  v-for="(item,key) in gamelist"
+                  :key="key"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="开奖状态">
                 <el-select v-model="formInline.kjstatus" filterable clearable>
                 <el-option
@@ -70,7 +82,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="8">
+          <!-- <el-col :span="8">
             <el-form-item label="彩票时间">
                <el-date-picker
                 v-model="formInline.time1"
@@ -81,7 +93,7 @@
                 end-placeholde="结束日期">
                 </el-date-picker>
             </el-form-item>
-          </el-col>
+          </el-col> -->
 
           <el-col :span="8">
             <el-form-item label="开奖时间">
@@ -101,7 +113,7 @@
         </el-form>
       </el-row>
     </div>
-    <div class="pagingbox">
+    <!-- <div class="pagingbox">
     <div class="paging">
       <el-pagination
       @size-change="handleSizeChange"
@@ -113,7 +125,12 @@
       :total="total">
     </el-pagination>
     </div>
-    </div>
+    </div> -->
+
+    <div class="paging">
+          <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
+          <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+        </div>
 
     <el-table
     :data="tableData"
@@ -122,15 +139,22 @@
     style="width: 100%">
     <el-table-column
       prop="id"
-      width="80"
       label="ID">
     </el-table-column>
     <el-table-column
+      prop="game_name"
+      label="游戏名称">
+    </el-table-column>
+    <el-table-column
+      prop="table_name"
+      label="桌子">
+    </el-table-column>
+    <!-- <el-table-column
       label="彩票时间">
       <template slot-scope="scope">
         <span>{{scope.row.term_to_time | time}}</span>
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column
       prop="cname"
       label="彩种">
@@ -160,7 +184,7 @@
     <el-table-column
       label="撤单状态">
       <template slot-scope="scope">
-        <el-button @click="edit(scope.row)" type="text" size="small" v-if="gameopenawardkillorder && scope.row.is_cancel_order=='需要撤单' || scope.row.is_cancel_order=='撤单'">{{scope.row.is_cancel_order}}</el-button>
+        <el-button @click="edit(scope.row)" type="danger" v-if="gameopenawardkillorder && scope.row.is_cancel_order=='需要撤单' || scope.row.is_cancel_order=='撤单'">{{scope.row.is_cancel_order}}</el-button>
         <span v-else>{{scope.row.is_cancel_order}}</span>
       </template>
     </el-table-column>
@@ -178,7 +202,7 @@
     </el-table-column>
   </el-table>
 
-<div class="pagingbox">
+<!-- <div class="pagingbox">
   <div class="paging">
     <el-pagination
       @size-change="handleSizeChange"
@@ -191,7 +215,13 @@
       :total="total">
     </el-pagination>
   </div>
-</div>
+</div> -->
+
+
+<div class="paging">
+          <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
+          <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+        </div>
 
 <el-dialog title='彩票撤单'  :visible.sync="dialogFormVisible" :before-close="reset">
     <el-form :model="form" :rules="rules" ref="form">
@@ -242,8 +272,10 @@ export default {
         number: '',
         name: '',
         time1: [],
-        time2: []
+        time2: [],
+        id: ''
       },
+      gamelist: [],
       currentPage: 1,
       tableData: [],
       gamename: [],
@@ -254,7 +286,6 @@ export default {
       ],
       status1: [
         {name:'全部',id: '' },
-        {name:'需要撤单',id: '1' },
         {name:'撤单',id: '2' },
         {name:'无',id: '4' },
         {name:'已撤单',id: '3' },
@@ -291,23 +322,32 @@ export default {
       las_id: '',
       showtime: false,
       shownumber: false,
-      game_id: ''
+      game_id: '',
+      num: 1
     }
   },
   created() {
     getgamename(this)
+    getgamelist(this)
     let that = this
-    if (!this.lottery.length && this.lottery.length != 0) {
-      that.currentPage = this.lottery.currentPage
-      that.pagesize = this.lottery.pagesize
-      that.formInline.number = this.lottery.number
-      that.formInline.name = this.lottery.name
-      that.formInline.time1 = this.lottery.time1
-      that.formInline.time2 = this.lottery.time2
-      that.formInline.setstatus = this.lottery.setstatus
-      that.formInline.cancelstatus = this.lottery.cancelstatus
-      that.formInline.kjstatus = this.lottery.kjstatus
+    if (Object.keys(this.$route.query).length > 0) {
+      that.formInline.number = this.$route.query.termno
+      that.formInline.name =  this.$route.query.id
       getlist(this)
+    } else {
+      if (!this.lottery.length && this.lottery.length != 0) {
+        that.currentPage = this.lottery.currentPage
+        that.num = this.lottery.currentPage
+        that.pagesize = this.lottery.pagesize
+        that.formInline.number = this.lottery.number
+        that.formInline.name = this.lottery.name
+        that.formInline.time1 = this.lottery.time1
+        that.formInline.time2 = this.lottery.time2
+        that.formInline.setstatus = this.lottery.setstatus
+        that.formInline.cancelstatus = this.lottery.cancelstatus
+        that.formInline.kjstatus = this.lottery.kjstatus
+        getlist(this)
+      }
     }
   },
   computed: {
@@ -353,9 +393,10 @@ export default {
     query () {
       let that = this
       this.currentPage = 1
+      this.num = 1
       getlist(this)
       let setlottery = {
-          'currentPage': that.currentPage,
+          'currentPage': that.num,
           'pagesize': that.pagesize,
           'number': that.formInline.number,
           'name': that.formInline.name,
@@ -364,6 +405,45 @@ export default {
           'setstatus': that.formInline.setstatus,
           'cancelstatus': that.formInline.cancelstatus,
           'kjstatus': that.formInline.kjstatus,
+          'id': that.formInline.id,
+        }
+      this.$store.commit('setlottery', setlottery)
+    },
+    up () {
+      let that = this
+      this.num--
+      this.currentPage = this.num
+      getlist(this)
+      let setlottery = {
+          'currentPage': that.num,
+          'pagesize': that.pagesize,
+          'number': that.formInline.number,
+          'name': that.formInline.name,
+          'time1': that.formInline.time1,
+          'time2': that.formInline.time2,
+          'setstatus': that.formInline.setstatus,
+          'cancelstatus': that.formInline.cancelstatus,
+          'kjstatus': that.formInline.kjstatus,
+          'id': that.formInline.id,
+        }
+      this.$store.commit('setlottery', setlottery)
+    },
+    down () {
+      let that = this
+      this.num++
+      this.currentPage = this.num
+      getlist(this)
+      let setlottery = {
+          'currentPage': that.num,
+          'pagesize': that.pagesize,
+          'number': that.formInline.number,
+          'name': that.formInline.name,
+          'time1': that.formInline.time1,
+          'time2': that.formInline.time2,
+          'setstatus': that.formInline.setstatus,
+          'cancelstatus': that.formInline.cancelstatus,
+          'kjstatus': that.formInline.kjstatus,
+          'id': that.formInline.id,
         }
       this.$store.commit('setlottery', setlottery)
     },
@@ -457,6 +537,7 @@ export default {
           'setstatus': that.formInline.setstatus,
           'cancelstatus': that.formInline.cancelstatus,
           'kjstatus': that.formInline.kjstatus,
+          'id': that.formInline.id,
         }
       this.$store.commit('setlottery', setlottery)
     },
@@ -474,6 +555,7 @@ export default {
           'setstatus': that.formInline.setstatus,
           'cancelstatus': that.formInline.cancelstatus,
           'kjstatus': that.formInline.kjstatus,
+          'id': that.formInline.id,
         }
       this.$store.commit('setlottery', setlottery)
     }
@@ -494,7 +576,7 @@ function getlist (that) {
     start2 = parseTime(that.formInline.time2[0].getTime() /1000)
     end2 = parseTime(that.formInline.time2[1].getTime() /1000)
   }
-  
+ 
   request({
     url: that.public.url + '/gameopenaward/getlotterylist',
     method: 'post',
@@ -509,12 +591,32 @@ function getlist (that) {
       term_to_time_from: start1,
       term_to_time_to: end1,
       open_award_time_from: start2,
-      open_award_time_to: end2
+      open_award_time_to: end2,
+      game_id: that.formInline.id
     }
   }).then(res => {
-    that.tableData = res.data.list
-    that.total = res.data.rownum * 1
-    that.currentPage = res.data.pageno * 1
+    if (res.data && res.data.list && res.data.list.length > 0) {
+      that.tableData = res.data.list
+    } else {
+      that.tableData = []
+    }
+    
+    // that.total = res.data.rownum * 1
+    // that.currentPage = res.data.pageno * 1
+  }).catch(error => {
+  })
+}
+
+
+
+function getgamelist (that) {
+  request({
+    url: that.public.url + '/backend/gameopenaward/getlotteryname',
+    method: 'post',
+    data: {
+    }
+  }).then(res => {
+    that.gamelist = res.data
   }).catch(error => {
   })
 }

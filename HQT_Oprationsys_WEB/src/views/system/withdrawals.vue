@@ -3,7 +3,7 @@
 <div class="addaccount">
     <el-form :model="form" ref="form">
         <el-form-item label="单笔提款最低限额" :label-width="formLabelWidth">
-        <el-input v-model="form.wdr_one_min_limitw" clearable style='width: 50%;' type='number'></el-input><span>元</span>
+        <el-input v-model="form.wdr_one_min_limit" clearable style='width: 50%;' type='number'></el-input><span>元</span>
       </el-form-item>
        <el-form-item label="单笔提款最高限额" :label-width="formLabelWidth">
         <el-input v-model="form.wdr_one_max_limit" clearable style='width: 50%;' type='number'></el-input><span>元</span>
@@ -12,10 +12,10 @@
         <el-input v-model="form.wdr_no_audit_limit" clearable style='width: 50%;' type='number'></el-input><span>元</span>
       </el-form-item>
        <el-form-item label="相同账号每日提款总额" :label-width="formLabelWidth">
-        <el-input v-model="form.wdr_user_day_total" clearable style='width: 50%;' type='number'></el-input><span>元</span>
+        <el-input v-model="form.wdr_day_user_total" clearable style='width: 50%;' type='number'></el-input><span>元</span>
       </el-form-item>
      <el-form-item label="相同账号每日提款次数" :label-width="formLabelWidth">
-        <el-input v-model="form.wdr_user_day_free_count" clearable style='width: 50%;' type='number'></el-input><span>次</span>
+        <el-input v-model="form.wdr_day_user_count" clearable style='width: 50%;' type='number'></el-input><span>次</span>
       </el-form-item>
     <el-form-item label="免费提款次数" :label-width="formLabelWidth">
         <el-input v-model="form.wdr_day_free_count" clearable style='width: 50%;' type='number'></el-input><span>次</span>
@@ -45,11 +45,11 @@ export default {
       userlist: [],
       dialogFormVisible: true,
       form: {
-        wdr_one_min_limitw: '',
+        wdr_one_min_limit: '',
         wdr_one_max_limit: '',
         wdr_no_audit_limit: '',
-        wdr_user_day_total: '',
-        wdr_user_day_free_count: '',
+        wdr_day_user_total: '',
+        wdr_day_user_count: '',
         wdr_day_free_count: '',
         wdr_over_count_brochg: ''
       },
@@ -76,11 +76,11 @@ export default {
             url: that.public.url + '/backend/sysconfig/depositconfig',
             method: 'post',
             data: {
-                  wdr_one_min_limitw: this.form.wdr_one_min_limitw,
+                  wdr_one_min_limit: this.form.wdr_one_min_limit,
                   wdr_one_max_limit: this.form.wdr_one_max_limit,
                   wdr_no_audit_limit: this.form.wdr_no_audit_limit,
-                  wdr_user_day_total: this.form.wdr_user_day_total,
-                  wdr_user_day_free_count: this.form.wdr_user_day_free_count,
+                  wdr_day_user_total: this.form.wdr_day_user_total,
+                  wdr_day_user_count: this.form.wdr_day_user_count,
                   wdr_day_free_count: this.form.wdr_day_free_count,
                   wdr_over_count_brochg: this.form.wdr_over_count_brochg
             }

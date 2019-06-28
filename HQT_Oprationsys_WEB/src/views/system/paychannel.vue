@@ -19,11 +19,11 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <!-- <el-col :span="6">
             <el-form-item label="充值方式">
               <el-input clearable placeholder="充值方式" v-model="formInline.code"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="6">
             <el-form-item label="状态">
                 <el-select v-model="formInline.type" filterable clearable>
@@ -77,7 +77,7 @@
     </el-table-column>
     <el-table-column
       prop="acc_code"
-      label="充值方式">
+      label="代码">
     </el-table-column>
     <el-table-column
       prop="val_grade_id"

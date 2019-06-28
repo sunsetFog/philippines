@@ -25,6 +25,18 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="玩家渠道">
+                <el-select v-model="formInline.org" filterable clearable>
+                <el-option
+                  v-for="item in orglist"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="4">
             <el-button type="primary" icon="el-icon-search" @click="query" v-if="newuserdayreportgetlist">查询</el-button>
           </el-col>
@@ -88,20 +100,28 @@
       label="提款金额">
     </el-table-column>
     <el-table-column
-      prop="newuser_flow_money"
-      label="用户投注额">
-    </el-table-column>
-    <el-table-column
-      prop="newuser_lose_money"
-      label="用户输额">
-    </el-table-column>
-    <el-table-column
-      prop="newuser_win_money"
-      label="用户赢额">
-    </el-table-column>
-    <el-table-column
       prop="rechwith_diff"
       label="充提差">
+    </el-table-column>
+    <el-table-column
+      prop="newuser_whole_bet_num"
+      label="投注人数">
+    </el-table-column>
+    <el-table-column
+      prop="newuser_ptop_bet_num"
+      label="人人类投注人数">
+    </el-table-column>
+    <el-table-column
+      prop="newuser_ptom_bet_num"
+      label="人机类投注人数">
+    </el-table-column>
+    <el-table-column
+      prop="newuser_ptop_flow"
+      label="人人类流水">
+    </el-table-column>
+    <el-table-column
+      prop="newuser_ptom_flow"
+      label="人机类流水">
     </el-table-column>
   </el-table>
 
@@ -134,14 +154,16 @@ export default {
     return {
       formInline: {
         starttime: '',
-        endtime: ''
+        endtime: '',
+        org: ''
       },
       currentPage: 1,
       tableData: [],
       total: 0,
       pagesize: 50,
       havetime: false,
-      havetime1: false
+      havetime1: false,
+      orglist: []
     }
   },
   created() {
@@ -149,12 +171,14 @@ export default {
     let time = new Date(new Date().toLocaleDateString()).getTime()
     this.formInline.starttime = new Date(week)
     this.formInline.endtime = new Date(time)
+    getorglist(this)
     let that = this
     if (!this.newuser.length && this.newuser.length != 0) {
       that.formInline.starttime = this.newuser.starttime
       that.currentPage = this.newuser.currentPage
       that.pagesize = this.newuser.pagesize
       that.formInline.endtime = this.newuser.endtime
+      that.formInline.org = this.newuser.org
       getlist(that, that.formInline.starttime, that.formInline.endtime, that.currentPage, that.pagesize)
     }
   },
@@ -174,7 +198,8 @@ export default {
           'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
-          'endtime': that.formInline.endtime
+          'endtime': that.formInline.endtime,
+          'org': that.formInline.org
         }
       this.$store.commit('setnewuser', setnewuser)
     },
@@ -185,27 +210,27 @@ export default {
       return ''
     },
     cell ({row, column, rowIndex, columnIndex}) {
-      if (columnIndex === 4 && row.newuser_balance_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 6 && row.newuser_recharge_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 8 && row.newuser_withdraw_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 9 && row.newuser_flow_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 10 && row.newuser_lose_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 11 && row.newuser_win_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 12 && row.rechwith_diff*1 < 0) {
-        return 'red'
-      }
+      // if (columnIndex === 4 && row.newuser_balance_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 6 && row.newuser_recharge_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 8 && row.newuser_withdraw_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 9 && row.newuser_flow_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 10 && row.newuser_lose_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 11 && row.newuser_win_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 12 && row.rechwith_diff*1 < 0) {
+      //   return 'red'
+      // }
     },
     handleSizeChange(val) {
       this.pagesize = val
@@ -216,7 +241,8 @@ export default {
           'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
-          'endtime': that.formInline.endtime
+          'endtime': that.formInline.endtime,
+          'org': that.formInline.org
         }
       this.$store.commit('setnewuser', setnewuser)
     },
@@ -228,7 +254,8 @@ export default {
           'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
-          'endtime': that.formInline.endtime
+          'endtime': that.formInline.endtime,
+          'org': that.formInline.org
         }
       this.$store.commit('setnewuser', setnewuser)
     }
@@ -267,7 +294,8 @@ function getlist (that, starttime, endtime, currentPage, pagesize) {
       date_from: timestart,
       date_to: timeend,
       pageno: currentPage,
-      pagerows: pagesize
+      pagerows: pagesize,
+      agent_org_id: that.formInline.org
     }
   }).then(res => {
     Message({
@@ -298,6 +326,18 @@ function parseTime(time) {
     let i = (date.getMinutes()<10?'0'+(date.getMinutes()):date.getMinutes())+':';
     let s = (date.getSeconds()<10?'0'+(date.getSeconds()):date.getSeconds());
     return y+m+d+h+i+s
+}
+
+function getorglist (that) {
+  request({
+    url: that.public.url + '/backend/org/getorglist',
+    method: 'post',
+    data: {
+    }
+  }).then(res => {
+    that.orglist = res.data
+  }).catch(error => {
+  })
 }
 
 </script>

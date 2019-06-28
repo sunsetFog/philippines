@@ -52,6 +52,7 @@ export default new Router({
         {path: '/',redirect: '/home'}
       ]
     },
-    {path: '/login',name: 'Login',meta: {title: '登陆'},component: resolve => require(['@/pages/login/login'],resolve)}
+    {path: '/login',name: 'Login',meta: {title: '登陆',navigation: 0},component: resolve => require(['@/pages/login/login'],resolve)},
+    {path: '/neutralgear',name: 'neutralGear',meta: {title: '正在刷新',navigation: 0},component: resolve => require(['@/pages/neutralGear/neutralGear'],resolve)}
   ]
 })

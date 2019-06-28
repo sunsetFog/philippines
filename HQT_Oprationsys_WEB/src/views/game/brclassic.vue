@@ -225,13 +225,23 @@
          <span>{{id}}</span>
       </el-form-item>
       <el-form-item label="桌子名称：" :label-width="formLabelWidth" prop='table'>
-        <el-input v-model="form1.table" clearable></el-input>
+        <el-input v-model="form1.table" clearable style="width:80%"></el-input><span>{{multiple}}</span>
       </el-form-item>
        <el-form-item label="投注倒计时长" :label-width="formLabelWidth" prop='number'>
         <el-input v-model="form1.number" clearable typr='number' style='width:80%'></el-input><span>秒</span>
       </el-form-item>
       <el-form-item label="排序" :label-width="formLabelWidth" prop='sort'>
         <el-input v-model="form1.sort" clearable typr='number'></el-input>
+      </el-form-item>
+      <el-form-item label="桌子类型" :label-width="formLabelWidth" prop='type'>
+       <el-select v-model="form1.type" filterable>
+                <el-option
+                  v-for="item in typelist"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
       </el-form-item>
       <el-form-item label="桌子状态" :label-width="formLabelWidth" prop='status'>
        <el-select v-model="form1.status" filterable>
@@ -353,20 +363,30 @@ export default {
         number: '',
         sort: '',
         status: '1',
+        type: ''
       },
       rules: {
         number: {required: true, message: '请填写投注倒计时长', trigger: 'blur'},
         status: {required: true, message: '请选择状态', trigger: 'change'},
       },
       rules1: {
-        table: {required: true, message: '请填写桌子名称', trigger: 'blur'},
+        table: [
+          {required: true, message: '请填写桌子名称', trigger: 'blur'},
+          {min: 0, max:6, message: '桌子名称应为6个字符以内', trigger: 'blur'}
+        ],
         number: {required: true, validator: number, trigger: 'blur'},
+        type: {required: true, message: '请选择类型', trigger: 'change'},
         status: {required: true, message: '请选择状态', trigger: 'change'},
         sort: [{required: true, validator: solts, trigger: 'blur'}],
       },
       statuslist: [
         {name:'启用',id: '1' },
         {name:'禁用',id: '0' }
+      ],
+      typelist: [
+        {name:'平倍',id: '1' },
+        {name:'中倍',id: '2' },
+        {name:'高倍',id: '3' },
       ],
       form2: {
         code: '',
@@ -388,7 +408,8 @@ export default {
       tableid: false,
       tablename: '',
       betname: '',
-      betid: ''
+      betid: '',
+      multiple: '' 
     }
   },
   created() {
@@ -406,6 +427,18 @@ export default {
     ])
   },
   watch: {
+     'form1.type': function (val) {
+       if (val == '1') {
+         this.multiple = '-平倍'
+       }
+       if (val == '2') {
+         this.multiple = '-中倍'
+       }
+       if (val == '3') {
+         this.multiple = '-高倍'
+       }
+        
+      }
   },
   filters: {
   },
@@ -448,9 +481,14 @@ export default {
       this.tableid = true
       this.dialogFormVisible = true
       this.id = row.id
-      this.form1.table = row.name
+      if (row.name!='' && row.name.indexOf('-') > 0) {
+        this.form1.table = row.name.split('-')[0]
+      } else {
+        this.form1.table = row.name
+      }
       this.form1.number = row.bet_count_down
       this.form1.sort = row.sortid
+      this.form1.type = row.table_type
       if (row.status == '开启') {
         this.form1.status = '1'
       } else {
@@ -490,6 +528,13 @@ export default {
     add () {
       this.title = '新增桌子'
       this.tableid = false
+      this.form1 = {
+        table: '',
+        number: '',
+        sort: '',
+        status: '1',
+        type: ''
+      }
       this.dialogFormVisible = true
     },
     up (row) {
@@ -570,6 +615,7 @@ export default {
             type: 'warning',
             center: true
           }).then(res => {
+            var name = this.form1.table + this.multiple
           if (this.title === '修改桌子') {
              request({
               url: that.public.url + '/gameset/updatetable',
@@ -577,10 +623,11 @@ export default {
               data: {
                     id: this.id,
                     game_id: 101,
-                    name: this.form1.table,
+                    name: name,
                     bet_count_down: this.form1.number,
                     status: this.form1.status,
                     sortid: this.form1.sort,
+                    table_type: this.form1.type,
               }
             }).then(res => {
               that.$message({
@@ -600,10 +647,11 @@ export default {
               data: {
                     game_id: 101,
                     type:1,
-                    name: this.form1.table,
+                    name: name,
                     bet_count_down: this.form1.number,
                     status: this.form1.status,
                     sortid: this.form1.sort,
+                    table_type: this.form1.type,
               }
             }).then(res => {
               that.$message({

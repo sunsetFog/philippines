@@ -84,7 +84,7 @@
             </td>
             <td crowspan="1" colspan="1">
               <div class="cell">
-                <el-input clearable style="width: 85%;" type='number' v-model="form.wdr_rm_day_atm2"></el-input><span>元</span>
+                <el-input clearable style="width: 85%;" type='number' v-model="form.wdr_rm_day_amt2"></el-input><span>元</span>
               </div>
             </td>
             <td crowspan="1" colspan="1">
@@ -97,7 +97,7 @@
             </td>
             <td crowspan="1" colspan="1">
               <div class="cell">
-                <el-radio-group v-model="form.wdr_rm_day_week_switch">
+                <el-radio-group v-model="form.wdr_rm_week_amt_switch">
                   <el-radio :label='0'>开启</el-radio>
                   <el-radio :label='1'>关闭</el-radio>
                 </el-radio-group>
@@ -197,7 +197,7 @@
             </td>
             <td crowspan="1" colspan="1">
               <div class="cell">
-                <el-input clearable style="width: 85%;" type='number' v-model="form.wdr_rm_cad_ration"></el-input><span>%</span>
+                <el-input clearable style="width: 85%;" type='number' v-model="form.wdr_rm_cad_ratio"></el-input><span>%</span>
               </div>
             </td>
             <td crowspan="1" colspan="1">
@@ -263,7 +263,7 @@
             </td>
             <td crowspan="1" colspan="1">
               <div class="cell">
-                <el-input clearable style="width: 85%;" type='number' v-model="form.wdr_rm_day_aum_count"></el-input><span>次</span>
+                <el-input clearable style="width: 85%;" type='number' v-model="form.wdr_rm_day_atm_count"></el-input><span>次</span>
               </div>
             </td>
             <td crowspan="1" colspan="1">
@@ -300,19 +300,19 @@ export default {
         wdr_rm_one_amt2: '',
         wdr_rm_day_amt_switch: '',
         wdr_rm_day_amt1: '',
-        wdr_rm_day_atm2: '',
-        wdr_rm_day_week_switch: '',
+        wdr_rm_day_amt2: '',
+        wdr_rm_week_amt_switch: '',
         wdr_rm_week_amt1: '',
         wdr_rm_week_amt2: '',
         wdr_rm_month_amt_switch: '',
         wdr_rm_month_amt1: '',
         wdr_rm_month_amt2: '',
-        wdr_rm_cad_ration: '',
+        wdr_rm_cad_ratio: '',
         wdr_rm_day_activity_amt: '',
         wdr_rm_month_activity_amt: '',
         wdr_rm_transacc_count: '',
         wdr_rm_transacc_ullev: '',
-        wdr_rm_day_aum_count: ''
+        wdr_rm_day_atm_count: ''
       }
     }
   },
@@ -335,19 +335,19 @@ export default {
           wdr_rm_one_amt2: this.form.wdr_rm_one_amt2,
           wdr_rm_day_amt_switch: this.form.wdr_rm_day_amt_switch,
           wdr_rm_day_amt1: this.form.wdr_rm_day_amt1,
-          wdr_rm_day_atm2: this.form.wdr_rm_day_atm2,
-          wdr_rm_day_week_switch: this.form.wdr_rm_day_week_switch,
+          wdr_rm_day_amt2: this.form.wdr_rm_day_amt2,
+          wdr_rm_week_amt_switch: this.form.wdr_rm_week_amt_switch,
           wdr_rm_week_amt1: this.form.wdr_rm_week_amt1,
           wdr_rm_week_amt2: this.form.wdr_rm_week_amt2,
           wdr_rm_month_amt_switch: this.form.wdr_rm_month_amt_switch,
           wdr_rm_month_amt1: this.form.wdr_rm_month_amt1,
           wdr_rm_month_amt2: this.form.wdr_rm_month_amt2,
-          wdr_rm_cad_ration: this.form.wdr_rm_cad_ration,
+          wdr_rm_cad_ratio: this.form.wdr_rm_cad_ratio,
           wdr_rm_day_activity_amt: this.form.wdr_rm_day_activity_amt,
           wdr_rm_month_activity_amt: this.form.wdr_rm_month_activity_amt,
           wdr_rm_transacc_count: this.form.wdr_rm_transacc_count,
           wdr_rm_transacc_ullev: this.form.wdr_rm_transacc_ullev,
-          wdr_rm_day_aum_count: this.form.wdr_rm_day_aum_count,
+          wdr_rm_day_atm_count: this.form.wdr_rm_day_atm_count,
         }
       }).then(res => {
         that.$message({

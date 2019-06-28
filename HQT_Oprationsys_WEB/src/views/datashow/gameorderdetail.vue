@@ -53,7 +53,7 @@
         </el-form>
       </el-row>
     </div>
-    <div class="pagingbox">
+    <!-- <div class="pagingbox">
     <div class="paging">
       <el-pagination
       @size-change="handleSizeChange"
@@ -65,7 +65,11 @@
       :total="total">
     </el-pagination>
     </div>
-    </div>
+    </div> -->
+    <div class="paging">
+  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
+  <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+</div>
 
     <el-table
     :data="tableData"
@@ -81,19 +85,19 @@
     </el-table-column>
     <el-table-column
       prop="tableno"
-      label="桌号">
+      label="游戏桌号">
     </el-table-column>
     <el-table-column
       prop="termno"
-      label="期号">
+      label="游戏期号">
     </el-table-column>
     <el-table-column
-      prop="bet_name"
+      prop="bet_item_code"
       label="下注项目">
     </el-table-column>
     <el-table-column
       prop="bet_data"
-      label="下单数据">
+      label="下注数据">
     </el-table-column>
     <el-table-column
       prop="bet_money"
@@ -113,7 +117,7 @@
     </el-table-column>
   </el-table>
 
-<div class="pagingbox">
+<!-- <div class="pagingbox">
   <div class="paging">
     <el-pagination
       @size-change="handleSizeChange"
@@ -126,6 +130,10 @@
       :total="total">
     </el-pagination>
   </div>
+</div> -->
+<div class="paging">
+  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
+  <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
 </div>
 
 
@@ -163,7 +171,8 @@ export default {
       pagesize: 50,
       havetime: false,
       havetime1: false,
-      id: ''
+      id: '',
+      num: 1
     }
   },
   created() {
@@ -198,6 +207,8 @@ export default {
     query () {
       // if (this.havetime && this.havetime1) {
         let that = this
+        this.currentPage = 1
+        this.num = 1
         getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize)
       // } else {
       //   Message({
@@ -205,6 +216,18 @@ export default {
       //     type: 'error'
       //   })
       // }
+    },
+    up () {
+      let that = this
+      this.num--
+      this.currentPage = this.num
+      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize)
+    },
+    down () {
+      let that = this
+      this.num++
+      this.currentPage = this.num
+      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize)
     },
     back () {
       this.$router.push({path: '/analysisdatamgr/gameuserrankreport'})
@@ -290,9 +313,9 @@ function getlist (that, starttime, endtime, currentPage, pagesize) {
         message: res.message,
         type: 'success'
       })
-    that.tableData = res.data.list
-    that.total = res.data.rownum * 1
-    that.currentPage = res.data.pageno * 1
+    that.tableData = res.data
+    // that.total = res.data.rownum * 1
+    // that.currentPage = res.data.pageno * 1
   }).catch(error => {
   })
 }

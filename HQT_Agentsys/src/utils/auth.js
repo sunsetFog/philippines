@@ -28,3 +28,17 @@ export function setname(name) {
 export function removename() {
   return Cookies.remove(username)
 }
+
+const web = 'web'
+
+export function getweb() {
+  return Cookies.get(web)
+}
+
+export function setweb(flag) {
+  return Cookies.set(web, flag)
+}
+
+export function removeweb() {
+  return Cookies.remove(web)
+}

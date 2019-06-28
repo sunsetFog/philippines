@@ -14,16 +14,17 @@ export default {
   },
   watch: {
     $route(to, from){
+        // console.log('watch~~~',to,from);
         document.title = to.meta.title;
-        if(to.path != '/login'&&from.path == '/'){
-          sessionStorage.setItem('checked',true);
+        let beforeRouterArr = ['/login','/neutralgear'];
+        if(beforeRouterArr.indexOf(to.path)==-1&&from.path == '/'){
           sessionStorage.setItem('counts',1);
-          this.$router.push({path: '/login'});
+          this.$router.push({path: '/neutralgear'});
           return;
         }else if(to.path == '/game'){
             purpleMagic(3);
             window.dispatchEvent(new Event('resize'));
-        }else{
+        }else if(to.path != '/game'){
             purpleMagic(2);
         }
     }

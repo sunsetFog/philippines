@@ -80,7 +80,7 @@
       width='200'
       >
       <template slot-scope="scope">
-        <el-button type="text"  @click="confirmEdit(scope.row)">{{scope.row.user_account}}</el-button>
+        <el-button type="text"  @click="confirmEdit(scope.row)" :disabled="scope.row.isleaf==0?true:false">{{scope.row.user_account}}</el-button>
       </template>
     </el-table-column>
       <el-table-column prop="level" label="层级"></el-table-column>
@@ -157,8 +157,8 @@ export default {
         if (value * 1 > 5 || value *1 < 0) {
           callback(new Error('请填写0%-5%之间的数值'));
         } else {
-          var integer = /^(([1-9]*)|(([0]\.\d{1,2}|[1-9]*\.\d{1,2})))$/ //金额保留两位小数
-          if(integer.test(value)) {
+          var integer = /^[1-9]\d*$|^[1-9]\d*\.\d\d?$|^0\.\d\d?$/ //金额保留两位小数
+          if(integer.test(value)  || value == '0') {
             callback();
           } else {
             callback(new Error('保留两位小数'));
@@ -257,7 +257,7 @@ export default {
       this.$store.commit("settax", settax);
     },
     confirmEdit (row) {
-      this.pid = row.puser_id
+      this.pid = row.user_id
       getlist(this)
     },
     edit(data) {
@@ -274,6 +274,7 @@ export default {
       })
         .then(res => {
           that.form2 = res.data
+          that.form.desc = res.data.reward_top
         })
         .catch(error => {});
     },
@@ -365,10 +366,10 @@ function getlist(that) {
       that.tableData = res.data.list;
       that.total = res.data.rownum * 1;
       that.currentPage = res.data.pageno * 1;
-      if (res.data.nav && res.data.nav.p_agents && res.data.nav.p_agents.length > 0) {
-        that.nav = res.data.nav.p_agents
+      if (res.data.nav_path && res.data.nav_path.length > 0) {
+        that.nav = res.data.nav_path
       } else {
-        hat.nav = []
+        that.nav = []
       }
     })
     .catch(error => {});

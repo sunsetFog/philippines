@@ -45,9 +45,9 @@
             </el-form-item>
           </el-col>
           
-          <el-col :span="2">
+          <!-- <el-col :span="2">
             <el-button type="primary" @click="again" v-if="gamemovetextrepeatpush">重推</el-button>
-          </el-col>
+          </el-col> -->
           <el-col :span="2">
             <el-button type="primary" icon="el-icon-search" @click="query" v-if="gamemovetextgetlist">查询</el-button>
           </el-col>
@@ -125,6 +125,7 @@
         width='200'
         label="操作">
         <template slot-scope="scope">
+          <el-button type="text" @click="again(scope.row)" v-if="gamemovetextrepeatpush" class="red">重推</el-button>
           <el-button type="text" size="small" @click="edit(scope.row.id)" v-if="gamemovetextupdate">编辑</el-button>
           <el-button type="text" size="small" @click="view(scope.row.id)" v-if="gamemovetextgetinfo">查看</el-button>
           <el-button type="text" size="small" @click="delet(scope.row.id)" v-if="gamemovetextdel">删除</el-button>
@@ -232,6 +233,9 @@
           </el-date-picker>
           <el-input v-model="form2.input" style="width:300px;margin-top:8px" type='number'></el-input><span>秒循环一次</span>
         </el-form-item>
+        <el-form-item label="播放次数" :label-width="formLabelWidth">
+          <el-input v-model="form2.num" style="width:200px" type='number' :disabled="form2.checkbox"></el-input><span>次，每次间隔</span><el-input v-model="form2.time" :disabled="form2.checkbox" style="width:200px" type='number'></el-input><span>秒</span>
+        </el-form-item>
         <el-form-item label="播放内容" :label-width="formLabelWidth" prop="content">
           <el-input v-model="form2.content" type='textarea' placeholder='必填。公告内容'></el-input>
         </el-form-item>
@@ -314,7 +318,9 @@
             value2: '',
             input: '',
             content: '',
-            radio: ''
+            radio: '',
+            num: '',
+            time: ''
         },
         rules2: {
             type: [
@@ -360,7 +366,14 @@
         'gamemovetextrepeatpush'
       ])
     },
-    watch: {},
+    watch: {
+      // 'form2.checkbox': function (val) {
+      //   if (val) {
+      //     this.form2.num = ''
+      //     this.form2.time = ''
+      //   }
+      // }
+    },
     filters: {
       play(val) {
         if (val === '0') {
@@ -416,6 +429,8 @@
           if (res.data.is_timing_play === '0') {
               // 不定时播放
               that.form2.checkbox = false
+              that.form2.num = res.data.loop_count
+              that.form2.time = res.data.one_interval_sec
           } else {
               that.form2.checkbox = true
               that.form2.input = res.data.one_loop_sec
@@ -463,6 +478,8 @@
                     let play_from_time = ''
                     let play_to_time = ''
                     let one_loop_sec = ''
+                    let num = ''
+                    let time = ''
                     if (that.form2.checkbox) {
                         // 定时播放
                         if (that.form2.value1) {
@@ -489,11 +506,15 @@
                             return false
                         }
                         one_loop_sec = that.form2.input
+                        num = ''
+                        time = ''
                     } else {
                         is_timing_play = 0
                         play_from_time = ''
                         play_to_time = ''
                         one_loop_sec = ''
+                        num = that.form2.num
+                        time = that.form2.time
                     }
                     request({
                         url: that.public.url + '/gamemovetext/add',
@@ -508,7 +529,9 @@
                             play_to_time: play_to_time,
                             one_loop_sec: one_loop_sec,
                             content: this.form2.content,
-                            switch: this.form2.radio
+                            switch: this.form2.radio,
+                            loop_count: num,
+                            one_interval_sec: time
                         }
                     }).then(res => {
                         that.$message({
@@ -519,6 +542,8 @@
                         that.form2.value1 = ''
                         that.form2.value2 = ''
                         that.form2.input = ''
+                        that.form2.num = ''
+                        that.form2.time = ''
                         that.form2.checkbox = false
                         that.$refs.form2.resetFields()
                         getlist(that)
@@ -529,6 +554,8 @@
                     let play_from_time = ''
                     let play_to_time = ''
                     let one_loop_sec = ''
+                    let num = ''
+                    let time = ''
                     if (that.form2.checkbox) {
                         // 定时播放
                         if (that.form2.value1) {
@@ -555,11 +582,15 @@
                             return false
                         }
                         one_loop_sec = that.form2.input
+                        num = ''
+                        time = ''
                     } else {
                         is_timing_play = 0
                         play_from_time = ''
                         play_to_time = ''
                         one_loop_sec = ''
+                        num = that.form2.num
+                        time = that.form2.time
                     }
                     request({
                         url: that.public.url + '/gamemovetext/update',
@@ -575,7 +606,9 @@
                             one_loop_sec: one_loop_sec,
                             content: this.form2.content,
                             switch: this.form2.radio,
-                            id: this.id
+                            id: this.id,
+                            loop_count: num,
+                            one_interval_sec: time
                         }
                     }).then(res => {
                         that.$message({
@@ -586,6 +619,8 @@
                         that.form2.value1 = ''
                         that.form2.value2 = ''
                         that.form2.input = ''
+                        that.form2.num = ''
+                        that.form2.time = ''
                         that.form2.checkbox = false
                         that.$refs.form2.resetFields()
                         getlist(that)
@@ -598,12 +633,13 @@
             }
         })
       },
-      again () {
+      again (row) {
         let that = this
          request({
               url: that.public.url + '/gamemovetext/repeatpush',
               method: 'post',
               data: {
+                id: row.id
               }
           }).then(res => {
             that.$message.success(res.message)
@@ -618,6 +654,8 @@
         that.form2.value1 = ''
         that.form2.value2 = ''
         that.form2.input = ''
+        that.form2.num = ''
+        that.form2.time = ''
         that.form2.checkbox = false
       },
       query() {

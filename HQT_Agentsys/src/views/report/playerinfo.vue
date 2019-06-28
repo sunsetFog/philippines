@@ -14,7 +14,7 @@
       </mt-cell>
        <mt-cell title="账号性质">
          <span>
-           {{type | type}}
+           {{type}}
          </span>
       </mt-cell>
        <mt-cell title="建立时间" :value="create_time">
@@ -29,7 +29,7 @@
       </mt-cell>
       <mt-cell title='游戏流水' :value="flow">
       </mt-cell>
-       <mt-cell title="最后活跃" :value="last_login_time">
+       <mt-cell title="最后活跃时间" :value="last_login_time">
       </mt-cell>
     </div>
 
@@ -103,28 +103,21 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
   .card {
     margin: 10px;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    border-left: 2px solid #d9d9d9;
-    border-right: 2px solid #d9d9d9;
+    border-top: 1px solid #2e163d;
+    border-bottom: 1px solid #2e163d;
+    border-left: 2px solid #2e163d;
+    border-right: 2px solid #2e163d;
     border-radius: 12px;
     position: relative;
-  }
-  .buttonposition {
-    position: absolute!important;
-    left: 86px;
-    top: 7px;
-    z-index: 200;
   }
   .mark {
     position: absolute;
     left: 120px;
-    top: 15px;
+    top: 14px;
   }
   .smallcell {
     width: 50%;
     float: left;
-    border-right: 1px solid #d9d9d9;
   }
   .smallcell .mint-cell-text{
     font-size: 12px;
@@ -133,7 +126,7 @@ export default {
   .threecell {
     float: left;
     flex: 1;
-    border-right: 1px solid #d9d9d9;
+    border-right: 1px solid #2e163d;
     text-align: center;
   }
 </style>

@@ -72,12 +72,16 @@
         </el-form>
       </el-row>
         </div>
+
+        <div class="paging">
+          <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
+          <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+        </div>
           <el-table
         :data="tableData"
         border
         style="width: 100%;">
         <el-table-column
-          width="50"
           label="ID"
           prop="id">
         </el-table-column>
@@ -120,17 +124,23 @@
           prop="cm_reward">
         </el-table-column>
         <el-table-column
-          label="常规开奖时间"
-          prop="co_open_time">
-        </el-table-column>
+              label="常规开奖时间">
+              <template slot-scope="scope">
+                {{scope.row.co_open_time | time}}
+              </template>
+            </el-table-column>
         <el-table-column
-          label="比倍开奖时间"
-          prop="cm_open_time">
-        </el-table-column>
+              label="比倍开奖时间">
+              <template slot-scope="scope">
+                {{scope.row.cm_open_time | time}}
+              </template>
+            </el-table-column>
         <el-table-column
-          label="彩金开奖时间"
-          prop="tg_open_time">
-        </el-table-column>
+              label="彩金开奖时间">
+              <template slot-scope="scope">
+                {{scope.row.tg_open_time | time}}
+              </template>
+            </el-table-column>
         <el-table-column
           label="比倍骰子点数"
           prop="cm_dice_points">
@@ -150,20 +160,10 @@
       </el-table>
 
       
-<div class="pagingbox">
-    <div class="paging" style="margin-top: 20px;">
-      <el-pagination
-        :current-page.sync="currentPage"
-        :page-size="pagesize"
-        :page-sizes="[50,100,200]"
-        :total="total"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
-        background
-        layout="sizes, prev, pager, next, jumper">
-      </el-pagination>
-    </div>
-  </div>
+<div class="paging">
+  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
+  <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+</div>
 
     
   
@@ -194,7 +194,8 @@ import { getToken } from '../../utils/auth';
             time3: [],
             id: ''
         },
-        statuslist: []
+        statuslist: [],
+        num: 1
       }
     },
     created () {
@@ -207,6 +208,7 @@ import { getToken } from '../../utils/auth';
         that.formInline.time2 = this.gamerecord.time2
         that.formInline.time3 = this.gamerecord.time3
         that.currentPage = this.gamerecord.currentPage
+        that.num = this.gamerecord.currentPage
         that.pagesize = this.gamerecord.pagesize
         getlist(that)
       }
@@ -218,15 +220,23 @@ import { getToken } from '../../utils/auth';
       ])
     },
     filters: {
+      time: function (val) {
+        if (val == '-1') {
+          return ''
+        } else {
+          return val
+        }
+      }
     },
     methods: {
-      handleCurrentChange(val) {
-        let that = this
-        this.currentPage = val *1
-        getlist(this)
-        let setgamerecord = {
+      up () {
+      let that = this
+      this.num--
+      this.currentPage = this.num
+      getlist(this)
+      let setgamerecord = {
         'id': that.formInline.id,
-        'currentPage': that.currentPage,
+        'currentPage': this.num,
         'pagesize': that.pagesize,
         'number': that.formInline.number,
         'time1': that.formInline.time1,
@@ -234,15 +244,15 @@ import { getToken } from '../../utils/auth';
         'time3': that.formInline.time3,
       }
       this.$store.commit('setgamerecord', setgamerecord)
-      },
-      handleSizeChange(val) {
-        let that = this
-        this.pagesize = val
-        this.currentPage = 1
-        getlist(this)
-        let setgamerecord = {
+    },
+    down () {
+      let that = this
+      this.num++
+      this.currentPage = this.num
+      getlist(this)
+      let setgamerecord = {
         'id': that.formInline.id,
-        'currentPage': that.currentPage,
+        'currentPage': this.num,
         'pagesize': that.pagesize,
         'number': that.formInline.number,
         'time1': that.formInline.time1,
@@ -250,13 +260,15 @@ import { getToken } from '../../utils/auth';
         'time3': that.formInline.time3,
       }
       this.$store.commit('setgamerecord', setgamerecord)
-      },
+    },
       query () {
         let that = this
+        this.currentPage = 1
+        this.num = 1
         getlist(this)
         let setgamerecord = {
         'id': that.formInline.id,
-        'currentPage': that.currentPage,
+        'currentPage': that.num,
         'pagesize': that.pagesize,
         'number': that.formInline.number,
         'time1': that.formInline.time1,
@@ -303,9 +315,7 @@ import { getToken } from '../../utils/auth';
         pagerows: that.pagesize
       }
     }).then(res => {
-      that.tableData = res.data.list
-      that.total = res.data.rownum *1
-      that.currentPage = res.data.pageno * 1
+      that.tableData = res.data
     }).catch(error => {
     })
   }

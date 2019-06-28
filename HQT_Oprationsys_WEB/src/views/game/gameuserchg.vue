@@ -15,9 +15,9 @@
                 <el-select v-model="formInline.type" filterable clearable>
                 <el-option
                   v-for="item in typelist"
-                  :key="item.type"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.type">
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -71,6 +71,7 @@
     @expand-change='change'
     :row-key="getrowkey"
     :expand-row-keys="expands"
+    :cell-class-name='cell'
     border
     style="width: 100%">
     <el-table-column type="expand">
@@ -210,15 +211,15 @@ export default {
       currentPage: 1,
       tableData: [],
       typelist: [
-        {name: '支付充值', type: '1'},
-        {name: '游戏结算', type: '2'},
-        {name: '游戏撤单', type: '3'},
-        {name: '后台充值', type: '4'},
-        {name: '活动奖励', type: '5'},
-        {name: '提款申请', type: '6'},
-        {name: '提款失败', type: '7'},
-        {name: '存保险箱', type: '8'},
-        {name: '取保险箱', type: '9'},
+        // {name: '支付充值', type: '1'},
+        // {name: '游戏结算', type: '2'},
+        // {name: '游戏撤单', type: '3'},
+        // {name: '后台充值', type: '4'},
+        // {name: '活动奖励', type: '5'},
+        // {name: '提款申请', type: '6'},
+        // {name: '提款失败', type: '7'},
+        // {name: '存保险箱', type: '8'},
+        // {name: '取保险箱', type: '9'},
       ],
       total: 0,
       pagesize: 50,
@@ -227,6 +228,7 @@ export default {
   },
   created() {
     let that = this
+    gettypelist(this)
     if (!this.gameuserchg.length && this.gameuserchg.length != 0) {
       that.formInline.value = this.gameuserchg.value
       that.currentPage = this.gameuserchg.currentPage
@@ -275,6 +277,11 @@ export default {
           'endtime': that.formInline.endtime,
         }
       this.$store.commit('setgameuserchg', setgameuserchg)
+    },
+    cell ({row, column, rowIndex, columnIndex}) {
+      if (columnIndex === 0 && row.src_type == '游戏结算') {
+        return 'displaynone'
+      }
     },
     handleSizeChange(val) {
       let that = this
@@ -409,6 +416,19 @@ function getinfo1 (that, id, type) {
 }
 
 
+function gettypelist(that) {
+  request({
+        url: that.public.url + '/gameuserchg/getchgnamelist',
+        method: 'post',
+        data: {
+        }
+    }).then(res => {
+        that.typelist = res.data
+    }).catch(error => {
+    })
+}
+
+
 
 </script>
 
@@ -452,5 +472,8 @@ function getinfo1 (that, id, type) {
       margin-right: 0;
       margin-bottom: 10px;
       width: 25%;
+  }
+  .displaynone .el-table__expand-icon  {
+    display: none;
   }
 </style>

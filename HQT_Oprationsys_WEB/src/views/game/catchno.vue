@@ -92,6 +92,13 @@
           label="抓号获取时间"
           prop="last_success_time">
         </el-table-column>
+        <el-table-column
+        v-if="flag"
+          label="操作">
+              <template slot-scope="scope">
+                <el-button @click="reset(scope.row)" type="text" size="small" class="red" v-if="scope.row.status === '未结果(处理中)'">撤单</el-button>
+              </template>
+            </el-table-column>
       </el-table>
 
       
@@ -189,7 +196,8 @@ import { getToken } from '../../utils/auth';
             id: '19',
             name: '腾讯分分彩'
           },
-        ]
+        ],
+        flag: true
       }
     },
     created () {
@@ -212,6 +220,15 @@ import { getToken } from '../../utils/auth';
     },
     filters: {
     },
+    watch: {
+      'formInline.status': function(val) {
+        if(val == '2' || val == '-1') {
+          this.flag = true
+        } else {
+          this.flag = false
+        }
+      }
+    },
     methods: {
       tableclassname ({row, rowIndex}) {
         if (row.status === '未结果(处理中)') {
@@ -231,6 +248,9 @@ import { getToken } from '../../utils/auth';
         'time': that.formInline.time,
       }
       this.$store.commit('setcatchno', setcatchno)
+      },
+      reset (row) {
+        this.$router.push({path:'/gameconfmgr/lottery',query:{'id':row.las_id,'termno':row.termno}})
       },
       handleSizeChange(val) {
         let that = this

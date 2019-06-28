@@ -1,80 +1,30 @@
 <template>
   <div class="headerdd">
     <!-- 遮罩层 -->
-    <transition name="fade">
+    <!-- <transition name="fade">
       <div v-show="show"
            class='mask'
            @click='menuHide();show=!show'
            ref='cover'>
       </div>
-    </transition>
+    </transition> -->
     <!-- 面包屑按钮 -->
     <mt-button slot="right"
                 icon='more'
-               @click="menuShow();show=!show">
-               <span style="font-size:12px;">个人信息</span>
+                style="color: #dbcbb7;"
+               @click="loginout">
+               <span style="font-size:12px;color: #dbcbb7;font-family: 'Microsoft YaHei'">返回游戏</span>
     </mt-button>
-    <!-- 菜单栏 -->
-    <ul ref="rightmenu"
-        class="headerright"
-        @click="menuHide();show=!show">
-        <div class='menu'>
-          <h2 class="whitetitle">用户</h2>
-        </div>
-
-      <div class="menurightbox">
-        <mt-cell title="个人信息" is-link  to="/personal">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
-      </mt-cell>
-       <mt-cell title="邮箱绑定" is-link  to="/email">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
-      </mt-cell>
-       <mt-cell title="登录密码" is-link  to="/pwd">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
-      </mt-cell>
-       <mt-cell title="结算密码" is-link  to="/settlement">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
-      </mt-cell>
-      </div>
-
-      <div class="menurightbox">
-        <mt-cell title="银行卡管理" is-link  to="/bankcard">
-        <img slot="icon" src="../../../../static/user.png" width="20" height="20">
-      </mt-cell>
-      </div>
-
-      <div class="menurightbox">
-        
-        <!-- <mt-cell title="页面刷新" is-link>
-      </mt-cell> -->
-      <div class="mint-cell" @click="ready">
-        <div class="mint-cell-wrapper">
-          <div class="mint-cell-title">
-           <div class="mint-cell-title">
-            页面刷新
-          </div>
-        </div>
-        </div>
-        
-      </div>
-      <div class="mint-cell" @click="loginout">
-        <div class="mint-cell-wrapper">
-          <div class="mint-cell-title">
-           <div class="mint-cell-title">
-            安全退出
-          </div>
-        </div>
-        </div>
-        
-      </div>
-      <!-- <mt-cell title="安全退出" is-link @click="loginout">
-      </mt-cell> -->
-      </div>
-    </ul>
   </div>
 </template>
 
 <script>
+import {
+  removename,
+  removeToken,
+  removeweb,
+  getweb
+} from '@/utils/auth'
 export default {
   components: {
   },
@@ -142,13 +92,16 @@ export default {
       }
     },
     loginout () {
-      this.$store
-        .dispatch('LogOut')
-        .then(() => {
-          this.$router.push({ path: '/login' })
-        })
-        .catch(() => {
-        })
+      if(getweb() == 'true') {
+        window.parent.postMessage('back','*')
+      } else {
+        document.location = 'js://webview?arg=back2game'
+      }
+      this.$store.commit('SET_TOKEN', '')
+      this.$store.commit('SET_NAME', '')
+      removeToken()
+      removename ()
+      removeweb()
     },
     ready () {
       location.reload();
@@ -172,25 +125,26 @@ export default {
   }
   .menu {
     line-height: 50px;
-    background: #304156;
+    background: #735885;
     text-align: left;
   }
   .whitetitle {
     margin: 0;
     padding: 5px 10px;
-    color:white;
   }
   .menurightbox {
     background: white;
-    margin: 20px 0;
-    a:not(:last-child) {
-      border-bottom: 1px solid #eadfdf;
+    // margin: 20px 0;
+    // a:not(:last-child) {
+    //   border-bottom: 1px solid #2e163d;
       
-    }
+    // }
     .mint-cell-title {
-      color: black;
       font-size: 14px;
       text-align: left;
+    }
+    .mint-cell-wrapper {
+      border:0!important;
     }
   }
   .headerright {
@@ -201,7 +155,7 @@ export default {
     margin: 0;
     padding: 0 0;
     min-width: 235px;
-    background: #f2f2f3;
+    background: #735885;
     z-index: 222;
     transition: all ease 0.4s;
     overflow: auto;

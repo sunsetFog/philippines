@@ -240,7 +240,7 @@ import { getToken } from '../../utils/auth';
           },
           {
             changetype: '50',
-            label: '【+】人工提现'
+            label: '【-】人工扣减'
           }
         ],
       }

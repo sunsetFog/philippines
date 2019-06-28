@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <otherheader title="结算密码"></otherheader>
+    <otherheader title="资金密码"></otherheader>
 
     <div class="card">
         <mt-field label="旧的密码" v-model="oldpwd" placeholder="如没有，可空置本栏" type='password'></mt-field>
-        <mt-field label="新的密码" v-model="newpwd" placeholder="请输入新的结算密码" type='password'></mt-field>
-        <mt-field label="确认密码" v-model="pwd" placeholder="请再输入一次结算密码" type='password'></mt-field>
+        <mt-field label="新的密码" v-model="newpwd" placeholder="请输入新的资金密码" type='password'></mt-field>
+        <mt-field label="确认密码" v-model="pwd" placeholder="请再输入一次资金密码" type='password'></mt-field>
     </div>
 
      <div class="card">
@@ -78,13 +78,4 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .card {
-    margin: 10px;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    border-left: 2px solid #d9d9d9;
-    border-right: 2px solid #d9d9d9;
-    border-radius: 12px;
-    position: relative;
-  }
 </style>

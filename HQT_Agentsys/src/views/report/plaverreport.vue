@@ -34,8 +34,8 @@
         <mt-cell :title="agent_name" is-link :to="'/plaverlist?'+ agent_id">
         </mt-cell>
         <div class="boxposition">
-          <p>直属玩家：<span class="fontcolorb">{{total_upalyer_num}}</span></p>
-          <p>直属流水：<span class="fontcolorr">{{total_upalyer_flow}}</span></p>
+          <p>直属玩家：<span class="fontcolorb">{{total_uplayer_num}}</span></p>
+          <p>直属流水：<span class="fontcolorr">{{total_uplayer_flow}}</span></p>
         </div>
       </div>
 
@@ -44,7 +44,7 @@
         <mt-cell :title=item.agent_name is-link :to="'/plaverlist?'+ item.agent_id">
         </mt-cell>
         <div class="boxposition">
-          <p>团队玩家：<span class="fontcolorb">{{item.agent_palyer_num}}</span></p>
+          <p>团队玩家：<span class="fontcolorb">{{item.agent_player_num}}</span></p>
           <p>团队流水：<span class="fontcolorr">{{item.agent_team_flow}}</span></p>
         </div>
          
@@ -115,12 +115,12 @@ function getincome (that) {
       data: {
       }
     }).then(res => {
-      that.flow = res.data.team_palyer_flow
-      that.num = res.data.team_palyer_num.toString()
+      that.flow = res.data.team_total_flow
+      that.num = res.data.total_player_num.toString()
       that.agent_name = res.data.agent_name
       that.agent_id = res.data.agent_id
-      that.total_upalyer_flow = res.data.total_upalyer_flow
-      that.total_upalyer_num = res.data.total_upalyer_num
+      that.total_uplayer_flow = res.data.total_uplayer_flow
+      that.total_uplayer_num = res.data.total_uplayer_num
     }).catch(error => {
     })
 }
@@ -148,10 +148,10 @@ function getlist (that, pageno) {
 <style rel="stylesheet/scss" lang="scss">
   .card {
     margin: 10px;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    border-left: 2px solid #d9d9d9;
-    border-right: 2px solid #d9d9d9;
+    border-top: 1px solid #2e163d;
+    border-bottom: 1px solid #2e163d;
+    border-left: 2px solid #2e163d;
+    border-right: 2px solid #2e163d;
     border-radius: 12px;
     position: relative;
   }
@@ -163,7 +163,7 @@ function getlist (that, pageno) {
   .threecell {
     float: left;
     flex: 1;
-    border-right: 1px solid #d9d9d9;
+    border-right: 1px solid #2e163d;
     text-align: center;
   }
   .plaverreport {
@@ -171,7 +171,7 @@ function getlist (that, pageno) {
       height: 70px;
     }
     .fontcolorb .mint-cell-label {
-      color: blue;
+      color: #ffea00;
     }
     .fontcolorr .mint-cell-label {
       color: red;
@@ -180,8 +180,8 @@ function getlist (that, pageno) {
       font-size: 20px;
     }
     .namestyle .mint-cell-text {
-      background: blue;
-      color: white;
+      background: #2e163d;
+      color: #855aa1;
       padding: 20px 10px;
     }
     .boxposition {
@@ -192,7 +192,7 @@ function getlist (that, pageno) {
     }
   }
   .mint-header {
-  background-color: #304156!important;
+  background-color: #513663!important;
   height: 60px!important;
   font-size: 21px!important;
 }

@@ -199,5 +199,17 @@ const getters = {
   gameclickstatgetlist: state => state.user.gameclickstatgetlist,
   gameclickstatdownloadlist: state => state.user.gameclickstatdownloadlist,
   gamewmgplayrecgetlist: state => state.user.gamewmgplayrecgetlist,
+  gamesetroyatlyinfo: state => state.user.gamesetroyatlyinfo,
+  gamesetupdateddzroyalty: state => state.user.gamesetupdateddzroyalty,
+  gamesetredpacketset: state => state.user.gamesetredpacketset,
+  gamesetredpacketlist: state => state.user.gamesetredpacketlist,
+  businessdealdaygetlistdownload: state => state.user.businessdealdaygetlistdownload,
+  businessdealdayreportgamedatadownload: state => state.user.businessdealdayreportgamedatadownload,
+  orgrestcreatekey: state => state.user.orgrestcreatekey,
+  orgupdatedomain: state => state.user.orgupdatedomain,
+  agentteamreportgetlist: state => state.user.agentteamreportgetlist,
+  csmreplytemplateadd: state => state.user.csmreplytemplateadd,
+  csmreplytemplateupdate: state => state.user.csmreplytemplateupdate,
+  csmreplytemplatedel: state => state.user.csmreplytemplatedel,
 }
 export default getters

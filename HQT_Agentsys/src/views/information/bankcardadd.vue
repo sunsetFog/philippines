@@ -9,7 +9,7 @@
     <div class="card">
         <mt-field label="开户人" v-model="form.cardholder" placeholder="中文或英文"></mt-field>
         <mt-field label="银行卡号" v-model="form.cardno" placeholder="卡号16到19位数字组成"></mt-field>
-        <mt-field label="结算密码" v-model="form.money_pwd" placeholder="请输入结算密码(需设置)" type='password'></mt-field>
+        <mt-field label="资金密码" v-model="form.money_pwd" placeholder="请输入资金密码(需设置)" type='password'></mt-field>
 
         <!-- <mt-cell title="银行名称" is-link  to="/bankradio"> -->
       <!-- </mt-cell> -->
@@ -120,17 +120,8 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .card {
-    margin: 10px;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    border-left: 2px solid #d9d9d9;
-    border-right: 2px solid #d9d9d9;
-    border-radius: 12px;
-    position: relative;
-  }
   .mint-header {
-  background-color: #304156!important;
+  background-color: #513663!important;
   height: 60px!important;
   font-size: 21px!important;
 }

@@ -1,7 +1,7 @@
 {
-    "WebVer": "1.12.0",
+    "WebVer": "1.13.1",
     "IsDebug": true,
-    "IsTest": true,
+    "IsTest": false,
     "IsSimulate": false,
     "HttpSerever": "http://www.baidu.com",
     "SocketServerNative": "ws://testenv-game.networkws.com:12001",

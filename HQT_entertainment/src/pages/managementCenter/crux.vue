@@ -62,17 +62,21 @@
 
         <recharge ref="recharge"></recharge>
         <binding-bank ref="banks"></binding-bank>
-        <add-bank ref="adds"></add-bank>
+        <withdrawal ref="withdrawal"></withdrawal>
+        <withdrawal-password ref="withPassword"></withdrawal-password>
+        <keyboard ref="board"></keyboard>
     </section>
 </template>
 
 <script>
 import recharge from '../../components/recharge.vue';
 import bindingBank from '../../components/bindingBank.vue';
-import addBank from '../../components/addBank.vue';
+import withdrawalPassword from '../../components/withdrawalPassword.vue';
+import withdrawal from '../../components/withdrawal.vue';
+import keyboard from '../../components/keyboard.vue';
 export default{
     name: 'parent',
-    components: {recharge,bindingBank,addBank},
+    components: {recharge,bindingBank,withdrawalPassword,withdrawal,keyboard},
     data(){
         return{
             nickname_state: false,
@@ -94,7 +98,7 @@ export default{
                 {theme: '登陆密码',explain: '6-16个字符',modify: '修改登录密码',url: '../../../static/dream/center/denglu.png'},
                 {theme: '绑定银行卡',explain: '最多可绑定5张银行卡',modify: '绑定银行卡',url: '../../../static/dream/center/yinhangka.png'},
                 {theme: '提款密码',explain: '6-16个字符',modify: '设置提款密码',url: '../../../static/dream/center/tikuanmima.png'},
-                {theme: '站内信',explain: '0条未读',modify: '查看站内信',url: '../../../static/dream/center/zhanneixin.png'},
+                {theme: '邮件',explain: '0条未读',modify: '查看站内信',url: '../../../static/dream/center/zhanneixin.png'},
                 {theme: '密保设定',explain: '用于找回密码',modify: '修改密保设定',url: '../../../static/dream/center/baomi.png'},
                 {theme: '公告',explain: '请随时关注最新广告',modify: '查看广告',url: '../../../static/dream/center/xinxi.png'}
             ],
@@ -120,7 +124,6 @@ export default{
         if('undefined' != typeof web){
             this.player_info = web.game_getPlayer();
             this.nickname = this.player_info.playerInfo.nickname;
-            // this.player_info.money = 65960.08;
             this.number_money = this.player_info.money.toString().split('');
             for(let i=0;i<this.number_money.length;i++){
                 if(this.number_money[i]=='.'){
@@ -137,15 +140,25 @@ export default{
         payMeans(index){
             if(index==0){
                 this.$refs.recharge.changeMeans();
+            }else if(index==1){
+                this.$refs.withdrawal.changeMeans();
             }
         },
         archivesMeans(index){
             if(index==1){
                 this.$refs.banks.changeMeans();
+            }else if(index==2){
+                this.$refs.withPassword.changeMeans();
             }
         },
-        parentsMeans(){
-            this.$refs.adds.changeMeans();
+        boardMeans(){
+            this.$refs.board.changeMeans();
+        },
+        keyMeans(index){
+            this.$refs.withdrawal.changeMeans(index);
+        },
+        bindMeans(){
+            this.$refs.banks.changeMeans();
         }
     }
 }

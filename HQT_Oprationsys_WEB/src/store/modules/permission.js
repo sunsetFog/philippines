@@ -50,7 +50,9 @@ const permission = {
     tax: [],
     drawingcashier: [],
     diversions: [],
-    gamerecord: []
+    gamerecord: [],
+    agentteam: [],
+    customer: []
   },
   getters: {
     role: state => state.role,
@@ -104,6 +106,8 @@ const permission = {
     tax: state => state.tax,
     diversions: state => state.diversions,
     gamerecord: state => state.gamerecord,
+    agentteam: state => state.agentteam,
+    customer: state => state.customer,
   },
   mutations: {
     setrole: (state, role) => {
@@ -258,6 +262,12 @@ const permission = {
     },
     setgamerecord: (state, gamerecord) => {
       state.gamerecord = gamerecord
+    },
+    setagentteam: (state, agentteam) => {
+      state.agentteam = agentteam
+    },
+    setcustomer: (state, customer) => {
+      state.customer = customer
     },
   },
   actions: {

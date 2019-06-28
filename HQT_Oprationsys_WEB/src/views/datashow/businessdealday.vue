@@ -4,6 +4,18 @@
       <el-row>
         <el-form :inline="true" label-width="80px">
           <el-col :span="6">
+            <el-form-item label="玩家渠道">
+                <el-select v-model="formInline.id" filterable clearable>
+                <el-option
+                  v-for="item in statuslist"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="开始日期">
               <el-date-picker
               v-model="formInline.starttime"
@@ -25,8 +37,11 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="2">
             <el-button type="primary" icon="el-icon-search" @click="query" v-if="businessdealdayreportgetlist">查询</el-button>
+          </el-col>
+          <el-col :span="2">
+            <el-button type="primary" icon="el-icon-search" @click="excel" v-if="businessdealdaygetlistdownload">导出excel</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -58,104 +73,86 @@
     </el-table-column>
      <el-table-column
       prop="user_logined_num"
-      width="100"
       label="登录用户">
     </el-table-column>
     <el-table-column
-      prop="user_active_num"
-      width="100"
+      prop="user_active_num"      
       label="活跃用户">
     </el-table-column>
     <el-table-column
-      prop="user_recharge_num"
-      width="100"
+      prop="user_recharge_num"     
       label="充值用户">
     </el-table-column>
     <el-table-column
-      prop="user_recharge_money"
-      width="100"
+      prop="user_recharge_money"  
       label="充值金额">
     </el-table-column>
     <el-table-column
-      width="100"
       prop="user_withdraw_num"
       label="玩家提款用户">
     </el-table-column>
     <el-table-column
       prop="user_withdraw_money"
-      width="100"
       label="玩家提款金额">
     </el-table-column>
     <el-table-column
       prop="agent_withdraw_num"
-      width="100"
       label="代理提款用户">
     </el-table-column>
     <el-table-column
-      prop="agent_withdraw_money"
-      width="100"
+      prop="agent_withdraw_money"     
       label="代理提款金额">
     </el-table-column>
     <el-table-column
-      prop="flow_money"
-      width="100"
+      prop="user_flow"      
       label="流水">
     </el-table-column>
     <el-table-column
-      prop="user_lose_money"
-      width="100"
+      prop="user_lose_money"      
       label="玩家输额">
     </el-table-column>
     <el-table-column
-      prop="user_win_money"
-      width="100"
+      prop="user_win_money"      
       label="玩家赢额">
     </el-table-column>
     <el-table-column
-      prop="tax"
-      width="100"
+      prop="tax"     
       label="税收">
     </el-table-column>
     <el-table-column
-      prop="rb_ratio"
-      width="100"
+      prop="pay_bet_ratio"     
       label="充投比">
     </el-table-column>
     <el-table-column
-      prop="gross_profit"
-      width="100"
+      prop="gross_profit"     
       label="平台毛利">
     </el-table-column>
     <el-table-column
-      prop="activity_grant_money"
-      width="100"
+      prop="activity_award"     
       label="活动派奖">
     </el-table-column>
     <el-table-column
-      prop="agent_reward_money"
-      width="100"
+      prop="agent_divide"     
       label="代理分成">
     </el-table-column>
     <el-table-column
-      prop="agent_bonus_money"
-      width="100"
+      prop="agent_bonus"     
       label="代理分红">
     </el-table-column>
     <el-table-column
-      prop="rewith_broker_rate"
-      width="100"
+      prop="chwi_broker_money"
       label="手续费">
     </el-table-column>
     <el-table-column
-      prop="net_profit"
-      width="100"
+      prop="ret_porfit"
       label="平台净利">
     </el-table-column>
     <el-table-column
-      prop="cash_ratio"
-      width="100"
+      prop="cash_rate"     
       label="现金流利润率">
     </el-table-column>
+    
+    
   </el-table>
 
 <div class="pagingbox">
@@ -187,7 +184,8 @@ export default {
     return {
       formInline: {
         starttime: '',
-        endtime: ''
+        endtime: '',
+        id: ''
       },
       currentPage: 1,
       tableData: [
@@ -195,7 +193,8 @@ export default {
       total: 0,
       pagesize: 50,
       havetime: false,
-      havetime1: false
+      havetime1: false,
+      statuslist: [],
     }
   },
   created() {
@@ -204,18 +203,21 @@ export default {
     this.formInline.starttime = new Date(week)
     this.formInline.endtime = new Date(time)
     let that = this
+    getaccount(this)
     if (!this.businessdealday.length && this.businessdealday.length != 0) {
       that.formInline.starttime = this.businessdealday.starttime
       that.currentPage = this.businessdealday.currentPage
       that.pagesize = this.businessdealday.pagesize
       that.formInline.endtime = this.businessdealday.endtime
+      that.formInline.id = this.businessdealday.id
       getlist(that, that.formInline.starttime, that.formInline.endtime, that.currentPage, that.pagesize)
     }
   },
   computed: {
     ...mapGetters([
       'businessdealdayreportgetlist',
-      'businessdealday'
+      'businessdealday',
+      'businessdealdaygetlistdownload'
     ])
   },
   watch : {
@@ -223,57 +225,95 @@ export default {
   methods: {
     query () {
         let that = this
+        that.currentPage = 1
         getlist(that, that.formInline.starttime, that.formInline.endtime, that.currentPage, that.pagesize)
         let setbusinessdealday = {
           'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
-          'endtime': that.formInline.endtime
+          'endtime': that.formInline.endtime,
+          'id': that.formInline.id,
         }
       this.$store.commit('setbusinessdealday', setbusinessdealday)
     },
+    excel () {
+      let that = this
+      var timestart = ''
+      var timeend = ''
+      if (that.formInline.starttime) {
+        var start = that.formInline.starttime.getTime() /1000
+        var timestart = parseTime(start)
+      }
+      if (that.formInline.endtime) {
+        var end = that.formInline.endtime.getTime() /1000
+        var timeend = parseTime(end + 24 *60*60 -1)
+      }
+      if (start && end) {
+        if (start > end) {
+          Message({
+            message: '开始时间必须小于结束时间',
+            type: 'error'
+          })
+          return
+        }
+      }
+    request({
+      url: that.public.url + '/backend/businessdealdayreport/getlistdownload',
+      method: 'post',
+      data: {
+        begindate: timestart,
+        enddate: timeend,
+        org_id: that.formInline.id,
+        pageno: that.currentPage,
+        pagerows: that.pagesize
+      }
+    }).then(res => {
+      window.location.href = that.public.url + res.data
+    }).catch(error => {
+    })
+    },
     cell ({row, column, rowIndex, columnIndex}) {
-      if (columnIndex === 4 && row.user_recharge_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 6 && row.user_withdraw_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 8 && row.agent_withdraw_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 9 && row.flow_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 10 && row.user_lose_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 11 && row.user_win_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 12 && row.tax*1 < 0) {
-        return 'red'
-      }
-       if (columnIndex === 14 && row.gross_profit*1 < 0) {
-        return 'red'
-      }
-       if (columnIndex === 15 && row.activity_grant_money*1 < 0) {
-        return 'red'
-      }
-       if (columnIndex === 16 && row.agent_reward_money*1 < 0) {
-        return 'red'
-      }
-       if (columnIndex === 17 && row.agent_bonus_money*1 < 0) {
-        return 'red'
-      }
-       if (columnIndex === 18 && row.rewith_broker_rate*1 < 0) {
-        return 'red'
-      }
+      // if (columnIndex === 4 && row.user_recharge_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 6 && row.user_withdraw_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 8 && row.agent_withdraw_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 9 && row.flow_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 10 && row.user_lose_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 11 && row.user_win_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 12 && row.tax*1 < 0) {
+      //   return 'red'
+      // }
+      //  if (columnIndex === 14 && row.gross_profit*1 < 0) {
+      //   return 'red'
+      // }
+      //  if (columnIndex === 15 && row.activity_grant_money*1 < 0) {
+      //   return 'red'
+      // }
+      //  if (columnIndex === 16 && row.agent_reward_money*1 < 0) {
+      //   return 'red'
+      // }
+      //  if (columnIndex === 17 && row.agent_bonus_money*1 < 0) {
+      //   return 'red'
+      // }
+      //  if (columnIndex === 18 && row.rewith_broker_rate*1 < 0) {
+      //   return 'red'
+      // }
     },
     tableclassname ({row, rowIndex}) {
-      if(row.gross_profit * 1 < (row.flow_money * 1 * 0.05) || row.net_profit * 1 < 0) {
-        return 'warning-row';
-      }
+      // if(row.gross_profit * 1 < (row.flow_money * 1 * 0.05) || row.net_profit * 1 < 0) {
+      //   return 'warning-row';
+      // }
     },
     handleSizeChange(val) {
       this.pagesize = val
@@ -284,7 +324,8 @@ export default {
           'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
-          'endtime': that.formInline.endtime
+          'endtime': that.formInline.endtime,
+          'id': that.formInline.id,
         }
       this.$store.commit('setbusinessdealday', setbusinessdealday)
     },
@@ -296,7 +337,8 @@ export default {
           'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
-          'endtime': that.formInline.endtime
+          'endtime': that.formInline.endtime,
+          'id': that.formInline.id,
         }
       this.$store.commit('setbusinessdealday', setbusinessdealday)
     }
@@ -331,8 +373,9 @@ function getlist (that, starttime, endtime, currentPage, pagesize) {
     url: that.public.url + '/backend/businessdealdayreport/getlist',
     method: 'post',
     data: {
-      date_from: timestart,
-      date_to: timeend,
+      begindate: timestart,
+      enddate: timeend,
+      org_id: that.formInline.id,
       pageno: currentPage,
       pagerows: pagesize
     }
@@ -357,6 +400,20 @@ function parseTime(time) {
     let i = (date.getMinutes()<10?'0'+(date.getMinutes()):date.getMinutes())+':';
     let s = (date.getSeconds()<10?'0'+(date.getSeconds()):date.getSeconds());
     return y+m+d+h+i+s
+}
+
+function getaccount (that) {
+  request({
+    url: that.public.url + '/backend/org/getorglist',
+    method: 'post',
+    data: {
+    }
+  }).then(res => {
+    let all = {id: "", name: "全部"}
+    that.statuslist = res.data
+    that.statuslist.unshift(all)
+  }).catch(error => {
+  })
 }
 
 </script>

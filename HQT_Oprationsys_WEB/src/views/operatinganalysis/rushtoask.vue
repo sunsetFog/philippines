@@ -322,7 +322,7 @@ export default {
         {name: '[+]理赔', type: '13'},
         {name: '[+]其他', type: '14'},
         {name: '[+]提款失败', type: '15'},
-        {name: '[-]人工提现', type: '50'},
+        {name: '[-]人工扣减', type: '50'},
         {name: '[-]提款成功', type: '51'},
         {name: '[+]返手续费', type: '16'},
         {name: '[+]保险箱存款', type: '17'},
@@ -403,13 +403,14 @@ export default {
     query () {
       let that = this
       this.currentPage = 1
+      this.num = 1
       getlist(this)
       let setrushtoask = {
           'type': that.formInline.type,
           'order': that.formInline.order,
           'ip': that.formInline.ip,
           'user': that.formInline.user,
-          'currentPage': that.currentPage,
+          'currentPage': this.num,
           'pagesize': that.pagesize,
           'time': that.formInline.time,
           'money1': that.formInline.money1,

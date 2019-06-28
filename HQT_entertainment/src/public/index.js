@@ -1,3 +1,4 @@
+import router from '../router'
 const comic = {
     //函数有参数传入，且有匿名函数回调
     start(value,callback){
@@ -10,6 +11,7 @@ const comic = {
             overallApp.style.minHeight = document.body.clientHeight+'px';
         }else{
             overallApp.style.height = document.body.clientHeight+'px';
+            // console.log('login!!!#',document.body.clientHeight);
         }
     }
 }

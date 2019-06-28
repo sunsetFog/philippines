@@ -334,8 +334,8 @@
                 <el-form-item label="接口返回信息" :label-width="formLabelWidth">
                   {{usertwoinfo.status}}
                 </el-form-item>
-                <el-form-item label="实际付款金额" :label-width="formLabelWidth">
-                  {{usertwoinfo.arrival_money}}
+                <el-form-item label="实际审核汇款金额" :label-width="formLabelWidth">
+                  {{usertwoinfo.factrem_money}}
                 </el-form-item>
                 <el-form-item label="附言" :label-width="formLabelWidth">
                   {{usertwoinfo.ps_fact}}
@@ -709,9 +709,9 @@ export default {
                   type: 'success',
                   message: res.message
                 })
-                // that.$refs.form.resetFields()
-                // that.dialogFormVisible = false
-                // getlist(that)
+                that.$refs.form2.resetFields()
+                that.dialogFormVisible2 = false
+                getlist(that)
               }).catch(error => {
               })
             }).catch(error => {

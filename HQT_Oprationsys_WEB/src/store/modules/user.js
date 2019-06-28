@@ -203,7 +203,19 @@ const user = {
     gamemovetextrepeatpush: false,
     gameclickstatgetlist: false,
     gameclickstatdownloadlist: false,
-    gamewmgplayrecgetlist: false
+    gamewmgplayrecgetlist: false,
+    gamesetroyatlyinfo: false,
+    gamesetupdateddzroyalty: false,
+    gamesetredpacketset: false,
+    gamesetredpacketlist: false,
+    businessdealdaygetlistdownload: false,
+    businessdealdayreportgamedatadownload: false,
+    orgrestcreatekey: false,
+    orgupdatedomain: false,
+    agentteamreportgetlist: false,
+    csmreplytemplateadd: false,
+    csmreplytemplateupdate: false,
+    csmreplytemplatedel: false
   },
 
   mutations: {
@@ -238,7 +250,7 @@ const user = {
         }
         setToken(res.data.token)
         commit('SET_TOKEN', res.data.token)
-        commit('SET_NAME', res.data.nickname)
+        commit('SET_NAME', res.data.loginname)
       }).catch(error => {
       })
     },
@@ -354,7 +366,7 @@ const user = {
         if (buttonshow === 'businessdealdayreportgetlist') {
           state.businessdealdayreportgetlist = true
         }
-        if (buttonshow === 'gamedealdayreportgetlist') {
+        if (buttonshow === 'businessdealdayreportgetgamedatalist') {
           state.gamedealdayreportgetlist = true
         }
         if (buttonshow === 'agentorgreportgetlist') {
@@ -818,6 +830,42 @@ const user = {
         }
         if (buttonshow === 'gamewmgplayrecgetlist') {
           state.gamewmgplayrecgetlist = true
+        }
+        if (buttonshow === 'gamesetroyatlyinfo') {
+          state.gamesetroyatlyinfo = true
+        }
+        if (buttonshow === 'gamesetupdateddzroyalty') {
+          state.gamesetupdateddzroyalty = true
+        }
+        if (buttonshow === 'gamesetredpacketset') {
+          state.gamesetredpacketset = true
+        }
+        if (buttonshow === 'gamesetredpacketlist') {
+          state.gamesetredpacketlist = true
+        }
+        if (buttonshow === 'businessdealdayreportgetlistdownload') {
+          state.businessdealdaygetlistdownload = true
+        }
+        if (buttonshow === 'businessdealdayreportgamedatadownload') {
+          state.businessdealdayreportgamedatadownload = true
+        }
+        if (buttonshow === 'orgrestcreatekey') {
+          state.orgrestcreatekey = true
+        }
+        if (buttonshow === 'orgupdatedomain') {
+          state.orgupdatedomain = true
+        }
+        if (buttonshow === 'agentteamreportgetlist') {
+          state.agentteamreportgetlist = true
+        }
+        if (buttonshow === 'csmreplytemplateadd') {
+          state.csmreplytemplateadd = true
+        }
+        if (buttonshow === 'csmreplytemplateupdate') {
+          state.csmreplytemplateupdate = true
+        }
+        if (buttonshow === 'csmreplytemplatedel') {
+          state.csmreplytemplatedel = true
         }
       })
     },

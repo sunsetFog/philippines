@@ -373,13 +373,14 @@ export default {
     query () {
       let that = this
       this.currentPage = 1
+      this.num = 1
       getlist(this)
       let setagentmoney = {
           'type': that.formInline.type,
           'order': that.formInline.order,
           'ip': that.formInline.ip,
           'user': that.formInline.user,
-          'currentPage': that.currentPage,
+          'currentPage': this.num,
           'pagesize': that.pagesize,
           'time': that.formInline.time,
           'money1': that.formInline.money1,

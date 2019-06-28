@@ -18,11 +18,18 @@
             </el-select>
             </el-form-item>
           </el-col>
-          <!-- <el-col :span="6">
+          <el-col :span="6">
             <el-form-item label="域名">
-              <el-input v-model="formInline.url" placeholder="域名" clearable></el-input>
+              <el-select v-model="formInline.url" multiple filterable>
+              <el-option
+                v-for="item in domainlists"
+                :key="item.id"
+                :label="item.url"
+                :value="item.id">
+              </el-option>
+            </el-select>
             </el-form-item>
-          </el-col> -->
+          </el-col>
           <el-col :span="2">
             <el-button type="primary" icon="el-icon-search" @click="query" v-if="orggetlist">查询</el-button>
           </el-col>
@@ -45,11 +52,24 @@
 
     <el-table
     :data="tableData"
+    :cell-class-name='cell'
     border
     style="width: 100%">
     <el-table-column
+      prop="id"
+      label="渠道代码">
+    </el-table-column>
+    <el-table-column
       prop="name"
-      label="渠道组名称">
+      label="玩家渠道">
+    </el-table-column>
+    <el-table-column
+      prop="type"
+      label="类型">
+    </el-table-column>
+    <el-table-column
+      prop="secretkey"
+      label="授权key">
     </el-table-column>
     <el-table-column
       prop="url"
@@ -69,13 +89,18 @@
       </template>
     </el-table-column>
     <el-table-column
+      prop="status"
+      label="状态">
+    </el-table-column>
+    <el-table-column
       fixed="right"
       label="操作"
       width='250'
       >
       <template slot-scope="scope">
         <el-button @click="edit(scope.row)" type="text" size="small" v-if="orgupdate">修改</el-button>
-        <!-- <el-button type="text" size="small" @click="delet(scope.row)" v-if="orgdel">删除</el-button> -->
+        <el-button @click="editdomain(scope.row)" type="text" size="small" v-if="orgupdate">修改域名</el-button>
+        <el-button @click="key(scope.row)" type="text" size="small" v-if="orgupdate">重新生成key</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -97,6 +122,16 @@
 
   <el-dialog :title='title'  :visible.sync="dialogFormVisible" :before-close="reset">
     <el-form :model="form" :rules="rules" ref="form">
+      <el-form-item label="类型" :label-width="formLabelWidth" prop="type">
+         <el-select v-model="form.type" filterable>
+              <el-option
+                v-for="item in typelist"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+      </el-form-item>
         <el-form-item label="玩家渠道" :label-width="formLabelWidth" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
@@ -112,11 +147,47 @@
             </el-select>
       </el-form-item>
 
+    <el-form-item label="状态：" :label-width="formLabelWidth" prop="status">
+      <el-radio-group v-model="form.status">
+        <el-radio :label='0'>禁用</el-radio>
+        <el-radio :label='1'>可用</el-radio>
+      </el-radio-group>
+    </el-form-item>
 
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="reset(form)">取 消</el-button>
       <el-button type="primary" @click="sure(form)">确 定</el-button>
+    </div>
+
+  </el-dialog>
+
+
+  <el-dialog title='修改渠道域名'  :visible.sync="dialogFormVisible2" :before-close="reset2">
+    <el-form :model="form2" :rules="rules2" ref="form2">
+      <el-form-item label="类型" :label-width="formLabelWidth">
+         <span>{{form2.type}}</span>
+      </el-form-item>
+        <el-form-item label="玩家渠道" :label-width="formLabelWidth">
+        <span>{{form2.name}}</span>
+      </el-form-item>
+
+      <el-form-item label="域名" :label-width="formLabelWidth" prop="domain">
+         <el-select v-model="form2.domain" multiple filterable style="width:100%">
+              <el-option
+                v-for="item in domainlist"
+                :key="item.id"
+                :label="item.url"
+                :value="item.id">
+              </el-option>
+            </el-select>
+      </el-form-item>
+
+
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="reset2(form)">取 消</el-button>
+      <el-button type="primary" @click="sure2(form)">确 定</el-button>
     </div>
 
   </el-dialog>
@@ -134,14 +205,23 @@ export default {
     return {
       formInline: {
         user: '',
+        url: []
       },
       currentPage: 1,
       userlist: [],
       tableData: [],
       dialogFormVisible: false,
+      dialogFormVisible2: false,
       form: {
         name: '',
-        domain: []
+        domain: [],
+        type: '1',
+        status: ''
+      },
+      form2: {
+        domain: [],
+        name: '',
+        type: ''
       },
       rules: {
         name: [
@@ -149,19 +229,36 @@ export default {
         ],
         domain: [
           {required: true, message: '请选择域名', trigger: 'change'}
-        ]
+        ],
+        type: [
+          {required: true, message: '请选择类型', trigger: 'change'}
+        ],
+        status: [
+          {required: true, message: '请选择状态', trigger: 'change'}
+        ],
+      },
+      rules2: {
+        domain: [
+          {required: true, message: '请选择域名', trigger: 'change'}
+        ],
       },
       domainlist: [],
+      domainlists: [],
       formLabelWidth: '120px',
       title: '',
       name: '',
       total: 0,
       pagesize: 50,
-      ids: []
+      ids: [],
+      typelist:[
+        {name:'内部公司',id:'1'},
+        {name:'外部接入商',id:'2'},
+      ]
     }
   },
   created() { 
     getuserlist(this)
+    getdomains(this)
     let that = this
     if (!this.org.length && this.org.length != 0) {
       that.currentPage = this.org.currentPage
@@ -176,13 +273,59 @@ export default {
       'orgdel',
       'orgupdate',
       'orggetlist',
-      'org'
+      'org',
+      'orgrestcreatekey',
+      'orgupdatedomain'
     ])
   },
   methods: {
     reset (form) {
       this.dialogFormVisible = false
       this.$refs.form.resetFields()
+    },
+    reset2 (form) {
+      this.dialogFormVisible2 = false
+      this.$refs.form2.resetFields()
+    },
+    key (row) {
+      let that = this
+       request({
+            url: that.public.url + '/backend/org/restcreatekey',
+            method: 'post',
+            data: {
+                id: row.id
+            }
+          }).then(res => {
+            that.$message({
+                type: 'success',
+                message: res.message
+              })
+              orglist(that)
+          }).catch(error => {
+          })
+    },
+    cell ({row, column, rowIndex, columnIndex}) {
+      // if (columnIndex === 4 && row.newuser_balance_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 6 && row.newuser_recharge_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 8 && row.newuser_withdraw_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 9 && row.newuser_flow_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 10 && row.newuser_lose_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 11 && row.newuser_win_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 12 && row.rechwith_diff*1 < 0) {
+      //   return 'red'
+      // }
     },
     query () {
       let that = this
@@ -191,7 +334,8 @@ export default {
       let setorg = {
         'currentPage': that.currentPage,
         'pagesize': that.pagesize,
-        'user': that.formInline.user
+        'user': that.formInline.user,
+        'url': that.formInline.url,
       }
       this.$store.commit('setorg', setorg)
     },
@@ -208,22 +352,70 @@ export default {
             }
           }).then(res => {
             that.form.name = res.data.name
-            let domain = res.data.url.split(',')
-            var namelist = that.domainlist.map(val => {
-              return val.url
-            })
-            for (var i = 0; i<domain.length; i++) {
-              var item = domain[i]
-              var name = item.split('|')[1]
-              var id = item.split('|')[0]
-              let flag = namelist.includes(name)
-              if(!flag){
-                that.domainlist.push({
-                  id:id,
-                  url: name
-                })
+            that.form.type = res.data.type
+            that.form.status = res.data.status * 1
+            if (res.data.url) {
+              let domain = res.data.url.split(',')
+              var namelist = that.domainlist.map(val => {
+                return val.url
+              })
+              for (var i = 0; i<domain.length; i++) {
+                var item = domain[i]
+                var name = item.split('|')[1]
+                var id = item.split('|')[0]
+                let flag = namelist.includes(name)
+                if(!flag){
+                  that.domainlist.push({
+                    id:id,
+                    url: name
+                  })
+                }
+                that.form.domain.push(id)
               }
-              that.form.domain.push(id)
+            } else {
+              that.form.domain = []
+            }
+            that.id = res.data.id
+          }).catch(error => {
+          })
+    },
+    editdomain (data) {
+      this.dialogFormVisible2 = true
+      let that = this
+      getdomain(this)
+      request({
+            url: that.public.url + '/backend/org/getinfo',
+            method: 'post',
+            data: {
+                id: data.id
+            }
+          }).then(res => {
+            if (res.data.type == '1') {
+              that.form2.type = '内部公司'
+            } else {
+              that.form2.type = '外部接入商'
+            }
+            that.form2.name = res.data.name
+            if (res.data.url) {
+              let domain = res.data.url.split(',')
+              var namelist = that.domainlist.map(val => {
+                return val.url
+              })
+              for (var i = 0; i<domain.length; i++) {
+                var item = domain[i]
+                var name = item.split('|')[1]
+                var id = item.split('|')[0]
+                let flag = namelist.includes(name)
+                if(!flag){
+                  that.domainlist.push({
+                    id:id,
+                    url: name
+                  })
+                }
+                that.form2.domain.push(id)
+              }
+            } else {
+              that.form2.domain = []
             }
             that.id = res.data.id
           }).catch(error => {
@@ -246,7 +438,9 @@ export default {
               data: {
                     name: this.form.name,
                     domain_id: domain_id,
-                    id: this.id
+                    id: this.id,
+                    type: this.form.type,
+                    status: this.form.status,
               }
             }).then(res => {
               that.$message({
@@ -265,7 +459,9 @@ export default {
             method: 'post',
             data: {
                 name: this.form.name,
-                domain_id: domain_id
+                domain_id: domain_id,
+                type: this.form.type,
+                status: this.form.status,
             }
           }).then(res => {
             that.$message({
@@ -278,6 +474,33 @@ export default {
           }).catch(error => {
           })
           }
+        } else {
+          return false
+        }
+      })
+    },
+    sure2 (form) {
+      let that = this
+      this.$refs.form2.validate((valid) => {
+        if (valid) {
+            let domain_id = this.form2.domain.join(',')
+             request({
+              url: that.public.url + '/backend/org/updatedomain',
+              method: 'post',
+              data: {
+                    domain_id: domain_id,
+                    id: this.id
+              }
+            }).then(res => {
+              that.$message({
+                type: 'success',
+                message: res.message
+              })
+              that.dialogFormVisible2 = false
+              that.$refs.form2.resetFields()
+              orglist(that)
+            }).catch(error => {
+            })
         } else {
           return false
         }
@@ -316,7 +539,8 @@ export default {
       let setorg = {
         'currentPage': that.currentPage,
         'pagesize': that.pagesize,
-        'user': that.formInline.user
+        'user': that.formInline.user,
+        'url': that.formInline.url,
       }
       this.$store.commit('setorg', setorg)
     },
@@ -327,7 +551,8 @@ export default {
       let setorg = {
         'currentPage': that.currentPage,
         'pagesize': that.pagesize,
-        'user': that.formInline.user
+        'user': that.formInline.user,
+        'url': that.formInline.url,
       }
       this.$store.commit('setorg', setorg)
     }
@@ -358,13 +583,15 @@ export default {
 }
 
 function orglist (that) {
+  let url = that.formInline.url.join(',')
   request({
     url: that.public.url + '/backend/org/getList',
     method: 'post',
     data: {
       pageno: that.currentPage,
       pagerows: that.pagesize,
-      org_id: that.formInline.user
+      org_id: that.formInline.user,
+      domain_id: url,
     }
   }).then(res => {
     that.tableData = res.data.list
@@ -390,6 +617,16 @@ function getdomain (that) {
     method: 'post'
   }).then(res => {
     that.domainlist = res.data
+  }).catch(error => {
+  })
+}
+
+function getdomains (that) {
+  request({
+    url: that.public.url + '/backend/domain/getdomains',
+    method: 'post'
+  }).then(res => {
+    that.domainlists = res.data
   }).catch(error => {
   })
 }

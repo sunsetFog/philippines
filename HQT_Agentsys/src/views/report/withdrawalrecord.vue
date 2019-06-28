@@ -20,7 +20,7 @@
         <mt-cell title="取现去向" :value="item.to_cardno">
         </mt-cell>
         <mt-cell title="订单状态">
-          <span>{{item.status | status}}</span>
+          <span>{{item.audit_status}}</span>
         </mt-cell>
       </div>
      
@@ -97,17 +97,8 @@ function getlist (that, pageno) {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .card {
-    margin: 10px;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    border-left: 2px solid #d9d9d9;
-    border-right: 2px solid #d9d9d9;
-    border-radius: 12px;
-    position: relative;
-  }
   .mint-header {
-    background-color: #304156!important;
+    background-color: #513663!important;
     height: 60px!important;
     font-size: 21px!important;
   }

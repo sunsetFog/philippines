@@ -31,7 +31,7 @@
 
         <div v-infinite-scroll='loadmore'>
         <div class="card namestyle"  v-for="(item, index) in newlist" :key="index">
-        <mt-cell :title="item.date" is-link :to="'/dayinfo?'+ item.date">
+        <mt-cell :title="item.adate" is-link :to="'/dayinfo?'+ item.adate">
         </mt-cell>
         <div class="boxposition">
           <p>团队总流水：<span class="fontcolorb">{{item.team_flow}}</span></p>
@@ -111,10 +111,10 @@ function getlist (that, pageno) {
 <style rel="stylesheet/scss" lang="scss">
   .daydegrees .card {
     margin: 10px;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    border-left: 2px solid #d9d9d9;
-    border-right: 2px solid #d9d9d9;
+    border-top: 1px solid #2e163d;
+    border-bottom: 1px solid #2e163d;
+    border-left: 2px solid #2e163d;
+    border-right: 2px solid #2e163d;
     border-radius: 12px;
     position: relative;
     .mint-popup {
@@ -140,7 +140,7 @@ function getlist (that, pageno) {
   .threecell {
     float: left;
     flex: 1;
-    border-right: 1px solid #d9d9d9;
+    border-right: 1px solid #2e163d;
     text-align: center;
   }
   .daydegrees {
@@ -148,7 +148,7 @@ function getlist (that, pageno) {
       height: 70px;
     }
     .fontcolorb .mint-cell-label {
-      color: blue;
+      color: #ffea00;
     }
     .fontcolorr .mint-cell-label {
       color: red;
@@ -157,8 +157,8 @@ function getlist (that, pageno) {
       font-size: 20px;
     }
     .namestyle .mint-cell-text {
-      background: blue;
-      color: white;
+      background: #2e163d;
+      color: #855aa1;
       padding: 20px 10px;
     }
     .boxposition {
@@ -169,7 +169,7 @@ function getlist (that, pageno) {
     }
   }
   .mint-header {
-  background-color: #304156!important;
+  background-color: #513663!important;
   height: 60px!important;
   font-size: 21px!important;
 }

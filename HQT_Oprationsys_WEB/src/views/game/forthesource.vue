@@ -154,6 +154,9 @@
       <el-form-item label="投注倒计时长" :label-width="formLabelWidth" prop="bet_count_down">
         <el-input v-model="form.bet_count_down" style="width:160px;" type='number'></el-input><span>秒</span>
       </el-form-item>
+      <el-form-item label="排序" :label-width="formLabelWidth" prop="sortid">
+        <el-input v-model="form.sortid" type='number' clearable></el-input>
+      </el-form-item>
        <el-form-item label="支持游戏" :label-width="formLabelWidth" prop='game_id'>
         <el-checkbox-group v-model="form.game_id">
           <el-checkbox v-for="(item,index) in gamelist" :label='item.id' :key='index'>{{item.name}}</el-checkbox>
@@ -229,6 +232,17 @@ import request from '@/utils/request'
 import { mapGetters } from 'vuex'
 export default {
   data() {
+    var sortrule = (rule, value, callback) => {
+      if(value === ''){
+        callback(new Error('请填排序'));
+      }else {
+        if(value*1<1||value*1>99||value.indexOf('.')>0) {
+          callback(new Error('请输入1到99的整数'));
+        } else {
+            callback();
+        }
+      }
+   }; 
     return {
       tableData: [],
       gamename: [],
@@ -255,7 +269,8 @@ export default {
         name: '',
         status: '',
         game_id: [],
-        bet_count_down: ''
+        bet_count_down: '',
+        sortid: ''
       },
       form2: {
         name: '',
@@ -267,7 +282,8 @@ export default {
       rules: {
         status: [{required: true, message: '请选状态', trigger: 'change'}],
         bet_count_down:[{required: true, message: '请选时间', trigger: 'blur'}],
-        game_id:[{required: true, message: '请选择至少一种游戏', trigger: 'change'}]
+        game_id:[{required: false, message: '', trigger: 'change'}],
+        sortid: [{required: true, validator: sortrule, trigger: 'blur'}]
       },
       rules2: {
         platform_id: [{required: true, message: '请填写平台ID', trigger: 'blur'}],
@@ -528,7 +544,8 @@ export default {
                 status: this.form.status,
                 bet_count_down:this.form.bet_count_down,
                 game_id: game_id,
-                lot_sd:this.list
+                lot_sd:this.list,
+                sort: this.form.sortid
               }
             }).then(res => {
               that.$message({

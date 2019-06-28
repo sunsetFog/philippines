@@ -6,11 +6,11 @@ Vue.use(Router)
 
 // 静态路由（无需权限）
 export const constantRouterMap = [
-  {
-    path: '/login',
-    component: () => import('@/views/login/login'),
-    hidden: true
-  },
+  // {
+  //   path: '/login',
+  //   component: () => import('@/views/login/login'),
+  //   hidden: true
+  // },
   {
     path: '/',
     name: 'home',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mt-header title="代理系统">
+    <mt-header title="代理系统" style="color:#dbcbb7">
       <!-- 左侧组件 -->
       <LeftMenu slot="left"></LeftMenu>
 
@@ -13,11 +13,23 @@
 <script>
 import DropDown from './components/dropdown'
 import LeftMenu from './components/leftmenu'
-
+import { setToken, setname, setweb } from '../../utils/auth'
 export default {
   name: 'mtheader',
   components: { DropDown, LeftMenu },
   created () {
+    let url = window.location.href
+    let token =  ((url.split('?')[1]).split('&')[0]).split('=')[1]
+    setToken(token)
+    this.$store.commit('SET_TOKEN', token)
+    let name =  ((url.split('?')[1]).split('&')[1]).split('=')[1]
+    this.$store.commit('SET_NAME', name)
+    setname(name)
+    if (((url.split('?')[1]).split('&')[2]) == 'web') {
+      setweb(true)
+    } else {
+      setweb(false)
+    }
     // this.$bus.$on('set-theme', (color) => {
     //   this.$el.querySelector('.mint-header').style.backgroundColor = color
     // })
@@ -34,7 +46,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .mint-header {
-  background-color: #304156!important;
+  background-color: #513663!important;
   height: 60px!important;
   font-size: 21px!important;
 }

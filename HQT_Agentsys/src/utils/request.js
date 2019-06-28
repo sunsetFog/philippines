@@ -44,12 +44,12 @@ service.interceptors.response.use(
         // type: 'error'
       })
 
-      if (res.code === 40001) {
-        store.dispatch('FedLogOut').then(() => {
-          location.reload() // 为了重新实例化vue-router对象 避免bug
-        })
-      }
-      return Promise.reject('error')
+      // if (res.code === 40001) {
+      //   store.dispatch('FedLogOut').then(() => {
+      //     location.reload() // 为了重新实例化vue-router对象 避免bug
+      //   })
+      // }
+      // return Promise.reject('error')
     } else {
       // Message({
       //   message: res.message,

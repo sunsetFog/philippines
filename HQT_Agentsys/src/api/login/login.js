@@ -15,12 +15,13 @@ export function login(that, username, password) {
 }
 
 export function logout() {
-  return request({
-    url: url.url + '/account/logout',
-    method: 'post',
-    data: {
-    }
-  })
+  // return request({
+  //   url: url.url + '/account/logout',
+  //   method: 'post',
+  //   data: {
+  //   }
+  // })
+  
 }
 
 export function getUserInfo() {

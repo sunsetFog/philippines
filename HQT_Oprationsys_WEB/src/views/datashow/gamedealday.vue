@@ -3,12 +3,11 @@
     <div class="query">
       <el-row>
         <el-form :inline="true" label-width="80px">
-          <el-col :span="6">
-            <el-form-item label="游戏名称">
-                <!-- <el-input v-model="formInline.id" clearable></el-input> -->
-                <el-select v-model="formInline.id" multiple filterable>
+          <el-col :span="5">
+            <el-form-item label="玩家渠道">
+                <el-select v-model="formInline.org" filterable clearable>
                 <el-option
-                  v-for="item in gamelist"
+                  v-for="item in orglist"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id">
@@ -16,7 +15,20 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
+            <el-form-item label="游戏名称">
+                <!-- <el-input v-model="formInline.id" clearable></el-input> -->
+                <el-select v-model="formInline.id" filterable clearable>
+                <el-option
+                  v-for="(item,key) in gamelist"
+                  :key="key"
+                  :label="item.name"
+                  :value="item.name">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="5">
             <el-form-item label="开始日期">
               <el-date-picker
               v-model="formInline.starttime"
@@ -27,7 +39,7 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <el-form-item label="结束日期">
               <el-date-picker
               v-model="formInline.endtime"
@@ -39,8 +51,11 @@
             </el-form-item>
           </el-col>
           
-          <el-col :span="4">
+          <el-col :span="2">
             <el-button type="primary" icon="el-icon-search" @click="query" v-if="gamedealdayreportgetlist">查询</el-button>
+          </el-col>
+          <el-col :span="2">
+            <el-button type="primary" icon="el-icon-search" @click="excel" v-if="businessdealdayreportgamedatadownload">导出excel</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -83,11 +98,11 @@
       label="流水">
     </el-table-column>
     <el-table-column
-      prop="user_lose_money"
+      prop="user_lose"
       label="玩家输额">
     </el-table-column>
     <el-table-column
-      prop="user_win_money"
+      prop="user_win"
       label="玩家赢额">
     </el-table-column>
     <el-table-column
@@ -97,7 +112,7 @@
       label="税收">
     </el-table-column>
     <el-table-column
-      prop="revenue"
+      prop="gross_profit"
       sortable="custom"
       :sort-orders="['ascending','descending']"
       label="营收">
@@ -134,7 +149,8 @@ export default {
       formInline: {
         starttime: '',
         endtime: '',
-        id: ''
+        id: '',
+        org: ''
       },
       currentPage: 1,
       tableData: [
@@ -143,7 +159,8 @@ export default {
       total: 0,
       pagesize: 50,
       havetime: false,
-      havetime1: false
+      havetime1: false,
+      orglist: []
     }
   },
   created() {
@@ -152,6 +169,7 @@ export default {
     this.formInline.starttime = new Date(week)
     this.formInline.endtime = new Date(time)
     getgamelist(this)
+    getorglist(this)
     let that = this
     if (!this.gamedealday.length && this.gamedealday.length != 0) {
       that.formInline.starttime = this.gamedealday.starttime
@@ -165,7 +183,8 @@ export default {
   computed: {
     ...mapGetters([
       'gamedealdayreportgetlist',
-      'gamedealday'
+      'gamedealday',
+      'businessdealdayreportgamedatadownload'
     ])
   },
   watch : {
@@ -173,41 +192,91 @@ export default {
   methods: {
     query () {
         let that = this
+        that.currentPage = 1
         getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
         let setgamedealday = {
           'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
           'endtime': that.formInline.endtime,
-          'id': that.formInline.id
+          'id': that.formInline.id,
+          'org': that.formInline.org
         }
       this.$store.commit('setgamedealday', setgamedealday)
     },
+    excel () {
+      let that = this
+      var timestart = ''
+      var timeend = ''
+      if (that.formInline.starttime) {
+        var start = that.formInline.starttime.getTime() /1000
+        var timestart = parseTime(start)
+      }
+      if (that.formInline.endtime) {
+        var end = that.formInline.endtime.getTime() /1000
+        var timeend = parseTime(end + 24 *60*60 -1)
+      }
+      if (start && end) {
+        if (start > end) {
+          Message({
+            message: '开始时间必须小于结束时间',
+            type: 'error'
+          })
+          return
+        }
+      }
+      var game_id = ''
+      var game_type = ''
+      if (that.formInline.id != '') {
+        that.gamelist.map(val=>{
+          if (that.formInline.id == val.name) {
+            game_id = val.id
+            game_type = val.type
+          }
+        })
+      }
+    request({
+      url: that.public.url + '/backend/businessdealdayreport/gamedatadownload',
+      method: 'post',
+      data: {
+        begindate: timestart,
+        enddate: timeend,
+        pageno: that.currentPage,
+        pagerows: that.pagesize,
+        game_id: game_id,
+        game_type: game_type,
+        org_id: that.formInline.org
+      }
+    }).then(res => {
+      window.location.href = that.public.url + res.data
+    }).catch(error => {
+    })
+    },
     cell ({row, column, rowIndex, columnIndex}) {
-      if (columnIndex === 2 && row.flow*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 3 && row.user_lose_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 4 && row.user_win_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 5 && row.tax*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 6 && row.revenue*1 < 0) {
-        return 'red'
-      }
+      // if (columnIndex === 2 && row.flow*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 3 && row.user_lose_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 4 && row.user_win_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 5 && row.tax*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 6 && row.revenue*1 < 0) {
+      //   return 'red'
+      // }
     },
     tableclassname ({row, rowIndex}) {
-      if(row.revenue * 1 < (row.flow * 1 * 0.05)) {
-        return 'warning-row';
-      }
-      if (rowIndex === 0) {
-        return 'success-row'
-      }
-      return ''
+      // if(row.revenue * 1 < (row.flow * 1 * 0.05)) {
+      //   return 'warning-row';
+      // }
+      // if (rowIndex === 0) {
+      //   return 'success-row'
+      // }
+      // return ''
     },
     sort ({column, prop, order}) {
       if (this.tableData.length > 0) {
@@ -245,7 +314,8 @@ export default {
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
           'endtime': that.formInline.endtime,
-          'id': that.formInline.id
+          'id': that.formInline.id,
+          'org': that.formInline.org
         }
       this.$store.commit('setgamedealday', setgamedealday)
     },
@@ -258,7 +328,8 @@ export default {
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
           'endtime': that.formInline.endtime,
-          'id': that.formInline.id
+          'id': that.formInline.id,
+          'org': that.formInline.org
         }
       this.$store.commit('setgamedealday', setgamedealday)
     }
@@ -289,16 +360,27 @@ function getlist (that, starttime, endtime, currentPage, pagesize, id) {
         return
       }
     }
-    var game_id = id.join(',')
+    var game_id = ''
+    var game_type = ''
+    if (id != '') {
+      that.gamelist.map(val=>{
+        if (id == val.name) {
+          game_id = val.id
+          game_type = val.type
+        }
+      })
+    }
   request({
-    url: that.public.url + '/backend/gamedealdayreport/getlist',
+    url: that.public.url + '/backend/businessdealdayreport/getgamedatalist',
     method: 'post',
     data: {
-      date_from: timestart,
-      date_to: timeend,
+      begindate: timestart,
+      enddate: timeend,
       pageno: currentPage,
       pagerows: pagesize,
-      game_id: game_id
+      game_id: game_id,
+      game_type: game_type,
+      org_id: that.formInline.org
     }
   }).then(res => {
     Message({
@@ -308,7 +390,7 @@ function getlist (that, starttime, endtime, currentPage, pagesize, id) {
       if (res.data.list.length === 0) {
         that.tableData = res.data.list
       } else {
-         let data = res.data.total[0]
+         let data = res.data.total
         data.adate = '总计'
         that.tableData = res.data.list
         that.tableData.unshift(data)
@@ -338,6 +420,21 @@ function getgamelist (that) {
     }
   }).then(res => {
     that.gamelist = res.data
+  }).catch(error => {
+  })
+}
+
+
+function getorglist (that) {
+  request({
+    url: that.public.url + '/backend/org/getorglist',
+    method: 'post',
+    data: {
+    }
+  }).then(res => {
+    let all = {id: "", name: "全部"}
+    that.orglist = res.data
+    that.orglist.unshift(all)
   }).catch(error => {
   })
 }

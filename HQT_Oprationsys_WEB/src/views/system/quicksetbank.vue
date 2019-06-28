@@ -6,7 +6,7 @@
           <el-col :span="3">
             <el-button type="info" round @click="add" v-if="quicksetbankadd">新增 + </el-button>
           </el-col>
-          <el-col :span="6">
+          <!-- <el-col :span="6">
             <el-form-item label="类型">
                 <el-select v-model="formInline.type" filterable clearable>
                 <el-option
@@ -17,7 +17,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="6">
             <el-form-item label="银行名称">
                 <el-input v-model="formInline.name" placeholder="银行名称" clearable></el-input>
@@ -53,12 +53,12 @@
     :data="tableData"
     border
     style="width: 100%">
-    <el-table-column
+    <!-- <el-table-column
       label="类型">
       <template slot-scope="scope">
         {{scope.row.type | type}}
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column
       prop="code"
       label="银行编码">
@@ -96,7 +96,7 @@
 
   <el-dialog :title='title'  :visible.sync="dialogFormVisible" :before-close="reset">
     <el-form :model="form" :rules="rules" ref="form">
-        <el-form-item label="类型" :label-width="formLabelWidth" prop="type">
+        <!-- <el-form-item label="类型" :label-width="formLabelWidth" prop="type">
         <el-select v-model="form.type" filterable clearable>
               <el-option
                 v-for="item in list"
@@ -105,7 +105,7 @@
                 :value="item.type">
               </el-option>
             </el-select>
-      </el-form-item>
+      </el-form-item> -->
        <el-form-item label="银行编码" :label-width="formLabelWidth" prop='code'>
         <el-input v-model="form.code"></el-input>
       </el-form-item>
@@ -180,12 +180,11 @@ export default {
   created() { 
     let that = this
     if (!this.quicksetbank.length && this.quicksetbank.length != 0) {
-      that.formInline.type = this.quicksetbank.type
       that.currentPage = this.quicksetbank.currentPage
       that.pagesize = this.quicksetbank.pagesize
       that.formInline.name = this.quicksetbank.name
       that.formInline.code = this.quicksetbank.code
-      getlist(that, that.formInline.type, that.currentPage, that.pagesize, that.formInline.name, that.formInline.code)
+      getlist(that, that.currentPage, that.pagesize, that.formInline.name, that.formInline.code)
     }
   },
   computed: {
@@ -205,9 +204,8 @@ export default {
     query () {
       let that = this
       this.currentPage = 1
-      getlist(that, that.formInline.type, that.currentPage, that.pagesize, that.formInline.name, that.formInline.code)
+      getlist(that, that.currentPage, that.pagesize, that.formInline.name, that.formInline.code)
       let setquicksetbank = {
-        'type': that.formInline.type,
         'currentPage': that.currentPage,
         'pagesize': that.pagesize,
         'name': that.formInline.name,
@@ -228,7 +226,7 @@ export default {
           }).then(res => {
             that.form.code = res.data.code
             that.form.name = res.data.name
-            that.form.type = res.data.type
+            // that.form.type = res.data.type
             that.id = res.data.id
           }).catch(error => {
           })
@@ -246,7 +244,7 @@ export default {
               url: that.public.url + '/quicksetbank/update',
               method: 'post',
               data: {
-                    type: this.form.type,
+                    // type: this.form.type,
                     code: this.form.code,
                     name: this.form.name,
                     id: this.id
@@ -254,7 +252,7 @@ export default {
             }).then(res => {
               that.dialogFormVisible = false
               that.$refs.form.resetFields()
-              getlist(that, that.formInline.type, that.currentPage, that.pagesize, that.formInline.name, that.formInline.code)
+              getlist(that, that.currentPage, that.pagesize, that.formInline.name, that.formInline.code)
             }).catch(error => {
             })
           } else {
@@ -262,14 +260,14 @@ export default {
             url: that.public.url + '/quicksetbank/add',
             method: 'post',
             data: {
-                  type: this.form.type,
+                  // type: this.form.type,
                   code: this.form.code,
                   name: this.form.name
             }
           }).then(res => {
             that.dialogFormVisible = false
             that.$refs.form.resetFields()
-            getlist(that, that.formInline.type, that.currentPage, that.pagesize, that.formInline.name, that.formInline.code)
+            getlist(that, that.currentPage, that.pagesize, that.formInline.name, that.formInline.code)
           }).catch(error => {
           })
           }
@@ -293,7 +291,7 @@ export default {
                 id: row.id
             }
           }).then(res => {
-           getlist(that, that.formInline.type, that.currentPage, that.pagesize, that.formInline.name, that.formInline.code)
+           getlist(that, that.currentPage, that.pagesize, that.formInline.name, that.formInline.code)
           }).catch(error => {
           })
       }).catch(() => {
@@ -307,9 +305,8 @@ export default {
       let that = this
       this.pagesize = val
       this.currentPage = 1
-      getlist(this, this.formInline.type, this.currentPage, this.pagesize, this.formInline.name, this.formInline.code)
+      getlist(this, this.currentPage, this.pagesize, this.formInline.name, this.formInline.code)
       let setquicksetbank = {
-        'type': that.formInline.type,
         'currentPage': that.currentPage,
         'pagesize': that.pagesize,
         'name': that.formInline.name,
@@ -320,9 +317,8 @@ export default {
     handleCurrentChange(val) {
       let that = this
       this.currentPage = val *1
-      getlist(this, this.formInline.type, this.currentPage, this.pagesize, this.formInline.name, this.formInline.code)
+      getlist(this, this.currentPage, this.pagesize, this.formInline.name, this.formInline.code)
       let setquicksetbank = {
-        'type': that.formInline.type,
         'currentPage': that.currentPage,
         'pagesize': that.pagesize,
         'name': that.formInline.name,
@@ -349,12 +345,11 @@ export default {
   }
 }
 
-function getlist (that, type, currentPage, pagesize, name, code) {
+function getlist (that, currentPage, pagesize, name, code) {
   request({
     url: that.public.url + '/quicksetbank/getList',
     method: 'post',
     data: {
-      type: type,
       pageno: currentPage,
       pagerows: pagesize,
       name: name.trim(),

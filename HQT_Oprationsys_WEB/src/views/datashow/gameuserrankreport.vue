@@ -3,20 +3,20 @@
     <div class="query">
       <el-row>
         <el-form :inline="true" label-width="80px">
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="游戏名称">
                 <!-- <el-input v-model="formInline.id" clearable></el-input> -->
-                <el-select v-model="formInline.id" multiple filterable>
+                <el-select v-model="formInline.id" filterable clearable>
                 <el-option
-                  v-for="item in gamelist"
-                  :key="item.id"
+                  v-for="(item,key) in gamelist"
+                  :key="key"
                   :label="item.name"
-                  :value="item.id">
+                  :value="item.name">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="排行条件">
                 <el-select v-model="formInline.order">
                 <el-option
@@ -28,7 +28,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="开始日期">
               <el-date-picker
               v-model="formInline.starttime"
@@ -39,7 +39,7 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="结束日期">
               <el-date-picker
               v-model="formInline.endtime"
@@ -50,7 +50,24 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+        </el-form>
+      </el-row>
+      <el-row>
+        <el-form :inline="true" label-width="80px">
+           <el-col :span="6">
+            <el-form-item label="玩家渠道">
+                <el-select v-model="formInline.org" filterable clearable>
+                <el-option
+                  v-for="item in orglist"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        
+          <el-col :span="6">
             <el-form-item label="排名个数">
                 <el-input v-model="formInline.number" clearable type='number'></el-input>
             </el-form-item>
@@ -61,19 +78,6 @@
         </el-form>
       </el-row>
     </div>
-    <!-- <div class="pagingbox">
-    <div class="paging">
-      <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page.sync="currentPage"
-      :page-size="pagesize"
-      background
-      layout="prev, next, jumper"
-      :total="total">
-    </el-pagination>
-    </div>
-    </div> -->
 
     <el-table
     :data="tableData"
@@ -82,41 +86,34 @@
     border
     style="width: 100%">
     <el-table-column
-      type="index"
-      width='100'
-      label="排名">
-    </el-table-column>
-    <!-- <el-table-column
-      prop="user_id"
-      label="用户id">
-    </el-table-column> -->
-    <el-table-column
       label="用户id">
       <template slot-scope="scope">
         <el-button type="text" size="small"  @click="edit(scope.row)" >{{scope.row.user_id}}</el-button>
       </template>
     </el-table-column>
     <el-table-column
-      prop="flow"
-      sortable="custom"
-      :sort-orders="['ascending','descending']"
-      label="流水">
+      prop="recharge_money"
+      label="充值额">
     </el-table-column>
     <el-table-column
-      prop="user_lose_money"
-      sortable="custom"
-      :sort-orders="['ascending','descending']"
-      label="玩家输额">
+      prop="withdraw_money"
+      label="提现额">
     </el-table-column>
     <el-table-column
-      prop="user_win_money"
-      sortable="custom"
-      :sort-orders="['ascending','descending']"
-      label="玩家赢额">
+      prop="flow_ptop"
+      label="人人类流水">
     </el-table-column>
     <el-table-column
-      prop="tax"
-      label="税收">
+      prop="flow_ptom"
+      label="人机类流水">
+    </el-table-column>
+    <el-table-column
+      prop="gross_profit"
+      label="平台毛利">
+    </el-table-column>
+    <el-table-column
+      prop="gross_profit_ratio"
+      label="平台利润率">
     </el-table-column>
   </el-table>
 
@@ -152,20 +149,26 @@ export default {
         endtime: '',
         id: '',
         order: '1',
-        number: ''
+        number: '10',
+        org: ''
       },
+      orglist: [],
       orderlist: [
         {
-          name: '用户亏损最多',
+          name: '充值最多用户',
           id: '1'
         },
         {
-          name: '用户盈利最多',
+          name: '提现最多用户',
           id: '2'
         },
         {
-          name: '流水最多',
+          name: '流水最多用户',
           id: '3'
+        },
+        {
+          name: '中奖最多用户',
+          id: '4'
         }
       ],
       currentPage: 1,
@@ -184,11 +187,13 @@ export default {
     this.formInline.starttime = new Date(week)
     this.formInline.endtime = new Date(time)
     getgamelist(this)
+    getorglist(this)
     let that = this
     if (!this.gameuserrankreport.length && this.gameuserrankreport.length != 0) {
       that.formInline.starttime = this.gameuserrankreport.starttime
       that.formInline.endtime = this.gameuserrankreport.endtime
       that.formInline.id = this.gameuserrankreport.id
+      that.formInline.org = this.gameuserrankreport.org
        getlist(that, that.formInline.starttime, that.formInline.endtime, that.formInline.id)
     }
   },
@@ -203,31 +208,32 @@ export default {
   methods: {
     query () {
         let that = this
-        if (this.formInline.number!= '' && this.formInline.number * 1 < 10) {
+        if (this.formInline.number== '' || this.formInline.number * 1 < 10) {
           this.$message.error('排名个数最小为10')
         } else {
           getlist(that, that.formInline.starttime, that.formInline.endtime, that.formInline.id)
           let setgameuserrankreport = {
               'starttime': that.formInline.starttime,
               'endtime': that.formInline.endtime,
-              'id': that.formInline.id
+              'id': that.formInline.id,
+              'org': that.formInline.org
             }
           this.$store.commit('setgameuserrankreport', setgameuserrankreport)
         } 
     },
     cell ({row, column, rowIndex, columnIndex}) {
-      if (columnIndex === 2 && row.flow*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 3 && row.user_lose_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 4 && row.user_win_money*1 < 0) {
-        return 'red'
-      }
-      if (columnIndex === 5 && row.tax*1 < 0) {
-        return 'red'
-      }
+      // if (columnIndex === 2 && row.flow*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 3 && row.user_lose_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 4 && row.user_win_money*1 < 0) {
+      //   return 'red'
+      // }
+      // if (columnIndex === 5 && row.tax*1 < 0) {
+      //   return 'red'
+      // }
     },
     sort ({column, prop, order}) {
       if (this.tableData.length > 0) {
@@ -239,6 +245,7 @@ export default {
             break
           case 'descending':
             this.tableData.sort((a,b) => {
+              console.log(a)
               return a[prop]*1 - b[prop]*1
             })
             break
@@ -248,17 +255,6 @@ export default {
     edit (row) {
       this.$router.push({path:'/analysisdatamgr/gameorderdetail',query:{id:row.user_id}})
     }
-    // handleSizeChange(val) {
-    //   this.pagesize = val
-    //   let that = this
-    //   this.currentPage = 1
-    //   getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
-    // },
-    // handleCurrentChange(val) {
-    //   this.currentPage = val *1
-    //   let that = this
-    //   getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
-    // }
   },
   filters: {
   }
@@ -286,7 +282,16 @@ function getlist (that, starttime, endtime, id) {
         return
       }
     }
-    var game_id = id.join(',')
+    var game_id = ''
+    var game_type = ''
+    if (that.formInline.id != '') {
+      that.gamelist.map(val=> {
+        if (val.name == that.formInline.id) {
+          game_id = val.id
+          game_type = val.type
+        }
+      }) 
+    }
   request({
     url: that.public.url + '/backend/gameuserrankreport/getlist',
     method: 'post',
@@ -294,8 +299,10 @@ function getlist (that, starttime, endtime, id) {
       date_from: timestart,
       date_to: timeend,
       game_id: game_id,
+      game_type: game_type,
       orderby: that.formInline.order,
-      count: that.formInline.number
+      count: that.formInline.number,
+      agent_org_id: that.formInline.org
     }
   }).then(res => {
     Message({
@@ -303,8 +310,6 @@ function getlist (that, starttime, endtime, id) {
         type: 'success'
       })
     that.tableData = res.data.list
-    that.total = res.data.rownum * 1
-    that.currentPage = res.data.pageno * 1
   }).catch(error => {
   })
 }
@@ -332,6 +337,19 @@ function getgamelist (that) {
   })
 }
 
+
+function getorglist (that) {
+  request({
+    url: that.public.url + '/backend/org/getorglist',
+    method: 'post',
+    data: {
+    }
+  }).then(res => {
+    that.orglist = res.data
+  }).catch(error => {
+  })
+}
+
 </script>
 
 <style>
@@ -346,11 +364,5 @@ function getgamelist (that) {
   }
   .el-table .success-row {
     background: #f0f9eb;
-  }
-  .gameuserrankreport .el-input__inner {
-    width: 180px!important;
-  }
-  .gameuserrankreport .el-date-editor.el-input{
-    width: 180px!important;
   }
 </style>

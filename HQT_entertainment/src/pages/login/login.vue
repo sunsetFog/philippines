@@ -1,8 +1,9 @@
 
 <template>
   <section id="login">
-      <div class="entertainment" style="height: 100%;">
+      <div class="entertainment">
           <img class="login_logo" src="../../../static/dream/login/logo_big.png"/>
+          <img class="big_fish" src="../../../static/dream/login/fish.png"/>
             <div class="sign_frame" v-if="active_state==1">
                 <div class="code_and_service">
                     <div class="customer_service"></div>
@@ -14,7 +15,7 @@
                     </div>
                     <div class="password_enter">
                         <span>密码:</span>
-                        <input v-model="password_number" placeholder="请输入登陆密码"></input>
+                        <input type="password" maxlength="20" v-model="password_number" placeholder="请输入登陆密码"></input>
                     </div>
                     <div class="remember_and_forget">
                         <div class="rectangle" @click="rememberMeans()"><img v-show="remember_checked" src="../../../static/dream/login/jizhu.png"/></div>
@@ -51,7 +52,7 @@
                 <div class="sign_password">
                     <div class="user_name_left">
                         <span>登陆密码:</span>
-                        <input v-model="login_password" placeholder="请输入登陆密码"></input>
+                        <input type="password" maxlength="20" v-model="login_password" placeholder="请输入登陆密码"></input>
                     </div>
                     <div class="user_name_right">字母和数字组成6-16个字符（必须包含数字和字母）且连续三位字符不相同</div>
                 </div>
@@ -71,27 +72,75 @@
             <div class="circuit_detection" v-if="active_state==3">
                 <div class="testing_header">
                     <label>线路检测</label>
-                    <img src="../../../static/dream/login/kuaisudenglu.png"/>
+                    <img @click="rapidRegistration(1)" src="../../../static/dream/login/kuaisudenglu.png"/>
                     <span>快速登陆</span>
                 </div>
+                <div class="example_detection">
+                    <div class="line_content" v-for="(item,index) in line_list">
+                        <div class="line_data" v-if="item.state==1">
+                            <img :src="item.circular1"/>
+                            <span :style="{color: item.color}">{{item.title}}</span>
+                            <div class="progress_bar" :style="{backgroundImage: item.signal1}">
+                                <div :style="{width: item.width,backgroundImage: item.progress1}"></div>
+                            </div>
+                            <span :style="{color: item.color}">0.169秒</span>
+                            <img :src="item.type1"/>
+                            <img :src="item.enter1"/>
+                        </div>
+                        <div class="line_data" v-if="item.state==2">
+                            <img :src="item.circular2"/>
+                            <span :style="{color: item.color}">{{item.title}}</span>
+                            <div class="progress_bar" :style="{backgroundImage: item.signal2}">
+                                <div :style="{width: item.width,backgroundImage: item.progress2}"></div>
+                            </div>
+                            <span :style="{color: item.color}">0.169秒</span>
+                            <img :src="item.type2"/>
+                            <img :src="item.enter2"/>
+                        </div>
+                        <div class="line_data" v-if="item.state==3">
+                            <img :src="item.circular3"/>
+                            <span :style="{color: item.color}">{{item.title}}</span>
+                            <div class="progress_bar" :style="{backgroundImage: item.signal3}">
+                                <div :style="{width: item.width,backgroundImage: item.progress3}"></div>
+                            </div>
+                            <span :style="{color: item.color}">0.169秒</span>
+                            <img :src="item.type3"/>
+                            <img :src="item.enter3"/>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
       </div>
-
+    <footers :vip_foot="vip_foot"></footers>
   </section>
 </template>
 
 <script>
+import footers from '../../components/footer.vue';
 export default{
+    components: {footers},
   data(){
     return{
+        vip_foot: false,
         active_state: 1,
-        account_number: 'test28',//登陆账号
-        password_number: '123456',//登陆密码
+        account_number: '',//登陆账号
+        password_number: '',//登陆密码
         remember_checked: false,
         user_name: '',//用户名
         player_nickname: '',//玩家昵称
         login_password: '',//注册密码
         verification_code: '',//验证码
+        line_list: [
+            {state: 1,title: '线路1',color: '#1dc570',time: '0.169秒',width: '70%'},
+            {state: 1,title: '线路1',color: '#1dc570',time: '0.169秒',width: '40%'},
+            {state: 1,title: '线路1',color: '#1dc570',time: '0.169秒',width: '50%'},
+            {state: 2,title: '线路2',color: '#ff9f00',time: '0.169秒',width: '25%'},
+            {state: 2,title: '线路2',color: '#ff9f00',time: '0.169秒',width: '90%'},
+            {state: 3,title: '线路3',color: '#f71210',time: '0.169秒',width: '80%'},
+            {state: 3,title: '线路3',color: '#f71210',time: '0.169秒',width: '30%'},
+            {state: 3,title: '线路3',color: '#f71210',time: '0.169秒',width: '100%'}
+        ],
     }
   },
   watch:{
@@ -99,18 +148,45 @@ export default{
           //console.log('checked',cur,old,this.remember_checked);
       }
   },
-  created(){
-      flashGameplayer();
-      if(sessionStorage.getItem('checked')){
-          if(sessionStorage.getItem('counts')==1){
-              location.reload();
-              sessionStorage.setItem('counts',2);
-          }
-          this.remember_checked = sessionStorage.getItem('checked');
-      }
-  },
   mounted(){
-    this.$means.overallHeight('login');
+      this.$means.overallHeight('login');
+  },
+  created(){
+      purpleMagic(2);
+    //   console.log('@@@route%%%',this.$route);
+      if(typeof this.$route.params.line!="undefined"){
+          this.rapidRegistration(3);
+      }else{
+          flashGameplayer();
+      }
+      if(localStorage.getItem('account')){
+          this.account_number = localStorage.getItem('account');
+          this.password_number = localStorage.getItem('password');
+          this.remember_checked = true;
+      }else{
+          this.account_number = '';
+          this.password_number = '';
+          this.remember_checked = false;
+      }
+      
+      for(let i=0;i<this.line_list.length;i++){
+          this.line_list[i].circular1 = '../../../static/dream/login/luxian1.png';
+          this.line_list[i].circular2 = '../../../static/dream/login/luxian2.png';
+          this.line_list[i].circular3 = '../../../static/dream/login/luxian3.png';
+          this.line_list[i].signal1 = 'url(../../../static/dream/login/luxian1jindu.png)';
+          this.line_list[i].signal2 = 'url(../../../static/dream/login/luxian2jindu.png)';
+          this.line_list[i].signal3 = 'url(../../../static/dream/login/luxian3jindu.png)';
+          this.line_list[i].type1 = '../../../static/dream/login/luxian1shuoming.png';
+          this.line_list[i].type2 = '../../../static/dream/login/luxian2shuoming.png';
+          this.line_list[i].type3 = '../../../static/dream/login/luxian3shuoming.png';
+          this.line_list[i].enter1 = '../../../static/dream/login/luxian1jinru.png';
+          this.line_list[i].enter2 = '../../../static/dream/login/luxian2jinru.png';
+          this.line_list[i].enter3 = '../../../static/dream/login/luxian3jinru.png';
+          this.line_list[i].progress1 =  'url(../../../static/dream/login/luxian11jindu.png)';
+          this.line_list[i].progress2 = 'url(../../../static/dream/login/luxian22jindu.png)';
+          this.line_list[i].progress3 = 'url(../../../static/dream/login/luxian33jindu.png)';
+      }
+    //   console.log('lin++list%%',this.line_list);
   },
   methods: {
       rapidRegistration(index){
@@ -118,19 +194,40 @@ export default{
       },
       signIn(){
             var that = this;
-            web.game_login(that.account_number,that.password_number,function() { 
-                let val = web.game_getPlayer();
-                sessionStorage.setItem('token',val.token);
-                sessionStorage.removeItem('checked');
-                that.$router.push({path: '/home'});
-            });
-            
+            if(that.account_number==''&&that.password_number==''){
+                that.$message.error('请输入账号和密码!');
+                return;
+            }else if(that.account_number == ''){
+                that.$message.error('请输入账号!');
+                return;
+            }else if(that.password_number == ''){
+                that.$message.error('请输入密码!');
+                return;
+            }
+            if(refreshWeb.state=='init'){
+                web.game_login(that.account_number,that.password_number,function() { 
+                    if(that.remember_checked==true){
+                        localStorage.setItem('account',that.account_number);
+                        localStorage.setItem('password',that.password_number);
+                    }else{
+                        localStorage.removeItem('account');
+                        localStorage.removeItem('password');
+                    }
+                    sessionStorage.setItem('account_number',that.account_number);
+                    sessionStorage.setItem('password_number',that.password_number);
+                    let val = web.game_getPlayer();
+                    sessionStorage.setItem('token',val.token);
+                    that.$router.push({path: '/home'});
+                });
+            }else{
+                that.$message.error('加载中');
+            }
       },
       rememberMeans(){
           if(this.remember_checked==false){
-              this.remember_checked = true;
+                this.remember_checked = true;
           }else{
-              this.remember_checked = false;
+                this.remember_checked = false;
           }
       }
   }
@@ -142,7 +239,7 @@ export default{
     width: 100%;
     padding-bottom: 165px;
     box-sizing: border-box;
-    .mixin_image(url('../../../static/dream/login/bg_denglu.png'));
+    .mixin_image(url('../../../static/dream/login/bg_denglu.jpg'));
     @color_violet: #3d1351;//字体
     @color_label: #dbcbb7;//字体
     @color_green: #0f991a;//按钮背景
@@ -153,18 +250,24 @@ export default{
         height: 100%;
         position: relative;
         .login_logo{
-            .mixin_img(470px;110px);
+            .mixin_img(790px;170px);
             position: absolute;
-            top: 95px;
+            top: 70px;
             left: 50%;
-            margin-left: -235px;
+            margin-left: -395px;
+        }
+        .big_fish{
+            .mixin_img(426px;487px);
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
         }
         .sign_frame{
             width: 480px;
             height: 430px;
             .mixin_image(url('../../../static/dream/login/kuankuan.png'));
             position: absolute;
-            top: 280px;
+            top: 290px;
             left: 50%;
             margin-left: -240px;
             .code_and_service{
@@ -179,6 +282,9 @@ export default{
                     position: absolute;
                     top: 3px;
                     right: 3px;
+                }
+                .customer_service:hover{
+                    .mixin_image(url('../../../static/dream/login/kefu_hover.png'));
                 }
             }
             .form_information{
@@ -325,7 +431,7 @@ export default{
             height: 430px;
             .mixin_image(url('../../../static/dream/login/kuankuan.png'));
             position: absolute;
-            top: 280px;
+            top: 290px;
             left: 50%;
             margin-left: -377.5px;
             padding: 0px 0px 0px 30px;
@@ -338,7 +444,7 @@ export default{
                     .mixin_div(200px,70px,none,#4cf200,center);
                     font-weight: 600;
                     font-size: 30px;
-                    text-shadow: @color_stroke 2px 2px 0,@color_stroke 2px 2px 0,@color_stroke 2px 2px 0,@color_stroke 2px 2px 0;
+                    text-shadow: 2px 2px 0px @color_stroke;
                     position: absolute;
                     top: 0px;
                     left: 0px;
@@ -351,6 +457,9 @@ export default{
                     position: absolute;
                     top: 3px;
                     right: 3px;
+                }
+                .customer_service:hover{
+                    .mixin_image(url('../../../static/dream/login/kefu_hover.png'));
                 }
             }
             .user_name,.nickname,.sign_password,.verification_code{
@@ -412,32 +521,83 @@ export default{
         .circuit_detection{
             width: 660px;
             height: 450px;
-            .mixin_image(url('../../../static/dream/login/kuankuan.png'));
+            .mixin_image(url('../../../static/dream/login/luxiankuan.png'));
             position: absolute;
-            top: 280px;
+            top: 290px;
             left: 50%;
             margin-left: -330px;
             padding: 10px 30px 0px 30px;
             box-sizing: border-box;
             .testing_header{
                 width: 100%;
-                height: 65px;
+                height: 60px;
                 label{
-                    .mixin_span(auto,65px,none,@color_violet,left);
+                    .mixin_span(auto,60px,none,@color_violet,left);
                     float: left;
                     font-size: 24px;
                 }
                 span{
-                    .mixin_span(auto,65px,none,#e8e7ed,left);
+                    .mixin_span(auto,60px,none,#e8e7ed,left);
                     float: right;
                     margin-right: 5px;
                     font-size: @font_size16;
-                    text-shadow: 2px 2px @color_stroke;
+                    text-shadow: 1px 1px 2px @color_stroke;
                 }
                 img{
                     .mixin_img(50px,50px);
                     float: right;
-                    margin-top: 7.5px;
+                    margin-top: 3px;
+                }
+            }
+            .example_detection{
+                width: 580px;
+                height: 350px;
+                margin: 5px 0px 0px 10px;
+                padding: 12px 0px 0px 22px;
+                box-sizing: border-box;
+                .line_content{
+                    width: 100%;
+                    height: 30px;
+                    margin-bottom: 10px;
+                    .line_data{
+                        width: 100%;
+                        height: 30px;
+                        img:nth-of-type(1){
+                            .mixin_img(10px,10px);
+                            float: left;
+                            margin-top: 10px;
+                        }
+                        span:nth-of-type(1){
+                            .mixin_span(80px,30px,none,@color_white,left);
+                            float: left;
+                            margin-left: 10px;
+                        }
+                        .progress_bar{
+                            .mixin_float(152px,20px,left);
+                            margin-top: 5px;
+                            background-size: 100% 100%;
+                            background-repeat: no-repeat;
+                            div{
+                                height: 20px;
+                                background: none;
+                                background-size: 152px 20px;
+                            }
+                        }
+                        span:nth-of-type(2){
+                            .mixin_span(90px,30px,none,@color_white,center);
+                            float: left;
+                        }
+                        img:nth-of-type(2){
+                            .mixin_img(50px,25px);
+                            float: left;
+                            margin-top: 2px;
+                        }
+                        img:nth-of-type(3){
+                            .mixin_img(70px,30px);
+                            float: left;
+                            margin-left: 70px;
+                        }
+                    }
                 }
             }
         }

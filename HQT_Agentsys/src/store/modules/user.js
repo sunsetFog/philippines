@@ -117,7 +117,6 @@ const user = {
         resolve()
         })
         .catch(error => {
-          console.log(3333)
           reject(error)
         })
       })

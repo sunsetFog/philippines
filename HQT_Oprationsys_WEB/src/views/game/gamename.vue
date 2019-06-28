@@ -416,10 +416,16 @@
             prop="qbmoney"
             label="底注">
           </el-table-column>
-          <el-table-column
-            prop="multiple"
+           <el-table-column
+        label="奖励倍数">
+        <template slot-scope="scope">
+          {{scope.row.multiple | multiple}}
+        </template>
+      </el-table-column>
+          <!-- <el-table-column
+            prop=""
             label="奖励倍数">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="num"
             label="数量">
@@ -504,12 +510,15 @@
     </div>
                  <el-table
           :data="tableData5_2"
+          :cell-class-name='cell2'
           border
           style="width: 100%">
           <el-table-column
-            prop="multiple"
-            label="奖励倍数">
-          </el-table-column>
+          label="奖励倍数">
+          <template slot-scope="scope">
+            <span>{{scope.row.multiple | multiple}}</span>
+          </template>
+        </el-table-column>
           <el-table-column
             prop="num"
             label="数量">
@@ -607,9 +616,11 @@
             label="底注">
           </el-table-column>
           <el-table-column
-            prop="multiple_u_limit"
-            label="上限倍数">
-          </el-table-column>
+          label="上限倍数">
+          <template slot-scope="scope">
+            <span>{{scope.row.multiple_u_limit | multiple}}</span>
+          </template>
+        </el-table-column>
           <el-table-column
             prop="num"
             label="数量">
@@ -671,9 +682,11 @@
           border
           style="width: 100%">
           <el-table-column
-            prop="multiple_u_limit"
-            label="上限倍数">
-          </el-table-column>
+          label="上限倍数">
+          <template slot-scope="scope">
+            <span>{{scope.row.multiple_u_limit | multiple}}</span>
+          </template>
+        </el-table-column>
           <el-table-column
             prop="num"
             label="数量">
@@ -783,6 +796,12 @@
     <el-tab-pane label="全民捕鱼（富豪场）">
       <richfish></richfish>
     </el-tab-pane>
+    <el-tab-pane label="斗地主设置">
+      <landlord></landlord>
+    </el-tab-pane>
+    <el-tab-pane label="红包扫雷设置">
+      <redenvelope></redenvelope>
+    </el-tab-pane>
   </el-tabs>
 
 
@@ -842,6 +861,7 @@
       
       <el-form-item label="奖励倍数：" :label-width="formLabelWidth" prop="money">
           <el-input v-model="form5.money" type='number'></el-input>
+          <span class="red" v-if="noget">未中奖</span>
       </el-form-item>
       <el-form-item label="数量" :label-width="formLabelWidth" prop="num">
           <el-input v-model="form5.num" type='number'></el-input>
@@ -849,7 +869,7 @@
       <el-form-item label="不带彩金图案" :label-width="formLabelWidth" prop="npic">
           <el-input v-model="form5.npic" type='number'></el-input>
       </el-form-item>
-      <el-form-item label="带彩金图案" :label-width="formLabelWidth" prop="pic">
+      <el-form-item label="带彩金图案" :label-width="formLabelWidth" prop='pic'>
           <el-input v-model="form5.pic" type='number'></el-input>
       </el-form-item>
     </el-form>
@@ -918,6 +938,8 @@ import dragonlottery from '../game/dragonlottery'
 import fish from '../game/fish'
 import vipfish from '../game/vipfish'
 import richfish from '../game/richfish'
+import landlord from '../game/landlord'
+import redenvelope from '../game/redenvelope'
 export default {
   data() {
     var zsrules = (rule, value, callback) => {
@@ -964,6 +986,7 @@ export default {
         status: 1,
         depict: ''
       },
+      noget: false,
       form2: {
         status: 1,
         name: ''
@@ -1058,7 +1081,7 @@ export default {
           {required: true, validator: zsrules, trigger: 'blur'}
         ],
         pic: [
-          {required: true, validator: zsrules, trigger: 'blur'}
+          {required: false}
         ],
       },
       rules6: {
@@ -1183,7 +1206,9 @@ export default {
     dragonlottery,
     fish,
     vipfish,
-    richfish
+    richfish,
+    landlord,
+    redenvelope
   },
   computed: {
     ...mapGetters([
@@ -1203,6 +1228,13 @@ export default {
     }
   },
   watch: {
+    'form5.money': function (val) {
+      if (val == '0') {
+        this.noget = true
+      } else {
+        this.noget = false
+      }
+    }
   },
   filters: {
     type (val) {
@@ -1220,7 +1252,16 @@ export default {
       if (val === '2') {
         return '人人类游戏'
       }
-    }
+    },
+    multiple(val) {
+      if (val == '0') {
+        return '0(未中奖)'
+      } else if(val == '-1'){
+        return '合计'
+      } else {
+        return val
+      }
+    },
   },
   methods: {
     exceed(file) {
@@ -1237,6 +1278,11 @@ export default {
       }
       if (columnIndex === 4 && row.status === '正常') {
         return 'green'
+      }
+    },
+    cell2 ({row, column, rowIndex, columnIndex}) {
+      if (columnIndex === 0 && row.multiple == '0') {
+        return 'red'
       }
     },
     before(file) {		
@@ -1410,7 +1456,11 @@ export default {
       this.title5 = '普通奖库-编辑'
       this.dialogFormVisible5 = true
       this.id5 = row.id
-      this.form5.money = row.multiple
+      if (row.multiple == '-1') {
+        this.form5.money = ''
+      } else {
+        this.form5.money = row.multiple
+      }
       this.form5.num = row.num
       this.form5.npic = row.ntg_pic_num
       this.form5.pic = row.tg_pic_num
@@ -1527,42 +1577,48 @@ export default {
         });
     },
     tz (row) {
-      if (row.name==='水浒传') {
+      if (row.name==='水浒传' || row.id == '601') {
         this.actionname = '6'
         getgameinfo(this, 601, 0)
       }
-      if (row.name==='百家乐') {
+      if (row.name==='百家乐' || row.id == '201' && row.type=='1') {
         this.actionname = '1'
       }
-      if (row.name==='百家乐（彩票场）') {
+      if (row.name==='百家乐（彩票场）' || row.id == '201' && row.type=='2') {
         this.actionname = '2'
       }
-      if (row.name==='红黑大战') {
+      if (row.name==='红黑大战' || row.id == '301') {
         this.actionname = '3'
       }
-      if (row.name==='百人牛牛') {
+      if (row.name==='百人牛牛' || row.id == '101' && row.type=='1') {
         this.actionname = '4'
       }
-      if (row.name==='百人牛牛(彩票场)') {
+      if (row.name==='百人牛牛(彩票场)' || row.id == '101' && row.type=='2') {
         this.actionname = '5'
       }
-      if (row.name==='水果机') {
+      if (row.name==='水果机' || row.id == '701') {
         this.actionname = '7'
       }
-      if (row.name==='龙虎斗') {
+      if (row.name==='龙虎斗' || row.id == '801' && row.type=='1') {
         this.actionname = '8'
       }
-      if (row.name==='龙虎斗（彩票场）') {
+      if (row.name==='龙虎斗（彩票场）'|| row.id == '801' && row.type=='2') {
         this.actionname = '9'
       }
-      if (row.name==='全民捕鱼平民场') {
+      if (row.name==='全民捕鱼平民场'|| row.id == '501') {
         this.actionname = '10'
       }
-      if (row.name==='全民捕鱼贵宾场') {
+      if (row.name==='全民捕鱼贵宾场'|| row.id == '502') {
         this.actionname = '11'
       }
-      if (row.name==='全民捕鱼富豪场') {
+      if (row.name==='全民捕鱼富豪场'|| row.id == '503') {
         this.actionname = '12'
+      }
+      if (row.name==='斗地主'|| row.id == '401') {
+        this.actionname = '13'
+      }
+      if (row.name==='红包扫雷'|| row.id == '91') {
+        this.actionname = '14'
       }
     },
     cz (row) {
@@ -1648,6 +1704,7 @@ export default {
             }
           }).then(res => {
             getlist(that)
+            getgameinfo(that,row.id,lottery)
           }).catch(error => {
           })
       }).catch(() => {
@@ -1694,6 +1751,7 @@ export default {
             }
           }).then(res => {
             getlist(that)
+            getgameinfo(that,row.id,lottery)
           }).catch(error => {
           })
       }).catch(() => {
@@ -1758,12 +1816,13 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
              request({
-              url: that.public.url + '/gameset/savegameinfo',
+              url: that.public.url + '/gameset/savebase',
               method: 'post',
               data: {
                     game_id: 601,
                     depict: this.form.depict,
-                    status: this.form.status
+                    status: this.form.status,
+                    type: 0
               }
             }).then(res => {
               getlist(that)

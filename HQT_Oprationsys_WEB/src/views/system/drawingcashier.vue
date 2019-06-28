@@ -4,7 +4,7 @@
       <el-row>
         <el-form :inline="true" label-width="100px">
           <el-col :span="5">
-            <el-form-item label="状态">
+            <el-form-item label="出纳状态">
               <el-select v-model="formInline.status" filterable clearable>
                 <el-option
                   v-for="item in typelist"
@@ -32,14 +32,14 @@
                   v-for="item in banklist"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.id"
+                  :value="item.name"
                 ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
 
            <el-col :span="5">
-            <el-form-item label="总代" label-width="100px">
+            <el-form-item label="玩家账号" label-width="100px">
               <el-input v-model="formInline.account" clearable></el-input>
             </el-form-item>
           </el-col>
@@ -63,7 +63,7 @@
           </el-col>
 
          <el-col :span="7">
-            <el-form-item label="玩家账号" label-width="100px">
+            <el-form-item label="总代" label-width="100px">
               <el-input v-model="formInline.user" clearable></el-input>
             </el-form-item>
           </el-col>
@@ -141,7 +141,7 @@
       style="width: 100%"
     >
       <el-table-column prop="id" label="提款ID"></el-table-column>
-      <el-table-column prop="cash_status" width="150" label="风控状态"></el-table-column>
+      <el-table-column prop="cash_status" width="150" label="出纳状态"></el-table-column>
       
       <el-table-column prop="rimaer" label="风控员"></el-table-column>
       <el-table-column label="风控时间">
@@ -149,7 +149,7 @@
           <span>{{scope.row.rima_ope_time | time}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="audit_status" label="状态"></el-table-column>
+      <!-- <el-table-column prop="audit_status" label="状态"></el-table-column> -->
       <el-table-column prop="user_account" label="玩家账号"></el-table-column>
       <el-table-column prop="org_name" label="玩家渠道"></el-table-column>
       <el-table-column prop="top_agent_account" label="总代"></el-table-column>
@@ -171,9 +171,9 @@
         </el-table-column> -->
       <el-table-column label="出纳操作"  width="120">
         <template slot-scope="scope">
-        <el-button @click="edit(scope.row)" type="text" size="small" v-if="scope.row.cash_status === '待审核' && paywithdrawauditwithdraw">操作</el-button>
+        <el-button @click="edit(scope.row)" type="text" size="small" v-if="scope.row.cash_status === '待出纳' || scope.row.is_self=='1'&& paywithdrawauditwithdraw">操作</el-button>
         <span v-if="scope.row.btn_display == '1'">{{scope.row.op_status}}</span>
-        <el-button type="text" size="small" v-if="scope.row.cash_status === '待审核'">第三方</el-button>
+        <el-button type="text" size="small" v-if="scope.row.cash_status === '待出纳'|| scope.row.is_self=='1'">第三方</el-button>
        </template>
       </el-table-column>
       <el-table-column label="查看订单">
@@ -540,22 +540,22 @@
          <span>请选择失败原因：</span>
       </el-form-item>
        <el-form-item prop='name'>
-         <el-radio v-model="form3.name" label='2'>低于提款限额，情确认提款金额，稍后再试。</el-radio>
+         <el-radio v-model="form3.name" label='1'>低于提款限额，情确认提款金额，稍后再试。</el-radio>
       </el-form-item>
       <el-form-item prop='name'>
-         <el-radio v-model="form3.name" label='3'>违反相关提款限额的，请查看“帮助中心”，请稍后再试。</el-radio>
+         <el-radio v-model="form3.name" label='2'>违反相关提款限额的，请查看“帮助中心”，请稍后再试。</el-radio>
       </el-form-item>
       <el-form-item prop='name'>
-         <el-radio v-model="form3.name" label='4'>需要检查游戏账户的某些问题，请联系您的代理商或在线客服带表。</el-radio>
+         <el-radio v-model="form3.name" label='3'>需要检查游戏账户的某些问题，请联系您的代理商或在线客服带表。</el-radio>
       </el-form-item>
       <el-form-item prop='name'>
-         <el-radio v-model="form3.name" label='5'>游戏资金低于您最近存款金额的，请确认您的游戏资金达到要求的限额，稍后再试</el-radio>
+         <el-radio v-model="form3.name" label='4'>游戏资金低于您最近存款金额的，请确认您的游戏资金达到要求的限额，稍后再试</el-radio>
       </el-form-item>
       <el-form-item prop='name'>
-         <el-radio v-model="form3.name" label='6'>参加游戏活动后，奖金需达到一定的流水。</el-radio>
+         <el-radio v-model="form3.name" label='5'>参加游戏活动后，奖金需达到一定的流水。</el-radio>
       </el-form-item>
       <el-form-item prop='name'>
-         <el-radio v-model="form3.name" label='7'>错误的银行账户信息，请在更正您的汇款银行信息后再试一次。</el-radio>
+         <el-radio v-model="form3.name" label='6'>错误的银行账户信息，请在更正您的汇款银行信息后再试一次。</el-radio>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -593,10 +593,10 @@ export default {
       dialogFormVisible: false,
       typelist: [
         { name: "全部", type: "10" },
-        { name: "待审核", type: "-1" },
-        { name: "审核中", type: "0" }, 
-        { name: "通过", type: "1" },
-        { name: "拒绝", type: "2" },
+        { name: "待出纳", type: "-1" },
+        { name: "出纳中", type: "0" }, 
+        { name: "出款成功", type: "1" },
+        { name: "出款失败", type: "2" },
         { name: "1.第三方汇款通过", type: "3" },
         { name: "2.第三方汇款排队中", type: "4" },
         { name: "3.发送汇款信息失败", type: "5" },
@@ -750,7 +750,8 @@ export default {
         method: "post",
         data: {
             id: this.id,
-            change: this.form3.name
+            change: 2,
+            reason: this.form3.name
         }
       })
         .then(res => {
@@ -769,7 +770,8 @@ export default {
       url: that.public.url + "/paywithdraw/getinfocash",
       method: "post",
       data: {
-          id: row.id
+          id: row.id,
+          select: 1
       }
     })
       .then(res => {
@@ -974,9 +976,9 @@ function getbanklist (that) {
     data: {}
   })
     .then(res => {
-      let all = {id: "", name: "全部"}
+      // let all = {id: "", name: "全部"}
       that.banklist = res.data.list
-      that.banklist.unshift(all)
+      // that.banklist.unshift(all)
     })
     .catch(error => {});
 }

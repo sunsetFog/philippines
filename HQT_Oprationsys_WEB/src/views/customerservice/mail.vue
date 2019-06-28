@@ -115,16 +115,18 @@
 
   <el-dialog :title='title'  :visible.sync="dialogFormVisible">
     <el-form :model="form" :rules="rules" ref="form">
-      <el-form-item label="收件人" :label-width="formLabelWidth" prop="name">
-        <!-- <el-input v-model="form.name"></el-input> -->
-        <el-select v-model="form.name" filterable multiple style="width:100%;">
+      <el-form-item label="渠道" :label-width="formLabelWidth" prop="org">
+      <el-select v-model="form.org" filterable style="width:100%;">
         <el-option
-          v-for="item in namelist"
+          v-for="item in orglist"
           :key="item.value"
-          :label="item.login_name"
-          :value="item.login_name">
+          :label="item.name"
+          :value="item.id">
         </el-option>
       </el-select>
+      </el-form-item>
+      <el-form-item label="收件人" :label-width="formLabelWidth" prop="name">
+        <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="主题" :label-width="formLabelWidth" prop="desc">
         <el-input v-model="form.desc"></el-input>
@@ -211,18 +213,21 @@ export default {
       dialogFormVisible: false,
       outerVisible: false,
       innerVisible: false,
+      orglist: [],
       form: {
-        name: [],
+        name: '',
         desc: '',
-        content: ''
+        content: '',
+        org: ''
       },
       rules: {
+        org:[{required: true, message: '请选择渠道', trigger: 'blur'}],
         name: [
           {required: true, message: '请输入收件人', trigger: 'blur'}
         ],
         desc: [
           {required: true, message: '请输入主题', trigger: 'blur'},
-          {min: 0, max: 50,message: '主题在50个字符以内', trigger: 'blur'}
+          {min: 0, max: 16,message: '主题在16个字符以内', trigger: 'blur'}
         ],
         content: [
           {required: true, message: '请输入内容', trigger: 'blur'},
@@ -244,8 +249,8 @@ export default {
     }
   },
   created() {
-    getnamelist (this)
     let that = this
+    getorglist(that)
     if (!this.mail.length && this.mail.length != 0) {
       that.formInline.title = this.mail.title
       that.currentPage = this.mail.currentPage
@@ -313,23 +318,26 @@ export default {
       let that = this
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.form.name.length > 0) {
-            var receiver = this.form.name.join(',')
-          } else {
-            var receiver = ''
-          }
+          // if (this.form.name.length > 0) {
+          //   var receiver = this.form.name.join(',')
+          // } else {
+          //   var receiver = ''
+          // }
             request({
             url: that.public.url + '/gameemail/add',
             method: 'post',
             data: {
-                  email_receiver: receiver,
+                  email_receiver: this.form.name,
                   title: this.form.desc,
-                  content: this.form.content
+                  content: this.form.content,
+                  org_id: this.form.org
             }
           }).then(res => {
+            if (response.code === 0) {
             that.dialogFormVisible = false
             that.$refs.form.resetFields()
              getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time)
+            }
           }).catch(error => {
           })
         } else {
@@ -403,16 +411,6 @@ function getlist (that, title, currentPage, pagesize, receive, time) {
   })
 }
 
-function getnamelist (that) {
-  request({
-    url: that.public.url + '/gameemail/getnamelist',
-    method: 'post',
-    data: {}
-  }).then(res => {
-    that.namelist = res.data
-  }).catch(error => {
-  })
-}
 
 function getreceiverlist (that, id, currentPage1, pagesize1) {
   request({
@@ -429,6 +427,19 @@ function getreceiverlist (that, id, currentPage1, pagesize1) {
     that.currentPage1 = res.data.pageno * 1
   }).catch(error => {
   })
+}
+
+
+function getorglist(that) {
+ request({
+    url: that.public.url + "/backend/org/getorglist",
+    method: "post",
+    data: {}
+  })
+    .then(res => {
+      that.orglist = res.data
+    })
+    .catch(error => {});
 }
 
 </script>

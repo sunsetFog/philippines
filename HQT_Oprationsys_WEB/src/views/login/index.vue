@@ -101,7 +101,7 @@ export default {
               const data = response.data
               setToken(data.token)
               this.$store.commit('SET_TOKEN', data.token)
-              this.$store.commit('SET_NAME', data.nickname)
+              this.$store.commit('SET_NAME', data.loginname)
               this.$store.commit('SET_ROLES', data.menu)
               this.$store.dispatch('getbtn', data.menu)
               this.$store.dispatch('getnewroles', data.menu)

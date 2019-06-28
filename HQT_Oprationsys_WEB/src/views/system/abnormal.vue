@@ -34,10 +34,10 @@
           <el-col :span="6">
             <el-form-item label="预警颜色">
                 <el-checkbox-group v-model="formInline.color">
-                  <el-checkbox :label='1'>红</el-checkbox>
-                  <el-checkbox :label='2'>黄</el-checkbox>
-                  <el-checkbox :label='3'>绿</el-checkbox>
-                  <el-checkbox :label='4'>无</el-checkbox>
+                  <el-checkbox :label='"ff0000"'>红</el-checkbox>
+                  <el-checkbox :label='"ffff00"'>黄</el-checkbox>
+                  <el-checkbox :label='"00ff00"'>绿</el-checkbox>
+                  <el-checkbox :label='""'>无</el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
           </el-col>
@@ -93,7 +93,7 @@
       >
     </el-table-column>
     <el-table-column label="预警颜色">
-        <template slot-scope="scope">{{scope.row.color | color}}</template>
+        <template slot-scope="scope">{{scope.row.color}}</template>
     </el-table-column>
     <el-table-column
       prop="inc_lower_level"
@@ -252,19 +252,19 @@ export default {
       ],
       colorlist: [
         {
-          id: '1',
+          id: 'ff0000',
           name: '红'
         },
         {
-          id: '2',
+          id: 'ffff00',
           name: '黄'
         },
         {
-          id: '3',
+          id: '00ff00',
           name: '绿'
         },
         {
-          id: '4',
+          id: '',
           name: '无'
         }
       ],

@@ -29,31 +29,37 @@
 }
 
 #home_index{
-    .el-carousel__container{
-        height: 740px;
+    .theme_picture{
+        .el-carousel__container{
+            height: 500px;
+        }       
     }
-    .el-carousel__arrow--left{
-        .mixin_image(url('../../static/dream/home/left_nomal.png'));
-        .el-icon-arrow-left{
-            display: none;
+    .game_contain{
+        .el-carousel__container{
+            height: 740px;
+        }
+        .el-carousel__arrow--left{
+            .mixin_image(url('../../static/dream/home/left_nomal.png'));
+            .el-icon-arrow-left{
+                display: none;
+            }
+        }
+        .el-carousel__arrow--left:hover{
+            .mixin_image(url('../../static/dream/home/left_hover.png'));
+        }
+        .el-carousel__arrow--right{
+            .mixin_image(url('../../static/dream/home/right_nomal.png'));
+            .el-icon-arrow-right{
+                display: none;
+            }
+        }
+        .el-carousel__arrow--right:hover{
+            .mixin_image(url('../../static/dream/home/right_hover.png'));
         }
     }
-    .el-carousel__arrow--left:hover{
-        .mixin_image(url('../../static/dream/home/left_hover.png'));
-    }
-    .el-carousel__arrow--right{
-        .mixin_image(url('../../static/dream/home/right_nomal.png'));
-        .el-icon-arrow-right{
-            display: none;
-        }
-    }
-    .el-carousel__arrow--right:hover{
-        .mixin_image(url('../../static/dream/home/right_hover.png'));
-    }
-
 }
 
-#lottery,#recharge,#bindingBank,#addBank{
+#lottery,#recharge,#bank_card,#withdrawalPassword,#withdrawal,#keyboard{
     .el-dialog__header{
         background: @color_indigo;
         padding: 20px;
@@ -81,7 +87,7 @@
     }
 }
 
-#recharge{
+#recharge,#withdrawal{
     .el-input__inner{
         width: 300px;
         height: 45px;
@@ -90,30 +96,22 @@
         border: 1px solid @color_blueviolet;
     }
 }
-
-#bindingBank{
-    .el-input__inner{
-        height: 45px;
-        background-color: @color_indigo;
-        color: #98719b;
-        border: 1px solid @color_blueviolet;
-    }
-    .opening_bank{
+#bank_card{
+    .bindingBank{
         .el-input__inner{
-            width: 220px;
+            height: 45px;
+            background-color: @color_indigo;
+            color: #98719b;
+            border: 1px solid @color_blueviolet;
         }
-    }
-    .bank_province{
-        .el-input__inner{
-            width: 130px;
-        }
-    }
-    .bank_city{
-        .el-input__inner{
-            width: 130px;
+        .opening_bank{
+            .el-input__inner{
+                width: 220px;
+            }
         }
     }
 }
+
 
 #management{
     .el-menu{

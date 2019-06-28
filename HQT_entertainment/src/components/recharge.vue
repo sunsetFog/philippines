@@ -13,11 +13,11 @@
             </div>
             <div class="rechargeable_blank">
                 <span>选择充值银行:</span>
-                <span><img src="../../static/dream/center/chongzhi.png"/></span>
+                <span><img src="../../static/dream/bank/gantanhao.png"/></span>
                 <span>如选择银行卡转账,请勿使用其他支付方式,否则充值将无法</span>
             </div>
             <div class="payment_method">
-                <button v-for="(item,index) in payment_list" :style="{margin: item.margin}">
+                <button v-for="(item,index) in payment_list" :style="{margin: item.margin}" :class="{'payment_active':item.active}" @click="paymentMeans(index)">
                     <span><img :src="item.url"/></span>{{item.title}}
                 </button>
             </div>
@@ -34,7 +34,7 @@
                                 </el-option>
                         </el-select>
                 </div>
-                <div class="now_bank"><button>现在就绑定银行卡</button></div>
+                <div class="now_bank"><button @click="nowBinding()">现在就绑定银行卡</button></div>
             </div>
             <div class="recharge_jine">
                 <label>选择付款银行:</label>
@@ -66,12 +66,12 @@ export default {
         return{
             rechargeActive: false,
             payment_list: [
-                {title: '大额快充',url: '../../static/dream/center/chongzhi.png',margin: '0px 32px 20px 0px'},
-                {title: '支付宝直接C',url: '../../static/dream/center/chongzhi.png',margin: '0px 32px 20px 0px'},
-                {title: '聚鑫银联',url: '../../static/dream/center/chongzhi.png',margin: '0px 32px 20px 0px'},
-                {title: 'HQP银联1',url: '../../static/dream/center/chongzhi.png',margin: '0px 0px 20px 0px'},
-                {title: 'HQP支付宝S3',url: '../../static/dream/center/chongzhi.png',margin: '0px 32px 0px 0px'},
-                {title: 'HQP支付宝S2',url: '../../static/dream/center/chongzhi.png',margin: '0px 32px 0px 0px'}
+                {title: '大额快充',url: '../../static/dream/bank/bank1.png',margin: '0px 32px 20px 0px',active: true},
+                {title: '支付宝直接C',url: '../../static/dream/bank/zhifubao.png',margin: '0px 32px 20px 0px',active: false},
+                {title: '聚鑫银联',url: '../../static/dream/bank/bank1.png',margin: '0px 32px 20px 0px',active: false},
+                {title: 'HQP银联1',url: '../../static/dream/bank/bank1.png',margin: '0px 0px 20px 0px',active: false},
+                {title: 'HQP支付宝S3',url: '../../static/dream/bank/zhifubao.png',margin: '0px 32px 0px 0px',active: false},
+                {title: 'HQP支付宝S2',url: '../../static/dream/bank/zhifubao.png',margin: '0px 32px 0px 0px',active: false}
             ],
             options: [{
             value: '选项1',
@@ -95,6 +95,15 @@ export default {
     methods:{
         changeMeans(){
             this.rechargeActive = true;
+        },
+        paymentMeans(index){
+            for(var i=0;i<this.payment_list.length;i++){
+                this.payment_list[i].active = false;
+            }
+            this.payment_list[index].active = true;
+        },
+        nowBinding(){
+            this.$parent.bindMeans();
         }
     }
 }
@@ -122,7 +131,7 @@ export default {
                 position: absolute;
                 right: 35px;
                 top: 15px;
-                border: 2px solid @color_blueviolet;
+                border: 1px solid @color_blueviolet;
             }
             button:hover{
                 background: @color_white2_hover;
@@ -151,6 +160,9 @@ export default {
             width: 100%;
             height: 140px;
             margin-top: 10px;
+            .payment_active{
+                .mixin_image(url('../../static/dream/bank/xuanzhong.png'));
+            }
             button{
                 .mixin_button(185px,55px,#2c1e37,@color_white);
                 text-align: left;
@@ -199,7 +211,7 @@ export default {
                     .mixin_button(auto,34px,@color_white2,@color_blueviolet);
                     padding: 0px 12px;
                     box-sizing: border-box;
-                    border: 2px solid @color_blueviolet;
+                    border: 1px solid @color_blueviolet;
                 }
                 button:hover{
                     background: @color_white2_hover
@@ -265,7 +277,7 @@ export default {
         height: 35px;
         button{
             .mixin_button(155px,34px,@color_white2,@color_blueviolet);
-            border: 2px solid @color_blueviolet;
+            border: 1px solid @color_blueviolet;
         }
         button:hover{
             background: @color_white2_hover;
