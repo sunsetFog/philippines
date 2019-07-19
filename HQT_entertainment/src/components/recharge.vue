@@ -1,0 +1,301 @@
+<template>
+    <section id="game_recharge">
+        <el-dialog
+        :visible.sync="rechargeActive"
+        width="1100px"
+        top="190px"
+        center>
+        <div slot="title">充值</div>
+        <div class="varieties_content">
+            <div class="payment_type">
+                <ul>
+                    <li v-for="(item,index) in pay_types" :class="{'type_active':item.active}" @click="paymentType(index)">
+                        <span>{{item.name}}</span>
+                        <span v-if="item.active"></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="payment_content">
+                <div class="payment_methods">
+                    <ul>
+                        <li v-for="(item,index) in payment_list" :class="{'mode_active':item.active}" @click="modeMeans(index)">{{item.name}}</li>
+                    </ul>
+                </div>
+                <div class="recharge_money">
+                    <span>充值金额:</span>
+                    <input type="text" v-model="money" maxlength="20" placeholder="请输入充值金额，最低100元"/>
+                    <img src="../../static/dream/recharge/xiaochu.png" @click="eliminate()"/>
+                </div>
+                <div class="recharge_range">充值范围100-10000元,比例为1:1</div>
+                <div class="money_example">
+                    <ul>
+                        <li v-for="(item,index) in money_list" :style="{padding: item.padding}" @mousedown="moneyDown(index)" @mouseup="moneyUp(index)">
+                            <span><img :src="item.url"/></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="payment_button">
+                    <button @click="confirmRecharge()">确认充值</button>
+                </div>
+            </div>
+        </div>
+        <div slot="footer" class="example_footer">
+
+        </div>
+        </el-dialog>
+    </section>
+</template>
+
+<script>
+export default {
+    name: 'children',
+    data(){
+        return{
+            rechargeActive: false,
+            pay_data: '',
+            pay_types: [],
+            payment_list: [],
+            money: '',
+            money_list: [
+                {name: 100,url: '../../static/dream/recharge/100.png',padding: '0px'},
+                {name: 300,url: '../../static/dream/recharge/300.png',padding: '0px'},
+                {name: 500,url: '../../static/dream/recharge/500.png',padding: '0px'},
+                {name: 1000,url: '../../static/dream/recharge/1000.png',padding: '0px'},
+                {name: 1500,url: '../../static/dream/recharge/1500.png',padding: '0px'},
+                {name: 3000,url: '../../static/dream/recharge/3000.png',padding: '0px'},
+                {name: 5000,url: '../../static/dream/recharge/5000.png',padding: '0px'},
+                {name: 9999,url: '../../static/dream/recharge/9999.png',padding: '0px'}
+            ],
+            first_index: null,
+            second_index: null,
+        }
+    },
+    methods:{
+        changeMeans(){
+            this.getJson();
+            this.rechargeActive = true;
+        },
+        getJson(){
+            var that = this;
+            web.game_recharge_types(function(value){
+                console.log('recharge&&',value);
+                that.pay_data = value;
+                that.pay_types = [];
+                for(let i=0;i<value.pay_types.length;i++){
+                    that.pay_types.push({
+                        name: value.pay_types[i].name,
+                        id: value.pay_types[i].id,
+                        pay_code: value.pay_types[i].pay_code,
+                        active: false
+                    })
+                }
+                that.pay_types[0].active = true;
+                that.first_index = 0;
+                that.paymentBtn(0);
+            });
+        },
+        paymentType(index){
+            for(let i=0;i<this.pay_types.length;i++){
+                this.pay_types[i].active = false;
+            }
+            this.pay_types[index].active = true;
+            this.first_index = index;
+            this.paymentBtn(index);
+        },
+        paymentBtn(index){
+            this.second_index = null;
+            this.payment_list = [];
+            if(!this.pay_data.pay_types[index].channel){
+                return;
+            }
+            for(let i=0;i<this.pay_data.pay_types[index].channel.length;i++){
+                this.payment_list.push({
+                    name: this.pay_data.pay_types[index].channel[i].name,
+                    id: this.pay_data.pay_types[index].channel[i].channel_id,
+                    pay_code: this.pay_data.pay_types[index].channel[i].pay_code,
+                    max_limit: this.pay_data.pay_types[index].channel[i].max_limit,
+                    min_limit: this.pay_data.pay_types[index].channel[i].min_limit,
+                    active: false
+                })
+            }
+        },
+        modeMeans(index){
+            this.second_index = index;
+            for(let i=0;i<this.payment_list.length;i++){
+                this.payment_list[i].active = false;
+            }
+            this.payment_list[index].active = true;
+        },
+        moneyUp(index){
+            for(let i=0;i<this.money_list.length;i++){
+                this.money_list[i].padding = '0px';
+            }
+            this.money = this.money_list[index].name;
+        },
+        moneyDown(index){
+            this.money_list[index].padding = '3px';
+        },
+        eliminate(){
+            this.money = '';
+        },
+        confirmRecharge(){
+            var that = this;
+            console.log('index%%',that.first_index,that.second_index);
+            if(that.money == ''){
+                that.$message.error('请输入充值金额！');
+                return;
+            }else if(that.money<100||that.money>10000){
+                that.$message.error('充值范围100-10000元！');
+                return;
+            }else if(that.second_index == null){
+                that.$message.error('请选择充值渠道！');
+            }else{
+                // console.log('充值json',that.money,that.payment_list[that.second_index].id,that.payment_list[that.second_index].pay_code,that.pay_types[that.first_index].id);
+                web.game_recharge_url(that.money,that.payment_list[that.second_index].id,that.payment_list[that.second_index].pay_code,that.pay_types[that.first_index].id,function(res){
+                    // console.log('充值',res.payurl);
+                    window.open(res.payurl);
+                });
+            }
+        }
+    }
+}
+</script>
+
+<style lang="less" scoped>
+#game_recharge{
+    .varieties_content{
+        width: 100%;
+        height: 620px;
+        .payment_type{
+            .mixin_float(155px,620px,left);
+            background: @color_tone20;
+            font-size: @font_size20;
+            .type_active{
+                .mixin_image(url('../../static/dream/recharge/beijingkuang.png'));
+            }
+            ul{
+                li{
+                    .mixin_li(155px,65px);
+                    margin-top: 50px;
+                    color: @color_white;
+                    background: @color_darkgray;
+                    cursor: pointer;
+                    position: relative;
+                    span:nth-of-type(1){
+                        .mixin_span(100%,65px,none,@color_white,center);
+                        position: absolute;
+                        left: 0px;
+                        top: 0px;
+                    }
+                    span:nth-of-type(2){
+                        .mixin_span(10px,65px,none,@color_white,center);
+                        position: absolute;
+                        right: -10px;
+                        top: 0px;
+                        .mixin_image(url('../../static/dream/recharge/zhizhen.png'));
+                    }
+                }
+            }
+        }
+        .payment_content{
+            .mixin_float(943px,620px,right);
+            padding: 0px 45px 0px 45px;
+            box-sizing: border-box;
+            .payment_methods{
+                width: 100%;
+                height: 210px;
+                padding: 30px 0px 0px 0px;
+                box-sizing: border-box;
+                font-size: @font_size20;
+                .mode_active{
+                    .mixin_image(url('../../static/dream/recharge/kuangkuang.png'));
+                }
+                ul{
+                    li{
+                        .mixin_li(auto,45px);
+                        padding: 0px 20px 0px 20px;
+                        box-sizing: border-box;
+                        margin: 25px 0px 0px 40px;
+                        .mixin_image(url('../../static/dream/recharge/zhifufangshi.png'));
+                        color: @color_white;
+                        cursor: pointer;
+                    }
+                }
+            }
+            .recharge_money{
+                width: 100%;
+                height: 50px;
+                position: relative;
+                span{
+                    .mixin_span(245px,50px,none,@color_white,right);
+                    font-size: @font_size24;
+                    position: absolute;
+                    left: 0px;
+                    top: 0px;
+                }
+                input{
+                    .mixin_input(385px,48px);
+                    color: #402887;
+                    font-size: @font_size21;
+                    border-radius: 4px;
+                    position: absolute;
+                    left: 265px;
+                    top: 0px;
+                }
+                img{
+                    .mixin_img(40px,40px);
+                    cursor: pointer;
+                    position: absolute;
+                    left: 605px;
+                    top: 4px; 
+                }
+            }
+            .recharge_range{
+                .mixin_div(100%,50px,none,@color_blueviolet,center);
+                padding-right: 120px;
+                box-sizing: border-box;
+                font-size: @font_size16;
+            }
+            .money_example{
+                width: 100%;
+                height: 180px;
+                padding-left: 90px;
+                box-sizing: border-box;
+                border-bottom: 1px solid @color_blueviolet;
+                ul{
+                    li{
+                        .mixin_li(112px,50px);
+                        margin: 20px 0px 0px 30px;
+                        cursor: pointer;
+                        span{
+                            .mixin_span(100%,100%,none,@color_white,left);
+                            .mixin_image(url('../../static/dream/recharge/money.png'));
+                            img{
+                                .mixin_img(53.5%,60%);
+                                float: left;
+                                margin: 7% 0 0 21.4%;
+                            }
+                        }
+                    }
+                }
+            }
+            .payment_button{
+                width: 100%;
+                height: 36px;
+                margin-top: 50px;
+                button{
+                    .mixin_button(155px,34px,@color_white2,@color_blueviolet);
+                    margin-left: 320px;
+                    border: 1px solid @color_blueviolet;
+                }
+                button:hover{
+                    background: @color_white2_hover;
+                }
+            }
+        }
+    }
+    .example_footer{
+        .mixin_div(100%,0px,none,auto,left);
+    }
+}
+</style>
