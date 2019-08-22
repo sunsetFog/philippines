@@ -41,16 +41,16 @@ export default{
                 {url: "url('../../static/dream/home/zaixiankefu.png')"}
             ],
             logo_list: [
-                {url: "url('../../static/dream/home/AG.png')",width: '85px'},
-                {url: "url('../../static/dream/home/BBIN_logo.png')",width: '70px'},
-                {url: "url('../../static/dream/home/saba_logo_en.png')",width: '108px'},
-                {url: "url('../../static/dream/home/lg.png')",width: '85px'},
-                {url: "url('../../static/dream/home/MG_logo.png')",width: '110px'},
-                {url: "url('../../static/dream/home/playtech-logo.png')",width: '105px'},
-                {url: "url('../../static/dream/home/playgo_logo.png')",width: '95px'},
-                {url: "url('../../static/dream/home/PS_logo.png')",width: '100px'},
-                {url: "url('../../static/dream/home/SW.png')",width: '115px'},
-                {url: "url('../../static/dream/home/TTG.png')",width: '105px'}
+                {url: "url('../../static/dream/home/AG.png')",width: '7%'},
+                {url: "url('../../static/dream/home/BBIN_logo.png')",width: '5.8%'},
+                {url: "url('../../static/dream/home/saba_logo_en.png')",width: '9%'},
+                {url: "url('../../static/dream/home/lg.png')",width: '7%'},
+                {url: "url('../../static/dream/home/MG_logo.png')",width: '9.16%'},
+                {url: "url('../../static/dream/home/playtech-logo.png')",width: '8.75%'},
+                {url: "url('../../static/dream/home/playgo_logo.png')",width: '7.9%'},
+                {url: "url('../../static/dream/home/PS_logo.png')",width: '8.3%'},
+                {url: "url('../../static/dream/home/SW.png')",width: '9.58%'},
+                {url: "url('../../static/dream/home/TTG.png')",width: '8.75%'}
             ],
             relevant_list: [
                 {title: '关于我们'},

@@ -2,8 +2,8 @@
     <section id="game_withdrawal">
         <el-dialog
         :visible.sync="rechargeActive"
-        width="1100px"
-        top="190px"
+        width="5.73rem"
+        top="0.99rem"
         center>
         <div slot="title">提款</div>
         <div class="varieties_content">
@@ -18,15 +18,14 @@
             <div class="payment_content">
                 <div class="current_balance">
                     <label>当前余额:</label>
-                    <input type="text" disabled v-model="money_total" placeholder="当前余额"/>
+                    <input type="text" disabled v-model.trim="money_total" placeholder="当前余额"/>
                 </div>
                 <div class="withdrawal_amount">
                     <label>提款金额:</label>
                     <img src="../../static/dream/recharge/jian.png" @click="addition(1)"/>
-                    <input v-model="withdrawal_amount" type="text" placeholder="请输入提款金额"/>
+                    <input v-model.trim="withdrawal_amount" type="text" placeholder="请输入提款金额"/>
                     <img src="../../static/dream/recharge/jia.png" @click="addition(2)"/>
                 </div>
-                <div class="explain">这里提示文本，手续费，注意事项等</div>
                 <div class="account_number" v-show="withdrawal_types[0].active">
                     <label>收取银行卡:</label>
                     <div class="user_account">
@@ -215,6 +214,7 @@ export default {
                     .mixin_span(240px,45px,none,@color_white,right);
                     float: left;
                     margin-right: 20px;
+                    font-size: @font_size18;
                 }
             }
             .current_balance{
@@ -229,7 +229,7 @@ export default {
                 }
             }
             .withdrawal_amount{
-                margin-top: 40px;
+                margin-top: 50px;
                 img:nth-of-type(1){
                     .mixin_img(42px,38px);
                     float: left;
@@ -253,13 +253,8 @@ export default {
                     cursor: pointer;
                 }
             }
-            .explain{
-                .mixin_div(100%,45px,none,@color_blueviolet,left);
-                margin-top: 10px;
-                padding-left: 260px;
-                box-sizing: border-box;
-            }
             .account_number{
+                margin-top: 50px;
                 .user_account{
                     .mixin_float(280px,45px,left);
                 }

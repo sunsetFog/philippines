@@ -4,115 +4,40 @@
       <div class="entertainment">
           <img class="login_logo" src="../../../static/dream/login/logo2.png"/>
           <img class="big_fish" src="../../../static/dream/login/fish.png"/>
-            <div class="sign_frame" v-if="active_state==1">
+            <div class="sign_frame">
                 <div class="code_and_service">
-                    <div class="customer_service"></div>
+                    <div class="customer_service" @click="customerService()"></div>
                 </div>
                 <div class="form_information">
                     <div class="account">
                         <span>账号:</span>
-                        <input v-model="account_number" placeholder="请输入账号"></input>
+                        <input v-model.trim="account_number" maxlength="30" placeholder="请输入账号"></input>
                     </div>
                     <div class="password_enter">
                         <span>密码:</span>
-                        <input type="password" maxlength="20" v-model="password_number" placeholder="请输入登陆密码"></input>
+                        <input :type="eyeType" maxlength="25" v-model.trim="password_number" placeholder="请输入登陆密码"></input>
+                        <img v-if="eyeType=='text'" @click="eyeMeans" class="zhengyan" src="../../../static/dream/login/zhengyan.png"/>
+                        <img v-else class="biyan" @click="eyeMeans" src="../../../static/dream/login/biyan.png"/>
                     </div>
                     <div class="remember_and_forget">
                         <div class="rectangle" @click="rememberMeans()"><img v-show="remember_checked" src="../../../static/dream/login/jizhu.png"/></div>
                         <span>记住密码</span>
-                        <div class="rapid_registration" @click="rapidRegistration(2)">快速注册</div>
-                        <span>忘记密码</span>
+                        <!-- <div class="rapid_registration" @click="rapidRegistration('register')">快速注册</div> -->
+                        <!-- <span @click="forgetPassword">忘记密码</span> -->
                     </div>
-                    <div class="sign_in" @click="signIn"></div>
+                    <div class="login_register">
+                        <div class="sign_in" @click="signIn"></div>
+                        <div class="is_register" @click="rapidRegistration('register')"></div>
+                    </div>
                     <div class="recommend"><span></span><span>推荐最优路线</span><span></span></div>
-                    <div class="optimal" @click="rapidRegistration(3)"></div>
+                    <div class="optimal" @click="rapidRegistration('line')"></div>
                     <div class="shortcut"></div>
-                </div>
-            </div>
-
-            <div class="register_frame" v-if="active_state==2">
-                <div class="theme">
-                    <div class="theme_title">注册钻石游戏</div>
-                    <div class="customer_service"></div>
-                </div>
-                <div class="user_name">
-                    <div class="user_name_left">
-                        <span>用户名:</span>
-                        <input v-model="user_name" placeholder="请输入用户名"></input>
-                    </div>
-                    <div class="user_name_right">由字母或数字组成的6-16个字母,不能连续4个相同字符，首字符不能为字母o或数字0</div>
-                </div>
-                <div class="nickname">
-                    <div class="user_name_left">
-                        <span>玩家昵称:</span>
-                        <input v-model="player_nickname" placeholder="请输入玩家昵称"></input>
-                    </div>
-                    <div class="user_name_right">由2至6个字母组成</div>
-                </div>
-                <div class="sign_password">
-                    <div class="user_name_left">
-                        <span>登陆密码:</span>
-                        <input type="password" maxlength="20" v-model="login_password" placeholder="请输入登陆密码"></input>
-                    </div>
-                    <div class="user_name_right">字母和数字组成6-16个字符（必须包含数字和字母）且连续三位字符不相同</div>
-                </div>
-                <div class="verification_code">
-                    <div class="user_name_left">
-                        <span>验证码:</span>
-                        <input style="width: 150px;float: left;" v-model="verification_code" placeholder="请输入验证码"></input>
-                        <div class="very_code"></div>
-                    </div>
-                    <div class="user_name_right">验证码不能为空</div>
-                </div>
-                <div class="submission"><span></span></div>
-                <div class="already_owned"><span @click="rapidRegistration(1)">已有账号登陆</span></div>
-            </div>
-
-
-            <div class="circuit_detection" v-if="active_state==3">
-                <div class="testing_header">
-                    <label>线路检测</label>
-                    <img @click="rapidRegistration('home')" src="../../../static/dream/login/kuaisudenglu.png"/>
-                    <span>快速登陆</span>
-                </div>
-                <div class="example_detection">
-                    <div class="line_content" v-for="(item,index) in line_list">
-                        <div class="line_data" v-if="item.state==1">
-                            <img :src="item.circular1"/>
-                            <span :style="{color: item.color}">{{item.title}}</span>
-                            <div class="progress_bar" :style="{backgroundImage: item.signal1}">
-                                <div :style="{width: item.width,backgroundImage: item.progress1}"></div>
-                            </div>
-                            <span :style="{color: item.color}">0.169秒</span>
-                            <img :src="item.type1"/>
-                            <img :src="item.enter1"/>
-                        </div>
-                        <div class="line_data" v-if="item.state==2">
-                            <img :src="item.circular2"/>
-                            <span :style="{color: item.color}">{{item.title}}</span>
-                            <div class="progress_bar" :style="{backgroundImage: item.signal2}">
-                                <div :style="{width: item.width,backgroundImage: item.progress2}"></div>
-                            </div>
-                            <span :style="{color: item.color}">0.169秒</span>
-                            <img :src="item.type2"/>
-                            <img :src="item.enter2"/>
-                        </div>
-                        <div class="line_data" v-if="item.state==3">
-                            <img :src="item.circular3"/>
-                            <span :style="{color: item.color}">{{item.title}}</span>
-                            <div class="progress_bar" :style="{backgroundImage: item.signal3}">
-                                <div :style="{width: item.width,backgroundImage: item.progress3}"></div>
-                            </div>
-                            <span :style="{color: item.color}">0.169秒</span>
-                            <img :src="item.type3"/>
-                            <img :src="item.enter3"/>
-                        </div>
-                    </div>
                 </div>
             </div>
             
       </div>
-    <footers :vip_foot="vip_foot"></footers>
+
+    <footers :vip_foot="false"></footers>
   </section>
 </template>
 
@@ -122,31 +47,11 @@ export default{
     components: {footers},
   data(){
     return{
-        vip_foot: false,
-        active_state: 1,
         account_number: '',//登陆账号
         password_number: '',//登陆密码
         remember_checked: false,
-        user_name: '',//用户名
-        player_nickname: '',//玩家昵称
-        login_password: '',//注册密码
-        verification_code: '',//验证码
-        line_list: [
-            {state: 1,title: '线路1',color: '#1dc570',time: '0.169秒',width: '70%'},
-            {state: 1,title: '线路1',color: '#1dc570',time: '0.169秒',width: '40%'},
-            {state: 1,title: '线路1',color: '#1dc570',time: '0.169秒',width: '50%'},
-            {state: 2,title: '线路2',color: '#ff9f00',time: '0.169秒',width: '25%'},
-            {state: 2,title: '线路2',color: '#ff9f00',time: '0.169秒',width: '90%'},
-            {state: 3,title: '线路3',color: '#f71210',time: '0.169秒',width: '80%'},
-            {state: 3,title: '线路3',color: '#f71210',time: '0.169秒',width: '30%'},
-            {state: 3,title: '线路3',color: '#f71210',time: '0.169秒',width: '100%'}
-        ],
+        eyeType: 'password'
     }
-  },
-  watch:{
-      remember_checked(cur,old){
-          //console.log('checked',cur,old,this.remember_checked);
-      }
   },
   mounted(){
       var that = this;
@@ -156,10 +61,7 @@ export default{
       }
   },
   created(){
-    //   console.log('@@@route%%%',this.$route);
-      if(typeof this.$route.params.line!="undefined"){
-          this.rapidRegistration(3);
-      }else{
+      if(refreshWeb.state==''){
           flashGameplayer();
       }
       if(localStorage.getItem('account')){
@@ -172,27 +74,17 @@ export default{
           this.remember_checked = false;
       }
       
-      for(let i=0;i<this.line_list.length;i++){
-          this.line_list[i].circular1 = '../../../static/dream/login/luxian1.png';
-          this.line_list[i].circular2 = '../../../static/dream/login/luxian2.png';
-          this.line_list[i].circular3 = '../../../static/dream/login/luxian3.png';
-          this.line_list[i].signal1 = 'url(../../../static/dream/login/luxian1jindu.png)';
-          this.line_list[i].signal2 = 'url(../../../static/dream/login/luxian2jindu.png)';
-          this.line_list[i].signal3 = 'url(../../../static/dream/login/luxian3jindu.png)';
-          this.line_list[i].type1 = '../../../static/dream/login/luxian1shuoming.png';
-          this.line_list[i].type2 = '../../../static/dream/login/luxian2shuoming.png';
-          this.line_list[i].type3 = '../../../static/dream/login/luxian3shuoming.png';
-          this.line_list[i].enter1 = '../../../static/dream/login/luxian1jinru.png';
-          this.line_list[i].enter2 = '../../../static/dream/login/luxian2jinru.png';
-          this.line_list[i].enter3 = '../../../static/dream/login/luxian3jinru.png';
-          this.line_list[i].progress1 =  'url(../../../static/dream/login/luxian11jindu.png)';
-          this.line_list[i].progress2 = 'url(../../../static/dream/login/luxian22jindu.png)';
-          this.line_list[i].progress3 = 'url(../../../static/dream/login/luxian33jindu.png)';
-      }
-    //   console.log('lin++list%%',this.line_list);
+
     this.keyEnter();
   },
   methods: {
+      eyeMeans(){
+          if(this.eyeType == 'password'){
+              this.eyeType = 'text';
+          }else{
+              this.eyeType = 'password';
+          }
+      },
       keyEnter(){
             let that = this;
             document.onkeypress = function(e) {
@@ -209,15 +101,22 @@ export default{
                 }
             };
       },
-      rapidRegistration(index){
-          if(index=='home'){
-
-          }else{
-              this.active_state = index;
+      customerService(){
+          window.open("https://chat32.live800.com/live800/chatClient/chatbox.jsp?companyID=12698&enterurl=&codeType=custom&info=");
+      },
+      rapidRegistration(value){
+          if(value=='register'){
+              if(refreshWeb.state=='init'){
+                  this.$router.push({path: '/register'});
+              }else{
+                  this.$message.error('加载中');
+              }
+          }else if(value=='line'){
+              this.$router.push({path: '/line'});
           }
       },
       signIn(){
-          console.log('yuming#####',window.location.host);
+        //   console.log('yuming#####',window.location.host);
             var that = this;
             if(that.account_number==''&&that.password_number==''){
                 that.$message.error('请输入账号和密码!');
@@ -230,9 +129,8 @@ export default{
                 return;
             }
             if(refreshWeb.state=='init'){
-                console.log('login-99');
                 web.game_login(that.account_number,that.password_number,window.location.host,function() { 
-                    console.log('login***');
+                    that.$store.dispatch('getPlayerInfo',web.game_getPlayer());
                     if(that.remember_checked==true){
                         localStorage.setItem('account',that.account_number);
                         localStorage.setItem('password',that.password_number);
@@ -242,8 +140,6 @@ export default{
                     }
                     sessionStorage.setItem('account_number',that.account_number);
                     sessionStorage.setItem('password_number',that.password_number);
-                    let val = web.game_getPlayer();
-                    sessionStorage.setItem('token',val.token);
                     that.$router.push({path: '/home'});
                 });
             }else{
@@ -336,10 +232,27 @@ export default{
                         margin-right: 15px;
                     }
                     input{
-                        .mixin_input(70%,48px);
+                        .mixin_input(60%,48px);
                         background: none;
+                        float: left;
                         color: @color_label;
                         font-size: @font_size20;
+                    }
+                    .zhengyan{
+                        width: 29px;
+                        height: 16px;
+                        font-size: 20px;
+                        float: right;
+                        margin: 17px 20px 0px 0px;
+                        cursor: pointer;
+                    }
+                    .biyan{
+                        width: 34px;
+                        height: 9px;
+                        font-size: 20px;
+                        float: right;
+                        margin: 20.5px 20px 0px 0px;
+                        cursor: pointer;
                     }
                 }
                 .password_enter{
@@ -394,15 +307,31 @@ export default{
                         color: @color_violet;
                     }
                 }
-                .sign_in{
-                    .mixin_button(100%,50px,none,auto);
-                    border-radius: 4px;
-                    font-size: 16px;
-                    font-weight: 600;
-                    .mixin_image(url('../../../static/dream/login/denglu.png'));
-                }
-                .sign_in:hover{
-                    .mixin_image(url('../../../static/dream/login/denglu_hover.png'));
+                .login_register{
+                    width: 100%;
+                    height: 50px;
+                    .sign_in{
+                        .mixin_button(48%,50px,none,auto);
+                        float: left;
+                        border-radius: 4px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        .mixin_image(url('../../../static/dream/login/denglu.jpg'));
+                    }
+                    .sign_in:hover{
+                        .mixin_image(url('../../../static/dream/login/denglu-hover.jpg'));
+                    }
+                    .is_register{
+                        .mixin_button(48%,50px,none,auto);
+                        float: right;
+                        border-radius: 4px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        .mixin_image(url('../../../static/dream/login/kuaisuzhuce.jpg'));
+                    }
+                    .is_register:hover{
+                        .mixin_image(url('../../../static/dream/login/kuaisuzhuce-hover.jpg'));
+                    }
                 }
                 .recommend{
                     .mixin_div(100%,50px,none,@color_violet,center);
@@ -453,181 +382,8 @@ export default{
                 }
             }
         }
-        .register_frame{
-            width: 755px;
-            height: 430px;
-            .mixin_image(url('../../../static/dream/login/kuankuan.png'));
-            position: absolute;
-            top: 290px;
-            left: 50%;
-            margin-left: -377.5px;
-            padding: 0px 0px 0px 30px;
-            box-sizing: border-box;
-            .theme{
-                width: 100%;
-                height: 70px;
-                position: relative;
-                .theme_title{
-                    .mixin_div(200px,70px,none,#4cf200,center);
-                    font-weight: 600;
-                    font-size: 30px;
-                    text-shadow: 2px 2px 0px @color_stroke;
-                    position: absolute;
-                    top: 0px;
-                    left: 0px;
-                }
-                .customer_service{
-                    width: 105px;
-                    height: 34px;
-                    .mixin_image(url('../../../static/dream/login/kefu.png'));
-                    cursor: pointer;
-                    position: absolute;
-                    top: 3px;
-                    right: 3px;
-                }
-                .customer_service:hover{
-                    .mixin_image(url('../../../static/dream/login/kefu_hover.png'));
-                }
-            }
-            .user_name,.nickname,.sign_password,.verification_code{
-                width: 100%;
-                height: 50px;
-                .user_name_left{
-                    .mixin_float(55%,50px,left);
-                    .mixin_image(url('../../../static/dream/login/juxingkuang.png'));
-                    span{
-                        .mixin_span(30%,50px,none,@color_label,right);
-                        font-weight: 600;
-                        float: left;
-                        font-size: 24px;
-                    }
-                    input{
-                        .mixin_input(70%,48px);
-                        background: none;
-                        color: @color_label;
-                        font-size: 20px;
-                    }
-                    .very_code{
-                        .mixin_float(80px,48px,right);
-                    }
-                }
-                .user_name_right{
-                    width: 45%;
-                    height: 50px;
-                    float: right;
-                    color: @color_violet;
-                    text-align: left;
-                    padding: 6px 0px 0px 10px;
-                    box-sizing: border-box;
-                }
-            }
-            .nickname,.sign_password,.verification_code{
-                margin-top: 15px;
-            }
-            .submission{
-                width: 100%;
-                height: 50px;
-                margin-top: 15px;
-                span{
-                    .mixin_span(405px,50px,none,@color_white,left);
-                    margin: 0 auto;
-                    .mixin_image(url('../../../static/dream/login/zhucetijiao.png'));
-                }
-            }
-            .already_owned{
-                width: 100%;
-                height: 45px;
-                span{
-                    .mixin_span(auto,30px,none,@color_violet,center);
-                    margin-top: 10px;
-                    cursor: pointer;
-                }
-            }
-        }
 
-        .circuit_detection{
-            width: 660px;
-            height: 450px;
-            .mixin_image(url('../../../static/dream/login/luxiankuan.png'));
-            position: absolute;
-            top: 290px;
-            left: 50%;
-            margin-left: -330px;
-            padding: 10px 30px 0px 30px;
-            box-sizing: border-box;
-            .testing_header{
-                width: 100%;
-                height: 60px;
-                label{
-                    .mixin_span(auto,60px,none,@color_violet,left);
-                    float: left;
-                    font-size: 24px;
-                }
-                span{
-                    .mixin_span(auto,60px,none,#e8e7ed,left);
-                    float: right;
-                    margin-right: 5px;
-                    font-size: @font_size16;
-                    text-shadow: 1px 1px 2px @color_stroke;
-                }
-                img{
-                    .mixin_img(50px,50px);
-                    float: right;
-                    margin-top: 3px;
-                }
-            }
-            .example_detection{
-                width: 580px;
-                height: 350px;
-                margin: 5px 0px 0px 10px;
-                padding: 12px 0px 0px 22px;
-                box-sizing: border-box;
-                .line_content{
-                    width: 100%;
-                    height: 30px;
-                    margin-bottom: 10px;
-                    .line_data{
-                        width: 100%;
-                        height: 30px;
-                        img:nth-of-type(1){
-                            .mixin_img(10px,10px);
-                            float: left;
-                            margin-top: 10px;
-                        }
-                        span:nth-of-type(1){
-                            .mixin_span(80px,30px,none,@color_white,left);
-                            float: left;
-                            margin-left: 10px;
-                        }
-                        .progress_bar{
-                            .mixin_float(152px,20px,left);
-                            margin-top: 5px;
-                            background-size: 100% 100%;
-                            background-repeat: no-repeat;
-                            div{
-                                height: 20px;
-                                background: none;
-                                background-size: 152px 20px;
-                            }
-                        }
-                        span:nth-of-type(2){
-                            .mixin_span(90px,30px,none,@color_white,center);
-                            float: left;
-                        }
-                        img:nth-of-type(2){
-                            .mixin_img(50px,25px);
-                            float: left;
-                            margin-top: 2px;
-                        }
-                        img:nth-of-type(3){
-                            .mixin_img(70px,30px);
-                            float: left;
-                            margin-left: 70px;
-                        }
-                    }
-                }
-            }
-        }
+
     }
 
 

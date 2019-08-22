@@ -2,8 +2,8 @@
     <section id="mail">
         <el-dialog
         :visible.sync="rechargeActive"
-        width="1215px"
-        top="100px"
+        width="6.33rem"
+        top="0.53rem"
         center>
         <div slot="title">邮件</div>
         <div class="varieties_content">
@@ -118,7 +118,12 @@ export default {
                     that.mail_list.push(res.list[k]);
                 }
                 that.pagination.pagesize = 10;
-                that.pagination.total = res.totalrows;
+                if(res.totalrows<=50){
+                    that.pagination.total = res.totalrows;
+                }else{
+                    that.pagination.total = 50;
+                }
+                
             })
         },
         consult(index,value){

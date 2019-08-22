@@ -1,5 +1,6 @@
 <template>
     <section id="home">
+        <div class="cover_up" :style="{height: cover_height}" v-show="cover_active" @click="judgeToken()"></div>
           <div class="header_info">
             <div class="head_content">
               <div class="reserve">
@@ -8,18 +9,18 @@
                   </ul>
               </div>
                   <div class="dream_login" v-if="safeActive">
-                      <div class="nickname"><input v-model="account_number" type="text" placeholder="账号" maxlength="30"/></div>
-                      <div class="password"><input type="password" v-model="password_number" placeholder="密码" maxlength="30"/></div>
+                      <div class="nickname"><input v-model.trim="account_number" type="text" placeholder="账号" maxlength="30"/></div>
+                      <div class="password"><input type="password" v-model.trim="password_number" placeholder="密码" maxlength="30"/></div>
                       <button class="sign_in" @click="signIn"></button>
-                      <button class="register"></button>
+                      <button class="register" @click="registerMeans"></button>
                   </div>
                   <div class="recharge_example" v-if="!safeActive">
                     <div class="example_contain">
                       <button class="drawing" @click="rechargeMeans(2)"></button>
                       <button class="recharge" @click="rechargeMeans(1)"></button>
                       <span class="exit_login" @click="safeExit()">安全退出</span>
-                      <div class="balance"><span>余额&nbsp;:</span><span v-if="player_info">￥{{money.toFixed(2)}}</span></div>
-                      <div class="welcome" v-if="player_info"><img src="../../static/dream/home/zhanghu.png"/><span>欢迎你,{{player_info.playerInfo.nickname}}</span></div>
+                      <div class="balance"><span>余额&nbsp;:</span><span>￥{{money}}</span></div>
+                      <div class="welcome"><img src="../../static/dream/home/zhanghu.png"/><span>欢迎你,{{player_info.nickname}}</span></div>
                     </div>
                   </div>
 
@@ -67,10 +68,12 @@
         <manage-alipay ref="manageAlipay"></manage-alipay>
         <add-alipay ref="addAlipay"></add-alipay>
         <know ref="know"></know>
+        <recharge-record ref="rechargeRecord"></recharge-record>
     </section>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
   export default {
     name: 'Main',
     data () {
@@ -79,20 +82,30 @@
         tabs_bar: [{title: '首页',active: false,path: '/home'},{title: '电子竞技',active: false,path: '/afteryards'},{title: '真人娱乐',active: false,path: '/realperson'},{title: '体育竞技',active: false,path: '/sports'},{title: '优惠活动',active: false,path: '/videogame'},{title: '代理系统',active: false,path: '/agentsystem'},{title: '管理中心',active: false,path: '/crux'}],
         fixed_bar: [{url: '../../static/dream/home/jiangyuan-nomal.png'},{url: '../../static/dream/home/kefu_nomal.png'},{url: '../../static/dream/home/zhiding_nomal.png'}],
         fixed_state: true,
-        player_info: '',
-        money: '',
         safeActive: false,
         account_number: '',//登陆账号
         password_number: '',//登陆密码
+        cover_height: '0px',
+        cover_active: false
       }
     },
     created(){
       this.tabs_bar[this.$route.meta.navigation].active = true;
-      if('undefined' != typeof web){
-          this.player_info = web.game_getPlayer();
-          this.money = this.player_info.money/10000;
-          console.log('player@@@##',this.player_info);
-      }
+    },
+    mounted(){
+        var that = this;
+        window.onresize = function temp5(){
+            let overallApp = document.getElementById('home');
+            if(overallApp!=null&&that.cover_active==true){
+                that.coverMeans();
+            }
+        }
+    },
+    computed: {
+        ...mapGetters([
+            'player_info',
+            'money'
+        ])
     },
     watch: {
         $route(to,from){
@@ -106,6 +119,13 @@
         }
     },
     methods:{
+        coverMeans(){
+            let cover = document.body.clientHeight-50;
+            this.cover_height = cover + 'px';
+        },
+        judgeToken(){
+            this.$means.judgeToken();
+        },
         hostMeans(value,response,count){
             if(value=='managebank'){
                 this.$refs.manageBank.changeMeans();
@@ -137,14 +157,21 @@
                 }else if(response=='alipay'){
                     this.$refs.withdrawal.getAlipayJson();
                 }
+            }else if(value=='portrait'){
+                if(response=='head'){
+                    this.portrait.head = count;
+                }else if(response=='frame'){
+                    this.portrait.frame = count;
+                }
+            }else if(value=='rechargerecord'){
+                this.$refs.rechargeRecord.changeMeans();
             }
         },
         rechargeMeans(index){
-          web.game_exit_scene(function(value){});
           if(index==1){
             this.$refs.recharge.changeMeans();
           }else if(index==2){
-            this.$refs.withdrawal.changeMeans(this.money.toFixed(2));
+            this.$refs.withdrawal.changeMeans(this.money);
           }
         },
         //导航栏
@@ -156,7 +183,6 @@
           }else{
             this.$message.success('敬请期待！');
           }
-          web.game_exit_scene(function(value){});
         },
         //初始tab
         tabEmptyActive(){
@@ -181,16 +207,16 @@
           if(index==0){
               window.open('https://www.manycai.com/index/index');
           }else if(index==1){
-              if(this.player_info.playerInfo.sex==1){
+              if(this.player_info.sex==1){
                 var sex = '男';
-              }else if(this.player_info.playerInfo.sex==2){
+              }else if(this.player_info.sex==2){
                 var sex = '女';
               }
               let json = {
                   enterurl: window.location.host+this.$route.path,
                   userId: this.player_info.uid,//用户id
                   loginname: this.player_info.loginame,//登录名
-                  grade: this.player_info.playerInfo.vip,//用户等级
+                  grade: this.player_info.vip,//用户等级
                   name: this.player_info.nickname,//用户名称
                   gender: sex,//性别
                   mobileNo: '',//手机号
@@ -233,13 +259,17 @@
         },
         safeExit(){
             var that = this;
-            web.game_exit_scene(function(value){});
             web.game_exit(function(){
               that.account_number = '';
               that.password_number = '';
               that.safeActive = true;
               sessionStorage.removeItem('token');
+              that.cover_active = true;
+              that.coverMeans();
             })
+        },
+        registerMeans(){
+            this.$router.push({path: '/register'});
         },
         signIn(){
             var that = this;
@@ -254,19 +284,18 @@
                   return;
               }
             web.game_login(that.account_number,that.password_number,window.location.host,function() {
-                let val = web.game_getPlayer();
-                sessionStorage.setItem('token',val.token);
+                that.$store.dispatch('getPlayerInfo',web.game_getPlayer());
                 sessionStorage.setItem('account_number',that.account_number);
                 sessionStorage.setItem('password_number',that.password_number);
                 that.safeActive = false;
                 that.$router.push({path: '/home'});
-                that.player_info = web.game_getPlayer();
+                that.cover_active = false;
             });
         },
         lineMeans(index){
-          web.game_exit_scene(function(value){});
-          if(index==2){
-            this.$router.push({name: 'Login',params:{line: 'line'}});
+          this.$means.judgeToken();
+          if(index==2&&this.$means.judgeToken()!=false){
+            this.$router.push({path: '/line'});
           }
         }
     },
@@ -281,6 +310,13 @@
 
 <style lang="less" scoped>
 #home{
+  .cover_up{
+      width: 100%;
+      position: fixed;
+      top: 50px;
+      left: 0px;
+      z-index: 999;
+  }
   .tabs_active{
     color: #ffea00;
     .mixin_image(url('../../static/dream/home/tabs_active.png'));

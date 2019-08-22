@@ -2,9 +2,10 @@
     <section id="neutralGear">
         <img src="../../../static/dream/portrait/logo2.png"/>
         <div class="progress_example">
-            <span :style="{width: percentage+'px',borderTopRightRadius: radius.top_right,borderBottomRightRadius: radius.bottom_right}"></span>
+            <span :style="{width: percentage+'%',borderTopRightRadius: radius.top_right,borderBottomRightRadius: radius.bottom_right}"></span>
             <!-- <el-progress :percentage="percentage" :color="customColor" :show-text="false" :width="155" :stroke-width="20"></el-progress> -->
         </div>
+        <game-theme ref="subject" :subject="true" @interaction="variableGear"></game-theme>
     </section>
 </template>
 
@@ -29,37 +30,26 @@ export default {
         this.radius.top_right = '0px';
         this.radius.bottom_right = '0px';
         this.timerKey = setInterval(this.timerMeans,200);
-        this.variableGear();
         flashGameplayer();
     },
     methods:{
         timerMeans(){
-            if(this.percentage>=800){
+            if(this.percentage>=83.7){
                 clearInterval(this.timerKey);
             }else{
-                this.percentage+=80;
+                this.percentage+=9.3;
             }
             // console.log('width%%',this.percentage);
         },
-        variableGear(){
+        variableGear(value){
             var that = this;
-            Object.defineProperty(refreshWeb, 'state', {
-                get: function() {
-                    return 'state';
-                },
-                set: function(value) {
-                    web.game_login(sessionStorage.getItem('account_number'),sessionStorage.getItem('password_number'),window.location.host,function() { 
-                        that.percentage = 848;
-                        that.radius.top_right = '15px';
-                        that.radius.bottom_right = '15px';
-                        let val = web.game_getPlayer();
-                        sessionStorage.setItem('token',val.token);
-                        that.$router.push({path: '/home'});
-                        console.log('loading%%%');
-                    });
-
-
-                }
+            web.game_login(sessionStorage.getItem('account_number'),sessionStorage.getItem('password_number'),window.location.host,function() { 
+                that.$store.dispatch('getPlayerInfo',web.game_getPlayer());
+                that.percentage = 98.8;
+                that.radius.top_right = '15px';
+                that.radius.bottom_right = '15px';
+                that.$router.push({path: '/home'});
+                console.log('loading%%%');
             });
         }
     }

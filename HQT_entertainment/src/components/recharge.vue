@@ -2,19 +2,22 @@
     <section id="game_recharge">
         <el-dialog
         :visible.sync="rechargeActive"
-        width="1100px"
-        top="190px"
+        width="5.73rem"
+        top="0.99rem"
         center>
         <div slot="title">充值</div>
         <div class="varieties_content">
-            <div class="payment_type">
-                <ul>
-                    <li v-for="(item,index) in pay_types" :class="{'type_active':item.active}" @click="paymentType(index)">
-                        <span>{{item.name}}</span>
-                        <span v-if="item.active"></span>
-                    </li>
-                </ul>
+            <div class="fashion_way">
+                <div class="payment_type">
+                    <ul>
+                        <li v-for="(item,index) in pay_types" :class="{'type_active':item.active}" @click="paymentType(index)">
+                            <span>{{item.name}}</span>
+                            <span v-if="item.active"></span>
+                        </li>
+                    </ul>
+                </div>
             </div>
+                
             <div class="payment_content">
                 <div class="payment_methods">
                     <ul>
@@ -23,8 +26,8 @@
                 </div>
                 <div class="recharge_money">
                     <span>充值金额:</span>
-                    <input type="text" v-model="money" maxlength="20" placeholder="请输入充值金额，最低100元"/>
-                    <img src="../../static/dream/recharge/xiaochu.png" @click="eliminate()"/>
+                    <input type="text" v-model.trim="money" maxlength="20" placeholder="请输入充值金额，最低100元"/>
+                    <img src="../../static/dream/recharge/xiaochu.png" @click="money = ''"/>
                 </div>
                 <div class="recharge_range">充值范围100-10000元,比例为1:1</div>
                 <div class="money_example">
@@ -36,6 +39,10 @@
                 </div>
                 <div class="payment_button">
                     <button @click="confirmRecharge()">确认充值</button>
+                </div>
+                <div class="position_record">
+                    <span></span>
+                    <button @click="rechargeRecord()">充值记录</button>
                 </div>
             </div>
         </div>
@@ -135,12 +142,11 @@ export default {
         moneyDown(index){
             this.money_list[index].padding = '3px';
         },
-        eliminate(){
-            this.money = '';
+        rechargeRecord(){
+            this.$parent.hostMeans('rechargerecord');
         },
         confirmRecharge(){
             var that = this;
-            console.log('index%%',that.first_index,that.second_index);
             if(that.money == ''){
                 that.$message.error('请输入充值金额！');
                 return;
@@ -166,40 +172,50 @@ export default {
     .varieties_content{
         width: 100%;
         height: 620px;
-        .payment_type{
-            .mixin_float(155px,620px,left);
-            background: @color_tone20;
-            font-size: @font_size20;
-            .type_active{
-                .mixin_image(url('../../static/dream/recharge/beijingkuang.png'));
-            }
-            ul{
-                li{
-                    .mixin_li(155px,65px);
-                    margin-top: 50px;
-                    color: @color_white;
-                    background: @color_darkgray;
-                    cursor: pointer;
-                    position: relative;
-                    span:nth-of-type(1){
-                        .mixin_span(100%,65px,none,@color_white,center);
-                        position: absolute;
-                        left: 0px;
-                        top: 0px;
-                    }
-                    span:nth-of-type(2){
-                        .mixin_span(10px,65px,none,@color_white,center);
-                        position: absolute;
-                        right: -10px;
-                        top: 0px;
-                        .mixin_image(url('../../static/dream/recharge/zhizhen.png'));
+        .fashion_way{
+            .mixin_float(190px,620px,left);
+            overflow: auto;
+            .payment_type{
+                width: 155px;
+                min-height: 620px;
+                float: left;
+                background: @color_tone20;
+                font-size: @font_size20;
+                .type_active{
+                    .mixin_image(url('../../static/dream/recharge/beijingkuang.png'));
+                }
+                ul{
+                    width: 100%;
+                    min-height: 620px;
+                    padding-bottom: 135px;
+                    box-sizing: border-box;
+                    li{
+                        .mixin_li(155px,65px);
+                        margin-top: 50px;
+                        color: @color_white;
+                        background: @color_darkgray;
+                        cursor: pointer;
+                        position: relative;
+                        span:nth-of-type(1){
+                            .mixin_span(100%,65px,none,@color_white,center);
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;
+                        }
+                        span:nth-of-type(2){
+                            .mixin_span(10px,65px,none,@color_white,center);
+                            position: absolute;
+                            right: -10px;
+                            top: 0px;
+                            .mixin_image(url('../../static/dream/recharge/zhizhen.png'));
+                        }
                     }
                 }
             }
         }
         .payment_content{
-            .mixin_float(943px,620px,right);
-            padding: 0px 45px 0px 45px;
+            .mixin_float(908px,620px,right);
+            padding: 0px 45px 0px 25px;
             box-sizing: border-box;
             .payment_methods{
                 width: 100%;
@@ -290,6 +306,23 @@ export default {
                 }
                 button:hover{
                     background: @color_white2_hover;
+                }
+            }
+            .position_record{
+                width: 100%;
+                height: 30px;
+                position: relative;
+                span{
+                    .mixin_span(155px,20px,@color_tone20,@color_white,left);
+                    position: absolute;
+                    left: -215px;
+                    top: -41px;
+                }
+                button{
+                    .mixin_button(155px,65px,@color_darkgray,@color_white);
+                    position: absolute;
+                    left: -215px;
+                    top: -21px;
                 }
             }
         }

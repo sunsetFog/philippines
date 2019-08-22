@@ -6,7 +6,7 @@
             <iframe :src="agentSrc" id="mapFrame" class="mapFrame" ref="mapFrame" @load="systemMeans()"></iframe>
         </div>
     </div>
-    <footers :vip_foot="vip_foot"></footers>
+    <footers :vip_foot="false"></footers>
 </section>
 </template>
 
@@ -16,8 +16,7 @@ export default{
     components: {footers},
     data(){
         return{
-            agentSrc: '',
-            vip_foot: false,
+            agentSrc: ''
         }
     },
     created(){

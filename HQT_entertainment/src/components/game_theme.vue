@@ -36,6 +36,10 @@ export default {
                     return 'type';
                 },
                 set: function(value) {
+                    console.log('changjing%%%%%',value,that.$route.path);
+                    if(that.$route.path=='/register'){
+                        return;
+                    }
                     if(value=='999992'){
                         that.$router.push({path: '/home'});
                         web.game_exit_scene(function(value){});
@@ -55,10 +59,12 @@ export default {
 
                     },
                     set:function(value){
-                        if(value==1001||value==1002||value==1101||value==1102||value==1103||value==1104||value==1105||value==1201||value==1202||value==1203||value==1204||value==1301||value==1302||value==1303||value==1||value==2){
+                        if(value==1001||value==1002||value==1101||value==1102||value==1103||value==1104||value==1105||value==1201||value==1203||value==1204||value==1301||value==1302||value==1303||value==1||value==2){
                             that.$router.push({path: '/home'});
                             that.openFullScreen().close();
                             web.game_exit_scene(function(value){});
+                        }else if(value==1202){
+                            that.$router.push({path: '/login'});
                         }
                     }
                 },
@@ -71,10 +77,19 @@ export default {
                         that.$router.push({path: '/home'});
                         that.openFullScreen().close();
                         web.game_exit_scene(function(value){});
-                        that.$message.error('请求超时!');
+                        // that.$message.error('请求超时!');
                     }
                 },
                 move:{
+                    configurable: true,
+                    get:function(){
+
+                    },
+                    set:function(value){
+                        that.$emit('interaction',value);
+                    }
+                },
+                refresh:{
                     configurable: true,
                     get:function(){
 
@@ -111,6 +126,22 @@ export default {
                             type: 'error',
                             callback: action => {
 
+                            }
+                        });
+                    }
+                },
+                recharge:{
+                    configurable: true,
+                    get:function(){
+
+                    },
+                    set:function(value){
+                        that.$alert('充值成功', '温馨提示', {
+                            confirmButtonText: '确定',
+                            type: 'success',
+                            callback: action => {
+                                web.game_getPlayer().setMoney(value);
+                                that.$store.dispatch('getPlayerInfo',web.game_getPlayer());
                             }
                         });
                     }

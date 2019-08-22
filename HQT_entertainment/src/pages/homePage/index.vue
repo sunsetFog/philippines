@@ -21,13 +21,13 @@
                </div>
            </div>
            <div class="game_contain">
-                <el-carousel :interval="5000" arrow="always" :autoplay="false" trigger="click">
+                <el-carousel :interval="5000" arrow="never" indicator-position="none" :autoplay="false" trigger="click">
                     <el-carousel-item v-for="(val,keys) in game_list" :key="keys">
                         <div class="game_frame">
                             <div class="carousel_header"></div>
                             <div class="carousel_contain">
                                 <ul>
-                                    <li v-for="(item,index) in val.pages" :style="{margin: item.margin}">
+                                    <li v-for="(item,index) in val.pages">
                                         <img :src="item.url" :style="{height: item.height,top: item.top}" @click="enterTheGame(index)"/>
                                     </li>
                                 </ul>
@@ -37,7 +37,7 @@
                 </el-carousel>
            </div>
        </div>
-       <footers :vip_foot="vip_foot"></footers>
+       <footers :vip_foot="false"></footers>
        <game-theme ref="subject" :subject="true" @interaction="setMove"></game-theme>
     </section>
 </template>
@@ -48,26 +48,20 @@ export default{
     components: {footers},
     data(){
         return{
-            vip_foot: true,
             card_picture: [
-                {url: '../../../static/dream/home/photo2.jpg'},
-                {url: '../../../static/dream/home/banner.jpg'},
+                {url: '../../../static/dream/home/photo2.jpg'}
+                // {url: '../../../static/dream/home/banner.jpg'},
             ],
             game_list: [
                 {pages: [
                     {url: '../../../static/dream/home/longhudou.png',margin: '0px 5px 60px 0px',height: '100%',top: '0px'},
-                    {url: '../../../static/dream/home/baijiale.png',margin: '0px 5px 60px 0px',height: '315px',top: '-35px'},
-                    {url: '../../../static/dream/home/bairenniuniu.png',margin: '0px 5px 60px 0px',height: '340px',top: '-60px'},
+                    {url: '../../../static/dream/home/baijiale.png',margin: '0px 5px 60px 0px',height: '112.5%',top: '-12.5%'},
+                    {url: '../../../static/dream/home/bairenniuniu.png',margin: '0px 5px 60px 0px',height: '121.4%',top: '-21.4%'},
                     {url: '../../../static/dream/home/shuiguoji.png',margin: '0px 0px 60px 0px',height: '100%',top: '0px'},
-                    {url: '../../../static/dream/home/buyu.png',margin: '0px 5px 0px 0px',height: '328px',top: '-48px'},
+                    {url: '../../../static/dream/home/buyu.png',margin: '0px 5px 0px 0px',height: '117.1%',top: '-17.1%'},
                     {url: '../../../static/dream/home/shuihu.png',margin: '0px 5px 0px 0px',height: '100%',top: '0px'},
                     {url: '../../../static/dream/home/doudizhu.png',margin: '0px 5px 0px 0px',height: '100%',top: '0px'},
-                    {url: '../../../static/dream/home/honghei.png',margin: '0px 0px 0px 0px',height: '310px',top: '-30px'}
-                ]},
-                {pages: [
-                    {url: '../../../static/dream/home/longhudou.png',margin: '0px 5px 60px 0px',height: '100%',top: '0px'},
-                    {url: '../../../static/dream/home/baijiale.png',margin: '0px 5px 60px 0px',height: '315px',top: '-35px'},
-                    {url: '../../../static/dream/home/bairenniuniu.png',margin: '0px 5px 60px 0px',height: '340px',top: '-60px'}
+                    {url: '../../../static/dream/home/honghei.png',margin: '0px 0px 0px 0px',height: '110.7%',top: '-10.7%'}
                 ]}
             ],
             play_info: false,
@@ -149,14 +143,9 @@ export default{
             }
         },
         encapsulation(value){
-            if(sessionStorage.getItem('token')){
-                // this.$router.push({path: '/game'});
-                web.game_startGame(value);
-                web.game_back2GameFromLobby(false);
-                this.$refs.subject.openFullScreen();
-            }else{
-                this.$message.error('请先登录');
-            }
+            web.game_startGame(value);
+            web.game_back2GameFromLobby(false);
+            this.$refs.subject.openFullScreen();
         }
     }
 }
@@ -268,6 +257,30 @@ export default{
                                 z-index: 3;
                             }
                             
+                        }
+                        li:nth-of-type(1){
+                            margin: 0px 5px 60px 0px;
+                        }
+                        li:nth-of-type(2){
+                            margin: 0px 5px 60px 0px;
+                        }
+                        li:nth-of-type(3){
+                            margin: 0px 5px 60px 0px;
+                        }
+                        li:nth-of-type(4){
+                            margin: 0px 0px 60px 0px;
+                        }
+                        li:nth-of-type(5){
+                            margin: 0px 5px 0px 0px;
+                        }
+                        li:nth-of-type(6){
+                            margin: 0px 5px 0px 0px;
+                        }
+                        li:nth-of-type(7){
+                            margin: 0px 5px 0px 0px;
+                        }
+                        li:nth-of-type(8){
+                            margin: 0px 0px 0px 0px;
                         }
                     }
                 }

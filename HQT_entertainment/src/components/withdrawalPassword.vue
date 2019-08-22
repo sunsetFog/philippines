@@ -2,22 +2,22 @@
     <section id="withdrawalPassword">
         <el-dialog
         :visible.sync="rechargeActive"
-        width="780px"
-        top="190px"
+        width="4.07rem"
+        top="0.99rem"
         center>
         <div slot="title">重置提款密码</div>
         <div class="varieties_content">
             <div class="no_regist_tel" v-if="!regist_tel">
                 <label>旧密码:</label>
-                <input type="password" maxlength="20" v-model="old_password" placeholder="请输入旧密码"/>
+                <input type="password" maxlength="6" v-model.trim="old_password" placeholder="请输入旧密码"/>
             </div>
             <div class="write_new">
                 <label>新提款密码:</label>
-                <input type="password" maxlength="20" v-model="new_password" placeholder="请输入新提款密码"/>
+                <input type="password" maxlength="6" v-model.trim="new_password" placeholder="请输入新提款密码"/>
             </div>
             <div class="write_code" v-if="regist_tel">
                 <label>验证码:</label>
-                <input type="text" maxlength="20" v-model="verify_code" placeholder="请填写验证码"/>
+                <input type="text" maxlength="20" v-model.trim="verify_code" placeholder="请填写验证码"/>
                 <button @click="getAutoCode()" v-show="verify_active">获取验证码</button>
                 <button v-show="!verify_active">{{verify_time}}s</button>
             </div>
@@ -45,6 +45,16 @@ export default {
             verify_active: true,
             old_password: '',
             new_password: ''
+        }
+    },
+    watch:{
+        new_password(cur,old){
+            if(/[^\d]/g.test(cur)){
+                if(this.new_password.match(/[^\d]/g)!=null){
+                   this.$message.error('请输入六位数字的密码！');
+                }
+                this.new_password = this.new_password.replace(/[^\d]/g, '');
+            }
         }
     },
     methods:{
@@ -91,6 +101,9 @@ export default {
                     return;
                 }else if(that.new_password==''){
                     that.$message.error('请输入新密码！');
+                    return;
+                }else if(that.old_password==that.new_password){
+                    that.$message.error('新密码与旧密码一致了！');
                     return;
                 }
                 web.game_resetMoneyPass_noTel(that.new_password,that.old_password,function(res){

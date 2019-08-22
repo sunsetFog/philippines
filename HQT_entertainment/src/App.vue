@@ -15,7 +15,7 @@ export default {
     },
     watch: {
         $route(to, from){
-            if(to.path == '/home'){
+            if(to.path == '/home'||to.path == '/neutralgear'){
                 this.subject = false;
             }else{
                 this.subject = true;
@@ -27,6 +27,13 @@ export default {
                 window.dispatchEvent(new Event('resize'));
             }else{
                 purpleMagic(2);
+            }
+            
+            if(from.path == '/register'){
+              console.log('退出注册');
+              web.game_register_exit();
+              // web.game_exit(function(){});
+              // web.game_exit_scene(function(value){});
             }
         }
     },

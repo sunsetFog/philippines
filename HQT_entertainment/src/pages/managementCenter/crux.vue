@@ -5,62 +5,69 @@
                 <div class="user_title">个人信息</div>
                 <div class="user_contain">
                     <div class="user_info">
-                        <img :src="portrait.head"/>
+                        <img :src="portrait.head" @click="portraitMeans()"/>
                         <img :src="portrait.frame"/>
-                        <span v-if="player_info">{{player_info.playerInfo.nickname}}</span>
+                        <span>{{player_info.nickname}}</span>
                     </div>
-                    <div class="account_balance"><label>账户余额:</label>
-                    <span v-if="player_info"><img v-for="(item,index) in number_money" :src="number_count[item].url"/></span>
-                    <span @click="payMeans(0)">充值</span></div>
+                    <div class="account_balance">
+                        <label>账户余额:</label>
+                        <span><img v-for="(item,index) in number_money" :src="number_count[item].url"/></span>
+                        <span @click="payMeans(0)">充值</span>
+                    </div>
+                    <div class="user_id">
+                        <label>我的ID:</label>
+                        <span>{{player_info.mShowUid}}</span>
+                        <button class="copy_dom" :data-clipboard-text="player_info.mShowUid" @click="copyText()">复制</button>
+                    </div>
                     <div class="nickname">
                         <label>昵称:</label>
-                        <span v-if="!nickname_state">{{player_info.playerInfo.nickname}}</span><i v-if="!nickname_state" class="el-icon-edit" @click="nickname_state = true"></i>
-                        <input type="text" v-if="nickname_state" placeholder="请输入昵称" v-model="nickname"/>
-                        <button v-if="nickname_state" @click="nickname_determine">确定</button>
+                        <div class="edit_name" v-if="!nickname_state">
+                            <span>{{player_info.nickname}}</span>
+                            <i class="el-icon-edit" @click="nicknameEdit()"></i>
+                        </div>
+                        <div class="nickname_select" v-else>
+                            <input type="text" placeholder="请输入昵称" v-model.trim="pet_name" ref="pet_name" @input="changeValue"/>
+                            <button @click="nickname_state = false">取消</button>
+                            <button @click="nicknameDetermine">确定</button>
+                        </div>
                     </div>
-                    <div class="gear_position"><label>棋牌档位:</label><span>50%</span><span>棋牌信息</span></div>
+                    <div class="sex_example">
+                        <label>性别:</label>
+                        <div class="edit_sex" v-if="sex_state==false">
+                            <span v-if="player_info.sex==1">男</span>
+                            <span v-if="player_info.sex==2">女</span>
+                            <i class="el-icon-edit" @click="sexEdit()"></i>
+                        </div>
+                        <div class="sex_select" v-else>
+                            <el-select v-model="sex_value" placeholder="请选择" size="mini">
+                                <el-option
+                                v-for="item in sex_options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <button @click="sex_state = false">取消</button>
+                            <button @click="sexDetermine()">确定</button>                           
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="information_right">
-                <div class="balance_contain">
-
-                    <div class="balance_list" v-for="(item,index) in balance_list" :class="{'margin_active':index==1||index==3}">
-                        <div class="theme">
-                            <div class="theme_left">{{item.theme}}</div>
-                            <div class="theme_right">{{item.balance_title}}</div>
-                        </div>
-                        <div class="balance_info">
-                            <div class="count">
-                                <div class="count_left"><span class="not_joined" v-if="item.money==''">用户尚未加入游戏</span><span v-else>{{item.money}}</span></div>
-                                <div class="count_right"><img src="../../../static/dream/center/yue.png"/></div>
-                            </div>
-                        </div>
+                <div class="archives_list" v-for="(item,index) in archives_list">
+                    <div class="archives_header"></div>
+                    <div class="archives_contain">
+                        <img :src="item.url"/>
+                        <span>{{item.theme}}</span>
+                        <span v-if="index!=2">{{item.explain}}</span>
+                        <span v-else>{{count_readed}}{{item.explain}}</span>
+                        <span @click="archivesMeans(index)">{{item.modify}}</span>
                     </div>
-
-                </div>
-                <div class="payment">
-                    <button v-for="(item,index) in pay_btn" @click="payMeans(index)">
-                        <img v-if="index!=3" :src="item.url"/>
-                        {{item.title}}
-                        <i v-if="index==3" class="el-icon-d-arrow-right"></i>
-                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="archives">
-            <div class="archives_list" v-for="(item,index) in archives_list" :class="{'archives_margin': index==0||index==2||index==4}">
-                <div class="archives_header"></div>
-                <div class="archives_contain">
-                    <img :src="item.url"/>
-                    <span>{{item.theme}}</span>
-                    <span v-if="index!=2">{{item.explain}}</span>
-                    <span v-else>{{count_readed}}{{item.explain}}</span>
-                    <span @click="archivesMeans(index)">{{item.modify}}</span>
-                </div>
-            </div>
-        </div>
 
         <recharge ref="recharge"></recharge>
         <withdrawal ref="withdrawal"></withdrawal>
@@ -75,30 +82,19 @@
         <consult ref="consult"></consult>
         <login-password ref="loginPassword"></login-password>
         <safe-deposit ref="safeDeposit"></safe-deposit>
+        <portrait ref="portrait"></portrait>
+        <recharge-record ref="rechargeRecord"></recharge-record>
     </section>
 </template>
 
 <script>
-
+import Clipboard from 'clipboard';
+import { mapGetters } from 'vuex';
 export default{
     name: 'parent',
     data(){
         return{
             nickname_state: false,
-            balance_list: [
-                {theme: '彩',balance_title: '彩票余额',money: '0.000'},
-                {theme: '彩',balance_title: '彩票余额',money: '0.000'},
-                {theme: '彩',balance_title: '彩票余额',money: '0.000'},
-                {theme: '彩',balance_title: '彩票余额',money: '0.000'},
-                {theme: '彩',balance_title: '彩票余额',money: ''},
-                {theme: '彩',balance_title: '彩票余额',money: '0.000'}
-            ],
-            pay_btn: [
-                {title: '充值',url: '../../../static/dream/center/chongzhi.png'},
-                {title: '提款',url: '../../../static/dream/center/tikuan.png'},
-                {title: '转账',url: '../../../static/dream/center/zhuanzhang.png'},
-                {title: '转账记录',url: ''}
-            ],
             archives_list: [
                 {theme: '登陆密码',explain: '6-16个字符',modify: '修改登录密码',url: '../../../static/dream/center/denglu.png'},
                 // {theme: '绑定银行卡',explain: '最多可绑定5张银行卡',modify: '绑定银行卡',url: '../../../static/dream/center/yinhangka.png'},
@@ -108,8 +104,7 @@ export default{
                 {theme: '公告',explain: '请随时关注最新广告',modify: '查看广告',url: '../../../static/dream/center/xinxi.png'},
                 {theme: '保险箱',explain: '用于存入和取出资金',modify: '查看保险箱',url: '../../../static/dream/center/baoxianxiang.png'}
             ],
-            player_info: '',
-            nickname: '',
+            pet_name: '',
             number_count: [
                 {url: '../../../static/dream/center/0.png'},
                 {url: '../../../static/dream/center/1.png'},
@@ -126,60 +121,117 @@ export default{
             ],
             number_money: [],
             portrait: {head: '',frame: ''},
-            money_total: '',//金额-子用
-            regist_tel: '',//是否手机邮件注册-子用
             count_readed: 0,//邮件阅读
+            sex_options: [
+                {value: 1,label: '男'},
+                {value: 2,label: '女'}
+            ],
+            sex_value: 1,
+            sex_state: false
         }
     },
     created(){
-        if('undefined' != typeof web){
-            this.player_info = web.game_getPlayer();
-            this.regist_tel = this.player_info.isRegistBytel;
-            // this.player_info.playerInfo.avatar = '../../../static/dream/portrait/ui_headImg_'+this.player_info.playerInfo.avatar+'.png';
-            // this.player_info.playerInfo.avatar_box = '../../../static/dream/portrait/ui_headBox_'+this.player_info.playerInfo.avatar_box+'.png';
-            this.portrait.head = '';
-            this.portrait.frame = '';
-            this.portrait.head = '../../../static/dream/portrait/ui_headImg_'+this.player_info.playerInfo.avatar+'.png';
-            this.portrait.frame = '../../../static/dream/portrait/ui_headBox_'+this.player_info.playerInfo.avatar_box+'.png';
-            // console.log('avarat',this.portrait);
-            this.nickname = this.player_info.playerInfo.nickname;
-            let money = '';
-            money = this.player_info.money/10000;
-            money = money.toFixed(2);
-            this.money_total = money;
-            this.number_money = money.toString().split('');
-            for(let i=0;i<this.number_money.length;i++){
-                if(this.number_money[i]=='.'){
-                   this.number_money[i] = 10; 
-                }else if(this.number_money[i]=='-'){
-                    this.number_money[i] = 11;
-                }
-            }
-            console.log('money====',this.number_money);
-        }
+        this.getJson();
+    },
+    computed: {
+        ...mapGetters([
+            'player_info',
+            'money'
+        ])
     },
     methods:{
-        nickname_determine(){
-            this.nickname_state = false;
-        },
-        payMeans(index){
-            if(index==0){
-                this.$refs.recharge.changeMeans();
-            }else if(index==1){
-                this.$refs.withdrawal.changeMeans(this.money_total);
+        getJson(){
+            if('undefined' != typeof web){
+                this.portrait.head = '../../../static/dream/portrait/ui_headImg_'+this.player_info.avatar+'.png';
+                this.portrait.frame = '../../../static/dream/portrait/ui_headBox_'+this.player_info.avatar_box+'.png';
+                this.pet_name = this.player_info.nickname;
+                this.sex_value = this.player_info.sex;
+                this.number_money = this.money.toString().split('');
+                for(let i=0;i<this.number_money.length;i++){
+                    if(this.number_money[i]=='.'){
+                    this.number_money[i] = 10; 
+                    }else if(this.number_money[i]=='-'){
+                        this.number_money[i] = 11;
+                    }
+                }
+                
             }
         },
+        changeValue () {
+            let leng = this.$means.validateTextLength(this.pet_name)
+            if (leng >= 6) {
+            this.$refs.pet_name.maxLength = leng
+            } else {
+            this.$refs.pet_name.maxLength = 15
+            }
+        },
+        portraitMeans(){
+            this.$refs.portrait.changeMeans(this.player_info.avatar,this.player_info.avatar_box);
+        },
+        copyText(){
+            var clipboard = new Clipboard('.copy_dom')  
+            clipboard.on('success', e => {  
+                this.$message.success('复制成功');
+                // 释放内存  
+                clipboard.destroy()  
+            })  
+            clipboard.on('error', e => {  
+                this.$message.error('该浏览器不支持自动复制');
+                // 释放内存  
+                clipboard.destroy()  
+            })    
+        },
+        allEmpty(){
+            this.nickname_state = false;
+            this.sex_state = false;
+        },
+        nicknameEdit(){
+            this.allEmpty();
+            this.pet_name = this.player_info.nickname;
+            this.nickname_state = true;
+        },
+        sexEdit(){
+            this.allEmpty();
+            this.sex_value = this.player_info.sex;
+            this.sex_state = true;
+        },
+        nicknameDetermine(){
+            var that = this;
+            if(that.pet_name==''){
+                that.$message.error('昵称不能为空！');
+                return;
+            }
+            web.game_updateName(that.pet_name,function(res){
+                that.$message.success('修改昵称成功！');
+                that.player_info.nickname = that.pet_name;
+                that.nickname_state = false;
+            })
+        },
+        sexDetermine(){
+            var that = this;
+            web.game_updateSex(that.sex_value,function(res){
+                web.game_getPlayer('sex').setSex(that.sex_value);
+                that.$store.dispatch('getPlayerInfo',web.game_getPlayer());
+                that.sex_state = false;
+                that.$message.success('修改性别成功！');
+            })
+        },
+        payMeans(index){
+            this.allEmpty();
+            this.$refs.recharge.changeMeans();
+        },
         archivesMeans(index){
+            this.allEmpty();
             if(index==0){
-                this.$refs.loginPassword.changeMeans(this.regist_tel);
+                this.$refs.loginPassword.changeMeans(this.player_info.isRegistBytel);//是否手机邮件注册-子用
             }else if(index==1){
-                this.$refs.withPassword.changeMeans(this.regist_tel);
+                this.$refs.withPassword.changeMeans(this.player_info.isRegistBytel);
             }else if(index==2){
                 this.$refs.mail.changeMeans();
             }else if(index==3){
                 this.$refs.notice.changeMeans();
             }else if(index==4){
-                this.$refs.safeDeposit.changeMeans();
+                this.$refs.safeDeposit.changeMeans(this.player_info.isPwdSeted,this.money,this.player_info.safe_money);
             }
         },
         hostMeans(value,response,count){
@@ -213,6 +265,14 @@ export default{
                 }else if(response=='alipay'){
                     this.$refs.withdrawal.getAlipayJson();
                 }
+            }else if(value=='portrait'){
+                if(response=='head'){
+                    this.portrait.head = count;
+                }else if(response=='frame'){
+                    this.portrait.frame = count;
+                }
+            }else if(value=='rechargerecord'){
+                this.$refs.rechargeRecord.changeMeans();
             }
         }
     }
@@ -225,7 +285,7 @@ export default{
     height: 100%;
     .personal_information{
         width: 100%;
-        height: 400px;
+        height: 100%;
         .information_left{
             .mixin_float(36.9%,100%,left);
             .user_title{
@@ -236,7 +296,7 @@ export default{
                 line-height: 60px;
             }
             .user_contain{
-                .mixin_div(100%,330px,@color_purple,@color_white,left);
+                .mixin_div(100%,691px,@color_purple,@color_white,left);
                 padding: 0px 20px;
                 box-sizing: border-box;
                 .user_info{
@@ -248,6 +308,8 @@ export default{
                         left: 50%;
                         top: 15px;
                         margin-left: -40px;
+                        z-index: 3;
+                        cursor: pointer;
                     }
                     img:nth-of-type(2){
                         .mixin_img(138px,138px);
@@ -255,6 +317,7 @@ export default{
                         left: 50%;
                         top: -15px;
                         margin-left: -69px;
+                        z-index: 2;
                     }
                     span{
                         .mixin_span(100%,30px,none,@color_white,center);
@@ -264,7 +327,7 @@ export default{
                         font-size: @font_size18;
                     }
                 }
-                .account_balance,.nickname,.gear_position{
+                .account_balance,.nickname,.sex_example,.user_id{
                     .mixin_div(100%,30px,none,@color_white,left);
                     margin-bottom: 10px;
                     font-size: @font_size16;
@@ -292,45 +355,69 @@ export default{
                         cursor: pointer;
                     }
                 }
-                .nickname{
-                    span:nth-of-type(1){
-                        .mixin_span(auto,30px,none,@color_gray,center);
-                    }
-                    i{
-                        color: @color_white;
-                        margin-left: 30px;
-                        cursor: pointer;
-                    }
-                    input{
-                        .mixin_input(150px,28px);
-                        border: 1px solid @color_blueviolet;
-                        background: @color_indigo;
-                        color: @color_blueviolet;
-                        vertical-align: middle;
+                .user_id{
+                    span{
+                        .mixin_span(150px,30px,none,@color_white,left);
                         float: left;
-                        margin-top: 1px;
                     }
                     button{
-                        .mixin_button(40px,28px,@color_indigo,@color_blueviolet);
+                        .mixin_button(40px,28px,@color_white2,@color_blueviolet);
+                        float: right;
+                        font-size: @font_size12;
                         border: 1px solid @color_blueviolet;
-                        font-size: 12px;
-                        margin-left: 20px;
-                        float: left;
-                        margin-top: 1px;
                     }
                     button:hover{
-                        background: @color_indigo_hover;
+                        background: @color_white2_hover;
                     }
                 }
-                .gear_position{
-                    span:nth-of-type(1){
-                        .mixin_span(auto,30px,none,@color_blueviolet,center);
+                .nickname,.sex_example{
+                    .edit_sex,.edit_name{
+                        span:nth-of-type(1){
+                            .mixin_span(auto,30px,none,@color_gray,center);
+                        }
+                        i{
+                            color: @color_white;
+                            margin-left: 30px;
+                            cursor: pointer;
+                        }
                     }
-                    span:nth-of-type(2){
-                        .mixin_span(auto,30px,none,@color_blueviolet,center);
-                        float: right;
-                        text-decoration: underline;
-                        cursor: pointer;
+                    .nickname_select{
+                        input{
+                            .mixin_input(150px,28px);
+                            border: 1px solid @color_blueviolet;
+                            background: @color_indigo;
+                            color: @color_blueviolet;
+                            vertical-align: middle;
+                            float: left;
+                            margin-top: 1px;
+                        }
+                    }
+                    .sex_select{
+                        .mixin_float(320px,30px,left);
+                    }
+                    .nickname_select,.sex_select{
+                        button:nth-of-type(1){
+                            .mixin_button(40px,28px,@color_white2,@color_blueviolet);
+                            border: 1px solid @color_blueviolet;
+                            font-size: 12px;
+                            margin-left: 30px;
+                            float: left;
+                            margin-top: 1px;
+                        }
+                        button:nth-of-type(1):hover{
+                            background: @color_white2_hover;
+                        } 
+                        button:nth-of-type(2){
+                            .mixin_button(40px,28px,@color_indigo,@color_blueviolet);
+                            border: 1px solid @color_blueviolet;
+                            font-size: 12px;
+                            margin-left: 10px;
+                            float: left;
+                            margin-top: 1px;
+                        }
+                        button:nth-of-type(2):hover{
+                            background: @color_indigo_hover;
+                        }    
                     }
                 }
             }
@@ -338,131 +425,52 @@ export default{
         }
         .information_right{
             .mixin_float(63.1%,100%,right);
-            .balance_contain{
-                .mixin_div(100%,365px,none,auto,left);
-                .balance_list{
-                        .mixin_float(47.16%,110px,left);
-                        border-top: 7px solid @color_blueviolet;
-                        margin: 0px 0px 10px 10px;
-                        .theme{
-                            width: 100%;
-                            height: 40px;
-                            background: @color_darkgray;
-                            padding: 0px 10px 0px 10px;
-                            box-sizing: border-box;
-                            .theme_left{
-                                .mixin_div(50%,40px,none,@color_blueviolet,left);
-                                float: left;
-                                font-weight: 600;
-                                font-size: 22px;
-                            }
-                            .theme_right{
-                                .mixin_div(50%,40px,none,@color_gray,right);
-                                float: right;
-                                font-size: @font_size16;
-                            }
-                        }
-                        .balance_info{
-                            width: 100%;
-                            height: 70px;
-                            background: @color_purple;
-                            position: relative;
-                            .count{
-                                width: 190px;
-                                height: 30px;
-                                position: absolute;
-                                left: 50%;
-                                top: 50%;
-                                margin: -15px 0px 0px -125px;
-                                .count_left{
-                                    .mixin_div(160px,30px,none,@color_white,center);
-                                    float: left;
-                                    font-weight: 600;
-                                    font-size: 26px;
-                                    .not_joined{
-                                        color: @color_gray;
-                                        font-size: 14px;
-                                        font-weight: 0;
-                                    }
-                                }
-                                .count_right{
-                                    .mixin_div(30px,30px,none,@color_white,center);
-                                    float: right;
-                                    img{
-                                        .mixin_img(20px,20px);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-
-            }
-            .payment{
-                width: 100%;
-                height: 35px;
-                button{
-                    .mixin_button(22.64%,35px,@color_yellow,@color_blueviolet);
-                    float: left;
-                    margin: 0px 0px 0px 10px;
-                    font-size: @font_size16;
+            padding: 0px 0px 0px 20px;
+            box-sizing: border-box;
+            .archives_list{
+                .mixin_div(100%,145px,none,auto,left);
+                float: left;
+                margin-bottom: 10px;
+                .archives_header{
+                    .mixin_div(100%,45px,@color_darkgray,@color_white,left);
+                    border-top: 7px solid @color_blueviolet;
+                }
+                .archives_contain{
+                    .mixin_div(100%,95px,@color_purple,@color_white,left);
+                    position: relative;
                     img{
-                        .mixin_img(20px,20px);
-                        margin-right: 5px;
+                        .mixin_img(55px,55px);
+                        position: absolute;
+                        left: 20px;
+                        top: 18px;
+                    }
+                    span:nth-of-type(1){
+                        .mixin_span(auto,25px,none,@color_white,left);
+                        font-size: @font_size20;
+                        position: absolute;
+                        left: 100px;
+                        top: 20px;
+                    }
+                    span:nth-of-type(2){
+                        .mixin_span(auto,25px,none,@color_dimgray,left);
+                        font-size: @font_size16;
+                        position: absolute;
+                        left: 100px;
+                        top: 45px;
+                    }
+                    span:nth-of-type(3){
+                        .mixin_span(auto,25px,none,@color_blueviolet,right);
+                        font-size: @font_size16;
+                        position: absolute;
+                        right: 20px;
+                        top: 20px;
+                        text-decoration: underline;
+                        cursor: pointer;
                     }
                 }
             }
         }
     }
 
-    .archives{
-        .mixin_div(100%,480px,none,auto,left);
-        margin-top: 30px;
-        .archives_margin{
-            margin-right: 10px;
-        }
-        .archives_list{
-            .mixin_div(48.8%,145px,none,auto,left);
-            float: left;
-            margin-bottom: 10px;
-            .archives_header{
-                .mixin_div(100%,45px,@color_darkgray,@color_white,left);
-                border-top: 7px solid @color_blueviolet;
-            }
-            .archives_contain{
-                .mixin_div(100%,95px,@color_purple,@color_white,left);
-                position: relative;
-                img{
-                    .mixin_img(55px,55px);
-                    position: absolute;
-                    left: 20px;
-                    top: 18px;
-                }
-                span:nth-of-type(1){
-                    .mixin_span(auto,25px,none,@color_white,left);
-                    font-size: @font_size20;
-                    position: absolute;
-                    left: 100px;
-                    top: 20px;
-                }
-                span:nth-of-type(2){
-                    .mixin_span(auto,25px,none,@color_dimgray,left);
-                    font-size: @font_size16;
-                    position: absolute;
-                    left: 100px;
-                    top: 45px;
-                }
-                span:nth-of-type(3){
-                    .mixin_span(auto,25px,none,@color_blueviolet,right);
-                    font-size: @font_size16;
-                    position: absolute;
-                    right: 20px;
-                    top: 20px;
-                    text-decoration: underline;
-                    cursor: pointer;
-                }
-            }
-        }
-    }
 }
 </style>

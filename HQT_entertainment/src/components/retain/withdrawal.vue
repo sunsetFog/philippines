@@ -16,7 +16,7 @@
             <template v-if="withdrawalState==2">
                 <div class="submission">
                     <label>请输入提款密码:</label>
-                    <input type="text" v-model="password" placeholder="请输入提款密码"/>
+                    <input type="text" v-model.trim="password" placeholder="请输入提款密码"/>
                     <img src="../../static/dream/bank/jianpan.png" @click="keyboard()"/>
                 </div>
                 <div class="submit_btn">

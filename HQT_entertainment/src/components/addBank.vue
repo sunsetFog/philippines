@@ -2,22 +2,22 @@
     <section id="addBank">
         <el-dialog
         :visible.sync="rechargeActive"
-        width="780px"
-        top="270px"
+        width="4.07rem"
+        top="1.41rem"
         center>
         <div slot="title">添加银行卡</div>
         <div class="varieties_content">
             <div class="account_name">
                 <label>开户姓名:</label>
-                <input type="text" v-model="account_name" placeholder="请输入开户人姓名"/>
+                <input type="text" maxlength="25" v-model.trim="account_name" placeholder="请输入开户人姓名"/>
             </div>
             <div class="card_number">
                 <label>银行卡号:</label>
-                <input type="text" v-model="card_number" placeholder="请输入银行卡号"/>
+                <input type="text" maxlength="25" v-model.trim="card_number" placeholder="请输入银行卡号"/>
             </div>
             <div class="opening_bank">
                 <label>开户行:</label>
-                <input type="text" v-model="opening_bank" placeholder="请输入开户行"/>
+                <input type="text" maxlength="50" v-model.trim="opening_bank" placeholder="请输入开户行"/>
             </div>
             <div class="line_example"></div>
             <div class="confirm_add">

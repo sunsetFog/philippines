@@ -39,7 +39,7 @@ export default {
         height: 620px;
     }
     .example_footer{
-        .mixin_div(100%,35px,none,auto,left);
+        .mixin_div(100%,0px,none,auto,left);
     }
 }
 </style>

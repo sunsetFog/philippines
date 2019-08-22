@@ -2,14 +2,14 @@
     <section id="manageAlipay">
         <el-dialog
         :visible.sync="rechargeActive"
-        width="780px"
-        top="270px"
+        width="4.07rem"
+        top="1.41rem"
         center>
         <div slot="title">管理支付宝</div>
         <div class="varieties_content">
             <div class="account_example">
                 <div class="account_list" v-for="(item,index) in alipay_list">
-                    <label>支付宝{{index}}:</label>
+                    <label>支付宝{{index+1}}:</label>
                     <div><span>{{item.cardholder}}</span><span>{{item.cardno}}</span></div>
                     <img src="../../static/dream/recharge/xiaochu.png" @click="deleteAlipay(index)"/>
                 </div>
@@ -87,19 +87,23 @@ export default {
                 height: 45px;
                 margin-top: 20px;
                 label{
-                    .mixin_span(180px,45px,none,@color_white,right);
+                    .mixin_span(100px,45px,none,@color_white,right);
                     float: left;
                     margin-right: 15px;
                     font-size: @font_size18;
                 }
                 div{
-                    .mixin_div(320px,43px,@color_indigo,@color_blueviolet,left);
+                    .mixin_div(505px,43px,@color_indigo,@color_blueviolet,left);
                     float: left;
                     font-size: @font_size18;
+                    padding-left: 10px;
+                    box-sizing: border-box;
                     span:nth-of-type(1){
-                        .mixin_span(135px,43px,none,@color_blueviolet,right);
+                        .mixin_span(auto,43px,none,@color_blueviolet,right);
                         float: left;
                         margin-right: 10px;
+                        max-width: 200px;
+                        overflow: hidden;
                     }
                     span:nth-of-type(2){
                         .mixin_span(auto,43px,none,@color_blueviolet,left);

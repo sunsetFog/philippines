@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    <footers :vip_foot="vip_foot"></footers>
+    <footers :vip_foot="false"></footers>
 </section>
 </template>
 
@@ -72,7 +72,6 @@ export default{
     data(){
         return{
             manage_state: false,//管理中心
-            vip_foot: false,
             menuList: [{key: '1',label: '派趣娱乐',icon: '../../../static/dream/center/pai.png',effect:[
                 {key:'1-2-1',label: '棋牌信息',path:'/chesscard',icon: '../../../static/dream/center/qipai.png',effect:[]},
                 {key:'1-3-1',label: '团队信息',path: '/teaminfo',icon: '../../../static/dream/center/tuandui.png',effect:[]},

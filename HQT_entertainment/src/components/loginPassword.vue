@@ -2,26 +2,26 @@
     <section id="loginPassword">
         <el-dialog
         :visible.sync="rechargeActive"
-        width="780px"
-        top="190px"
+        width="4.07rem"
+        top="0.99rem"
         center>
         <div slot="title">重置登陆密码</div>
         <div class="varieties_content">
             <div class="account_name">
                 <label>账号:</label>
-                <input type="text" maxlength="30" v-model="account" placeholder="请输入正确的会员账号"/>
+                <input type="text" maxlength="20" v-model.trim="account" placeholder="请输入正确的会员账号"/>
             </div>
             <div class="write_old" v-if="!regist_tel">
                 <label>旧密码:</label>
-                <input type="password" maxlength="20" v-model="old_password" placeholder="请填写旧密码"/>
+                <input type="password" maxlength="20" v-model.trim="old_password" placeholder="请填写旧密码"/>
             </div>
             <div class="write_new">
                 <label>新密码:</label>
-                <input type="password" maxlength="20" v-model="new_password" placeholder="请输入新密码"/>
+                <input type="password" maxlength="20" v-model.trim="new_password" placeholder="请输入新密码"/>
             </div>
             <div class="write_code" v-if="regist_tel">
                 <label>验证码:</label>
-                <input type="text" maxlength="20" v-model="verify_code" placeholder="请填写验证码"/>
+                <input type="text" maxlength="20" v-model.trim="verify_code" placeholder="请填写验证码"/>
                 <button @click="getAutoCode()" v-show="verify_active">获取验证码</button>
                 <button v-show="!verify_active">{{verify_time}}s</button>
             </div>
@@ -106,6 +106,7 @@ export default {
                 }
                 web.game_resetLoginPass_noTel(that.account,that.new_password,that.old_password,function(res){
                     that.rechargeActive = false;
+                    sessionStorage.setItem('password_number',that.new_password);
                     that.$message.success('登陆密码修改成功！');
                 })
             }

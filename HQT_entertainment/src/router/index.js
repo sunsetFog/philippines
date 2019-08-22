@@ -10,7 +10,6 @@ export default new Router({
     {path: '/',component:resolve => require(['@/pages/home'],resolve),
       children: [
         {path: '/home',name: 'home',meta: {title: '首页',navigation: 0},component: resolve => require(['@/pages/homePage/index.vue'],resolve)},
-        {path: '/game',name: 'game',meta: {title: '首页',navigation: 0},component: resolve => require(['@/pages/game/game.vue'],resolve)},
         {path: '/lottery',meta: {title: '彩票',navigation: 1},component: resolve => require(['@/pages/lottery/lottery.vue'],resolve),
           children: [
             {path: '/fivestars',name: 'fiveStars',meta: {title: '五星',navigation: 1},component: resolve => require(['@/pages/lottery/fiveStars.vue'],resolve)},
@@ -53,6 +52,9 @@ export default new Router({
       ]
     },
     {path: '/login',name: 'Login',meta: {title: '登陆',navigation: 0},component: resolve => require(['@/pages/login/login'],resolve)},
+    {path: '/line',name: 'Line',meta: {title: '线路检测',navigation: 0},component: resolve => require(['@/pages/login/line'],resolve)},
+    {path: '/register',name: 'Register',meta: {title: '注册',navigation: 0},component: resolve => require(['@/pages/register/register'],resolve)},
+    {path: '/game',name: 'game',meta: {title: '首页',navigation: 0},component: resolve => require(['@/pages/game/game.vue'],resolve)},
     {path: '/neutralgear',name: 'neutralGear',meta: {title: '加载中',navigation: 0},component: resolve => require(['@/pages/neutralGear/neutralGear'],resolve)}
   ]
 })

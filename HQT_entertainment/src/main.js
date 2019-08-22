@@ -6,28 +6,45 @@ import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import router from './router'
 import axios from 'axios';
-import url from './api/url.js';
+Vue.prototype.$axios = axios;
 import globalMeans from './public/index.js';
+Vue.prototype.$means = globalMeans;
 import 'babel-polyfill'
 Vue.config.productionTip = false
 // es6Promise .polyfill();
 Vue.use(iView);
 
+import overall from '../static/overall.json'
+let domain;
+if (process.env.NODE_ENV === 'development') {
+    domain = 'http://10.1.101.120:502';
+} else {
+    // domain = location.protocol + '//' + window.location.host;
+    if(window.location.host=='webgame.predyfqp1.com'){
+        domain = location.protocol + '//' +  overall.http_pre;
+    }else if(window.location.host=='webgame.premsqp72.com'){
+        domain = location.protocol + '//' +  overall.http_online;
+    }else{
+        domain = 'http://not_pre_online';
+    }
+}
+Vue.prototype.$domain = domain;
+console.log('domain',domain,overall.http_pre,overall.http_online);
+
+
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
-import cache from './vuex/vuex.js';
-Vue.prototype.$cache = cache;
+import 'lib-flexible';
+
+import store from './vuex/vuex.js';
+// Vue.prototype.$store = store;
 
 // https://www.cnblogs.com/zhaojunhao/p/9622299.html
 //md5加密-type是字符串
 import md5 from 'js-md5';
 Vue.prototype.$md5 = md5;
-
-Vue.prototype.$domain = 'http://10.1.101.120:9999';
-Vue.prototype.$means = globalMeans;
-Vue.prototype.$url = url;
 
 import recharge from './components/recharge.vue';
 import withdrawal from './components/withdrawal.vue';
@@ -44,6 +61,8 @@ import consult from './components/consult.vue';
 import loginPassword from './components/loginPassword.vue';
 import gameTheme from './components/game_theme.vue';
 import safeDeposit from './components/safeDeposit.vue';
+import portrait from './components/portrait.vue';
+import rechargeRecord from './components/rechargeRecord.vue';
 Vue.component('recharge',recharge);
 Vue.component('withdrawal',withdrawal);
 Vue.component('manageBank',manageBank);
@@ -59,6 +78,8 @@ Vue.component('consult',consult);
 Vue.component('loginPassword',loginPassword);
 Vue.component('gameTheme',gameTheme);
 Vue.component('safeDeposit',safeDeposit);
+Vue.component('portrait',portrait);
+Vue.component('rechargeRecord',rechargeRecord);
 
 
 import NProgress from 'nprogress'
@@ -73,7 +94,7 @@ router.beforeEach((to, from, next) => {
     }
 
     let user = sessionStorage.getItem('token');
-    let beforeRouterArr = ['/login'];
+    let beforeRouterArr = ['/login','/register','/line'];
     if (!user && beforeRouterArr.indexOf(to.path)==-1) {
         next({path: '/login'});
     } else {
@@ -89,6 +110,7 @@ router.afterEach(transition => {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

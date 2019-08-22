@@ -8,7 +8,7 @@
         <div slot="title">键盘</div>
         <div class="varieties_content">
             <div class="area_cotent">
-                <input type="text" disabled v-model="key_input" placeholder="请输入密码"/>
+                <input type="text" disabled v-model.trim="key_input" placeholder="请输入密码"/>
             </div>
             <div style="height: 350px;padding-left: 190px;box-sizing: border-box;">
                 <ul class="keyboard">

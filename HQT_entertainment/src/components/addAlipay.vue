@@ -2,18 +2,18 @@
     <section id="addAlipay">
         <el-dialog
         :visible.sync="rechargeActive"
-        width="780px"
-        top="270px"
+        width="4.07rem"
+        top="1.41rem"
         center>
         <div slot="title">绑定支付宝</div>
         <div class="varieties_content">
             <div class="account_name">
                 <label>支付宝账号:</label>
-                <input type="text" v-model="account" placeholder="请输入支付宝账号"/>
+                <input type="text" maxlength="25" v-model.trim="account" placeholder="请输入支付宝账号"/>
             </div>
             <div class="card_number">
                 <label>实名制姓名:</label>
-                <input type="text" v-model="real_name" placeholder="请输入实名制姓名"/>
+                <input type="text" maxlength="25" v-model.trim="real_name" placeholder="请输入实名制姓名"/>
             </div>
             <div class="line_example">支付宝绑定的注意事项说明</div>
             <div class="confirm_add">
