@@ -19,3 +19,13 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+index.html-flashGameplayer()-refreshWeb.state = 'init';return;
+web.game_
+that.$means.amateur_
+index,README返回
+consult.vue两个web
+刷新:this.variableGear();
+
+localhost:1314
+flexible.js

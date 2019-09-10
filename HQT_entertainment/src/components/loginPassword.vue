@@ -21,7 +21,7 @@
             </div>
             <div class="write_code" v-if="regist_tel">
                 <label>验证码:</label>
-                <input type="text" maxlength="20" v-model.trim="verify_code" placeholder="请填写验证码"/>
+                <input type="text" maxlength="10" v-model.trim="verify_code" placeholder="请填写验证码"/>
                 <button @click="getAutoCode()" v-show="verify_active">获取验证码</button>
                 <button v-show="!verify_active">{{verify_time}}s</button>
             </div>
@@ -59,6 +59,7 @@ export default {
             this.account = '';
             this.old_password = '';
             this.new_password = '';
+            this.verify_code = '';
         },
         getAutoCode(){
             var that = this;
@@ -91,6 +92,10 @@ export default {
                 }
                 web.game_resetLoginPass_tel(that.account,that.new_password,that.verify_code,function(res){
                     that.rechargeActive = false;
+                    if (localStorage.getItem("account")) {
+                        localStorage.setItem("password",that.new_password);
+                    }
+                    sessionStorage.setItem('password_number',that.new_password);
                     that.$message.success('登陆密码修改成功！');
                 })
             }else{
@@ -106,6 +111,9 @@ export default {
                 }
                 web.game_resetLoginPass_noTel(that.account,that.new_password,that.old_password,function(res){
                     that.rechargeActive = false;
+                    if (localStorage.getItem("account")) {
+                        localStorage.setItem("password",that.new_password);
+                    }
                     sessionStorage.setItem('password_number',that.new_password);
                     that.$message.success('登陆密码修改成功！');
                 })

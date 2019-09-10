@@ -44,13 +44,19 @@ export default {
             }
             that.goods_id = value;
             that.rechargeActive = true;
-            console.log('id@@',value);
+            //console.log('id@@',value);
             web[that.interface.single](value,function(res){
-                console.log('success',res);
+                //console.log('success',res);
                 if(res.content.indexOf('span')!=-1){
                     let money = res.content.split(':');
                     let content = money[0]+":<span style='color: #b00cb3'>"+money[1].split(',')[0]+'</span>,'+money[1].split(',')[1];
                     res.content = content;
+                }else if(res.content.indexOf('<')!=-1){
+                    let money = res.content.split('<');
+                    let content = money[0]+":<span style='color: #b00cb3'>"+money[1].split('>')[0]+'</span>'+money[1].split('>')[1];
+                    res.content = content;
+                }else{
+                    res.content = that.$means.trim(res.content);
                 }
                 that.consult_data = res;
                 that.$parent.hostMeans(that.interface.name,'get');
@@ -58,11 +64,12 @@ export default {
         },
         deleteMeans(){
             var that = this;
-            console.log('delete_success');
+            //console.log('delete_success');
             web[that.interface.delete](that.goods_id,function(res){
-                console.log('delete$$',res);
+                //console.log('delete$$',res);
                 that.$parent.hostMeans(that.interface.name,'get');
                 that.rechargeActive = false;
+                that.$message.success('删除成功');
             })
         }
     }
@@ -81,6 +88,7 @@ export default {
             height: 320px;
             font-size: @font_size18;
             color: @color_white;
+            overflow-y: auto;
         }
         .delete_info{
             width: 100%;

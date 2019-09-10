@@ -15,12 +15,10 @@ service.interceptors.request.use(config => {
   config.headers.post['Content-Type'] = 'application/json'
   config.headers.get['Content-Type'] = 'application/json'
   config.cancelToken = service.$source.token
-
-  if (sessionStorage.getItem('token')) {
-    config.headers['token'] = sessionStorage.getItem('token');
+  //header里存token,登录需要设,后台每一次请求要获取，不能把中文存在header
+  if(sessionStorage.getItem('token')){
+    config.headers['H-Token'] = sessionStorage.getItem('token');
   }
-
-    
   return config
 }, error => {
   Promise.reject(error)
@@ -29,13 +27,14 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(
   response => {
+    //console.log('Hk-拦截器',response);//根据状态修改
     if (!response.data) {
       return Promise.reject(response)
     } else {
       if (!response.data.flag) { // code码 1001会话过期, 1002无权限, 1003其他客户端登录了
         let code = response.data.code
         if ([1001, 1003].indexOf(code) > -1) {
-          MessageBox.alert(response.data.msg, {
+          MessageBox.alert(response.data.message, {
             confirmButtonText: '确定',
             callback: action => {
               router.replace('/login')
@@ -51,9 +50,9 @@ service.interceptors.response.use(
           })
           return Promise.reject(response)
         } else {
-          if (response.data.msg) {
+          if (response.data.message) {
             Message({
-              message: response.data.msg,
+              message: response.data.message,
               type: 'error',
               duration: 3 * 1000
             })
@@ -61,9 +60,9 @@ service.interceptors.response.use(
           return Promise.reject(response)
         }
       } else {
-        if (response.data.msg) {
+        if (response.data.message) {
           Message({
-            message: response.data.msg,
+            message: response.data.message,
             type: 'success',
             duration: 3 * 1000
           })
@@ -73,14 +72,11 @@ service.interceptors.response.use(
     }
   },
   error => {
-    // for debug
-    // alert('response:error')
     Message({
       message: error.message,
       type: 'error',
       duration: 5 * 1000
     })
-    // router.push('请求不到数据或者超时请求重转发到404页面')
     return Promise.reject(error)
   }
 )

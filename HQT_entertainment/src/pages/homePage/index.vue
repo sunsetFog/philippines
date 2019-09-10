@@ -12,13 +12,7 @@
        <div class="enter_game">
            <img class="big_fish" src="../../../static/dream/login/fish.png" @click="fishMeans()"/>
            <div class="advertisement">
-               <div class="message_tips">
-                   <span v-show="play_info" class="laba_quality"><img src="../../../static/dream/home/laba.png"/></span>
-                   <span v-show="play_info" class="word_quality">最新广告&nbsp;:</span>
-                   <div class="flash_quality" v-show="play_info">
-                       <div v-html="timer_content" class="move_left" :style="{width:timer_width+'px'}"></div>
-                   </div>
-               </div>
+
            </div>
            <div class="game_contain">
                 <el-carousel :interval="5000" arrow="never" indicator-position="none" :autoplay="false" trigger="click">
@@ -38,7 +32,7 @@
            </div>
        </div>
        <footers :vip_foot="false"></footers>
-       <game-theme ref="subject" :subject="true" @interaction="setMove"></game-theme>
+       <game-theme ref="subject" :subject="false"></game-theme>
     </section>
 </template>
 
@@ -63,65 +57,20 @@ export default{
                     {url: '../../../static/dream/home/doudizhu.png',margin: '0px 5px 0px 0px',height: '100%',top: '0px'},
                     {url: '../../../static/dream/home/honghei.png',margin: '0px 0px 0px 0px',height: '110.7%',top: '-10.7%'}
                 ]}
-            ],
-            play_info: false,
-            timer: null,
-            timer_width: 0,
-            timer_content: '',
-            timer_list: []
+            ]
         }
     },
     created(){
         
     },
-    beforeDestroy(){
-        this.clearTimer();
-    },
-    watch:{
-        timer_list(cur,old){
-            // console.log('current&&',this.timer,this.timer_list.length);
-            if(this.timer==null&&this.timer_list.length!=0){
-                // console.log('start')
-                this.play_info = true;
-                this.timer_content = this.timer_list[0];
-                this.timer = setInterval(this.timerMeans1,200);
-            }           
-        }
-    },
+    // beforeDestroy(){
+    //     this.clearTimer();
+    // },
     methods: {
         fishMeans(){
+            // this.$router.push({path: '/crux'});
             // var value = "赌侠<font color='#23f0fd' size='26'> testN28 </font>赢得<font color='#ffe400' size='26'> 253.4 </font>奖金，大吉大利 今晚吃鸡!";
             // errorCodeGame.move = value;
-        },
-        timerMeans1(){
-            if(this.timer_width>1500){
-                this.clearTimer();
-                this.timer_list.shift();
-                // console.log('stop111',this.timer);
-            }else{
-                this.timer_width+=30;
-                // console.log('width##',this.timer_width);
-            }
-        },
-        clearTimer(){
-                clearInterval(this.timer);
-                this.timer = null;
-                this.timer_width = 0;
-                this.play_info = false;
-        },
-        setMove(value){
-            let home_index = document.getElementById('home_index');
-            if(home_index==null){
-                return;
-            }
-            // if(!value){
-            //     var value = "赌侠<font color='#23f0fd' size='26'> testN28 </font>赢得<font color='#ffe400' size='26'> 253.4 </font>奖金，大吉大利 今晚吃鸡!";
-            // }
-            var that = this;
-            value = value.replace(" size='26'",'');
-            value = value.replace(" size='26'",'');
-            value = value.replace(" size='26'",'');
-            that.timer_list.push(value);
         },
         enterTheGame(index){
             if(index==0){
@@ -143,9 +92,10 @@ export default{
             }
         },
         encapsulation(value){
+            let that = this;
             web.game_startGame(value);
             web.game_back2GameFromLobby(false);
-            this.$refs.subject.openFullScreen();
+            that.$refs.subject.openFullScreen();
         }
     }
 }
@@ -182,46 +132,6 @@ export default{
              position: absolute;
              left: 0px;
              top: 8px;
-             .message_tips{
-                 width: 1200px;
-                 height: 35px;
-                 margin: 0 auto;
-                 position: relative;
-                 .laba_quality{
-                     .mixin_span(25px,35px,none,auto,center);
-                     margin-right: 16px;
-                     line-height: 0px;
-                     padding-top: 5px;
-                     box-sizing: border-box;
-                     position: absolute;
-                     top: 0px;
-                     left: 0px;
-                     img{
-                        .mixin_img(25px,25px);
-                    }
-                }
-                .word_quality{
-                    .mixin_span(70px,35px,none,@color_tone1,left);
-                    position: absolute;
-                    top: 0px;
-                    left: 41px;
-                }
-                .flash_quality{
-                    .mixin_span(1000px,35px,none,@color_white,left);
-                    position: absolute;
-                    top: 0px;
-                    left: 131px;
-                    overflow: hidden;
-                    .move_left{
-                        width: 0px;
-                        height: 35px;
-                        float: right;
-                        text-indent: 1px;
-                        text-align: left;
-                        overflow: hidden;
-                    }
-                }
-             }
          }
          .game_contain{
              .mixin_center(1350px,740px);

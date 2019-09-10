@@ -39,6 +39,7 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="no_time" v-show="no_have">暂无充值记录</div>
                 </div>
             </div>
         </div>
@@ -62,22 +63,26 @@ export default {
                 {name: '未成功',active: false}
             ],
             record_list: [],
-            save_list: [],
+            no_have: false
         }
     },
     methods:{
         changeMeans(){
             this.rechargeActive = true;
-            this.getJson();
+            this.recordState(0);
         },
-        getJson(){
+        getJson(type){
             var that = this;
-            web.game_recharge_recods(3,function(res){
+            web.game_recharge_recods(type,function(res){
                 that.record_list = res.list;
                 for(let i=0;i<that.record_list.length;i++){
                     that.record_list[i].created_at = that.$means.getLocalTime(that.record_list[i].created_at);
                 }
-                that.save_list = that.record_list;
+                if(that.record_list.length==0){
+                    that.no_have = true;
+                }else{
+                    that.no_have = false;
+                }
             })
         },
         recordState(index){
@@ -87,19 +92,11 @@ export default {
             this.record_type[index].active = true;
             this.record_list = [];
             if(index==0){
-                this.record_list = this.save_list;
+                this.getJson(3);
             }else if(index==1){
-                for(let k=0;k<this.save_list.length;k++){
-                    if(this.save_list[k].status == '充值成功'){
-                        this.record_list.push(this.save_list[k]);
-                    }
-                }
+                this.getJson(1);
             }else if(index==2){
-                for(let k=0;k<this.save_list.length;k++){
-                    if(this.save_list[k].status == '支付中'||this.save_list[k].status == '充值失败'){
-                        this.record_list.push(this.save_list[k]);
-                    }
-                }
+                this.getJson(2);
             }
         },
         copyText(){
@@ -199,6 +196,10 @@ export default {
                             }
                         }
                     }
+                }
+                .no_time{
+                    .mixin_div(100%,80px,none,@color_dimgray,center);
+                    font-size: @font_size20;
                 }
             }
         }

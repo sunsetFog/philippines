@@ -17,7 +17,7 @@
             </div>
             <div class="write_code" v-if="regist_tel">
                 <label>验证码:</label>
-                <input type="text" maxlength="20" v-model.trim="verify_code" placeholder="请填写验证码"/>
+                <input type="text" maxlength="10" v-model.trim="verify_code" placeholder="请填写验证码"/>
                 <button @click="getAutoCode()" v-show="verify_active">获取验证码</button>
                 <button v-show="!verify_active">{{verify_time}}s</button>
             </div>
@@ -48,6 +48,14 @@ export default {
         }
     },
     watch:{
+        old_password(cur,old){
+            if(/[^\d]/g.test(cur)){
+                if(this.old_password.match(/[^\d]/g)!=null){
+                   this.$message.error('请输入六位数字的密码！');
+                }
+                this.old_password = this.old_password.replace(/[^\d]/g, '');
+            }
+        },
         new_password(cur,old){
             if(/[^\d]/g.test(cur)){
                 if(this.new_password.match(/[^\d]/g)!=null){

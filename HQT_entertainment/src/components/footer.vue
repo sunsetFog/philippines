@@ -2,7 +2,7 @@
     <section id="footer_index">
        <div class="footer_contain">
            <div class="contain_center">
-               <div class="function_example" v-if="vip_foot">
+               <!-- <div class="function_example" v-if="vip_foot">
                    <ul>
                        <li v-for="(item,index) in function_list" :style="{backgroundImage: item.url}" :class="{'function_margin': index!=4}"></li>
                     </ul>
@@ -17,10 +17,10 @@
                        <li v-for="(item,index) in relevant_list" :class="{'relevant_border':index!=5&&index!=6}">{{item.title}}</li>
                        <li>官方邮箱&nbsp;:&nbsp;cs@bifa.bet</li>
                     </ul>
-               </div>
+               </div> -->
                <div class="copyright_example">
-                   <span>@2010-2020&nbsp;88必发&nbsp;版权所有</span>
-                   <span>88必发娱乐&nbsp;邀你共创未来</span>
+                   <span>@2010-2020&nbsp;钻石娱乐&nbsp;版权所有</span>
+                   <span>钻石娱乐&nbsp;邀你共创未来</span>
                </div>
            </div>
        </div>
@@ -83,8 +83,9 @@ export default{
             width: 1200px;
             height: 100%;
             margin: 0 auto;
-            padding: 20px 0px 19px 0px;
+            padding: 20px 0px 50px 0px;
             box-sizing: border-box;
+            overflow: hidden;
             .function_example{
                 width: 100%;
                 height: 90px;
@@ -120,10 +121,11 @@ export default{
             }
             .relevant_example{
                 width: 100%;
-                height: 20px;
-                margin-top: 24px;
-                padding-left: 180px;
+                height: 35px;
+                margin-top: 10px;
+                padding: 15px 0px 0px 180px;
                 box-sizing: border-box;
+                overflow: hidden;
                 .relevant_border{
                     border-right: 1px solid @color_white;
                 }
@@ -152,11 +154,12 @@ export default{
             }
             .copyright_example{
                 width: 100%;
-                height: 20px;
-                margin-top: 17px;
-                padding-left: 520px;
+                height: 35px;
+                margin-top: 10px;
+                padding: 15px 0px 0px 420px;
                 box-sizing: border-box;
                 font-size: @font_size12;
+                overflow: hidden;
                 span:nth-of-type(1){
                     .mixin_span(auto,20px,none,@color_white,left);
                     float: left;

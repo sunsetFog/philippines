@@ -39,7 +39,7 @@ export default {
         getBankJson(){
             var that = this;
             web.game_bank_lists(1,function(res){
-                console.log('提款bank%%',res);
+                //console.log('提款bank%%',res);
                 that.bank_list = res.list;
             })
         },

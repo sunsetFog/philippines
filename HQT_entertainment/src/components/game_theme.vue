@@ -25,7 +25,7 @@ export default {
             });
         },
         changeMeans(){
-            // console.log('subject######');
+            // //console.log('subject######');
             this.variableChange1();
             this.variableChange2();
         },
@@ -36,7 +36,7 @@ export default {
                     return 'type';
                 },
                 set: function(value) {
-                    console.log('changjing%%%%%',value,that.$route.path);
+                    //console.log('changjing%%%%%',value,that.$route.path);
                     if(that.$route.path=='/register'){
                         return;
                     }
@@ -96,6 +96,18 @@ export default {
                     },
                     set:function(value){
                         that.$emit('interaction',value);
+                        if(sessionStorage.getItem('sign_in')&&sessionStorage.getItem('register')){
+                            catchGame.mice = 'ok';
+                            sessionStorage.removeItem('sign_in');
+                            sessionStorage.removeItem('register');
+                            return;
+                        }else if(sessionStorage.getItem('sign_in')){
+                            catchGame.mice = 'ok';
+                            sessionStorage.removeItem('sign_in');
+                        }else if(sessionStorage.getItem('register')){
+                            catchGame.register = 'ok';
+                            sessionStorage.removeItem('register');
+                        }
                     }
                 },
                 socket:{
@@ -112,6 +124,7 @@ export default {
                             web.game_relogin();
                         }).catch(() => {
                             web.game_clear();
+                            that.$router.push({path: '/login'});
                         });
                     }
                 },

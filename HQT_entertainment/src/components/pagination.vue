@@ -20,12 +20,12 @@
     },
     methods: {
       sizeChange (val) {
-        console.log('pagesize+++', val)
+        //console.log('pagesize+++', val)
         this.pagination.pagesize = val
         this.$emit('emitWay')
       },
       currentChange (val) {
-        console.log('currentPage++', val)
+        //console.log('currentPage++', val)
         this.pagination.page = val
         this.$emit('emitWay')
       }

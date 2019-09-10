@@ -62,7 +62,7 @@ export default {
                 return;
             }
             web.game_bindBank(1,that.account_name,that.opening_bank,that.card_number,function(res){
-                console.log('add_bank',res);
+                //console.log('add_bank',res);
                 that.rechargeActive = false;
                 that.$parent.hostMeans('withdrawal','bank');
                 that.$parent.hostMeans('managebank');

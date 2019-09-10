@@ -54,9 +54,7 @@ export default{
         }
     },
     created(){
-        web.game_register_enter(window.location.host,function(res){
-            console.log('come_on',res);
-        })
+        this.registerEnter();
     },
     mounted(){
         var that = this;
@@ -66,6 +64,12 @@ export default{
         }
     },
     methods: {
+        registerEnter(){
+            let that = this;
+            web.game_register_enter(window.location.host,function(res){
+                //console.log('come_on',res);
+            })
+        },
         nowRegister(){
             let that = this;
             if(that.$means.isMoblie(that.account_number)){
@@ -124,7 +128,7 @@ export default{
                     agentorg: window.location.host
 			}
 			that.$axios.post(that.$domain + '/web/player/safetyreg',json).then(res=>{
-                console.log('success_register',res);
+                //console.log('success_register',res);
                 if(res.data.code==0){
                     that.$router.push({path: '/login'});
                     that.$message.success('注册成功');
@@ -132,7 +136,7 @@ export default{
                     that.$message.error(res.data.message);
                 }
 			}).catch((err)=>{
-                console.log('error',err);
+                //console.log('error',err);
             })
         },
         verificationCode2(){
@@ -145,7 +149,7 @@ export default{
 				cellphone: that.account_number
 			}
 			that.$axios.post(that.$domain + '/web/player/getmobilecode',json).then(res=>{
-                console.log('success_code',res,typeof res.data);
+                //console.log('success_code',res,typeof res.data);
                 if(typeof res.data=='string'){
                     that.verify_time = 60;
                     that.verify_active = true;
@@ -161,7 +165,7 @@ export default{
                     that.$message.error(res.data.message);
                 }
 			}).catch((err)=>{
-                console.log('error',err);
+                //console.log('error',err);
             })    
         },
         timer(){
@@ -191,7 +195,7 @@ export default{
 <style lang="less" scoped>
 #register{
     width: 100%;
-    padding-bottom: 160px;
+    padding-bottom: 115px;
     box-sizing: border-box;
     .mixin_image(url('../../../static/dream/register/bg01.jpg'));
     .entertainment{

@@ -23,6 +23,7 @@
                     <ul>
                         <li v-for="(item,index) in payment_list" :class="{'mode_active':item.active}" @click="modeMeans(index)">{{item.name}}</li>
                     </ul>
+                    <div class="no_time" v-show="no_have">暂无充值渠道</div>
                 </div>
                 <div class="recharge_money">
                     <span>充值金额:</span>
@@ -75,6 +76,7 @@ export default {
             ],
             first_index: null,
             second_index: null,
+            no_have: false
         }
     },
     methods:{
@@ -85,7 +87,7 @@ export default {
         getJson(){
             var that = this;
             web.game_recharge_types(function(value){
-                console.log('recharge&&',value);
+                //console.log('recharge&&',value);
                 that.pay_data = value;
                 that.pay_types = [];
                 for(let i=0;i<value.pay_types.length;i++){
@@ -124,6 +126,11 @@ export default {
                     min_limit: this.pay_data.pay_types[index].channel[i].min_limit,
                     active: false
                 })
+            }
+            if(this.payment_list.length==0){
+                this.no_have = true;
+            }else{
+                this.no_have = false;
             }
         },
         modeMeans(index){
@@ -181,14 +188,14 @@ export default {
                 float: left;
                 background: @color_tone20;
                 font-size: @font_size20;
+                padding-bottom: 115px;
+                box-sizing: border-box;
                 .type_active{
                     .mixin_image(url('../../static/dream/recharge/beijingkuang.png'));
                 }
                 ul{
                     width: 100%;
-                    min-height: 620px;
-                    padding-bottom: 135px;
-                    box-sizing: border-box;
+                    float: left;
                     li{
                         .mixin_li(155px,65px);
                         margin-top: 50px;
@@ -236,6 +243,10 @@ export default {
                         color: @color_white;
                         cursor: pointer;
                     }
+                }
+                .no_time{
+                    .mixin_div(100%,80px,none,@color_dimgray,center);
+                    font-size: @font_size20;
                 }
             }
             .recharge_money{

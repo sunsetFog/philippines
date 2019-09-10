@@ -14,22 +14,15 @@ Vue.config.productionTip = false
 // es6Promise .polyfill();
 Vue.use(iView);
 
-import overall from '../static/overall.json'
+import overall from '../static/capital/overall.json'
 let domain;
 if (process.env.NODE_ENV === 'development') {
-    domain = 'http://10.1.101.120:502';
+    domain = overall.development;
 } else {
-    // domain = location.protocol + '//' + window.location.host;
-    if(window.location.host=='webgame.predyfqp1.com'){
-        domain = location.protocol + '//' +  overall.http_pre;
-    }else if(window.location.host=='webgame.premsqp72.com'){
-        domain = location.protocol + '//' +  overall.http_online;
-    }else{
-        domain = 'http://not_pre_online';
-    }
+    domain = location.protocol + '//' + window.location.host;
 }
 Vue.prototype.$domain = domain;
-console.log('domain',domain,overall.http_pre,overall.http_online);
+//console.log('domain',domain);
 
 
 import ElementUI from 'element-ui';

@@ -23,7 +23,7 @@ export default{
         // this.agentSrc = "http://10.1.101.120:501/#/?token="+sessionStorage.getItem('token')+'&loginname='+web.game_getPlayer().playerInfo.nickname+'&web';
         let that = this;
         web.game_agent_url(function(value){
-            console.log('agent$$$$');
+            //console.log('agent$$$$');
             that.agentSrc = value.agent_url + '&web';
         })
     },
@@ -36,7 +36,7 @@ export default{
             var that = this;
             window.onmessage = function (e) {
                 e = e||event;
-                console.log('回调参数',e);
+                //console.log('回调参数',e);
                 if (e.data == 'back') {
                     that.$router.push({path: '/home'});
                 }
@@ -54,7 +54,7 @@ export default{
     height: 100%;
     .system_example{
         width: 100%;
-        height: 1000px;
+        height: 1200px;
         .mixin_image(url('../../../static/dream/center/bg-guanli.jpg'));
         position: relative;
         .big_fish{
@@ -65,7 +65,7 @@ export default{
         }
         .manage_content{
             width: 1200px;
-            height: 1000px;
+            height: 1200px;
             background: rgba(88,51,82,0.6);
             border-left: 1px solid @color_blueviolet;
             border-right: 1px solid @color_blueviolet;

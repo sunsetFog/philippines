@@ -109,7 +109,6 @@ export default{
 <style lang="less" scoped>
 #management{
     width: 100%;
-    height: 1290px;
     .example_frame{
         width: 100%;
         height: 1120px;

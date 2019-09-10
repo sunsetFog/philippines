@@ -59,6 +59,16 @@ export default {
             save_money: '',
         }
     },
+    watch:{
+        save_money(cur,old){
+            if(/[^\d]/g.test(cur)){
+                if(this.save_money.match(/[^\d]/g)!=null){
+                   this.$message.error('请输入纯数字！');
+                }
+                this.save_money = this.save_money.replace(/[^\d]/g, '');
+            }
+        }
+    },
     methods:{
         changeMeans(value,res,save){
             this.rechargeActive = true;
@@ -125,8 +135,8 @@ export default {
                     web.game_safeMoney(that.save_money*10000,value,function(res){
                         that.money_total = res.balance/10000;
                         that.money_total = that.money_total.toFixed(2);
-                        web.game_getPlayer().setMoney(res.balance);
-                        web.game_getPlayer().setSafeMoney(res.deposit);
+                        web.game_getPlayer('money').setMoney(res.balance);
+                        web.game_getPlayer('safe_money').setSafeMoney(res.deposit);
                         that.$store.dispatch('getPlayerInfo',web.game_getPlayer());
                         that.$parent.getJson();
                         that.deposited_money = Number(that.deposited_money) + Number(that.save_money);
@@ -138,8 +148,8 @@ export default {
                     web.game_takeMoney(that.save_money*10000,value,function(res){
                         that.money_total = res.balance/10000;
                         that.money_total = that.money_total.toFixed(2);
-                        web.game_getPlayer().setMoney(res.balance);
-                        web.game_getPlayer().setSafeMoney(res.deposit);
+                        web.game_getPlayer('money').setMoney(res.balance);
+                        web.game_getPlayer('safe_money').setSafeMoney(res.deposit);
                         that.$store.dispatch('getPlayerInfo',web.game_getPlayer());
                         that.$parent.getJson();
                         that.deposited_money = Number(that.deposited_money) - Number(that.save_money);

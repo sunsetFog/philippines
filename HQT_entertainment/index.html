@@ -127,7 +127,8 @@
   <script>
     var sceneWeb = {type:0};
     var errorCodeGame = {};
-    var refreshWeb = {state: ''}
+    var refreshWeb = {state: ''};
+    var catchGame = {mice: ''};
     var zoomGames = document.getElementsByClassName('egret-player')[0];
     function purpleMagic(parameter){
         if(parameter==2){
@@ -156,13 +157,13 @@
     }
 
     function webLoginCallback() {
-        console.info("callback:",web.game_getPlayer())
+        //console.info("callback:",web.game_getPlayer())
     }
     
     function web_gameInited() {
         errorCodeGame.refresh = 'init';
         refreshWeb.state = 'init';
-        console.info("GameInited")
+        console.info("GameInited",refreshWeb.state);
         // loginTest();
     }
 
@@ -172,7 +173,7 @@
     }
     //进入场景
     function web_enterScene(type){
-        console.info("enterScene",type)
+        //console.info("enterScene",type)
         sceneWeb.type = type;
     }
     //服务器错误信息提示
@@ -202,16 +203,16 @@
     }
     //加载游戏的进度条
     function web_easyLoading(progress){
-        console.info("easyLoading",progress)
+        //console.info("easyLoading",progress)
     }
     //跑马灯
     function web_broadcast(data){
-        console.log("web_broadcast",data);
+        //console.log("web_broadcast",data);
         errorCodeGame.move = data.mTxtMsg;
     }
     // 游戏断开连接
     function web_socketClose(){
-        console.log('network@');
+        //console.log('network@');
         errorCodeGame.socket = 'socket';
         // let network =  confirm('服务器连接已断开，是否重连？');
         // if(network==true){
@@ -275,7 +276,7 @@
         var xhr = new XMLHttpRequest();
         xhr.open('GET', './static/manifest.json?v=' + Math.random(), true);
         xhr.addEventListener("load", function () {
-            // console.log('xml',xhr)
+            // //console.log('xml',xhr)
             var manifest = JSON.parse(xhr.response);
             var list = manifest.initial.concat(manifest.game);
             loadScript(list, function () {

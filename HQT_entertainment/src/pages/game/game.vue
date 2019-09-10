@@ -97,7 +97,7 @@
 <style lang="less" scoped>
 #home_game{
     width: 100%;
-    .mixin_image(url('../../../static/dream/bank/bj-youxi.jpg'));
+    .mixin_image(url('../../../static/dream/center/bj-youxi.jpg'));
     .game_example{
         width: 100%;
         height: 80px;

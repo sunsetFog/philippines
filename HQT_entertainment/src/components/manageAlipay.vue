@@ -39,7 +39,7 @@ export default {
         getAlipayJson(){
             var that = this;
             web.game_bank_lists(2,function(res){
-                console.log('提款alipay**&%%',res);
+                //console.log('提款alipay**&%%',res);
                 that.alipay_list = res.list;
             })
         },
@@ -57,7 +57,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                console.log('##alipay&&&');
+                //console.log('##alipay&&&');
                 web.game_unBindBank(2,that.alipay_list[index].bank_id,function(res){
                     that.getAlipayJson();
                     that.$message.success('解绑成功');

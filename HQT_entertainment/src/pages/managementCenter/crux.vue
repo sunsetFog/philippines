@@ -141,7 +141,6 @@ export default{
     },
     methods:{
         getJson(){
-            if('undefined' != typeof web){
                 this.portrait.head = '../../../static/dream/portrait/ui_headImg_'+this.player_info.avatar+'.png';
                 this.portrait.frame = '../../../static/dream/portrait/ui_headBox_'+this.player_info.avatar_box+'.png';
                 this.pet_name = this.player_info.nickname;
@@ -154,8 +153,6 @@ export default{
                         this.number_money[i] = 11;
                     }
                 }
-                
-            }
         },
         changeValue () {
             let leng = this.$means.validateTextLength(this.pet_name)
@@ -300,13 +297,13 @@ export default{
                 padding: 0px 20px;
                 box-sizing: border-box;
                 .user_info{
-                    .mixin_div(100%,160px,none,@color_white,left);
+                    .mixin_div(100%,205px,none,@color_white,left);
                     position: relative;
                     img:nth-of-type(1){
                         .mixin_img(80px,80px);
                         position: absolute;
                         left: 50%;
-                        top: 15px;
+                        top: 45px;
                         margin-left: -40px;
                         z-index: 3;
                         cursor: pointer;
@@ -315,14 +312,14 @@ export default{
                         .mixin_img(138px,138px);
                         position: absolute;
                         left: 50%;
-                        top: -15px;
+                        top: 15px;
                         margin-left: -69px;
                         z-index: 2;
                     }
                     span{
                         .mixin_span(100%,30px,none,@color_white,center);
                         position: absolute;
-                        top: 115px;
+                        top: 150px;
                         font-weight: 600;
                         font-size: @font_size18;
                     }
@@ -374,11 +371,13 @@ export default{
                     .edit_sex,.edit_name{
                         span:nth-of-type(1){
                             .mixin_span(auto,30px,none,@color_gray,center);
+                            float: left;
                         }
                         i{
                             color: @color_white;
-                            margin-left: 30px;
+                            margin: 7px 0px 0px 30px;
                             cursor: pointer;
+                            float: left;
                         }
                     }
                     .nickname_select{

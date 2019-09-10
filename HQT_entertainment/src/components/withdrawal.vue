@@ -20,9 +20,9 @@
                     <label>当前余额:</label>
                     <input type="text" disabled v-model.trim="money_total" placeholder="当前余额"/>
                 </div>
-                <div class="withdrawal_amount">
+                <div class="withdrawal_amount_s">
                     <label>提款金额:</label>
-                    <img src="../../static/dream/recharge/jian.png" @click="addition(1)"/>
+                    <img src="../../static/dream/recharge/jian.png" :class="{'amount_disable': withdrawal_amount=='','amount_pointer': withdrawal_amount!=''}" @click="addition(1)"/>
                     <input v-model.trim="withdrawal_amount" type="text" placeholder="请输入提款金额"/>
                     <img src="../../static/dream/recharge/jia.png" @click="addition(2)"/>
                 </div>
@@ -98,7 +98,7 @@ export default {
         getBankJson(){
             var that = this;
             web.game_bank_lists(1,function(res){
-                console.log('提款bank%%',res);
+                //console.log('提款bank%%',res);
                 that.bank_list = res.list;
                 that.getAlipayJson();
             })
@@ -106,7 +106,7 @@ export default {
         getAlipayJson(){
             var that = this;
             web.game_bank_lists(2,function(res){
-                console.log('提款alipay%%',res);
+                //console.log('提款alipay%%',res);
                 that.alipay_list = res.list;
             })
         },
@@ -145,9 +145,9 @@ export default {
                 }
                 var card = that.alipay_card;
             }
-                console.log('amount',that.withdrawal_amount*10000);
+                //console.log('amount',that.withdrawal_amount*10000);
                 web.game_drawout(that.withdrawal_amount*10000,card,function(res){
-                    console.log('success$$',res);
+                    //console.log('success$$',res);
                     that.$parent.hostMeans('know',that.withdrawal_amount);
                 })
 
@@ -207,7 +207,7 @@ export default {
             .mixin_float(943px,620px,right);
             padding: 75px 45px 0px 45px;
             box-sizing: border-box;
-            .current_balance,.withdrawal_amount,.account_number{
+            .current_balance,.withdrawal_amount_s,.account_number{
                 width: 100%;
                 height: 45px;
                 label{
@@ -228,13 +228,18 @@ export default {
                     cursor: not-allowed;
                 }
             }
-            .withdrawal_amount{
+            .withdrawal_amount_s{
                 margin-top: 50px;
+                .amount_disable{
+                    cursor: not-allowed;
+                }
+                .amount_pointer{
+                    cursor: pointer;
+                }
                 img:nth-of-type(1){
                     .mixin_img(42px,38px);
                     float: left;
                     margin: 2px 14px 0px 0px;
-                    cursor: pointer;
                 }
                 input{
                     .mixin_input(160px,43px);

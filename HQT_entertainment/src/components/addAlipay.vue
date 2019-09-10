@@ -53,7 +53,7 @@ export default {
                 return;
             }
             web.game_bindBank(2,that.real_name,'',that.account,function(res){
-                console.log('add_alipay',res);
+                //console.log('add_alipay',res);
                 that.rechargeActive = false;
                 that.$parent.hostMeans('withdrawal','alipay');
                 that.$parent.hostMeans('managealipay');

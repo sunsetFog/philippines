@@ -21,6 +21,7 @@
                         <img v-show="item.is_readed" src="../../static/dream/recharge/read.png"/>
                     </div>
                 </div>
+                <div class="no_time" v-show="no_have">暂无公告</div>
              </div>
              <div class="page_example">
                 <pagination :pagination="pagination" @emitWay="getJson"></pagination>
@@ -40,7 +41,8 @@ export default {
         return{
             rechargeActive: false,
             mail_list: [],
-            pagination: {page: 1,pagesize: 25,total: 0}
+            pagination: {page: 1,pagesize: 25,total: 0},
+            no_have: false
         }
     },
     methods:{
@@ -50,9 +52,9 @@ export default {
         },
         getJson(){
             var that = this;
-            console.log('youjian***',that.pagination);
+            //console.log('youjian***',that.pagination);
             web.game_get_message(1,function(res){
-                console.log('邮件##',res);
+                //console.log('邮件##',res);
                 for(let i=0;i<res.list.length;i++){
                     res.list[i].created_at = that.$means.getLocalTime(res.list[i].created_at);
                     // let timestamp = res.list[i].created_at;
@@ -114,6 +116,11 @@ export default {
                     that.pagination.total = res.totalrows;
                 }else{
                     that.pagination.total = 50;
+                }
+                if(that.mail_list.length==0){
+                    that.no_have = true;
+                }else{
+                    that.no_have = false;
                 }
             })
         },
@@ -198,6 +205,10 @@ export default {
                         top: 12px;
                     }
                 }
+            }
+            .no_time{
+                .mixin_div(100%,80px,none,@color_dimgray,center);
+                font-size: @font_size20;
             }
 
         }

@@ -108,7 +108,7 @@ export default{
 <style lang="less" scoped>
 #line{
     width: 100%;
-    padding-bottom: 160px;
+    padding-bottom: 115px;
     box-sizing: border-box;
     .mixin_image(url('../../../static/dream/login/bg_denglu.jpg'));
     @color_violet: #3d1351;//字体

@@ -1,166 +1,199 @@
 
 <template>
-  <section id="login">
-      <div class="entertainment">
-          <img class="login_logo" src="../../../static/dream/login/logo2.png"/>
-          <img class="big_fish" src="../../../static/dream/login/fish.png"/>
-            <div class="sign_frame">
-                <div class="code_and_service">
-                    <div class="customer_service" @click="customerService()"></div>
+    <section id="login">
+        <div class="entertainment">
+            <img class="login_logo" src="../../../static/dream/login/logo2.png"/>
+            <img class="big_fish" src="../../../static/dream/login/fish.png"/>
+                <div class="sign_frame">
+                    <div class="code_and_service">
+                        <div class="customer_service" @click="customerService()"></div>
+                    </div>
+                    <div class="form_information">
+                        <div class="account">
+                            <span>账号:</span>
+                            <input v-model.trim="account_number" maxlength="30" placeholder="请输入账号"></input>
+                        </div>
+                        <div class="password_enter">
+                            <span>密码:</span>
+                            <input :type="eyeType" maxlength="25" v-model.trim="password_number" placeholder="请输入登陆密码"></input>
+                            <img v-if="eyeType=='text'" @click="eyeMeans" class="zhengyan" src="../../../static/dream/login/zhengyan.png"/>
+                            <img v-else class="biyan" @click="eyeMeans" src="../../../static/dream/login/biyan.png"/>
+                        </div>
+                        <div class="remember_and_forget">
+                            <div class="rectangle" @click="rememberMeans()"><img v-show="remember_checked" src="../../../static/dream/login/jizhu.png"/></div>
+                            <span>记住密码</span>
+                            <!-- <div class="rapid_registration" @click="rapidRegistration('register')">快速注册</div> -->
+                            <!-- <span @click="forgetPassword">忘记密码</span> -->
+                        </div>
+                        <div class="login_register">
+                            <div class="sign_in" @click="signIn"></div>
+                            <div class="is_register" @click="rapidRegistration('register')"></div>
+                        </div>
+                        <div class="recommend"><span></span><span>推荐最优路线</span><span></span></div>
+                        <div class="optimal" @click="rapidRegistration('line')"></div>
+                        <div class="shortcut"></div>
+                    </div>
                 </div>
-                <div class="form_information">
-                    <div class="account">
-                        <span>账号:</span>
-                        <input v-model.trim="account_number" maxlength="30" placeholder="请输入账号"></input>
-                    </div>
-                    <div class="password_enter">
-                        <span>密码:</span>
-                        <input :type="eyeType" maxlength="25" v-model.trim="password_number" placeholder="请输入登陆密码"></input>
-                        <img v-if="eyeType=='text'" @click="eyeMeans" class="zhengyan" src="../../../static/dream/login/zhengyan.png"/>
-                        <img v-else class="biyan" @click="eyeMeans" src="../../../static/dream/login/biyan.png"/>
-                    </div>
-                    <div class="remember_and_forget">
-                        <div class="rectangle" @click="rememberMeans()"><img v-show="remember_checked" src="../../../static/dream/login/jizhu.png"/></div>
-                        <span>记住密码</span>
-                        <!-- <div class="rapid_registration" @click="rapidRegistration('register')">快速注册</div> -->
-                        <!-- <span @click="forgetPassword">忘记密码</span> -->
-                    </div>
-                    <div class="login_register">
-                        <div class="sign_in" @click="signIn"></div>
-                        <div class="is_register" @click="rapidRegistration('register')"></div>
-                    </div>
-                    <div class="recommend"><span></span><span>推荐最优路线</span><span></span></div>
-                    <div class="optimal" @click="rapidRegistration('line')"></div>
-                    <div class="shortcut"></div>
-                </div>
-            </div>
-            
-      </div>
+                
+        </div>
 
-    <footers :vip_foot="false"></footers>
-  </section>
+        <footers :vip_foot="false"></footers>
+    </section>
 </template>
 
 <script>
 import footers from '../../components/footer.vue';
 export default{
     components: {footers},
-  data(){
-    return{
-        account_number: '',//登陆账号
-        password_number: '',//登陆密码
-        remember_checked: false,
-        eyeType: 'password'
-    }
-  },
-  mounted(){
-      var that = this;
-      that.$means.overallHeight('login');
-      window.onresize = function temp1(){
-          that.$means.overallHeight('login');
-      }
-  },
-  created(){
-      if(refreshWeb.state==''){
-          flashGameplayer();
-      }
-      if(localStorage.getItem('account')){
-          this.account_number = localStorage.getItem('account');
-          this.password_number = localStorage.getItem('password');
-          this.remember_checked = true;
-      }else{
-          this.account_number = '';
-          this.password_number = '';
-          this.remember_checked = false;
-      }
-      
+    data(){
+        return{
+            account_number: '',//登陆账号
+            password_number: '',//登陆密码
+            remember_checked: false,
+            eyeType: 'password'
+        }
+    },
+    mounted(){
+        var that = this;
+        that.$means.overallHeight('login');
+        window.onresize = function temp1(){
+            that.$means.overallHeight('login');
+        }
+    },
+    created(){
+        this.catchMice();
+        if(refreshWeb.state==''){
+            flashGameplayer();
+        }else{
+            web.game_exit(function(){});
+        }
+        if(localStorage.getItem('account')){
+            this.account_number = localStorage.getItem('account');
+            this.password_number = localStorage.getItem('password');
+            this.remember_checked = true;
+        }else{
+            this.account_number = '';
+            this.password_number = '';
+            this.remember_checked = false;
+        }
+        
 
-    this.keyEnter();
-  },
-  methods: {
-      eyeMeans(){
-          if(this.eyeType == 'password'){
-              this.eyeType = 'text';
-          }else{
-              this.eyeType = 'password';
-          }
-      },
-      keyEnter(){
-            let that = this;
-            document.onkeypress = function(e) {
-                var keycode = document.all ? event.keyCode : e.which;
-                // console.log('keycode',keycode);
-                if (keycode == 13) {
-                    let login = document.getElementById('login');
-                    // console.log('#login',login);
-                    if(login!=null){
-                            that.signIn();// 登录方法名
-                            return false;
-                    }
-                    
-                }
-            };
-      },
-      customerService(){
-          window.open("https://chat32.live800.com/live800/chatClient/chatbox.jsp?companyID=12698&enterurl=&codeType=custom&info=");
-      },
-      rapidRegistration(value){
-          if(value=='register'){
-              if(refreshWeb.state=='init'){
-                  this.$router.push({path: '/register'});
-              }else{
-                  this.$message.error('加载中');
-              }
-          }else if(value=='line'){
-              this.$router.push({path: '/line'});
-          }
-      },
-      signIn(){
-        //   console.log('yuming#####',window.location.host);
-            var that = this;
-            if(that.account_number==''&&that.password_number==''){
-                that.$message.error('请输入账号和密码!');
-                return;
-            }else if(that.account_number == ''){
-                that.$message.error('请输入账号!');
-                return;
-            }else if(that.password_number == ''){
-                that.$message.error('请输入密码!');
-                return;
-            }
-            if(refreshWeb.state=='init'){
-                web.game_login(that.account_number,that.password_number,window.location.host,function() { 
-                    that.$store.dispatch('getPlayerInfo',web.game_getPlayer());
-                    if(that.remember_checked==true){
-                        localStorage.setItem('account',that.account_number);
-                        localStorage.setItem('password',that.password_number);
-                    }else{
-                        localStorage.removeItem('account');
-                        localStorage.removeItem('password');
-                    }
-                    sessionStorage.setItem('account_number',that.account_number);
-                    sessionStorage.setItem('password_number',that.password_number);
-                    that.$router.push({path: '/home'});
-                });
+        this.keyEnter();
+    },
+    methods: {
+        eyeMeans(){
+            if(this.eyeType == 'password'){
+                this.eyeType = 'text';
             }else{
-                that.$message.error('加载中');
+                this.eyeType = 'password';
             }
-      },
-      rememberMeans(){
-          if(this.remember_checked==false){
-                this.remember_checked = true;
-          }else{
-                this.remember_checked = false;
-          }
-      }
-  }
+        },
+        keyEnter(){
+                let that = this;
+                document.onkeypress = function(e) {
+                    var keycode = document.all ? event.keyCode : e.which;
+                    // console.log('keycode',keycode);
+                    if (keycode == 13) {
+                        let login = document.getElementById('login');
+                        // console.log('#login',login);
+                        if(login!=null){
+                                that.signIn();// 登录方法名
+                                return false;
+                        }
+                        
+                    }
+                };
+        },
+        customerService(){
+            window.open("https://chat32.live800.com/live800/chatClient/chatbox.jsp?companyID=12698&enterurl=&codeType=custom&info=");
+        },
+        rapidRegistration(value){
+            if(value=='register'){
+                if(refreshWeb.state=='init'){
+                    this.$router.push({path: '/register'});
+                }else{
+                    this.$message.error('加载游戏中,稍后为你进入快速注册！');
+                    sessionStorage.setItem('register','up');
+                }
+            }else if(value=='line'){
+                this.$router.push({path: '/line'});
+            }
+        },
+        signIn(res){
+                var that = this;
+                if(that.account_number==''&&that.password_number==''){
+                    that.$message.error('请输入账号和密码!');
+                    return;
+                }else if(that.account_number == ''){
+                    that.$message.error('请输入账号!');
+                    return;
+                }else if(that.password_number == ''){
+                    that.$message.error('请输入密码!');
+                    return;
+                }
+                if(refreshWeb.state=='init'){
+                    web.game_login(that.account_number,that.password_number,window.location.host,function() { 
+                        that.$store.dispatch('getPlayerInfo',web.game_getPlayer());
+                        if(that.remember_checked==true){
+                            localStorage.setItem('account',that.account_number);
+                            localStorage.setItem('password',that.password_number);
+                        }else{
+                            localStorage.removeItem('account');
+                            localStorage.removeItem('password');
+                        }
+                        sessionStorage.setItem('account_number',that.account_number);
+                        sessionStorage.setItem('password_number',that.password_number);
+                        that.$router.push({path: '/home'});
+                    });
+                }else{
+                    that.$message.error('加载游戏中,稍后为你登陆操作！');
+                    sessionStorage.setItem('sign_in','up');
+                }
+        },
+        rememberMeans(){
+            if(this.remember_checked==false){
+                    this.remember_checked = true;
+            }else{
+                    this.remember_checked = false;
+            }
+        },
+        catchMice(){
+            var that = this;
+            Object.defineProperties(catchGame,{
+                mice:{
+                    configurable: true,
+                    get:function(){
+                        return '';
+                    },
+                    set:function(value){
+                        if(value == 'ok'){
+                            refreshWeb.state = 'init';
+                            that.signIn();
+                        }
+                    }
+                },
+                register:{
+                    configurable: true,
+                    get:function(){
+                        return '';
+                    },
+                    set:function(value){
+                        if(value == 'ok'){
+                            refreshWeb.state = 'init';
+                            that.rapidRegistration('register');
+                        }
+                    }
+                }
+            });
+        }
+    }
 }
 </script>
 
 <style lang="less" scoped>
 #login{
     width: 100%;
-    padding-bottom: 160px;
+    padding-bottom: 115px;
     box-sizing: border-box;
     .mixin_image(url('../../../static/dream/login/bg_denglu.jpg'));
     @color_violet: #3d1351;//字体
@@ -349,6 +382,7 @@ export default{
                         left: 137px;
                         top: 0px;
                         font-size: @font_size17;
+                        overflow: hidden;
                     }
                     span:nth-of-type(3){
                         .mixin_span(75px,10px,none,@color_violet,left);
