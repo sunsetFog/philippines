@@ -93,7 +93,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -241,7 +241,7 @@
             @size-change="handleSizeChange3"
             @current-change="handleCurrentChange3"
             :current-page.sync="currentPage3"
-            :page-sizes="[50,100,200]"
+            :page-sizes="[20,50,200]"
             :page-size="pagesize3"
             background
             layout="sizes, prev, pager, next, jumper"
@@ -447,7 +447,7 @@
       @size-change="handleSizeChange5"
       @current-change="handleCurrentChange5"
       :current-page.sync="currentPage5"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize5"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -536,8 +536,8 @@
           fixed="right"
           label="操作">
           <template slot-scope="scope">
-            <el-button @click="edit5(scope.row)" type="text" size="small">修改</el-button>
-            <el-button type="text" size="small" @click="delet5(scope.row)">删除</el-button>
+            <el-button @click="edit5(scope.row)" type="text" size="small"  v-if="scope.row.multiple !=-1">修改</el-button>
+            <el-button type="text" size="small" @click="delet5(scope.row)" v-if="scope.row.multiple !=-1">删除</el-button>
           </template>
         </el-table-column>
         </el-table>
@@ -549,7 +549,7 @@
       @size-change="handleSizeChange5_2"
       @current-change="handleCurrentChange5_2"
       :current-page.sync="currentPage5_2"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize5_2"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -635,7 +635,7 @@
       @size-change="handleSizeChange6"
       @current-change="handleCurrentChange6"
       :current-page.sync="currentPage6"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize6"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -696,8 +696,8 @@
           fixed="right"
           label="操作">
           <template slot-scope="scope">
-            <el-button @click="edit6(scope.row)" type="text" size="small">修改</el-button>
-            <el-button type="text" size="small" @click="delet6(scope.row)">删除</el-button>
+            <el-button @click="edit6(scope.row)" type="text" size="small" v-if="scope.row.multiple_u_limit !=-1">修改</el-button>
+            <el-button type="text" size="small" @click="delet6(scope.row)" v-if="scope.row.multiple_u_limit !=-1">删除</el-button>
           </template>
         </el-table-column>
         </el-table>
@@ -709,7 +709,7 @@
       @size-change="handleSizeChange6_2"
       @current-change="handleCurrentChange6_2"
       :current-page.sync="currentPage6_2"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize6_2"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -801,6 +801,18 @@
     </el-tab-pane>
     <el-tab-pane label="红包扫雷设置">
       <redenvelope></redenvelope>
+    </el-tab-pane>
+    <el-tab-pane label="疯狂斗牛设置">
+      <creazycow></creazycow>
+    </el-tab-pane>
+     <el-tab-pane label="彩票牛牛设置">
+      <lotterycow></lotterycow>
+    </el-tab-pane>
+     <el-tab-pane label="抢庄牛牛设置">
+      <qznn></qznn>
+    </el-tab-pane>
+     <el-tab-pane label="二八杠设置">
+      <twoEight></twoEight>
     </el-tab-pane>
   </el-tabs>
 
@@ -940,6 +952,10 @@ import vipfish from '../game/vipfish'
 import richfish from '../game/richfish'
 import landlord from '../game/landlord'
 import redenvelope from '../game/redenvelope'
+import creazycow from '../game/creazycow'       
+import lotterycow from '../game/lotterycow'  
+import qznn from '../game/qznn'  
+import twoEight from '../game/twoEight'  
 export default {
   data() {
     var zsrules = (rule, value, callback) => {
@@ -948,6 +964,17 @@ export default {
       } else {
         if (value *1 < 0) {
           callback(new Error('值为正数'))
+        } else {
+          callback();
+        }
+      }
+    }
+    var moneyrules = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入值'));
+      } else {
+        if (value *1 < 0) {
+          callback(new Error('请输入正数'))
         } else {
           callback();
         }
@@ -1072,7 +1099,7 @@ export default {
       },
       rules5: {
         money: [
-          {required: true, validator: zsrules, trigger: 'blur'}
+          {required: true, validator: moneyrules, trigger: 'blur'}
         ],
         num: [
           {required: true, validator: zsrules, trigger: 'blur'}
@@ -1086,7 +1113,7 @@ export default {
       },
       rules6: {
         money: [
-          {required: true, validator: zsrules, trigger: 'blur'}
+          {required: true, validator: moneyrules, trigger: 'blur'}
         ],
         num: [
           {required: true, validator: zsrules, trigger: 'blur'}
@@ -1105,13 +1132,13 @@ export default {
       formLabelWidth: '180px',
       title: '',
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       total2: 0,
-      pagesize2: 50,
+      pagesize2: 20,
       currentPage2: 1,
       tableData2: [],
       total3: 0,
-      pagesize3: 50,
+      pagesize3: 20,
       currentPage3: 1,
       tableData3: [],
       id: '',
@@ -1128,11 +1155,11 @@ export default {
         status: ''
       },
       total5: 0,
-      pagesize5: 50,
+      pagesize5: 20,
       currentPage5: 1,
       tableData5: [],
       total5_2: 0,
-      pagesize5_2: 50,
+      pagesize5_2: 20,
       currentPage5_2: 1,
       tableData5_2: [],
       formInline5_2: {
@@ -1152,7 +1179,7 @@ export default {
         status: ''
       },
       total6: 0,
-      pagesize6: 50,
+      pagesize6: 20,
       currentPage6: 1,
       tableData6: [],
       tableData7: [],
@@ -1161,7 +1188,7 @@ export default {
         name: '',
       },
       total6_2: 0,
-      pagesize6_2: 50,
+      pagesize6_2: 20,
       currentPage6_2: 1,
       tableData6_2: [],
       title6: '',
@@ -1208,7 +1235,11 @@ export default {
     vipfish,
     richfish,
     landlord,
-    redenvelope
+    redenvelope,
+    creazycow,
+    lotterycow,
+    qznn,
+    twoEight,
   },
   computed: {
     ...mapGetters([
@@ -1357,6 +1388,7 @@ export default {
       }
       if(this.actionname1 === '3') {
          getlist4(this)
+         getlist4_2(this)
       }
       if(this.actionname1 === '6') {
          getnum(this)
@@ -1456,11 +1488,7 @@ export default {
       this.title5 = '普通奖库-编辑'
       this.dialogFormVisible5 = true
       this.id5 = row.id
-      if (row.multiple == '-1') {
-        this.form5.money = ''
-      } else {
-        this.form5.money = row.multiple
-      }
+      this.form5.money = row.multiple
       this.form5.num = row.num
       this.form5.npic = row.ntg_pic_num
       this.form5.pic = row.tg_pic_num
@@ -1620,6 +1648,9 @@ export default {
       if (row.name==='红包扫雷'|| row.id == '91') {
         this.actionname = '14'
       }
+      if (row.name==='疯狂斗牛'|| row.id == '901') {
+        this.actionname = '15'
+      }
     },
     cz (row) {
       let that = this
@@ -1670,22 +1701,22 @@ export default {
     up(row) {
       let that = this
       var lottery = 0
-      if (row.name==='百家乐（彩票场）') {
+      if (row.id == '101' && row.type =='2') {
         lottery = 2
       }
-      if (row.name==='百家乐') {
+      if (row.id == '101' && row.type =='1') {
         lottery = 1
       }
-      if (row.name==='百人牛牛(彩票场)') {
+      if (row.id == '201' && row.type =='2') {
         lottery = 2
       }
-      if (row.name==='百人牛牛') {
+      if (row.id == '201' && row.type =='1') {
         lottery = 1
       }
-      if (row.name==='龙虎斗（彩票场）') {
+      if (row.id == '801' && row.type =='2') {
         lottery = 2
       }
-      if (row.name==='龙虎斗') {
+      if (row.id == '801' && row.type =='1') {
         lottery = 1
       }
       this.$confirm('此操作将启用该数据, 是否继续?', '提示', {
@@ -1717,22 +1748,22 @@ export default {
     down(row) {
       let that = this
       var lottery = 0
-      if (row.name==='百家乐（彩票场）') {
+      if (row.id == '101' && row.type =='2') {
         lottery = 2
       }
-      if (row.name==='百家乐') {
+      if (row.id == '101' && row.type =='1') {
         lottery = 1
       }
-      if (row.name==='百人牛牛(彩票场)') {
+      if (row.id == '201' && row.type =='2') {
         lottery = 2
       }
-      if (row.name==='百人牛牛') {
+      if (row.id == '201' && row.type =='1') {
         lottery = 1
       }
-      if (row.name==='龙虎斗（彩票场）') {
+      if (row.id == '801' && row.type =='2') {
         lottery = 2
       }
-      if (row.name==='龙虎斗') {
+      if (row.id == '801' && row.type =='1') {
         lottery = 1
       }
       this.$confirm('此操作将停用该数据, 是否继续?', '提示', {

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <mt-header title="提现记录">
-        <mt-button slot="left" @click="back">
+        <mt-button slot="left" class="all_palm" @click="back">
         <i class="mintui mintui-back"></i>
         </mt-button>
 

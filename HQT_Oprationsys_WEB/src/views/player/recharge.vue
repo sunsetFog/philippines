@@ -25,8 +25,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="玩家搜索">
-                <el-input v-model="formInline.region" placeholder="玩家搜索" clearable></el-input>
+            <el-form-item label="玩家账号">
+                <el-input v-model="formInline.region" placeholder="玩家账号" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="3">
@@ -60,7 +60,7 @@
     </el-table-column>
     <el-table-column
       prop="user_account"
-      label="玩家名称"
+      label="玩家账号"
       >
     </el-table-column>
     <el-table-column
@@ -108,7 +108,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -136,7 +136,7 @@ export default {
       currentPage: 1,
       tableData: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       keys: [],
       id: '',
       statuslist: []

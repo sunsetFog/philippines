@@ -38,7 +38,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="newuserdayreportgetlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="newuserdayreportgetlist" :loading="loading">查询</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -115,6 +115,10 @@
       prop="newuser_ptom_bet_num"
       label="人机类投注人数">
     </el-table-column>
+     <el-table-column
+      prop="newuser_ptom_bet"
+      label="人机类投注额">
+    </el-table-column>
     <el-table-column
       prop="newuser_ptop_flow"
       label="人人类流水">
@@ -131,7 +135,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -160,10 +164,11 @@ export default {
       currentPage: 1,
       tableData: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       havetime: false,
       havetime1: false,
-      orglist: []
+      orglist: [],
+      loading: false
     }
   },
   created() {
@@ -286,7 +291,7 @@ function getlist (that, starttime, endtime, currentPage, pagesize) {
         return
       }
     }
-    
+    that.loading = true
   request({
     url: that.public.url + '/backend/newuserdayreport/getlist',
     method: 'post',
@@ -302,6 +307,7 @@ function getlist (that, starttime, endtime, currentPage, pagesize) {
         message: res.message,
         type: 'success'
       })
+      that.loading = false
       if (res.data.list.length === 0) {
         that.tableData = res.data.list
       } else {

@@ -15,6 +15,7 @@
 
 <script>
 export default{
+    name: 'finance_information',
     data(){
         return{
                 information: [

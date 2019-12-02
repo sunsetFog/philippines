@@ -33,6 +33,7 @@
 
 <script>
 export default{
+    name: 'gamePlayer',
     data(){
         return{
             quota_list: [{gear_position: '游客19109'},{gear_position: '游客19109'},{gear_position: '游客19109'},{gear_position: '游客19109'},{gear_position: '游客19109'},{gear_position: '游客19109'},{gear_position: '游客19109'},{gear_position: '游客19109'}],

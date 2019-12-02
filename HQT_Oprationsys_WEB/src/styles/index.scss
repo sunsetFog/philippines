@@ -85,3 +85,10 @@ a:hover {
 .red {
   color: red;
 }
+
+#downloadAnalysis{
+  .el-date-editor .el-range-separator{
+    width: 10%;
+    padding: 0px;
+  }
+}

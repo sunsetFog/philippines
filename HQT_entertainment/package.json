@@ -1,7 +1,7 @@
 {
-  "name": "cards",
+  "name": "webgame",
   "version": "1.0.0",
-  "description": "单",
+  "description": "钻石娱乐",
   "author": "Lvans <2693281934@qq.com>",
   "private": true,
   "scripts": {

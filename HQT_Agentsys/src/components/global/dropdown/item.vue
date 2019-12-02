@@ -1,5 +1,5 @@
 <template>
-    <li class="dropdown-list-item" @click="handleClick"><i class="mintui mintui-back"></i>&nbsp;<slot></slot></li>
+    <li class="dropdown-list-item all_palm" @click="handleClick"><i class="mintui mintui-back"></i>&nbsp;<slot></slot></li>
 </template>
 
 <script>

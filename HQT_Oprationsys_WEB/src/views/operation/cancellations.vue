@@ -87,7 +87,7 @@
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
       :page-size="pagesize"
-      :page-sizes="[10,20,30,40,50]"
+      :page-sizes="[20,50,200]"
       background
       layout="sizes, prev, pager, next, jumper"
       :total="total">
@@ -119,7 +119,7 @@ export default {
       currentPage: 1,
       tableData: [],
       total: 0,
-      pagesize: 50
+      pagesize: 20
     }
   },
   created() {

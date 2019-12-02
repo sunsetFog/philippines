@@ -15,6 +15,7 @@
 
 <script>
     export default{
+        name: 'home_game',
         data(){
             return{
                 count_height: 630,
@@ -52,6 +53,10 @@
                     that.enlargeDisable();
                 }
             }
+            that.overflowBody(true);
+        },
+        beforeDestroy(){
+            this.overflowBody(false);
         },
         methods:{
             zoomMeans(value){
@@ -88,6 +93,14 @@
                 let purple_height = value + 80;
                 this.purple_define.height = purple_height;
                 this.purple_define.width = value/0.5625;
+            },
+            overflowBody(value){
+                let body_set = document.getElementsByTagName('body')[0];
+                if(value){
+                    body_set.style.overflow = 'hidden';
+                }else{
+                    body_set.style.overflow = 'auto';
+                }
             }
         }
     }
@@ -97,6 +110,8 @@
 <style lang="less" scoped>
 #home_game{
     width: 100%;
+    overflow: hidden;
+    min-height: 800px;
     .mixin_image(url('../../../static/dream/center/bj-youxi.jpg'));
     .game_example{
         width: 100%;

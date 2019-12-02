@@ -81,24 +81,39 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="3">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameordergetlist">查询</el-button>
+
+          <el-col :span="6">
+            <el-form-item label="UID" label-width="100px">
+            <el-input v-model="formInline.uid" placeholder="请输入要查询的关键词" clearable></el-input>
+            </el-form-item>
           </el-col>
-          <el-col :span="3">
+
+        </el-form>
+      </el-row>
+      <el-row>
+        <el-form>
+          <el-col :span="2" :offset="19">
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameordergetlist" :loading="loading">查询</el-button>
+          </el-col>
+          <el-col :span="2">
             <el-button type="primary"  @click="excel" v-if="gameorderexportorderlist">导出excel</el-button>
           </el-col>
         </el-form>
       </el-row>
     </div>
     <div class="paging">
-      <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-      <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+      <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+      <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
     </div>
 
     <el-table
     :data="tableData"
     border
     style="width: 100%">
+    <el-table-column
+      prop="uid"
+      label="UID">
+    </el-table-column>
     <el-table-column
       prop="id"
       label="订单编号">
@@ -141,7 +156,7 @@
     </el-table-column>
     <el-table-column
       prop="tax"
-      label="税收">
+      label="代理收益">
     </el-table-column>
     <el-table-column
       prop="bbef_balance"
@@ -162,8 +177,8 @@
 
 <div class="pagingbox">
   <div class="paging">
-    <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-    <el-button type='primary' @click="down" :disabled="tableData.length <50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+    <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+    <el-button type='primary' @click="down" :disabled="tableData.length <20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
   </div>
 </div>
 
@@ -183,8 +198,10 @@ export default {
         starttime: '',
         endtime: '',
         user: '',
-        id: ''
+        id: '',
+        uid: ''
       },
+      loading: false,
       gamelist: [],
       currentPage: 1,
       tableData: [],
@@ -195,7 +212,7 @@ export default {
         {name: '已撤单', type: '3'},
       ],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       userlist: [],
       num: 1
@@ -215,6 +232,7 @@ export default {
       that.formInline.starttime = this.order.starttime
       that.formInline.endtime = this.order.endtime
       that.formInline.user = this.order.user
+      that.formInline.uid = this.order.uid
       getlist(this)
     }
     if (Object.keys(this.$route.query).length > 0) {
@@ -276,6 +294,7 @@ export default {
           'starttime': that.formInline.starttime,
           'endtime': that.formInline.endtime,
           'user': that.formInline.user,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setorder', setorder)
     },
@@ -293,6 +312,7 @@ export default {
           'starttime': that.formInline.starttime,
           'endtime': that.formInline.endtime,
           'user': that.formInline.user,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setorder', setorder)
     },
@@ -310,6 +330,7 @@ export default {
           'starttime': that.formInline.starttime,
           'endtime': that.formInline.endtime,
           'user': that.formInline.user,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setorder', setorder)
     },
@@ -329,7 +350,8 @@ export default {
         status: that.formInline.type,
         agent_org_id: that.formInline.user,
         game_id: id,
-        game_type: type
+        game_type: type,
+        uid: that.formInline.uid,
       }
       if (that.$route.query) {
         if (that.formInline.starttime) {
@@ -425,6 +447,7 @@ export default {
 
 
 function getlist (that) {
+  that.loading = true
   var type = ''
   var id = ''
   that.gamelist.map(val=>{
@@ -441,7 +464,8 @@ function getlist (that) {
     status: that.formInline.type,
     agent_org_id: that.formInline.user,
     game_id: id,
-    game_type: type
+    game_type: type,
+    uid: that.formInline.uid,
   }
   if (that.$route.query) {
     if (that.formInline.starttime) {
@@ -468,6 +492,7 @@ function getlist (that) {
     method: 'post',
     data: data
   }).then(res => {
+    that.loading = false
     that.tableData = res.data
     // that.total = res.data.rownum * 1
     // that.currentPage = res.data.pageno * 1
@@ -490,7 +515,7 @@ function getgamelist (that) {
 
 function getuserlist (that) {
   request({
-    url: that.public.url + '/backend/org/getOrglist',
+    url: that.public.url + '/backend/org/getorglist',
     method: 'post'
   }).then(res => {
     let all = {id: "", name: "全部"}
@@ -520,13 +545,6 @@ function parseTime(time) {
     margin-right: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-  .line {
-    border-bottom: 1px solid #666;
-    margin-bottom: 20px;
-    font-size: 21px;
-    font-weight: 700;
-    margin-right: -126px;
   }
   .floatright {
     float: right;

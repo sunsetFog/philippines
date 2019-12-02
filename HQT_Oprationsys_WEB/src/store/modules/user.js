@@ -17,12 +17,18 @@ const user = {
     roledel: false,
     roleupdate: false,
     rolegetlist: false,
+    rolegetagentorg: false,
     privilegeadd: false,
     privilegedel: false,
     privilegeupdate: false,
     accountadd: false,
     accountdel: false,
     accountgetlist: false,
+    accountgetaccountorginfo: false,
+    accountgetitopagentlist:false,
+    accountgetrtopagentlist:false,
+    accountgetvirtualagentinfo:false,
+    accountgetrealtopagentinfo:false,
     accountupdate: false,
     accountaddCmoney: false,
     accountresetLoginPwd: false,
@@ -50,6 +56,11 @@ const user = {
     newuserdayreportgetlist: false,
     keepuserdayreportgetlist: false,
     businessdealdayreportgetlist: false,
+    webdownpagesetdel:false,
+    webdownpagesetupdatestatus:false,
+    webdownpagesetupdate:false,
+    webdownpagesetadd:false,
+    webdownpagesetgetlist:false,
     gamedealdayreportgetlist: false,
     agentorgdayreportgetlist: false,
     agentaccountdayreportgetlist: true, //by test
@@ -58,9 +69,13 @@ const user = {
     gameemailgetinfo: false,
     gameemailgetreceiverlist: false,
     gamenoticeadd: false,
+    gamebanneradd:false,
     gamenoticedel: false,
+    gamebannerdel:false,
     gamenoticeupdate: false,
+    gamebannerupdate:false,
     gamenoticegetlist: false,
+    gamebannergetlist:false,
     gameactivityupdate: false,
     gameactivityadd: false,
     gameactivitydel: false,
@@ -68,6 +83,7 @@ const user = {
     gameactivitysearchsearchactivity: false,
     gameactivitysearchgetjoinuserlist: false,
     gameactivitysearchgetdayjoinusersum: false,
+    reglargessmoneyselectConfig:false,//注册送金
     quicksetbankgetlist: false,
     quicksetbankadd: false,
     quicksetbankupdate: false,
@@ -89,7 +105,9 @@ const user = {
     gameusergetinfo: false,
     gameordergetlist: false,
     payrechargegetlist: false,
+    payrechargeexportpayrecharge:false,
     paywithdrawgetlist: false,
+    paywithdrawexportwithdraw:false,
     gamenamegetlist: false,
     gamenameadd: false,
     gamenamedel: false,
@@ -101,7 +119,11 @@ const user = {
     gameopenawardgetlist: false,
     gameopenawardkillorder: false,
     gameuserchggetlist: false,
+    gameuserchggetListdownload:false,
     gamesinglereportgetlist: false,
+    gamertpsetgetrtpdatalist: false,
+    repstudioexportlist:false,
+    repstudiogetlist:false,
     gameuserrankreportgetlist: false,
     gameuserrankreportgameorderdetail: false,
     gameuserbankgethistorylist: false,
@@ -162,6 +184,12 @@ const user = {
     gamesetupdatebetitem: false,
     gamesetaddbetitem: false,
     gamesetgetbetitemlist: false,
+    virtualagentaddagent: false,
+    virtualagentgetlist: false,
+    virtualagentgetinfo: false,
+    virtualagentupdateurl: false,
+    virtualagentgetusercountinfo:false,
+    virtualagentgetdomainlist: false,
     gamesetgetawardsrclist: false,
     paymodeadd: false,
     paymodedel: false,
@@ -180,8 +208,10 @@ const user = {
     withdrawpostupdateauditstatus: false,
     withdrawpostgetinfo: false,
     withdrawpostexceptionlist: false,
+    withdrawpostupdateconfirmstatus:false,
     agentaccountgettaxlist: false,
     agentaccountupdatetax: false,
+    gameusercodegetlist:false,
     paywithdrawgetcashlist: false,
     paywithdrawgetinfocash: false,
     paywithdrawauditwithdraw: false,
@@ -210,12 +240,71 @@ const user = {
     gamesetredpacketlist: false,
     businessdealdaygetlistdownload: false,
     businessdealdayreportgamedatadownload: false,
+    gamesinglereportexportlist: false,
+    gamertpsetdownloadrtpdata: false,
     orgrestcreatekey: false,
     orgupdatedomain: false,
     agentteamreportgetlist: false,
     csmreplytemplateadd: false,
     csmreplytemplateupdate: false,
-    csmreplytemplatedel: false
+    csmreplytemplatedel: false,
+    csmmessagegetlist: false,
+    csmmessageexportgetlist: false,
+    csmmessagesendemail: false,
+    csmmessagegetinfolist: false,
+    csmmessagecreateremark: false,
+    csmmessageaccept: false,
+    csmmessagegetimpinfo: false,
+    csmmessagefrozeuser: false,
+    csmmessageaddmoney: false,
+    csmmessagesubmoney: false,
+    csmmessagedelbind: false,
+    csmmessagebankunbind: false,
+    csmmessagemodifypwd: false,
+    csmmessagechangeuseragent: false,
+    gamesetredpacketaiset: false,
+    paybankcardgetpaybanklist: false,
+    paybankcarddelpaybank: false,
+    paybankcardupdatepaybank: false,
+    paybankcardaddpaybank: false,
+    paybankcardtransferrecord: false,
+    paybankcardbankcardlist: false,
+    paybankcardaddbankcard: false,
+    paybankcardupdatebankcard: false,
+    paybankcardgetpaycardinfo: false,
+    paybankcardupdatestatus: false,
+    domaingetorglist: false,
+    paybankcardshowcardlist: false,
+    paybankcardbanklist: false,
+    paybankcardallotpaycard: false,
+    paybankcardselectpaycard: false,
+    paywithdrawsendttpayout: false,
+    agentusabledomainagentdomainlist: false,
+    agentusabledomainaddagentdomain: false,
+    agentusabledomainupdateagentdomain: false,
+    agentusabledomaindelagentdomain: false,
+    syscleardatasetadd: false,
+    syscleardatasetgetlist: false,
+    syscleardatasetupdate: false,
+    syscleardatasetdel: false,
+    syscleardatasetupdatestatus: false,
+    gamesetdeltable: false,
+    robotsceneconfigaiaccountlist: false,
+    robotsceneconfigaddonerobot: false,
+    robotsceneconfigaddmultirobot: false,
+    robotsceneconfigaisupgameupdate: false,
+    robotsceneconfigdelaiaccount: false,
+    gameconfmgraiconfig: false,
+    gameemailclearhistory: false,
+    gamertpsetupdatertpset:false,
+    gamenamesetroyatly:false,
+    gamesetqznngameset:false,
+    gamesetqznnlist:false,
+    gamesetebglist:false,
+    reglargessmoneysaveupdate:false,
+    gamertpsetgetrtpsetinfo:false,
+    analysisdownloadquery: false,
+    analysisdownloadexcel: false
   },
 
   mutations: {
@@ -270,6 +359,9 @@ const user = {
         if (buttonshow === 'rolegetlist') {
           state.rolegetlist = true
         }
+        if (buttonshow === 'rolegetagentorg') {
+          state.rolegetagentorg = true
+        }
         if (buttonshow === 'privilegeadd') {
           state.privilegeadd = true
         }
@@ -290,6 +382,21 @@ const user = {
         }
         if (buttonshow === 'accountgetlist') {
           state.accountgetlist = true
+        }
+        if (buttonshow === 'accountgetaccountorginfo') {
+          state.accountgetaccountorginfo = true
+        }
+        if (buttonshow === 'accountgetitopagentlist') {
+          state.accountgetitopagentlist = true
+        }
+        if (buttonshow === 'accountgetrtopagentlist') {
+          state.accountgetrtopagentlist = true
+        }
+        if (buttonshow === 'accountgetvirtualagentinfo') {
+          state.accountgetvirtualagentinfo = true
+        }
+        if (buttonshow === 'accountgetrealtopagentinfo') {
+          state.accountgetrealtopagentinfo = true
         }
         if (buttonshow === 'accountaddCmoney') {
           state.accountaddCmoney = true
@@ -366,6 +473,18 @@ const user = {
         if (buttonshow === 'businessdealdayreportgetlist') {
           state.businessdealdayreportgetlist = true
         }
+        if (buttonshow === 'webdownpagesetdel') {
+          state.webdownpagesetdel = true
+        }
+        if (buttonshow === 'webdownpagesetupdatestatus') {
+          state.webdownpagesetupdatestatus = true
+        }
+        if (buttonshow === 'webdownpagesetadd') {
+          state.webdownpagesetadd = true
+        }
+        if (buttonshow === 'webdownpagesetgetlist') {
+          state.webdownpagesetgetlist = true
+        }
         if (buttonshow === 'businessdealdayreportgetgamedatalist') {
           state.gamedealdayreportgetlist = true
         }
@@ -381,6 +500,9 @@ const user = {
         if (buttonshow === 'gameemailadd') {
           state.gameemailadd = true
         }
+        if (buttonshow === 'webdownpagesetupdate') {
+          state.webdownpagesetupdate = true
+        }
         if (buttonshow === 'gameemailgetinfo') {
           state.gameemailgetinfo = true
         }
@@ -390,14 +512,26 @@ const user = {
         if (buttonshow === 'gamenoticeadd') {
           state.gamenoticeadd = true
         }
+        if (buttonshow === 'gamebanneradd') {
+          state.gamebanneradd = true
+        }
         if (buttonshow === 'gamenoticedel') {
           state.gamenoticedel = true
+        }
+        if (buttonshow === 'gamebannerdel') {
+          state.gamebannerdel = true
         }
         if (buttonshow === 'gamenoticeupdate') {
           state.gamenoticeupdate = true
         }
+        if (buttonshow === 'gamebannerupdate') {
+          state.gamebannerupdate = true
+        }
         if (buttonshow === 'gamenoticegetlist') {
           state.gamenoticegetlist = true
+        }
+        if (buttonshow === 'gamebannergetlist') {
+          state.gamebannergetlist = true
         }
         if (buttonshow === 'gameactivityupdate') {
           state.gameactivityupdate = true
@@ -419,6 +553,9 @@ const user = {
         }
         if (buttonshow === 'gameactivitysearchgetdayjoinusersum') {
           state.gameactivitysearchgetdayjoinusersum = true
+        }
+        if (buttonshow === 'reglargessmoneyselectConfig') {//注册送金
+          state.reglargessmoneyselectConfig = true
         }
         if (buttonshow === 'quicksetbankadd') {
           state.quicksetbankadd = true
@@ -483,8 +620,14 @@ const user = {
         if (buttonshow === 'payrechargegetlist') {
           state.payrechargegetlist = true
         }
+        if (buttonshow === 'payrechargeexportpayrecharge') {
+          state.payrechargeexportpayrecharge = true
+        }
         if (buttonshow === 'paywithdrawgetlist') {
           state.paywithdrawgetlist = true
+        }
+        if (buttonshow === 'paywithdrawexportwithdraw') {
+          state.paywithdrawexportwithdraw = true
         }
         if (buttonshow === 'gamenamegetlist') {
           state.gamenamegetlist = true
@@ -519,8 +662,20 @@ const user = {
         if (buttonshow === 'gameuserchggetlist') {
           state.gameuserchggetlist = true
         }
-        if (buttonshow === 'gamesinglereportgetlist') {
+        if (buttonshow === 'gameuserchggetListdownload') {
+          state.gameuserchggetListdownload = true
+        }
+        if (buttonshow === 'gamesinglereportgetlist') {   
           state.gamesinglereportgetlist = true
+        }
+        if (buttonshow === 'gamertpsetgetrtpdatalist') {   
+          state.gamertpsetgetrtpdatalist = true
+        }
+        if (buttonshow === 'repstudioexportlist') {   
+          state.repstudioexportlist = true
+        }
+        if (buttonshow === 'repstudiogetlist') {   
+          state.repstudiogetlist = true
         }
         if (buttonshow === 'gameuserrankreportgetlist') {
           state.gameuserrankreportgetlist = true
@@ -705,6 +860,24 @@ const user = {
         if (buttonshow === 'gamesetgetbetitemlist') {
           state.gamesetgetbetitemlist = true
         }
+        if (buttonshow === 'virtualagentupdateurl') {
+          state.virtualagentupdateurl = true
+        }
+        if (buttonshow === 'virtualagentgetusercountinfo') {
+          state.virtualagentgetusercountinfo = true
+        }
+        if (buttonshow === 'virtualagentaddagent') {
+          state.virtualagentaddagent = true
+        }
+        if (buttonshow === 'virtualagentgetdomainlist') {
+          state.virtualagentgetdomainlist = true
+        }
+        if (buttonshow === 'virtualagentgetlist') {
+          state.virtualagentgetlist = true
+        }
+        if (buttonshow === 'virtualagentgetinfo') {
+          state.virtualagentgetinfo = true
+        }
         if (buttonshow === 'gamesetgetawardsrclist') {
           state.gamesetgetawardsrclist = true
         }
@@ -759,11 +932,17 @@ const user = {
         if (buttonshow === 'withdrawpostexceptionlist') {
           state.withdrawpostexceptionlist = true
         }
+        if (buttonshow === 'withdrawpostupdateconfirmstatus') {
+          state.withdrawpostupdateconfirmstatus = true
+        }
         if (buttonshow === 'agentaccountgettaxlist') {
           state.agentaccountgettaxlist = true
         }
         if (buttonshow === 'agentaccountupdatetax') {
           state.agentaccountupdatetax = true
+        }
+        if (buttonshow === 'gameusercodegetlist') {
+          state.gameusercodegetlist = true
         }
         if (buttonshow === 'paywithdrawgetcashlist') {
           state.paywithdrawgetcashlist = true
@@ -846,8 +1025,14 @@ const user = {
         if (buttonshow === 'businessdealdayreportgetlistdownload') {
           state.businessdealdaygetlistdownload = true
         }
-        if (buttonshow === 'businessdealdayreportgamedatadownload') {
+        if (buttonshow === 'businessdealdayreportgamedatadownload') {   
           state.businessdealdayreportgamedatadownload = true
+        }
+        if (buttonshow === 'gamesinglereportexportlist') {   
+          state.gamesinglereportexportlist = true
+        }
+        if (buttonshow === 'gamertpsetdownloadrtpdata') {   
+          state.gamertpsetdownloadrtpdata = true
         }
         if (buttonshow === 'orgrestcreatekey') {
           state.orgrestcreatekey = true
@@ -866,6 +1051,177 @@ const user = {
         }
         if (buttonshow === 'csmreplytemplatedel') {
           state.csmreplytemplatedel = true
+        }
+        if (buttonshow === 'csmmessagegetlist') {
+          state.csmmessagegetlist = true
+        }
+        if (buttonshow === 'csmmessageexportgetlist') {
+          state.csmmessageexportgetlist = true
+        }
+        if (buttonshow === 'csmmessagesendemail') {
+          state.csmmessagesendemail = true
+        }
+        if (buttonshow === 'csmmessagegetinfolist') {
+          state.csmmessagegetinfolist = true
+        }
+        if (buttonshow === 'csmmessagecreateremark') {
+          state.csmmessagecreateremark = true
+        }
+        if (buttonshow === 'csmmessageaccept') {
+          state.csmmessageaccept = true
+        }
+        if (buttonshow === 'csmmessagegetimpinfo') {
+          state.csmmessagegetimpinfo = true
+        }
+        if (buttonshow === 'csmmessagefrozeuser') {
+          state.csmmessagefrozeuser = true
+        }
+        if (buttonshow === 'csmmessageaddmoney') {
+          state.csmmessageaddmoney = true
+        }
+        if (buttonshow === 'csmmessagesubmoney') {
+          state.csmmessagesubmoney = true
+        }
+        if (buttonshow === 'csmmessagedelbind') {
+          state.csmmessagedelbind = true
+        }
+        if (buttonshow === 'csmmessagebankunbind') {
+          state.csmmessagebankunbind = true
+        }
+        if (buttonshow === 'csmmessagemodifypwd') {
+          state.csmmessagemodifypwd = true
+        }
+        if (buttonshow === 'csmmessagechangeuseragent') {
+          state.csmmessagechangeuseragent = true
+        }
+        if (buttonshow === 'gamesetredpacketaiset') {
+          state.gamesetredpacketaiset = true
+        }
+        if (buttonshow === 'paybankcardgetpaybanklist') {
+          state.paybankcardgetpaybanklist = true
+        }
+        if (buttonshow === 'paybankcarddelpaybank') {
+          state.paybankcarddelpaybank = true
+        }
+        if (buttonshow === 'paybankcardupdatepaybank') {
+          state.paybankcardupdatepaybank = true
+        }
+        if (buttonshow === 'paybankcardaddpaybank') {
+          state.paybankcardaddpaybank = true
+        }
+        if (buttonshow === 'paybankcardtransferrecord') {
+          state.paybankcardtransferrecord = true
+        }
+        if (buttonshow === 'paybankcardbankcardlist') {
+          state.paybankcardbankcardlist = true
+        }
+        if (buttonshow === 'paybankcardaddbankcard') {
+          state.paybankcardaddbankcard = true
+        }
+        if (buttonshow === 'paybankcardupdatebankcard') {
+          state.paybankcardupdatebankcard = true
+        }
+        if (buttonshow === 'paybankcardgetpaycardinfo') {
+          state.paybankcardgetpaycardinfo = true
+        }
+        if (buttonshow === 'paybankcardupdatestatus') {
+          state.paybankcardupdatestatus = true
+        }
+        if (buttonshow === 'domaingetorglist') {
+          state.domaingetorglist = true
+        }
+        if (buttonshow === 'paybankcardshowcardlist') {
+          state.paybankcardshowcardlist = true
+        }
+        if (buttonshow === 'paybankcardbanklist') {
+          state.paybankcardbanklist = true
+        }
+        if (buttonshow === 'paybankcardallotpaycard') {
+          state.paybankcardallotpaycard = true
+        }
+        if (buttonshow === 'paybankcardselectpaycard') {
+          state.paybankcardselectpaycard = true
+        }
+        if (buttonshow === 'paywithdrawsendttpayout') {
+          state.paywithdrawsendttpayout = true
+        }
+        if (buttonshow === 'agentusabledomainagentdomainlist') {
+          state.agentusabledomainagentdomainlist = true
+        }
+        if (buttonshow === 'agentusabledomainaddagentdomain') {
+          state.agentusabledomainaddagentdomain = true
+        }
+        if (buttonshow === 'agentusabledomainupdateagentdomain') {
+          state.agentusabledomainupdateagentdomain = true
+        }
+        if (buttonshow === 'agentusabledomaindelagentdomain') {
+          state.agentusabledomaindelagentdomain = true
+        }
+        if (buttonshow === 'syscleardatasetadd') {
+          state.syscleardatasetadd = true
+        }
+        if (buttonshow === 'syscleardatasetgetlist') {
+          state.syscleardatasetgetlist = true
+        }
+        if (buttonshow === 'syscleardatasetupdate') {
+          state.syscleardatasetupdate = true
+        }
+        if (buttonshow === 'syscleardatasetdel') {
+          state.syscleardatasetdel = true
+        }
+        if (buttonshow === 'syscleardatasetupdatestatus') {
+          state.syscleardatasetupdatestatus = true
+        }
+        if (buttonshow === 'gamesetdeltable') {
+          state.gamesetdeltable = true
+        }
+        if (buttonshow === 'robotsceneconfigaiaccountlist') {
+          state.robotsceneconfigaiaccountlist = true
+        }
+        if (buttonshow === 'robotsceneconfigaddonerobot') {
+          state.robotsceneconfigaddonerobot = true
+        }
+        if (buttonshow === 'robotsceneconfigaddmultirobot') {
+          state.robotsceneconfigaddmultirobot = true
+        }
+        if (buttonshow === 'robotsceneconfigaisupgameupdate') {
+          state.robotsceneconfigaisupgameupdate = true
+        }
+        if (buttonshow === 'robotsceneconfigdelaiaccount') {
+          state.robotsceneconfigdelaiaccount = true
+        }
+        if (buttonshow === 'gameconfmgraiconfig') {
+          state.gameconfmgraiconfig = true
+        }
+        if (buttonshow === 'gameemailclearhistory') {
+          state.gameemailclearhistory = true
+        }
+        if (buttonshow === 'gamertpsetupdatertpset') {
+          state.gamertpsetupdatertpset = true
+        }
+        if (buttonshow === 'gamenamesetroyatly') {
+          state.gamenamesetroyatly = true
+        }
+        if (buttonshow === 'gamesetqznngameset') {
+          state.gamesetqznngameset = true
+        }
+        if (buttonshow === 'gamesetqznnlist') {
+          state.gamesetqznnlist = true
+        }
+        if (buttonshow === 'gamesetebglist') {
+          state.gamesetebglist = true
+        }
+        if (buttonshow === 'reglargessmoneysaveupdate') {
+          state.reglargessmoneysaveupdate = true
+        }
+        if (buttonshow === 'gamertpsetgetrtpsetinfo') {
+          state.gamertpsetgetrtpsetinfo = true
+        }
+        if (buttonshow === 'analysisquery') {
+          state.analysisdownloadquery = true
+        }
+        if (buttonshow === 'analysisexcel') {
+          state.analysisdownloadexcel = true
         }
       })
     },

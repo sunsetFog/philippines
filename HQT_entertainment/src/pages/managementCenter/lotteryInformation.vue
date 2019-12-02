@@ -32,6 +32,7 @@
 
 <script>
 export default{
+    name: 'lotteryInformation',
     data(){
         return{
             balance_list: [{theme: '沙',balance_title: '沙巴余额',money: ''},{theme: 'PT',balance_title: 'PT余额',money: '0.000'},{theme: 'AG',balance_title: 'AG余额',money: '0.000'},{theme: 'BB',balance_title: 'BBIN余额',money: '0.000'}],

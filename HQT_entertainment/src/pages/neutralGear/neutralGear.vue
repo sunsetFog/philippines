@@ -5,16 +5,16 @@
             <span :style="{width: percentage+'%',borderTopRightRadius: radius.top_right,borderBottomRightRadius: radius.bottom_right}"></span>
             <!-- <el-progress :percentage="percentage" :color="customColor" :show-text="false" :width="155" :stroke-width="20"></el-progress> -->
         </div>
-        <game-theme ref="subject" :subject="true" @interaction="variableGear"></game-theme>
+        <game-theme ref="subject" :subject="true" @await="variableGear"></game-theme>
     </section>
 </template>
 
 <script>
 export default {
+    name: 'neutralGear',
     data(){
         return{
             percentage: 0,
-            customColor: '#409eff',
             timerKey: '',
             radius: {top_right: '0px',bottom_right: '0px'}
         }
@@ -30,7 +30,9 @@ export default {
         this.radius.top_right = '0px';
         this.radius.bottom_right = '0px';
         this.timerKey = setInterval(this.timerMeans,200);
-        flashGameplayer();
+        if(refreshWeb.state==''){
+            flashGameplayer();
+        }
     },
     methods:{
         timerMeans(){
@@ -48,7 +50,7 @@ export default {
                 that.percentage = 98.8;
                 that.radius.top_right = '15px';
                 that.radius.bottom_right = '15px';
-                that.$router.push({path: '/home'});
+                that.$router.push({path: sessionStorage.getItem('save_path')});
                 //console.log('loading%%%');
             });
         }
@@ -59,6 +61,7 @@ export default {
 <style lang="less" scoped>
 #neutralGear{
     width: 100%;
+    overflow: hidden;
     .mixin_image(url('../../../static/dream/portrait/bg_loading.jpg'));
     position: relative;
     img{
@@ -73,7 +76,6 @@ export default {
         width: 860px;
         height: 46px;
         .mixin_image(url('../../../static/dream/portrait/kuang.png'));
-        // background: blue;
         overflow: hidden;
         border-radius: 20px;
         padding: 5px 0px 0px 6px;
@@ -86,7 +88,6 @@ export default {
             height: 35px;
             display: inline-block;
             .mixin_image(url('../../../static/dream/portrait/jindus.png'));
-            // background: blueviolet;
             float: left;
             overflow: hidden;
             border-top-right-radius: 15px;

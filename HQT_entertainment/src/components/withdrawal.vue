@@ -3,7 +3,7 @@
         <el-dialog
         :visible.sync="rechargeActive"
         width="5.73rem"
-        top="0.99rem"
+        top="0.8rem"
         center>
         <div slot="title">提款</div>
         <div class="varieties_content">
@@ -40,7 +40,7 @@
                     </div>
                     <button class="admin_account" @click="manageMeans(1)">管理银行卡</button>
                 </div>
-                <div class="account_number" v-show="withdrawal_types[1].active">
+                <!-- <div class="account_number" v-show="withdrawal_types[1].active">
                     <label>支付宝账号:</label>
                     <div class="user_account">
                         <el-select v-model="alipay_card" placeholder="请选择支付宝" size="mini">
@@ -53,7 +53,7 @@
                         </el-select>
                     </div>
                     <button class="admin_account" @click="manageMeans(2)">管理支付宝</button>
-                </div>
+                </div> -->
                 <div class="line_bottom"></div>
                 <div class="payment_button">
                     <button @click="exchange()">确认兑换</button>
@@ -69,13 +69,13 @@
 
 <script>
 export default {
-    name: 'children',
+    name: 'game_withdrawal',
     data(){
         return{
             rechargeActive: false,
             withdrawal_types: [
                 {name: '提款到银行卡',active: true},
-                {name: '提款到支付宝',active: false}
+                // {name: '提款到支付宝',active: false}
             ],
             bank_list: [],
             bank_card: '',
@@ -83,6 +83,20 @@ export default {
             alipay_card: '',
             money_total: '',
             withdrawal_amount: ''
+        }
+    },
+    watch: {
+        withdrawal_amount(cur,old){
+            if(/[^\d]/g.test(cur)){
+                if(cur.match(/[^\d]/g)!=null){
+                   this.$message.error('请输入正整数！');
+                }
+                this.withdrawal_amount = this.withdrawal_amount.replace(/[^\d]/g, '');
+            }
+            if(cur>this.money_total){
+                this.$message.error('提款金额不能大于当前金额！');
+                this.withdrawal_amount = parseInt(this.money_total);
+            }
         }
     },
     methods:{
@@ -147,7 +161,10 @@ export default {
             }
                 //console.log('amount',that.withdrawal_amount*10000);
                 web.game_drawout(that.withdrawal_amount*10000,card,function(res){
-                    //console.log('success$$',res);
+                    // console.log('success$$998888',res);
+                    that.money_total = res.balance/10000;
+                    that.money_total = that.money_total.toFixed(2);
+                    web.game_getPlayer('money').setMoney(res.balance);
                     that.$parent.hostMeans('know',that.withdrawal_amount);
                 })
 

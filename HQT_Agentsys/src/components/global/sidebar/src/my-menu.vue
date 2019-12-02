@@ -1,6 +1,6 @@
 <template>
   <div class='sideBar togglehide' ref='barPart'>
-    <div class='menuCover' @click='toggleMenu' ref='cover'></div>
+    <div class='menuCover all_palm' @click='toggleMenu' ref='cover'></div>
     <ul class='menu'>
       <li class='list-title'><slot name="menu-title"></slot></li>
       <slot></slot>  

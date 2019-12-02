@@ -3,7 +3,7 @@
         <el-dialog
         :visible.sync="rechargeActive"
         width="5.73rem"
-        top="0.99rem"
+        top="0.8rem"
         center>
         <div slot="title">修改头像</div>
         <div class="varieties_content">
@@ -50,7 +50,7 @@
 
 <script>
 export default {
-    name: 'children',
+    name: 'portrait',
     data(){
         return{
             rechargeActive: false,

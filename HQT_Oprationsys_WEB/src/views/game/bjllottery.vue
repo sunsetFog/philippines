@@ -15,6 +15,9 @@
                 <el-radio :label='1'>可用</el-radio>
               </el-radio-group>
             </el-form-item>
+             <el-form-item label="玩家抽水比例" :label-width="formLabelWidth" prop='number'>
+              <el-input v-model="form.number" type='number' style="width:140px"></el-input><span>%</span>
+            </el-form-item>
             <el-form-item :label-width="formLabelWidth">
               <el-button type="primary" @click="sure(form)" v-if="gamesetsavebase">保存配置</el-button>
             </el-form-item>
@@ -159,6 +162,17 @@ import request from '@/utils/request'
 import { mapGetters } from 'vuex'
 export default {
   data() {
+    var royalty = (rule, value, callback) => {
+      if(value === ''){
+        callback(new Error('请输入玩家抽水比例'));
+      }else {
+        if(value*1<0 || value.toString().indexOf('.')>0) {
+          callback(new Error('请输入正整数'));
+        } else {
+          callback();
+        }
+      }
+   }; 
     return {
       formInline: {
         id: '',
@@ -166,7 +180,8 @@ export default {
       },
       form: {
         depict: '',
-        status: ''
+        status: '',
+        number: ''
       },
       currentPage: 1,
       tableData: [
@@ -174,9 +189,10 @@ export default {
       tableData2: [],
       rules: {
         status: {required: true, message: '请选择状态', trigger: 'change'},
+        number: {required: true, validator: royalty, trigger: 'blur'},
       },
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       title2: '',
       dialogFormVisible2: false,
@@ -243,6 +259,7 @@ export default {
                   game_id: 201,
                   depict: this.form.depict,
                   status: this.form.status,
+                  royalty: this.form.number,
                   type: 2
             }
           }).then(res => {
@@ -385,6 +402,7 @@ function getinfo (that) {
       }
     }).then(res => {
       that.form.depict = res.data.depict
+      that.form.number = res.data.royalty
       that.form.status = res.data.status * 1
     }).catch(error => {
     })

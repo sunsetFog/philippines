@@ -3,7 +3,7 @@
         <el-dialog
         :visible.sync="rechargeActive"
         width="5.73rem"
-        top="0.99rem"
+        top="0.8rem"
         center>
         <div slot="title">充值记录</div>
         <div class="varieties_content">
@@ -53,7 +53,7 @@
 <script>
 import Clipboard from 'clipboard';
 export default {
-    name: 'children',
+    name: 'rechargeRecord',
     data(){
         return{
             rechargeActive: false,

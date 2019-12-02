@@ -3,7 +3,7 @@
     <el-pagination
       @size-change="sizeChange"
       @current-change="currentChange"
-      :current-page="pagination.page || 1"
+      :current-page="pagination.page"
       :page-sizes="[10]"
       :page-size="pagination.pagesize"
       layout="total, sizes, prev, pager, next, jumper"
@@ -13,6 +13,7 @@
 </template>
 <script>
   export default {
+    name: 'page',
     props: ['pagination'],
     data () {
       return {

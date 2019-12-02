@@ -6,7 +6,7 @@
   <div class="dropdown"
        :myclickoutside="handleClick">
     <!-- 按钮样式 -->
-    <div class="more-btn"
+    <div class="more-btn all_palm"
          @click="show = true">
       <slot name="btn"></slot>
     </div>

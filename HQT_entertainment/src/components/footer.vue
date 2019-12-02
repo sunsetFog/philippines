@@ -30,6 +30,7 @@
 
 <script>
 export default{
+    name: 'footer_index',
     props: ['vip_foot'],
     data(){
         return{
@@ -83,7 +84,7 @@ export default{
             width: 1200px;
             height: 100%;
             margin: 0 auto;
-            padding: 20px 0px 50px 0px;
+            padding: 35px 0px 35px 0px;
             box-sizing: border-box;
             overflow: hidden;
             .function_example{
@@ -154,18 +155,18 @@ export default{
             }
             .copyright_example{
                 width: 100%;
-                height: 35px;
-                margin-top: 10px;
-                padding: 15px 0px 0px 420px;
+                height: 45px;
+                line-height: 45px;
+                padding: 0px 0px 0px 420px;
                 box-sizing: border-box;
                 font-size: @font_size12;
                 overflow: hidden;
                 span:nth-of-type(1){
-                    .mixin_span(auto,20px,none,@color_white,left);
+                    .mixin_span(auto,45px,none,@color_white,left);
                     float: left;
                 }
                 span:nth-of-type(2){
-                    .mixin_span(auto,20px,none,@color_white,left);
+                    .mixin_span(auto,45px,none,@color_white,left);
                     float: left;
                     margin-left: 55px;
                 }

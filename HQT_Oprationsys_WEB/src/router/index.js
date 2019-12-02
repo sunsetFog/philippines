@@ -115,7 +115,14 @@ export const constantRouterMap = [
         hidden: true,
         component: () => import('@/views/player/tax'),
         meta: {title: '总代管理', icon: 'guide', parent: 'gameusermgr/tax'}
-      }
+      },
+      {
+        path: 'codeamount',
+        name: 'codeamountindex',
+        hidden: true,
+        component: () => import('@/views/player/codeamount'),
+        meta: {title: '玩家打码量查询', icon: 'guide', parent: 'gameusermgr/codeamount'}
+      },
 
     ]
   },
@@ -217,15 +224,16 @@ export const constantRouterMap = [
         name: 'payrechargeindex',
         hidden: true,
         component: () => import('@/views/game/payrecharge'),
-        meta: { title: '玩家充值记录列表', icon: 'guide', parent: 'analysisdatamgr/payrecharge' }
+        meta: { title: '玩家充值记录列表', icon: 'clipboard', parent: 'analysisdatamgr/payrecharge' }
       },
       {
         path: 'paywithdraw',
         name: 'paywithdrawindex',
         hidden: true,
         component: () => import('@/views/game/paywithdraw'),
-        meta: { title: '玩家提款记录列表', icon: 'guide', parent: 'analysisdatamgr/paywithdraw' }
+        meta: { title: '玩家提款记录列表', icon: 'clipboard', parent: 'analysisdatamgr/paywithdraw' }
       },
+      
       // {
       //   path: 'income',
       //   name: 'incomeindex',
@@ -238,8 +246,29 @@ export const constantRouterMap = [
         name: 'gameuserchgindex',
         hidden: true,
         component: () => import('@/views/game/gameuserchg'),
-        meta: { title: '账变查询', icon: 'guide', parent: 'analysisdatamgr/gameuserchg' }
-      }
+        meta: { title: '账变查询', icon: 'clipboard', parent: 'analysisdatamgr/gameuserchg' }
+      },
+      {
+        path: 'gamertpset',
+        name: 'gamertpsetindex',
+        hidden: true,
+        component: () => import('@/views/datashow/gamertpset'),
+        meta: { title: 'RTP查询', icon: 'clipboard', parent: 'analysisdatamgr/gamertpset' }
+      },
+      {
+        path: 'downloadanalysis',
+        name: 'analysisindex',
+        hidden: true,
+        component: () => import('@/views/datashow/downloadAnalysis'),
+        meta: { title: '登陆下载分析报表', icon: 'clipboard', parent: 'analysisdatamgr/downloadanalysis' }
+      },
+      {
+        path: 'repstudiodata',
+        name: 'repstudiodataindex',
+        hidden: true,
+        component: () => import('@/views/datashow/repstudiodata'),
+        meta: { title: '工作室数据统计报表', icon: 'clipboard', parent: 'analysisdatamgr/repstudiodata' }
+      },
     ]
   },
   {
@@ -297,6 +326,13 @@ export const constantRouterMap = [
         component: () => import('@/views/customerservice/queryactivity'),
         meta: { title: '活动查询', icon: 'guide', parent: 'activitymgr/queryactivity' }
       },
+      {
+        path: 'registerpayment',
+        name: 'reglargessmoneyindex',
+        hidden: true,
+        component: () => import('@/views/customerservice/registerpayment'),
+        meta: { title: '注册送金', icon: 'guide', parent: 'activitymgr/registerpayment' }
+      },
     ]
   },
   
@@ -338,19 +374,26 @@ export const constantRouterMap = [
         meta: { title: '跑马灯', icon: 'guide', parent: 'gamemsgmgr/diversions' }
       },
       {
-        path: 'customer',
-        name: 'csmmessageindex',
+        path: 'banners',
+        name: 'bannersindex',
         hidden: true,
-        component: () => import('@/views/customerservice/customer'),
-        meta: { title: '客服消息管理', icon: 'guide', parent: 'customerservice/customer' }
+        component: () => import('@/views/customerservice/banners'),
+        meta: { title: '轮播广告管理', icon: 'guide', parent: 'gamemsgmgr/banners' }
       },
-      {
-        path: 'mailtemplate',
-        name: 'csmreplytemplateindex',
-        hidden: true,
-        component: () => import('@/views/customerservice/mailtemplate'),
-        meta: { title: '邮件模板管理', icon: 'guide', parent: 'customerservice/mailtemplate' }
-      }
+      // {
+      //   path: 'customer',
+      //   name: 'csmmessageindex',
+      //   hidden: true,
+      //   component: () => import('@/views/customerservice/customer'),
+      //   meta: { title: '客服消息管理', icon: 'guide', parent: 'gamemsgmgr/customer' }
+      // },
+      // {
+      //   path: 'mailtemplate',
+      //   name: 'csmreplytemplateindex',
+      //   hidden: true,
+      //   component: () => import('@/views/customerservice/mailtemplate'),
+      //   meta: { title: '邮件模板管理', icon: 'guide', parent: 'gamemsgmgr/mailtemplate' }
+      // }
     ]
   },
   {
@@ -375,6 +418,20 @@ export const constantRouterMap = [
         hidden: true,
         component: () => import('@/views/game/gamename'),
         meta: { title: '游戏设置', icon: 'guide', parent: 'gameconfmgr/gamename' }
+      },
+      {
+        path: 'airole',
+        name: 'robotsceneconfigindex',
+        hidden: true,
+        component: () => import('@/views/game/airole'),
+        meta: { title: 'AI角色管理', icon: 'guide', parent: 'gameconfmgr/airole' }
+      },
+      {
+        path: 'aiconfig',
+        name: 'gameconfmgrindex',
+        hidden: true,
+        component: () => import('@/views/game/aiconfig'),
+        meta: { title: 'AI配置管理', icon: 'guide', parent: 'gameconfmgr/aiconfig' }
       },
       {
         path: 'forthesource',
@@ -455,27 +512,6 @@ export const constantRouterMap = [
         meta: { title: '在线充值申请', icon: 'guide', parent: 'rewithmgr/online' }
       },
       {
-        path: 'paychannel',
-        name: 'paychannelindex',
-        hidden: true,
-        component: () => import('@/views/system/paychannel'),
-        meta: { title: '充值来源设置', icon: 'tab', parent: 'rewithmgr/paychannel' }
-      },
-      {
-        path: 'webtechnology',
-        name: 'paymodeindex',
-        hidden: true,
-        component: () => import('@/views/withdrawal/webtechnology'),
-        meta: { title: '前端分类管理', icon: 'tab', parent: 'rewithmgr/webtechnology' }
-      },
-      {
-        path: 'quicksetbank',
-        name: 'quicksetbankindex',
-        hidden: true,
-        component: () => import('@/views/system/quicksetbank'),
-        meta: { title: '银行代码设置', icon: 'tab', parent: 'rewithmgr/quicksetbank' }
-      },
-      {
         path: 'applywithdrawal',
         name: 'withdrawpostindex',
         hidden: true,
@@ -504,14 +540,6 @@ export const constantRouterMap = [
         meta: { title: '提款出纳', icon: 'tab', parent: 'rewithmgr/drawingcashier' }
       },
       {
-
-        path: '/chant',
-        name: 'chant',
-        hidden: true,
-        component: () => import('@/views/system/chant'),
-        meta: { title: '充值银行列表', icon: 'tab', parent: 'rewithmgr/paychannel' }
-      },
-      {
         path: 'riskcontrol',
         name: 'sysconfigindex2',
         hidden: true,
@@ -536,6 +564,67 @@ export const constantRouterMap = [
     
   },
   {
+    path: '/bank',
+    component: Layout,
+    name: 'bankmgrexpland',
+    redirect: 'noredirect',
+    hidden: true,
+    alwaysShow: true,
+    meta: { title: '充提银行管理', icon: 'example' },
+    children: [
+      {
+        path: 'quicksetbank',
+        name: 'quicksetbankindex',
+        hidden: true,
+        component: () => import('@/views/system/quicksetbank'),
+        meta: { title: '银行代码设置', icon: 'tab', parent: 'bank/quicksetbank' }
+      },
+      {
+        path: 'topupbank',
+        name: 'paybankcardindex',
+        hidden: true,
+        component: () => import('@/views/system/topupbank'),
+        meta: { title: '充值银行设置', icon: 'tab', parent: 'bank/topupbank' }
+      },
+      {
+        path: 'paychannel',
+        name: 'paychannelindex',
+        hidden: true,
+        component: () => import('@/views/system/paychannel'),
+        meta: { title: '充值来源设置', icon: 'tab', parent: 'bank/paychannel' }
+      },
+      {
+
+        path: '/chant',
+        name: 'chant',
+        hidden: true,
+        component: () => import('@/views/system/chant'),
+        meta: { title: '充值银行列表', icon: 'tab', parent: 'bank/paychannel' }
+      },
+      {
+        path: 'webtechnology',
+        name: 'paymodeindex',
+        hidden: true,
+        component: () => import('@/views/withdrawal/webtechnology'),
+        meta: { title: '前端分类管理', icon: 'tab', parent: 'bank/webtechnology' }
+      },
+      {
+        path: 'bankcard',
+        name: 'paybankcardlistindex',
+        hidden: true,
+        component: () => import('@/views/system/bankcard'),
+        meta: { title: '银行卡列表', icon: 'tab', parent: 'bank/bankcard' }
+      },
+      {
+        path: 'bankallocation',
+        name: 'bankcardallocationindex',
+        hidden: true,
+        component: () => import('@/views/system/bankallocation'),
+        meta: { title: '银行卡分配管理', icon: 'tab', parent: 'bank/bankallocation' }
+      },
+    ]
+  },
+  {
     path: '/domainmgr',
     component: Layout,
     name: 'domainmgrexpland',
@@ -550,6 +639,34 @@ export const constantRouterMap = [
         hidden: true,
         component: () => import('@/views/promoters/domain'),
         meta: { title: '域名管理', icon: 'list', parent: 'domainmgr/domain' }
+      },
+      {
+        path: 'agentdomain',
+        name: 'agentusabledomainindex',
+        hidden: true,
+        component: () => import('@/views/promoters/agentdomain'),
+        meta: { title: '代理域名管理', icon: 'list', parent: 'domainmgr/agentdomain' }
+      },
+      {
+        path: 'virtualagent',
+        name: 'virtualagentindex',
+        hidden: true,
+        component: () => import('@/views/promoters/virtualagent'),
+        meta: { title: '推广链接管理', icon: 'list', parent: 'domainmgr/virtualagent' },
+      },
+      {
+        path: 'virtualagentgetinfo',
+        name: 'virtualagentgetinfoindex',
+        hidden: true,
+        component: () => import('@/views/promoters/virtualagentgetinfo'),
+        meta: { title: '查看代理详情', icon: 'list', parent: 'domainmgr/virtualagentgetinfo' },
+      },
+      {
+        path: 'webdownpage',
+        name: 'webdownpageindex',
+        hidden: true,
+        component: () => import('@/views/promoters/webdownpage'),
+        meta: { title: '下载页管理', icon: 'list', parent: 'domainmgr/webdownpage' },
       },
     ]
   },
@@ -614,6 +731,13 @@ export const constantRouterMap = [
         hidden: true,
         component: () => import('@/views/permissions/pointson'),
         meta: { title: '上分权限', icon: 'table', parent: 'backendmgr/pointson' }
+      },
+      {
+        path: 'datacleaning',
+        name: 'syscleardatasetindex',
+        hidden: true,
+        component: () => import('@/views/permissions/datacleaning'),
+        meta: { title: '数据清理', icon: 'tab' , parent: 'backendmgr/datacleaning'}
       },
       {
         path: 'accountcommnav',

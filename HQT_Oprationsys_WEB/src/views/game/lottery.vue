@@ -64,7 +64,7 @@
                   v-for="(item,key) in gamelist"
                   :key="key"
                   :label="item.name"
-                  :value="item.id">
+                  :value="item.name">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -108,7 +108,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameopenawardgetlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameopenawardgetlist" :loading="loading">查询</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -128,8 +128,8 @@
     </div> -->
 
     <div class="paging">
-          <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-          <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+          <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+          <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
         </div>
 
     <el-table
@@ -219,8 +219,8 @@
 
 
 <div class="paging">
-          <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-          <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+          <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+          <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
         </div>
 
 <el-dialog title='彩票撤单'  :visible.sync="dialogFormVisible" :before-close="reset">
@@ -323,7 +323,8 @@ export default {
       showtime: false,
       shownumber: false,
       game_id: '',
-      num: 1
+      num: 1,
+      loading: false
     }
   },
   created() {
@@ -471,7 +472,7 @@ export default {
             center: true
           }).then(res => {
             let time = ''
-            if (that.form.time && that.form.time.length > 0) {
+            if (that.form.time) {
               time = parseTime(that.form.time.getTime() /1000)
             }
             request({
@@ -564,6 +565,7 @@ export default {
 
 
 function getlist (that) {
+  that.loading = true
   var start1 = ''
   var start2 = ''
   var end1 = ''
@@ -576,6 +578,17 @@ function getlist (that) {
     start2 = parseTime(that.formInline.time2[0].getTime() /1000)
     end2 = parseTime(that.formInline.time2[1].getTime() /1000)
   }
+  var type = ''
+  var id = ''
+  if (that.formInline.id != '') {
+    that.gamelist.map (val =>{
+      if (that.formInline.id === val.name) {
+        type = val.type
+        id = val.id
+      }
+    })
+  }
+  
  
   request({
     url: that.public.url + '/gameopenaward/getlotterylist',
@@ -592,9 +605,11 @@ function getlist (that) {
       term_to_time_to: end1,
       open_award_time_from: start2,
       open_award_time_to: end2,
-      game_id: that.formInline.id
+      game_id: id,
+      type:type
     }
   }).then(res => {
+    that.loading = false
     if (res.data && res.data.list && res.data.list.length > 0) {
       that.tableData = res.data.list
     } else {
@@ -652,13 +667,6 @@ function parseTime(time) {
     margin-right: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-  .line {
-    border-bottom: 1px solid #666;
-    margin-bottom: 20px;
-    font-size: 21px;
-    font-weight: 700;
-    margin-right: -126px;
   }
   .floatright {
     float: right;

@@ -183,7 +183,7 @@
             </td>
             <td crowspan="1" colspan="1">
               <div class="cell">
-                【投注总额】/ 【在线充值 + 上级转账】
+               （人机类投注总额 + 人人类流水）/ 用户总充值
               </div>
             </td>
             <td crowspan="1" colspan="1">

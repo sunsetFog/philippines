@@ -2,6 +2,16 @@
   <div class="app-container">
 <div class="addaccount">
     <el-form :model="form" :rules="rules" ref="form">
+      <el-form-item label="总代类型" :label-width="formLabelWidth" prop="status">
+        <el-select v-model="form.status" filterable clearable placeholder='请选择总代类型'>
+              <el-option
+                v-for="item in statuslist"
+                :key="item.id"
+                :label="item.name"
+                :value="item.name">
+              </el-option>
+            </el-select>
+      </el-form-item>
         <el-form-item label="玩家渠道" :label-width="formLabelWidth" prop="id">
         <el-select v-model="form.id" filterable clearable placeholder='请选择玩家渠道'>
               <el-option
@@ -13,25 +23,18 @@
             </el-select>
       </el-form-item>
        <el-form-item label="登录账号" :label-width="formLabelWidth" prop='name'>
-        <el-input v-model="form.name" placeholder='请输入6-12位包含大小写和数字' clearable></el-input>
+        <el-input v-model="form.name" placeholder='请输入6-12位的账号' clearable></el-input>
       </el-form-item>
       
-       <el-form-item label="昵称" :label-width="formLabelWidth" prop="nickname">
+       <el-form-item label="昵称" :label-width="formLabelWidth" prop="nickname" v-if="flag">
         <el-input v-model="form.nickname" placeholder='昵称最大长度为6个汉字或12个字节长度的字母或数字(不能输入特殊字符)' clearable></el-input>
       </el-form-item>
-      <el-form-item label="登录密码" :label-width="formLabelWidth" prop='pwd'>
+      <el-form-item label="登录密码" :label-width="formLabelWidth" prop='pwd' v-if="flag">
         <el-input v-model="form.pwd" type='password' placeholder='请输入6-12位密码' clearable></el-input>
       </el-form-item>
-      <el-form-item label="税收" :label-width="formLabelWidth" prop='reward'>
+      <!-- <el-form-item label="税收" :label-width="formLabelWidth" prop='reward'>
         <span>玩家抽水的</span><el-input v-model="form.reward" type="number" style="width: 30%;"></el-input><span>%</span>
-      </el-form-item>
-      <el-form-item label="日工资" :label-width="formLabelWidth">
-        <!-- <el-input v-model.number="form.wages" type="number"></el-input> -->
-      </el-form-item>
-       
-      <el-form-item label="分红" :label-width="formLabelWidth">
-        <!-- <el-input v-model="form.bonus" type="number"></el-input> -->
-      </el-form-item>
+      </el-form-item> -->
 
 
     </el-form>
@@ -44,6 +47,9 @@
 
    <el-dialog title='二次确认:新增总代'  :visible.sync="dialogFormVisible2" :before-close="reset2">
     <el-form>
+       <el-form-item label="总代类型" :label-width="formLabelWidth">
+        <span>{{form.status}}</span>
+      </el-form-item>
       <el-form-item label="玩家渠道" :label-width="formLabelWidth">
         <span>{{form.id}}</span>
       </el-form-item>
@@ -53,18 +59,12 @@
       <!-- <el-form-item label="登录密码" :label-width="formLabelWidth">
         <span>{{form.pwd}}</span>
       </el-form-item> -->
-       <el-form-item label="昵称" :label-width="formLabelWidth">
+       <el-form-item label="昵称" :label-width="formLabelWidth" v-if="flag">
          <span>{{form.nickname}}</span>
       </el-form-item>
-       <el-form-item label="税收" :label-width="formLabelWidth">
+       <!-- <el-form-item label="税收" :label-width="formLabelWidth">
         <span>玩家抽水的</span><span>{{form.reward}}</span><span>%</span>
-      </el-form-item>
-      <el-form-item label="日工资" :label-width="formLabelWidth">
-        <!-- <span>{{form.wages}}</span> -->
-      </el-form-item>
-      <el-form-item label="分红" :label-width="formLabelWidth">
-         <!-- <span>{{form.bonus}}</span> -->
-      </el-form-item>
+      </el-form-item> -->
 
 
     </el-form>
@@ -149,6 +149,7 @@ export default {
         name: '',
         nickname: ''
       },
+      flag: true,
       currentPage: 1,
       tableData: [],
       userlist: [],
@@ -159,16 +160,35 @@ export default {
         pwd: '',
         nickname: '',
         wages: '',
-        reward: '',
+        // reward: '',
         bonus: '',
-        desc: ''
+        desc: '',
+        status: '真实总代'
       },
+      statuslist: [
+        {
+          id: '0',
+          name: '真实总代'
+        },
+        {
+          id: '1',
+          name: '虚拟总代'
+        },
+        {
+          id: '2',
+          name: '虚拟代理'
+        }
+      ],
       rules: {
+        status: [
+          {required: true, message: '请选择总代类型', trigger: 'change'}
+        ],
         id: [
-          {required: true, message: '请输入渠道组ID', trigger: 'change'}
+          {required: true, message: '请选择玩家渠道', trigger: 'change'}
         ],
         name: [
-          {required: true, validator: validate4, trigger: 'blur'}
+          {required: true, message: '请输入登录账号', trigger: 'blur'},
+          {min:6,max:12,message: '长度在6到12个字符',trigger: 'blur'}
         ],
         pwd: [
           {required: true, message: '请输入登录密码', trigger: 'blur'},
@@ -180,9 +200,9 @@ export default {
         wages: [
           {required: true, validator: validate3, trigger: 'blur'}
         ],
-        reward: [
-          {required: true, validator: validate1, trigger: 'blur'}
-        ],
+        // reward: [
+        //   {required: true, validator: validate1, trigger: 'blur'}
+        // ],
         bonus: [
           {required: true, validator: validate2, trigger: 'blur'}
         ]
@@ -191,7 +211,7 @@ export default {
       title: '',
       name: '',
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       dialogFormVisible2: false
     }
   },
@@ -202,6 +222,23 @@ export default {
     ...mapGetters([
       'agentaccountadd'
     ])
+  },
+  watch: {
+    'form.status': function (val) {
+      if (val == '真实总代') {
+        this.flag = true
+      }
+      if (val == '虚拟总代') {
+        this.flag = false
+        this.form.nickname = ''
+        this.form.pwd = ''
+      }
+      if (val == '虚拟代理') {
+        this.flag = false
+        this.form.nickname = ''
+        this.form.pwd = ''
+      }
+    }
   },
   methods: {
     reset (form) {
@@ -224,9 +261,15 @@ export default {
     sure2 (form) {
       let that = this
       var id = ''
+      var type = ''
       this.userlist.map(val=>{
         if (val.name === this.form.id) {
          id = val.id
+        }
+      })
+      this.statuslist.map(val=>{
+        if (val.name === this.form.status) {
+         type = val.id
         }
       })
         request({
@@ -234,11 +277,12 @@ export default {
         method: 'post',
         data: {
               org_id: id,
+              type: type,
               login_name: this.form.name,
               login_pwd: this.form.pwd,
               nickname: this.form.nickname,
               // day_wages: this.form.wages,
-              reward_top: this.form.reward,
+              // reward_top: this.form.reward,
               // bonus: this.form.bonus,
               // depict: this.form.desc,
         }
@@ -257,7 +301,7 @@ export default {
 
 function getuserlist (that) {
   request({
-    url: that.public.url + '/backend/org/getOrglist',
+    url: that.public.url + '/backend/org/getorglist',
     method: 'post'
   }).then(res => {
     that.userlist = res.data

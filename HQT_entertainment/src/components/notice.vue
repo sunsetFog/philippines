@@ -1,5 +1,5 @@
 <template>
-    <section id="mail">
+    <section id="notice">
         <el-dialog
         :visible.sync="rechargeActive"
         width="6.33rem"
@@ -36,7 +36,7 @@
 
 <script>
 export default {
-    name: 'children',
+    name: 'notice',
     data(){
         return{
             rechargeActive: false,
@@ -138,7 +138,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#mail{
+#notice{
     .varieties_content{
         width: 100%;
         height: 710px;

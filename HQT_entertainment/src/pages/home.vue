@@ -18,12 +18,21 @@
           </ul>
         </div>
         <div class="dream_login" v-if="safeActive">
-          <div class="nickname">
-            <input v-model.trim="account_number" type="text" placeholder="账号" maxlength="30">
-          </div>
-          <div class="password">
-            <input type="password" v-model.trim="password_number" placeholder="密码" maxlength="30">
-          </div>
+          <input
+            class="nickname"
+            v-model.trim="account_number"
+            type="text"
+            placeholder="账号"
+            maxlength="20"
+          >
+          <input
+            class="password"
+            type="password"
+            v-model.trim="password_number"
+            placeholder="密码"
+            maxlength="12"
+            @keyup.enter="signIn"
+          >
           <button class="sign_in" @click="signIn"></button>
           <button class="register" @click="registerMeans"></button>
         </div>
@@ -52,14 +61,16 @@
         </div>
         <div class="tabs_right">
           <ul v-if="player_info.mIsAgent">
-            <li style="width: 14.28%;"
+            <li
+              style="width: 14.28%;"
               v-for="(item,index) in tabs_bar"
               :class="{'tabs_active':item.active}"
               @click="tabBarChange(index,item.exhibition,item.path)"
             >{{item.title}}</li>
           </ul>
           <ul v-else>
-            <li style="width: 16.66%;"
+            <li
+              style="width: 16.66%;"
               v-for="(item,index) in tabs_bar"
               v-if="item.title!='代理系统'"
               :class="{'tabs_active':item.active}"
@@ -100,7 +111,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: "Main",
+  name: "home",
   data() {
     return {
       header_list: [
@@ -110,11 +121,36 @@ export default {
       ],
       tabs_bar: [
         { title: "首页", active: false, exhibition: true, path: "/home" },
-        { title: "电子竞技", active: false, exhibition: false, path: "/lottery" },
-        { title: "真人娱乐", active: false, exhibition: false, path: "/realperson" },
-        { title: "体育竞技", active: false, exhibition: false, path: "/sports" },
-        { title: "优惠活动", active: false, exhibition: false, path: "/videogame" },
-        { title: "代理系统", active: false, exhibition: true, path: "/agentsystem" },
+        {
+          title: "电子竞技",
+          active: false,
+          exhibition: false,
+          path: "/lottery"
+        },
+        {
+          title: "真人娱乐",
+          active: false,
+          exhibition: false,
+          path: "/realperson"
+        },
+        {
+          title: "体育竞技",
+          active: false,
+          exhibition: false,
+          path: "/sports"
+        },
+        {
+          title: "优惠活动",
+          active: false,
+          exhibition: false,
+          path: "/videogame"
+        },
+        {
+          title: "代理系统",
+          active: false,
+          exhibition: true,
+          path: "/agentsystem"
+        },
         { title: "管理中心", active: false, exhibition: true, path: "/crux" }
       ],
       fixed_bar: [
@@ -154,15 +190,21 @@ export default {
       } else {
         this.fixed_state = true;
       }
+    },
+    password_number(cur, old) {
+      if (/[^A-z0-9]/.test(cur)) {
+        this.$message.error("不能输入特殊字符！");
+        this.password_number = cur.replace(/[^A-z0-9]/, "");
+      }
     }
   },
   methods: {
-    sailKey(value){
-      this.tabs_bar.forEach((item,index,array)=>{
-        if(item.path==value){
+    sailKey(value) {
+      this.tabs_bar.forEach((item, index, array) => {
+        if (item.path == value) {
           item.active = true;
         }
-      })
+      });
     },
     coverMeans() {
       let cover = document.body.clientHeight - 50;
@@ -219,10 +261,10 @@ export default {
         this.$refs.withdrawal.changeMeans(this.money);
       }
     },
-    tabBarChange(index,show,value) {
-      this.tabEmptyActive();
-      this.tabs_bar[index].active = true;
+    tabBarChange(index, show, value) {
       if (show) {
+        this.tabEmptyActive();
+        this.tabs_bar[index].active = true;
         this.$router.push({ path: value });
       } else {
         this.$message.success("敬请期待！");
@@ -260,11 +302,12 @@ export default {
           var sex = "女";
         }
         let json = {
-          enterurl: window.location.host + this.$route.path,
-          userId: this.player_info.uid, //用户id
+          enterurl: window.location.host + this.$route.path,//当前网址
+          userId: this.player_info.mShowUid, //用户id
           loginname: this.player_info.loginame, //登录名
           grade: this.player_info.vip, //用户等级
-          name: this.player_info.nickname, //用户名称
+          // name: this.player_info.nickname, //用户名称
+          name: this.player_info.mShowUid, //用户id
           gender: sex, //性别
           mobileNo: "", //手机号
           memo: "备注信息", //备注信息
@@ -312,8 +355,12 @@ export default {
           json.key;
         // console.log('hash',json.hashCode);
         //console.log("url$$$", infoValue);
+        // window.open(
+        //   "https://chat32.live800.com/live800/chatClient/chatbox.jsp?companyID=12698&enterurl=&codeType=custom&info=" +
+        //     encodeURIComponent(infoValue)
+        // );
         window.open(
-          "https://chat32.live800.com/live800/chatClient/chatbox.jsp?companyID=12698&enterurl=&codeType=custom&info=" +
+            "https://nine.mdihi.com/chat/chatClient/chatbox.jsp?companyID=365033539&configID=2306&jid=4095904748&s=1&enterurl=&codeType=custom&info=" +
             encodeURIComponent(infoValue)
         );
         // window.open("https://chat32.live800.com/live800/chatClient/chatbox.jsp?companyID=12698&enterurl=&codeType=custom&info=userId%3D440297033%26loginname%3Dtest28%26name%3DtestN28%26timestamp%3D1563358352994%26key%3Dlive800Key&s=1");
@@ -386,10 +433,16 @@ export default {
       );
     },
     lineMeans(index) {
-      this.$means.judgeToken();
-      if (index == 2 && this.$means.judgeToken() != false) {
-        this.$router.push({ path: "/line" });
-      }
+      this.$message.success("敬请期待！");
+      // this.$means.judgeToken();
+      // if (index == 2 && this.$means.judgeToken() != false) {
+      //   this.$message.success("敬请期待！");
+      //   // this.$router.push({ path: "/line" });
+      // }else if (index == 1 && this.$means.judgeToken() != false) {
+      //   this.$router.push({ path: "/download" });
+      // }else{
+      //   this.$message.success("敬请期待！");
+      // }
     }
   },
   beforeCreate() {
@@ -457,7 +510,6 @@ export default {
     }
   }
 
-  text-align: left;
   .header_info {
     width: 100%;
     height: 50px;
@@ -498,20 +550,16 @@ export default {
         position: relative;
         .nickname,
         .password {
-          width: 142px;
-          height: 32px;
           position: absolute;
           top: 8px;
-          input {
-            .mixin_input(142px, 32px);
-            float: left;
-            background: #3d1351;
-            color: #ac24df;
-            border: 1px solid #913cc9;
-          }
+          .mixin_input(180px, 32px);
+          float: left;
+          background: #3d1351;
+          color: #ac24df;
+          border: 1px solid #913cc9;
         }
         .nickname {
-          right: 340px;
+          right: 378px;
         }
         .password {
           right: 188px;

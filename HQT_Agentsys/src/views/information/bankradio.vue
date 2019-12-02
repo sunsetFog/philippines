@@ -2,7 +2,7 @@
   <div class="container">
     <!-- <otherheader title="银行名称"></otherheader> -->
     <mt-header title="银行卡管理">
-        <mt-button slot="left" @click="back">
+        <mt-button slot="left" class="all_palm" @click="back">
         <i class="mintui mintui-back"></i>
         </mt-button>
     </mt-header>

@@ -112,7 +112,7 @@
         <el-pagination
           :current-page.sync="currentPage"
           :page-size="pagesize"
-          :page-sizes="[50,100,200]"
+          :page-sizes="[20,50,200]"
           :total="total"
           @current-change="handleCurrentChange"
           @size-change="handleSizeChange"
@@ -220,7 +220,7 @@
         title: '',
         name: '',
         total: 0,
-        pagesize: 50
+        pagesize: 20
       }
     },
     created() {

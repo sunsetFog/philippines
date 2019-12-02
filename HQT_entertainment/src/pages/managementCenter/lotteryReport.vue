@@ -85,6 +85,7 @@
 
 <script>
 export default{
+    name: 'lotteryReport',
     data(){
         return{
             quota_list: [{gear_position: '游客19109'},{gear_position: '游客19109'},{gear_position: '游客19109'},{gear_position: '游客19109'},{gear_position: '游客19109'},{gear_position: '游客19109'}],

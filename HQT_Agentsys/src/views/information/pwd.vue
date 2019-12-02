@@ -9,7 +9,7 @@
     </div>
 
      <div class="card">
-         <mt-button type="primary" size="large" @click="sure">修改</mt-button>
+         <mt-button type="primary" size="large" class="all_palm" @click="sure">修改</mt-button>
      </div>
 
 

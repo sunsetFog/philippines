@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <mt-header title="银行卡提现管理">
-        <mt-button slot="left" @click="back">
+        <mt-button slot="left" class="all_palm" @click="back">
         <i class="mintui mintui-back"></i>
         </mt-button>
 
@@ -10,12 +10,12 @@
     <div class="card">
       <mt-cell title="账户余额" :value="balance">
       </mt-cell>
-      <mt-field label="提现金额" v-model="money" placeholder="" type='number'></mt-field>
+      <mt-field label="提现金额" v-model="money" :attr="{ maxlength: 12}" placeholder="" type='number'></mt-field>
     </div>
 
     <div class="card">
       <mt-cell title="银行信息">
-          <span style="color: #9f14a5" @click="change">更换银行卡</span>
+          <span style="color: #9f14a5" class="all_palm" @click="change">更换银行卡</span>
       </mt-cell>
 
       <mt-cell title="银行名称">
@@ -31,11 +31,11 @@
     </div>
 
     <div class="card">
-        <mt-field label="资金密码" v-model="pwd" placeholder="请输入资金密码" type='password'></mt-field>
+        <mt-field label="资金密码" v-model="pwd" :attr="{ maxlength: 6 }" placeholder="请输入6位数字的资金密码" type='password'></mt-field>
     </div>
 
      <div class="card">
-         <mt-button type="primary" size="large" @click="sure">立即提现</mt-button>
+         <mt-button type="primary" size="large" class="all_palm" @click="sure">立即提现</mt-button>
      </div>
 
 
@@ -116,6 +116,12 @@ export default {
         })
         return
       }
+      // if (this.money<100) {
+      //   Toast({
+      //     message: '提现金额最小100'
+      //   })
+      //   return
+      // }
       if (this.balance*1 < this.money *1) {
         Toast({
           message: '提现金额不能大于账户余额'
@@ -134,6 +140,23 @@ export default {
         })
         return
       }
+
+      if (this.pwd.length!=6) {
+        Toast({
+          message: '请输入6位数字的资金密码'
+        })
+        return
+      }
+
+      if(/[^\d]/g.test(that.pwd)){
+        if(that.pwd.match(/[^\d]/g)!=null){
+          Toast({message: '请输入6位数字的资金密码！'});
+        }
+        that.pwd = '';
+        return;
+      }
+
+
       request({
         url: that.public.url + '/paywithdraw/apply',
         method: 'post',

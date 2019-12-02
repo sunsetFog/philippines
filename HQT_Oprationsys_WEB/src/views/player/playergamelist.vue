@@ -78,9 +78,11 @@
               <el-form-item label="玩家信息:" label-width="73px" prop="info">
                 <el-select v-model="ruleForm.info" placeholder="">
                   <el-option label="全部" value=""></el-option>
+                  <el-option label="UID" value="4"></el-option>
                   <el-option label="邮箱" value="1"></el-option>
                   <el-option label="手机" value="2"></el-option>
                   <el-option label="银行卡" value="3"></el-option>
+                  <el-option label="IP" value="5"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item prop="chan">
@@ -186,7 +188,7 @@
           </el-row>
         </el-form>
       </div>
-      <div class="pagingbox">
+      <div class="pagingbox" style="overflow: hidden;">
         <div class="paging" style="margin-top: 15px;">
           <el-pagination
             :current-page.sync="currentPage"
@@ -209,16 +211,21 @@
 
     </div>
 
+
+      <div id="wrapper1">
+        <div id="div1"></div>
+      </div>
       <el-table
         :data="tableData"
         border
         :row-class-name='rowclass'
+        ref="wrappertable"
         :cell-class-name='cell1'
         style="width: 100%">
         <el-table-column
           label="UID"
-          width='80'
-          prop="id">
+          width='100'
+          prop="uid">
         </el-table-column>
         <el-table-column
         label="玩家账号"
@@ -234,6 +241,27 @@
           label="玩家渠道"
           prop="org_name">
         </el-table-column>
+         <el-table-column
+        width='200'
+        label="玩家备注">
+        <template slot-scope="scope">
+          <el-popover trigger='hover' placement='top'>
+            <span>{{scope.row.remark}}</span>
+            <div slot="reference" class="name-wrapper">
+              <span v-if="scope.row.inputshow">
+              <el-input v-model="scope.row.remark"></el-input>
+              <el-row style="margin-top:5px;">
+                <el-button type="primary" size='mini' @click="remarksure(scope.row)">确 定</el-button>
+                <el-button type="primary" size='mini' @click="remarkqx(scope.row)">取消</el-button>
+              </el-row>
+            </span>
+            
+            <span v-else>{{scope.row.remark.length > 4 ? scope.row.remark.substring(0,4) : scope.row.remark}}</span>
+            </div>
+          </el-popover>
+          
+        </template>
+      </el-table-column>
         <el-table-column
           label="层级"
           prop="level">
@@ -269,9 +297,9 @@
           label="查看"
           prop="viewinfo">
           <template slot-scope="scope">
-            <el-button @click="team(scope.row)" type="text" size="small">团队</el-button>
-            <el-button type="text" size="small" @click="ct">充提</el-button>
-            <el-button type="text" size="small" @click="zb">账变</el-button>
+            <el-button @click="team(scope.row)" type="text" size="small" v-if="scope.row.is_agent == '1'">团队</el-button>
+            <el-button type="text" size="small" @click="ct(scope.row)">充提</el-button>
+            <el-button type="text" size="small" @click="zb(scope.row)">账变</el-button>
             <el-button type="text" size="small" @click="tax(scope.row)" v-if="fundchangeagentfundlinklist">税收</el-button>
           </template>
         </el-table-column>
@@ -307,34 +335,13 @@
             </el-button>
           </template>
         </el-table-column>
-        <el-table-column
-        width='200'
-        label="玩家备注">
-        <template slot-scope="scope">
-          <el-popover trigger='hover' placement='top'>
-            <span>{{scope.row.remark}}</span>
-            <div slot="reference" class="name-wrapper">
-              <span v-if="scope.row.inputshow">
-              <el-input v-model="scope.row.remark"></el-input>
-              <el-row style="margin-top:5px;">
-                <el-button type="primary" size='mini' @click="remarksure(scope.row)">确 定</el-button>
-                <el-button type="primary" size='mini' @click="remarkqx(scope.row)">取消</el-button>
-              </el-row>
-            </span>
-            
-            <span v-else>{{scope.row.remark.length > 4 ? scope.row.remark.substring(0,4) : scope.row.remark}}</span>
-            </div>
-          </el-popover>
-          
-        </template>
-      </el-table-column>
       </el-table>
       <div class="pagingbox">
         <div class="paging">
           <el-pagination
             :current-page.sync="currentPage"
             :page-size="pagesize"
-            :page-sizes="[50,100,200]"
+            :page-sizes="[20,50,200]"
             :total="total"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -458,25 +465,25 @@
                 <el-form-item label="玩家渠道:" :label-width="formLabelWidth">
                   <span>{{gameuser.org_name}}</span>
                 </el-form-item>
-                <el-form-item label="上级代理:" :label-width="formLabelWidth" prop='upname' v-if="dlshow">
+                <!-- <el-form-item label="上级代理:" :label-width="formLabelWidth" prop='upname' v-if="dlshow">
                   <el-input v-model="form6.upname" placeholder="（只能填写代理账号）"></el-input>
-                </el-form-item>
-                <el-form-item label="代理线:" :label-width="formLabelWidth"  v-else>
+                </el-form-item> -->
+                <!-- <el-form-item label="代理线:" :label-width="formLabelWidth"  v-else>
                   <div class="parenti" v-for="(item,key) in agentline" :key="key">
                     <span>{{item.name}}</span>
                     <i class="el-icon-d-arrow-right"></i>
                   </div>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="玩家账号:" :label-width="formLabelWidth" prop="name">
                   <el-input v-model="form6.name"></el-input>
                 </el-form-item>
                 <el-form-item label="玩家层级:" :label-width="formLabelWidth">
                   <span>{{gameuser.old_level}}</span>
                 </el-form-item>
-                <el-form-item label="修改类型:" :label-width="formLabelWidth" prop="radio6">
+                <!-- <el-form-item label="修改类型:" :label-width="formLabelWidth" prop="radio6">
                   <el-radio v-model="form6.radio6" label="1" size="mini">代理</el-radio>
                   <el-radio v-model="form6.radio6" label="2" size="mini">会员</el-radio>
-                </el-form-item>
+                </el-form-item> -->
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="reset6(form)">取 消</el-button>
@@ -541,10 +548,15 @@
                         <span>{{gameuser.nickname}}</span>
                       </el-form-item>
                       <el-form-item label="已绑定手机号:" :label-width="formLabelWidth">
-                        <span>{{gameuser.mobile}}</span> <span><el-button  size="small" @click="delbind('1')" v-if="gameuser.mobile" style="margin-left: 58px;">删除</el-button></span>
+                        <span v-show="!mobile_active" v-if="gameuser.mobile">{{gameuser.mobile}}</span>
+                        <span v-show="!mobile_active" v-else>没绑定手机号</span> 
+                        <span v-show="!mobile_active"><el-button  size="small" @click="delbinds('1',gameuser.mobile)" style="margin-left: 58px;">修改</el-button></span>
+                        <span v-show="mobile_active"><el-input style="width: 200px;" type="text" maxlength="20" placeholder="请输入手机号" v-model="mobile_value"></el-input></span>
+                        <span v-show="mobile_active" style="margin-left: 60px;"><el-button @click="mobile_active = false">取消</el-button></span>
+                        <span v-show="mobile_active" style="margin-left: 10px;"><el-button type="primary" @click="mobileDetermine">确定</el-button></span>
                       </el-form-item>
                       <el-form-item label="已绑定邮箱:" :label-width="formLabelWidth">
-                        <span>{{gameuser.email}}</span> <span><el-button  size="small" @click="delbind('2')" v-if="gameuser.email" style="margin-left: 58px;">删除</el-button></span>
+                        <span>{{gameuser.email}}</span> <span><el-button  size="small" @click="delbinds('2')" v-if="gameuser.email" style="margin-left: 58px;">删除</el-button></span>
                       </el-form-item>
                     </el-form>
                   </div>
@@ -606,6 +618,63 @@
                   </el-table>
                 </el-tab-pane>
 
+                <el-tab-pane label="支付宝" name="fourth_two">
+                  <el-table
+                    :data="tableDatamessageTwo"
+                    :cell-class-name='cell2'
+                    border>
+                    <el-table-column
+                      label="状态"
+                      prop="status">
+                    </el-table-column>
+                    <el-table-column
+                      label="玩家渠道"
+                      prop="user_org_name">
+                    </el-table-column>
+                    <el-table-column
+                      label="玩家名"
+                      prop="user_account">
+                    </el-table-column>
+                    <el-table-column
+                      label="支付宝账号"
+                      prop="cardno">
+                    </el-table-column>
+                    <el-table-column
+                      label="支付宝实名"
+                      prop="cardholder">
+                    </el-table-column>                  
+                    <!-- <el-table-column
+                      label="银行名称"
+                      prop="bankname">
+                    </el-table-column> -->
+                    <!-- <el-table-column
+                      label="省份"
+                      prop="province">
+                    </el-table-column> -->
+                    <!-- <el-table-column
+                      label="城市"
+                      prop="city">
+                    </el-table-column> -->
+                    <!-- <el-table-column
+                      label="支行名称"
+                      prop="branchname">
+                    </el-table-column> -->
+                    <el-table-column
+                      width='160'
+                      label="绑定时间"
+                      prop="bindtime">
+                    </el-table-column>
+                    <el-table-column
+                      label="操作" class="operate">
+                      <template slot-scope="scope">
+                        <!-- <el-button @click="fc(scope.row)" type="text" size="small" style="margin-left:10px">银行反查</el-button> -->
+                        <el-button @click="cacelalipay(scope.row)" type="text" size="small" v-if="gameuserbankunbind && scope.row.status !='已取消绑定'">取消绑定</el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </el-tab-pane>
+
+
                 <el-tab-pane label="玩家详细资料" name="fifth">
                   <div>
                     <el-form>
@@ -628,12 +697,12 @@
                       <el-form-item label="邮箱:" :label-width="formLabelWidth" prop="name" class="positionside">
                         <span>{{userdatainfo.email}}</span>
                       </el-form-item>
-                      <el-form-item label="支付宝账号:" :label-width="formLabelWidth" prop="name" class="positionside">
+                      <!-- <el-form-item label="支付宝账号:" :label-width="formLabelWidth" prop="name" class="positionside">
                         <span>{{userdatainfo.alipay_account}}</span>
-                      </el-form-item>
-                      <el-form-item label="支付宝实名:" :label-width="formLabelWidth" prop="name" class="positionside">
+                      </el-form-item> -->
+                      <!-- <el-form-item label="支付宝实名:" :label-width="formLabelWidth" prop="name" class="positionside">
                         <span>{{userdatainfo.alipay_realname}}</span>
-                      </el-form-item>
+                      </el-form-item> -->
                       <el-form-item label="所属渠道组:" :label-width="formLabelWidth" prop="name" class="positionside">
                         <span>{{userdatainfo.org_name}}</span>
                       </el-form-item>
@@ -670,6 +739,42 @@
                     </el-form>
                   </div>
                 </el-tab-pane>
+
+              <el-tab-pane label="玩家充投比" name="sixth">
+                  <div>
+                    <el-form>
+                      <el-form-item label="账号:" :label-width="formLabelWidth2" class="positionside">
+                        <span>{{gameuser.login_name}}</span>
+                      </el-form-item>                    
+                      <el-form-item label="所属渠道组:" :label-width="formLabelWidth2" prop="name" class="positionside">
+                        <span>{{gameuser.org_name}}</span>
+                      </el-form-item> 
+                       <el-form-item label="账户实际总充值:" :label-width="formLabelWidth2" prop="name" class="positionside">
+                        <span>{{userdatainfo2.money}}</span>
+                      </el-form-item> 
+                       <el-form-item label="首笔充值前账户余额:" :label-width="formLabelWidth2" prop="name" class="positionside">
+                        <span>{{userdatainfo2.firec_account_wallet}}</span>
+                      </el-form-item>   
+                       <el-form-item label="用户总输额:" :label-width="formLabelWidth2" prop="name" class="positionside">
+                        <span>{{userdatainfo2.lose_money}}</span>
+                      </el-form-item> 
+                       <el-form-item label="用户总赢额:" :label-width="formLabelWidth2" prop="name" class="positionside">
+                        <span>{{userdatainfo2.win_money}}</span>
+                      </el-form-item> 
+                        <el-form-item label="人机类投注额:" :label-width="formLabelWidth2" prop="name" class="positionside">
+                        <span>{{userdatainfo2.bet_ptom}}</span>
+                      </el-form-item>
+                       <el-form-item label="用户总流水:" :label-width="formLabelWidth2" prop="name" class="positionside">
+                        <span>{{userdatainfo2.flow}}</span>
+                      </el-form-item> 
+                       <el-form-item label="总充投比:" :label-width="formLabelWidth2" prop="name" class="positionside">
+                        <span>{{ctb}}%</span>
+                      </el-form-item>                  
+                    </el-form>
+                  </div>
+                </el-tab-pane>
+
+
               </el-tabs>
               <div slot="footer" class="dialog-footer" v-if="buttonshow">
                 <el-button @click="reset(form)">取 消</el-button>
@@ -908,6 +1013,7 @@
       text:'',
       unit: new Array("仟", "佰", "拾", "", "仟", "佰", "拾", "", "角", "分"),
       formLabelWidth: '120px',
+      formLabelWidth2: '150px',
       form1: {
         code: '',
         recode: ''
@@ -945,12 +1051,14 @@
         {name: '未开奖', id: '6'}
       ],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       currentPage: 1,
       tableData: [
       ],
       tableDatamessage: [
+      ],
+       tableDatamessageTwo: [
       ],
       userid:'',
       rules: {
@@ -1072,11 +1180,18 @@
       },
       gameuser: {},
       userdatainfo: {},
+      userdatainfo2:{},
+      ctb:'',
       agentline: [],
       dlshow: false,
       czshow: false,
       datalist: [],
-      zdflag: true
+      zdflag: true,
+      mobile_active: false,
+      mobile_value: '',
+      mid:'',
+      typeMain:'',
+      isagentMain:'',
     }
   },
     created(){
@@ -1104,6 +1219,26 @@
         playergamelist(that)
       }
     },
+    mounted () {
+      let dom = this.$refs.wrappertable.$refs.bodyWrapper
+      let wrapper1 = document.getElementById('wrapper1')
+      dom.addEventListener('scroll', this.handlescroll, true)
+      wrapper1.addEventListener('scroll', this.handlescroll2, true)
+    },
+    destroyed(){
+      // let dom = this.$refs.wrappertable.$refs.bodyWrapper
+      // let wrapper1 = document.getElementById('wrapper1')
+      // if(dom){
+      //    dom.removeEventListener('scroll',this.handlescroll)
+      //   wrapper1.removeEventListener('scroll',this.handlescroll2)
+      // }   
+    },
+    // destroyed() {
+    //   let dom = this.$refs.wrappertable.$refs.bodyWrapper
+    //   let wrapper1 = document.getElementById('wrapper1')
+    //   dom.removeEventListener('scroll',this.handlescroll)
+    //   wrapper1.removeEventListener('scroll',this.handlescroll2)
+    // },
     watch:{
       'form8.radio1': function (val) {
         if (val === '2') {
@@ -1176,6 +1311,24 @@
     methods: {
       team(row) {
         this.$router.push({path: '/analysisdatamgr/agentteam',query:{org:row.org_id,name:row.login_name}})
+      },
+      handlescroll(e) {
+        if (this.$refs.wrappertable) {
+          let dom = this.$refs.wrappertable.$refs.bodyWrapper
+          let wrapper1 = document.getElementById('wrapper1')
+          let domleft = this.$refs.wrappertable.$refs.bodyWrapper.scrollLeft
+          let wrapper1left = document.getElementById('wrapper1').scrollLeft
+          wrapper1.scrollTo(domleft,0)
+        }
+      },
+      handlescroll2() {
+        if (this.$refs.wrappertable) {
+          let dom = this.$refs.wrappertable.$refs.bodyWrapper
+          let wrapper1 = document.getElementById('wrapper1')
+          let domleft = this.$refs.wrappertable.$refs.bodyWrapper.scrollLeft
+          let wrapper1left = document.getElementById('wrapper1').scrollLeft
+          dom.scrollTo(wrapper1left,0)
+        }
       },
       th (row) {
          let that = this
@@ -1274,16 +1427,22 @@
               that.nav = res.data.nav_path.p_agents
               that.orgid = res.data.nav_path.org_id
             }
+           that.mid = row.id
+            // if(row.is_agent === 1){
+            //   idenfication = true
+            // }else{
+            //     idenfication = false
+            // }
       that.total = res.data.rownum * 1
       that.currentPage = res.data.pageno * 1
           }).catch(error => {
           })
       },
-      ct () {
-        this.$router.push({path: '/analysisdatamgr/rushtoask'})
+      ct (row) {
+        this.$router.push({path: '/analysisdatamgr/rushtoask',query:{login_name:row.login_name}})
       },
-      zb () {
-        this.$router.push({path: '/analysisdatamgr/gamedealday'})
+      zb (row) {
+        this.$router.push({path: '/analysisdatamgr/gameuserchg',query:{uid:row.uid}})
       },
       znx () {
         this.$router.push({path: '/gamemsgmgr/mail'})
@@ -1434,30 +1593,77 @@
         }).catch(error => {
         })
       },
-      delbind (type) {
+      delbinds (type,res) {
         let that = this
-        that.$confirm('确认删除吗?删除后将不能恢复', '二次确认', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          center: true
-        }).then(res => {
-          request({
-            url:that.public.url + '/gameuser/delbind',
-            method:'post',
-            data:{
-              user_id: that.userid,
-              del_type: type
-            }
+
+        if(type==1){
+
+          that.mobile_value = res;
+          that.mobile_active = true;
+
+        }else if(type==2){
+
+          that.$confirm('确认删除吗?删除后将不能恢复', '二次确认', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true
           }).then(res => {
-            that.$message({
-              type: 'success',
-              message: res.message
+            request({
+              url:that.public.url + '/gameuser/delbind',
+              method:'post',
+              data:{
+                user_id: that.userid,
+                del_type: type
+              }
+            }).then(res => {
+              that.$message({
+                type: 'success',
+                message: res.message
+              })
+            }).catch(error => {
             })
           }).catch(error => {
           })
-        }).catch(error => {
-        })
+
+        }
+
+      },
+      //是否手机
+      isMoblie: function (value) {
+        return !/^1\d{10}$/.test(value);
+      },
+      mobileDetermine(){
+        let that = this;
+        if(that.mobile_value!=''&&that.isMoblie(that.mobile_value)){
+          that.$message.error('手机号格式不对');
+          return;
+        }
+        request({
+              url:that.public.url + '/gameuser/updatephonenum',
+              method:'post',
+              data:{
+                id: that.gameuser.id,
+                mobile: that.mobile_value
+              }
+            }).then(res => {
+              if(res.code==0){
+                that.mobile_active = false;
+                that.gameuser.mobile = that.mobile_value;
+                that.dialogFormVisible = false;
+                that.$message({
+                  type: 'success',
+                  message: '绑定手机号修改成功'
+                })
+              }else{
+                that.$message({
+                  type: 'success',
+                  message: res.message
+                })
+              }
+              
+            }).catch(error => {
+            })
       },
       numchange(event){
         this.mynum = Number(event).toFixed(2)
@@ -1572,7 +1778,10 @@
         if(that.activeName2 === 'fourth'){
           bankcard(that)
         }
-        if (that.activeName2 === 'third' || that.activeName2 === 'fourth' || that.activeName2 === 'fifth') {
+        if(that.activeName2 === 'fourth_two'){
+          alipay(that)
+        }
+        if (that.activeName2 === 'third' || that.activeName2 === 'fourth' || that.activeName2 === 'fifth' ||  that.activeName2 ==='fourth_two' || that.activeName2 ==='sixth') {
           this.buttonshow = false
         } else {
           this.buttonshow = true
@@ -1589,10 +1798,25 @@
           }).catch(error => {
           })
         }
+         if (that.activeName2 === 'sixth') {
+          request({
+            url:that.public.url + '/gameuser/chongtoubi',
+            method:'post',
+            data:{
+              id: that.userid
+              // id: '103'
+            }
+          }).then(res => {
+            that.userdatainfo2 = res.data
+            that.ctb = (res.data.ctb*100).toFixed(2)
+          }).catch(error => {
+          })
+        }
       },
       nodeclick (data) {
         let that = this
         let userid = data.user_id
+        that.mid =  data.user_id
         // this.ruleForm.selectchannel = ''
             request({
               url: that.public.url + '/backend/gameuser/getlist',
@@ -1685,13 +1909,14 @@
           if (valid) {
             alert('submit')
           } else {
-            console.log('error')
+            // console.log('error')
             return false
           }
         })
       },
       query(){
         let that = this;
+        that.mid = '';
         playergamelist(that)
         let setplayergamelist = {
         'info': that.ruleForm.info,
@@ -1812,6 +2037,8 @@
                   org_id:this.gameuser.agent_org_id
                 }
               }).then(res => {
+                that.typeMain = res.data.type
+                that.isagentMain = res.data.is_agent
                 if (res.data.old_agent_line.length > 0) {
                  var old_agent_line = res.data.old_agent_line
                 } else {
@@ -1827,6 +2054,8 @@
                   {'status': '转移到', 'up': new_agent_line, 'level': res.data.new_level}
                 ]
                 this.dialogFormVisible9 = true
+                  console.log(this.typeMain )
+        console.log(this.isagentMain )
               }).catch(error => {
               })
             } else {
@@ -1841,6 +2070,8 @@
                   org_id:this.gameuser.agent_org_id
                 }
               }).then(res => {
+                that.typeMain = res.data.type
+                that.isagentMain = res.data.is_agent
                 if (res.data.old_agent_line.length > 0) {
                  var old_agent_line = res.data.old_agent_line
                 } else {
@@ -1856,6 +2087,8 @@
                   {'status': '转移到', 'up': new_agent_line, 'level': res.data.new_level}
                 ]
                 this.dialogFormVisible9 = true
+                  console.log(this.typeMain )
+        console.log(this.isagentMain )
               }).catch(error => {
               })
                 
@@ -1867,6 +2100,7 @@
         })
       },
       sure9 () {
+      
         let that = this
         if (this.upshow) {
         } else {
@@ -1876,7 +2110,33 @@
         } else {
           that.form8.top = ''
         }
-        request({
+         if(this.typeMain == 1 && this.isagentMain == 0){
+          request({
+            url:that.public.url + '/gameuser/memberchangeagent',
+            method:'post',
+            data:{
+              user_id: that.userid,
+              user_account: that.form8.desc,
+              type: that.form8.radio1,
+              // reward_top: that.form8.top
+            }
+          }).then(res => {
+            that.$message({
+              type: 'success',
+              message: res.message
+            })
+            that.$refs.form8.resetFields()
+            that.form8.desc = ''
+            that.form8.top = ''
+            that.dialogFormVisible8 = false
+            that.dialogFormVisible9 = false
+            that.typeMain = ''
+            that.isagentMain = ''
+            playergamelist(that)
+          }).catch(error => {
+          })
+        }else{
+           request({
             url:that.public.url + '/gameuser/changeuseragent',
             method:'post',
             data:{
@@ -1898,6 +2158,8 @@
             playergamelist(that)
           }).catch(error => {
           })
+        }
+       
       },
       cacelcard(row){
         let that = this;
@@ -1919,6 +2181,36 @@
               message: res.message
             })
             bankcard(that)
+          }).catch(error => {
+
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+          })
+        })
+      })
+      },
+      cacelalipay(row){//支付宝解绑
+        let that = this;
+        this.$confirm('是否继续解除绑定?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          request({
+            url:that.public.url + '/backend/gameuserbank/unbind',
+            method:'post',
+            data:{
+              id:row.id
+            }
+          }).then(res => {
+            this.$message({
+              type: 'success',
+              message: res.message
+            })
+            alipay(that)
           }).catch(error => {
 
           }).catch(() => {
@@ -1966,7 +2258,7 @@
                 that.dialogFormVisible3 = false
                 that.$refs.form3.resetFields()
                 that.text = ''
-                getplayergamelist(that)
+                playergamelist(that)
               }).catch(error => {
               })
             }).catch(error => {
@@ -1992,8 +2284,8 @@
                 data:{
                   user_id:this.userid,
                   login_name:this.form6.name,
-                  modify_type:this.form6.radio6,
-                  parent_agent:this.form6.upname
+                  // modify_type:this.form6.radio6,
+                  // parent_agent:this.form6.upname
                 }
               }).then(res => {
                 this.$message({
@@ -2002,7 +2294,7 @@
                 })
                 that.dialogFormVisible6 = false
                 that.$refs.form6.resetFields()
-                getplayergamelist(that)
+                playergamelist(that)
               }).catch(error => {
               })
             }).catch(error => {
@@ -2020,6 +2312,14 @@
           return 'red'
         }
       },
+       cell2 ({row, column, rowIndex, columnIndex}) {
+        if (columnIndex === 0 && row.status === '绑定中') {
+          return 'green'
+        }
+        if (columnIndex === 0 && row.status === '已取消绑定') {
+          return 'red'
+        }
+      },
       excel () {
         let that = this
         var start = ''
@@ -2028,6 +2328,7 @@
         var regend = ''
         var freezetime = ''
         var freezeendtime = ''
+        var loNmae = ''
         if (that.ruleForm.date1 && that.ruleForm.date1.length > 0) {
           let  timestart = that.ruleForm.date1[0].getTime() /1000
           start = parseTime(timestart)
@@ -2042,6 +2343,11 @@
           freezetime = parseTime(that.ruleForm.date3[0].getTime() /1000)
           freezeendtime = parseTime(that.ruleForm.date3[1].getTime() /1000)
         }
+        if(that.mid!=''){
+      loNmae == ''
+    }else{
+      loNmae = that.ruleForm.accountnum
+    }
         request({
           url: that.public.url + '/gameuser/exportuserdata',
           method: 'post',
@@ -2053,7 +2359,7 @@
             agent_balance_min:that.ruleForm.playerbalance3,
             agent_balance_max:that.ruleForm.playerbalance4,
             org_id:that.ruleForm.selectchannel,
-            login_name: that.ruleForm.accountnum,
+            login_name:loNmae,
             level:that.ruleForm.playerlevel,
             status:that.ruleForm.freeztype,
             user_balance_min:that.ruleForm.playerbalance1,
@@ -2063,7 +2369,8 @@
             sort_column: that.ruleForm.playername,
             sort_type: that.ruleForm.checked,
             freeze_time_from:freezetime,
-            freeze_time_to:freezeendtime
+            freeze_time_to:freezeendtime,
+            agent_user_id:that.mid
           }
         }).then(res => {
           window.location.href = that.public.url + res.data
@@ -2106,7 +2413,7 @@
             that.$refs.form4.resetFields()
             that.dialogFormVisible4 = false
             that.text = ''
-            getplayergamelist(that)
+            playergamelist(that)
           }).catch(error => {
           })
       },
@@ -2177,7 +2484,7 @@
     }).catch(error => {
     })
   }
-  function bankcard(that){
+  function bankcard(that){//【银行】传参和支付宝传参不一样
     request({
       url:that.public.url + '/backend/gameuserbank/gethistorylist',
       method:'post',
@@ -2192,6 +2499,24 @@
       that.tableDatamessage = res.data.list
     }) .catch(error => {})
   }
+function alipay(that){//银行传参和【支付宝】传参不一样
+    request({
+      url:that.public.url + '/backend/gameuserbank/gethistorylist',
+      method:'post',
+      data:{
+        bank_cond_type: '',
+        bank_cond_text: '',
+        agent_org_id: that.gameuser.agent_org_id,
+        user_account: that.gameuser.login_name,
+        type:2,
+        pageno:'1',
+        pagerows:'100',
+      }
+    }).then(res => {
+      that.tableDatamessageTwo = res.data.list
+    }) .catch(error => {})
+  }
+
 
   function getuserinfo (that) {
     request({
@@ -2214,6 +2539,7 @@
     var regend = ''
     var freezetime = ''
     var freezeendtime = ''
+    var loNmae = ''
     if (that.ruleForm.date1 && that.ruleForm.date1.length > 0) {
       let  timestart = that.ruleForm.date1[0].getTime() /1000
       start = parseTime(timestart)
@@ -2228,6 +2554,16 @@
       freezetime = parseTime(that.ruleForm.date3[0].getTime() /1000)
       freezeendtime = parseTime(that.ruleForm.date3[1].getTime() /1000)
     }
+    // if(idenfication){
+    //   mid = this.tableData.id
+    // }else{
+    //   mid = ''
+    // }
+    if(that.mid!=''){
+      loNmae == ''
+    }else{
+      loNmae = that.ruleForm.accountnum
+    }
     request({
       url: that.public.url + '/gameuser/getlist',
       method: 'post',
@@ -2239,7 +2575,7 @@
         agent_balance_min:that.ruleForm.playerbalance3,
         agent_balance_max:that.ruleForm.playerbalance4,
         org_id:that.ruleForm.selectchannel,
-        login_name: that.ruleForm.accountnum,
+        login_name: loNmae,
         level:that.ruleForm.playerlevel,
         status:that.ruleForm.freeztype,
         user_balance_min:that.ruleForm.playerbalance1,
@@ -2252,6 +2588,7 @@
         freeze_time_to:freezeendtime,
         pageno: that.currentPage,
         pagerows: that.pagesize,
+        agent_user_id:that.mid
       }
     }).then(res => {
       let tableData = res.data.list
@@ -2477,5 +2814,14 @@
   .playergamelist .el-tree>.el-tree-node{
     min-width: 100%;
     display: inline-block!important;
+  }
+  .playergamelist #div1{
+    height: 10px;
+    width:1800px;
+  }
+  .playergamelist #wrapper1 {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
   }
 </style>

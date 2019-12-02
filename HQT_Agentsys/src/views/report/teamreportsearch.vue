@@ -18,7 +18,7 @@
     </el-date-picker>
     </div>
 
-    <div class="mint-cell-wrapper" style="background: white; border-top: 1px solid #2e163d;" v-if="datashow === 2"  @click="opendate">
+    <div class="mint-cell-wrapper all_palm" style="background: white; border-top: 1px solid #2e163d;" v-if="datashow === 2"  @click="opendate">
       <span style="margin-right:15px;">开始时间</span>
       <span style="color: #a9a9a9">{{starttime || '' ? starttime: '请选择开始时间'}}</span>
     </div>
@@ -28,7 +28,7 @@
     v-model="starttime">
   </mt-datetime-picker>
 
-   <div class="mint-cell-wrapper" style="background: white; border-top: 1px solid #2e163d;" v-if="datashow === 2"  @click="opendate">
+   <div class="mint-cell-wrapper all_palm" style="background: white; border-top: 1px solid #2e163d;" v-if="datashow === 2"  @click="opendate">
       <span style="margin-right:15px;">结束时间</span>
       <span style="color: #a9a9a9">{{endtime || '' ? endtime: '请选择结束时间'}}</span>
     </div>
@@ -83,15 +83,6 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .card {
-    margin: 10px;
-    border-top: 1px solid #2e163d;
-    border-bottom: 1px solid #2e163d;
-    border-left: 2px solid #2e163d;
-    border-right: 2px solid #2e163d;
-    border-radius: 12px;
-    position: relative;
-  }
   .mark1 {
     position: absolute;
     left: 80px;
@@ -124,8 +115,9 @@ export default {
     .boxposition {
       position: absolute;
       left: 140px;
-      top: 0;
+      top: 10px;
       font-size: 12px;
+      cursor: pointer;
     }
     .teamreportsearch {
       display: block;

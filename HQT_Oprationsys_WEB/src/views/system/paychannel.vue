@@ -19,11 +19,11 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <!-- <el-col :span="6">
-            <el-form-item label="充值方式">
-              <el-input clearable placeholder="充值方式" v-model="formInline.code"></el-input>
+          <el-col :span="6">
+            <el-form-item label="代码">
+              <el-input clearable placeholder="代码" v-model="formInline.code"></el-input>
             </el-form-item>
-          </el-col> -->
+          </el-col>
           <el-col :span="6">
             <el-form-item label="状态">
                 <el-select v-model="formInline.type" filterable clearable>
@@ -79,10 +79,10 @@
       prop="acc_code"
       label="代码">
     </el-table-column>
-    <el-table-column
+    <!-- <el-table-column
       prop="val_grade_id"
       label="价值量等价">
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column
       prop="depict"
       label="说明">
@@ -120,7 +120,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -146,7 +146,10 @@
       <el-form-item label="密匙" :label-width="formLabelWidth" prop='key'>
         <el-input v-model="form.key" :placeholder="placeholder"></el-input>
       </el-form-item>
-      <el-form-item label="请求地址" :label-width="formLabelWidth" prop='pay_req_url'>
+      <el-form-item label="提现请求地址" :label-width="formLabelWidth" prop='wdr_req_url'>
+        <el-input v-model="form.wdr_req_url" :placeholder="placeholder"></el-input>
+      </el-form-item>
+       <el-form-item label="充值请求地址" :label-width="formLabelWidth" prop='pay_req_url'>
         <el-input v-model="form.pay_req_url" :placeholder="placeholder"></el-input>
       </el-form-item>
       <el-form-item label="查单地址" :label-width="formLabelWidth" prop='qry_order_url'>
@@ -168,9 +171,9 @@
       <el-form-item label="说明" :label-width="formLabelWidth" prop="depict">
         <el-input v-model="form.depict"></el-input>
       </el-form-item>
-       <el-form-item label="价值量等级设置" :label-width="formLabelWidth" prop="depict">
+       <!-- <el-form-item label="价值量等级设置" :label-width="formLabelWidth" prop="depict">
         
-      </el-form-item>
+      </el-form-item> -->
 
 
     </el-form>
@@ -183,7 +186,7 @@
 
 
     <el-dialog :title='title'  :visible.sync="dialogFormVisible2" :before-close="reset2">
-    <el-form :model="form2" :rules="rules2" ref="form">
+    <el-form :model="form2" :rules="rules2" ref="form2">
         
        
       <el-form-item label="充值来源" :label-width="formLabelWidth" prop='name'>
@@ -198,11 +201,20 @@
       <el-form-item label="密匙" :label-width="formLabelWidth" prop='key'>
         <el-input v-model="form2.key" :placeholder="placeholder"></el-input>
       </el-form-item>
-      <el-form-item label="请求地址" :label-width="formLabelWidth" prop='pay_req_url'>
+      <el-form-item label="提现请求地址" :label-width="formLabelWidth" prop='wdr_req_url'>
+        <el-input v-model="form2.wdr_req_url" :placeholder="placeholder"></el-input>
+      </el-form-item>
+      <el-form-item label="充值请求地址" :label-width="formLabelWidth" prop='pay_req_url'>
         <el-input v-model="form2.pay_req_url" :placeholder="placeholder"></el-input>
       </el-form-item>
       <el-form-item label="查单地址" :label-width="formLabelWidth" prop='qry_order_url'>
         <el-input v-model="form2.qry_order_url" :placeholder="placeholder"></el-input>
+      </el-form-item>
+       <el-form-item label="我方使用公钥" :label-width="formLabelWidth">
+        <el-input v-model="form2.my_pub_key" ></el-input>
+      </el-form-item>
+      <el-form-item label="对方使用公钥" :label-width="formLabelWidth">
+        <el-input v-model="form2.it_pub_key" ></el-input>
       </el-form-item>
 
 
@@ -277,6 +289,7 @@ export default {
         othername: '',
         key: '',
         pay_req_url: '',
+        wdr_req_url: '',
         qry_order_url: '',
         depict: '',
         status: '1'
@@ -287,7 +300,10 @@ export default {
         othername: '',
         key: '',
         pay_req_url: '',
+        wdr_req_url: '',
         qry_order_url: '',
+        my_pub_key:'',
+        it_pub_key:'',
       },
       list: [
         {name: '全部', type: ''},
@@ -310,8 +326,9 @@ export default {
         ],
         code: [{required: true, message: '请输入商户代码', trigger: 'blur'}],
         key: [{required: true, message: '请输入密匙', trigger: 'blur'}],
-        pay_req_url: [{required: true, message: '请输入支付请求地址', trigger: 'blur'}],
-        qry_order_url: [{required: true, message: '请输入查询订单地址', trigger: 'blur'}]
+        pay_req_url: [{required: false, message: '请输入充值请求地址', trigger: 'blur'}],
+        wdr_req_url: [{required: false, message: '请输入提现请求地址', trigger: 'blur'}],
+        qry_order_url: [{required: false, message: '请输入查询订单地址', trigger: 'blur'}]
       },
       rules2: {
         name: [
@@ -326,12 +343,13 @@ export default {
       title: '',
       name: '',
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       allname: [],
       placeholder: '',
       key: '',
       pay_req_url: '',
-      qry_order_url: ''
+      qry_order_url: '',
+      wdr_req_url: ''
     }
   },
   created() { 
@@ -504,9 +522,16 @@ export default {
             that.form2.name = res.data.name
             that.key = res.data.key
             that.pay_req_url = res.data.pay_req_url
+            that.wdr_req_url = res.data.wdr_req_url
             that.qry_order_url = res.data.qry_order_url
             that.form2.othername = res.data.alias
             that.id = res.data.id
+            that.form2.key = res.data.key
+            that.form2.pay_req_url = res.data.pay_req_url
+            that.form2.wdr_req_url = res.data.wdr_req_url
+            that.form2.qry_order_url = res.data.qry_order_url
+            that.form2.my_pub_key = res.data.my_pub_key
+            that.form2.it_pub_key = res.data.it_pub_key
           }).catch(error => {
           })
     },
@@ -531,6 +556,7 @@ export default {
                   key: this.form.key,
                   alias: this.form.othername,
                   pay_req_url: this.form.pay_req_url,
+                  wdr_req_url: this.form.wdr_req_url,
                   qry_order_url: this.form.qry_order_url,
                   status: this.form.status,
                   depict: this.form.depict
@@ -552,25 +578,31 @@ export default {
     },
     sure2 () {
        let that = this
-      this.$refs.form.validate((valid) => {
+      this.$refs.form2.validate((valid) => {
          if (valid) {
       let pay_req_url = ''
       let qry_order_url = ''
       let key = ''
-      if (this.form.pay_req_url === '') {
+      let wdr_req_url = ''
+      if (this.form2.pay_req_url === '') {
         pay_req_url = this.pay_req_url
       } else {
-        pay_req_url = this.form.pay_req_url
+        pay_req_url = this.form2.pay_req_url
       }
-      if (this.form.qry_order_url === '') {
+      if (this.form2.qry_order_url === '') {
         qry_order_url = this.qry_order_url
       } else {
-        qry_order_url = this.form.qry_order_url
+        qry_order_url = this.form2.qry_order_url
       }
-      if (this.form.key === '') {
+      if (this.form2.key === '') {
         key = this.key
       } else {
-        key = this.form.key
+        key = this.form2.key
+      }
+      if (this.form2.wdr_req_url === '') {
+        wdr_req_url = this.wdr_req_url
+      } else {
+        wdr_req_url = this.form2.wdr_req_url
       }
         request({
         url: that.public.url + '/paychannel/updatecompay',
@@ -581,8 +613,11 @@ export default {
               alias: this.form2.othername,
               key: key,
               pay_req_url: pay_req_url,
+              wdr_req_url: wdr_req_url,
               qry_order_url: qry_order_url,
-              id: this.id
+              id: this.id,
+              my_pub_key: this.form2.my_pub_key,
+              it_pub_key:this.form2.it_pub_key
         }
       }).then(res => {
         that.$message({

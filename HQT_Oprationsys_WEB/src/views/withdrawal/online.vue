@@ -6,7 +6,7 @@
           
 
 
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="处理状态">
                 <el-select v-model="formInline.status" filterable>
                 <el-option
@@ -36,6 +36,12 @@
           <el-col :span="6">
             <el-form-item label="玩家账号" label-width="70px">
             <el-input v-model="formInline.account" placeholder="请输入要查询的关键词" clearable></el-input>
+            </el-form-item>
+          </el-col>
+
+           <el-col :span="6">
+            <el-form-item label="UID" label-width="70px">
+            <el-input v-model="formInline.uid" placeholder="请输入要查询的关键词" clearable></el-input>
             </el-form-item>
           </el-col>
 
@@ -106,10 +112,32 @@
                  <el-input v-model="formInline.rechargeid" placeholder="请输入要查询的关键词" clearable></el-input>
             </el-form-item>
           </el-col>
-
+           <el-col :span="6">
+            <el-form-item label="复审人">
+                 <el-input v-model="formInline.s_audit_account" placeholder="请输入要查询的关键词" clearable></el-input>
+            </el-form-item>
+          </el-col>
           <el-col :span="6">
             <el-form-item label="平台附言">
                  <el-input v-model="formInline.platform" placeholder="请输入要查询的关键词" clearable></el-input>
+            </el-form-item>
+          </el-col>
+           <el-col :span="6">
+            <el-form-item label="充值来源">
+                <!-- <el-input v-model="formInline.name" placeholder="充值来源" clearable></el-input> -->
+                <el-select v-model="formInline.name" filterable clearable>
+                <el-option
+                  v-for="item in allname"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+            <el-col :span="6">
+            <el-form-item label="订单号">
+                 <el-input v-model="formInline.order_no" placeholder="请输入要查询的关键词" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="2">
@@ -142,6 +170,14 @@
     <el-table-column
       prop="id"
       label="ID">
+    </el-table-column>
+    <el-table-column
+      prop="uid"
+      label="UID">
+    </el-table-column>
+    <el-table-column
+      prop="order_no"
+      label="订单号">
     </el-table-column>
     <el-table-column
       prop="status"
@@ -207,12 +243,24 @@
         {{scope.row.ps_fact}}
       </template>
     </el-table-column>
+     <el-table-column
+      label="复审人">
+      <template slot-scope="scope">
+        {{scope.row.s_audit_account}}
+      </template>
+    </el-table-column>
+     <el-table-column
+      label="上传图片"  width="150">
+      <template slot-scope="scope">
+       <el-button v-if="scope.row.status==='支付中'" @click="openForm(scope.row)" type="primary">上传图片</el-button>
+      </template>
+    </el-table-column>
     <el-table-column
       fixed="right"
       label="操作">
       <template slot-scope="scope">
         <el-button @click="edit(scope.row)" type="text" size="small" v-if="scope.row.status === '支付中' && payrechargesauditone">审核</el-button>
-        <el-button @click="edit2(scope.row)" type="text" size="small" v-if="scope.row.status === '己初审' && payrechargesaudittwo">复审</el-button>
+        <el-button @click="edit2(scope.row)" type="text" size="small" v-if="scope.row.status === '已初审' && payrechargesaudittwo">复审</el-button>
       </template>
     </el-table-column>
     <el-table-column
@@ -230,7 +278,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -238,8 +286,6 @@
     </el-pagination>
   </div>
 </div>
-
-
   <el-dialog :title='title'  :visible.sync="dialogFormVisible" :before-close="reset">
     <el-form :model="form" :rules="rules" ref="form">
       <el-form-item label="玩家渠道" :label-width="formLabelWidth">
@@ -269,7 +315,7 @@
       <el-form-item label="附言" :label-width="formLabelWidth" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="附件上传" :label-width="formLabelWidth">
+      <!-- <el-form-item label="附件上传" :label-width="formLabelWidth">
          <el-upload
               class="upload-demo"
               :action="action"
@@ -288,13 +334,42 @@
       </el-form-item>
        <el-form-item label="上传图片名" :label-width="formLabelWidth">
         <span>{{imgname}}</span>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="reset(form)">取 消</el-button>
       <el-button type="primary" @click="sure(form)">确 定</el-button>
     </div>
+  </el-dialog>
 
+<!--  :http-request="uploadImg" -->
+<el-dialog :title='titleM'  :visible.sync="dialogFormVisibleM" :before-close="resetM">
+    <el-form :model="form" :rules="rules" ref="formM">     
+      <el-form-item label="附件上传" :label-width="formLabelWidth">
+         <el-upload
+              class="upload-demo"
+              :action="action"
+              :headers='token'
+              :on-exceed="exceed"
+              :on-success='success2'
+              :on-error='error2'          
+              :show-file-list='showfile'
+              :before-upload='before'
+              multiple
+              :limit="1"
+              :file-list="fileList2">
+            <el-button size="small" type="primary">选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传图片文件,且文件大小不超过5m</div>
+          </el-upload>
+      </el-form-item>
+       <el-form-item label="上传图片名" :label-width="formLabelWidth">
+        <span>{{imgname2}}</span>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="resetM(form)">取 消</el-button>
+      <el-button type="primary" @click="sureM(form)">确 定</el-button>
+    </div>
   </el-dialog>
 
 
@@ -369,7 +444,7 @@
   </el-dialog>
 
 
-  <el-dialog title='上传查看'  :visible.sync="dialogFormVisible3">
+  <el-dialog title='查看预览'  :visible.sync="dialogFormVisible3">
     <img :src="imgsrc" style="width:100%">
     
   <el-button @click="reset3()">取 消</el-button> 
@@ -395,7 +470,10 @@ export default {
         time: [],
         time1: [],
         rechargeid: '',
-        platform: ''
+        s_audit_account:'',
+        platform: '',
+        uid: '',
+        order_no:'',
       },
       form2: {
         radio: '',
@@ -409,17 +487,19 @@ export default {
           {required: true, message: '请选择审核失败原因', trigger: 'change'}
         ]
       },
-      showfile: false,
+      showfile: true,
       imgsrc: '',
       userinfo: {},
       statuslist: [],
       currentPage: 1,
       tableData: [],
       moneylist: [],
+      allname:[],
       typelist: [
         {name: '全部', type: ''},
         {name: '支付中', type: '0'},
-        {name: '充值成功', type: '1,2'},
+        {name: '人工充值成功', type: '2'},
+        {name: '充值成功(第三方返回)', type: '1'},
         {name: '已初审', type: '3'},
         {name: '充值失败', type: '4'},
         {name: '超时无效', type: '5'},
@@ -431,17 +511,21 @@ export default {
         {name: 'web', type: 'web'},
       ],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       title: '',
+      titleM:'',
       dialogFormVisible: false,
+      dialogFormVisibleM:false,
       dialogFormVisible2: false,
       dialogFormVisible3: false,
       form: {
         name: '',
         money: ''
       },
+      formM:'',
       imgname: '',
+       imgname2: '',
       rules: {
         name: [
           {required: true, message: '请输入附言', trigger: 'blur'}
@@ -452,17 +536,23 @@ export default {
       },
       formLabelWidth: '180px',
       fileList: [],
+      fileList2: [],
       order_no: '',
       file_name: '',
       usertwoinfo: {},
       src: '',
       reason: false,
-      isChoose: false
+      isChoose: false,
+      picId:'',
+      fileData:{
+        id:''
+      },
     }
   },
   created() {
     let that = this
     getaccount(this)
+    getallname(this)
     getrecharge(this)
     if (!this.online.length && this.online.length != 0) {
       that.formInline.status = this.online.status
@@ -473,13 +563,15 @@ export default {
       that.formInline.chareg = this.online.chareg
       that.formInline.time = this.online.time
       that.formInline.time1 = this.online.time1
-      that.formInline.rechargeid = this.online.rechargeid
+      that.formInline.rechargeid = this.online.rechargeid 
       that.formInline.platform = this.online.platform
+      that.formInline.order_no = this.online.order_no
+      that.formInline.uid = this.online.uid
       getlist(this)
     }
     if (Object.keys(this.$route.query).length > 0) {
       if (this.$route.query.user) {
-        that.formInline.value = this.$route.query.user
+        that.formInline.account = this.$route.query.user
       }
       if (this.$route.query.timeto && this.$route.query.timefrom) {
           var date = this.$route.query.timeto
@@ -495,7 +587,8 @@ export default {
       if (this.$route.query.org) {
         that.formInline.id = this.$route.query.org
       }
-        that.formInline.status = '1,2'
+        that.formInline.status = ''
+        // that.formInline.status = '1,2'
       getlist(this)
     }
   },
@@ -535,6 +628,20 @@ export default {
     }
   },
   methods: {
+    // uploadImg(img){
+    //   let formData = new FormData()
+    //   formData.append('id',this.fileData)
+    //   Api.uploadFile({
+    //     data:formData
+    //   }).then((data)=>{
+    //     console.log(data)
+    //   }).catch((err)=>{
+
+    //   })
+    // },
+    uploadData(){
+      return this.fileData
+    },
     edit (row) {
       this.title = '玩家充值审核'
       this.dialogFormVisible = true
@@ -656,12 +763,27 @@ export default {
       this.fileList = []
       this.imgname = res.data.file_name
     },
+     success2(res,file,fileList2) {
+      this.$message({
+        message: res.message,
+        type: 'success'
+      });
+      this.fileList2 = []
+      this.imgname2 = res.data.file_name
+    },
     error(res,file,fileList) {
       this.$message({
         message: res.message,
         type: 'error'
       });
       this.fileList = []
+    },
+    error2(res,file,fileList2) {
+      this.$message({
+        message: res.message,
+        type: 'error'
+      });
+      this.fileList2 = []
     },
     query () {
       let that = this
@@ -678,6 +800,8 @@ export default {
           'time1': that.formInline.time1,
           'rechargeid': that.formInline.rechargeid,
           'platform': that.formInline.platform,
+          'order_no': that.formInline.order_no,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setonline', setonline)
     },
@@ -779,15 +903,19 @@ export default {
       let data = {
         status: status,
         agent_org_id: that.formInline.id,
-        user_id: that.formInline.account.trim(),
+        // user_id: that.formInline.account.trim(),
         chareg_meth: that.formInline.chareg,
         device: that.formInline.device,
-        apply_time_to: start,
-        apply_time_from: end,
-        arrival_time_to: start1,
-        arrival_time_from: end1,
+        apply_time_to: end,
+        apply_time_from: start,
+        arrival_time_to: end1,
+        arrival_time_from: start1,
         id: that.formInline.rechargeid.trim(),
-        ps_platform: that.formInline.platform.trim()
+        ps_platform: that.formInline.platform.trim(),
+        order_no: that.formInline.order_no.trim(),
+        uid: that.formInline.uid,
+        s_audit_account:that.formInline.s_audit_account,
+        source_id:that.formInline.name
       }
       
       request({
@@ -815,6 +943,8 @@ export default {
           'time1': that.formInline.time1,
           'rechargeid': that.formInline.rechargeid,
           'platform': that.formInline.platform,
+          'order_no': that.formInline.order_no,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setonline', setonline)
     },
@@ -833,9 +963,45 @@ export default {
           'time1': that.formInline.time1,
           'rechargeid': that.formInline.rechargeid,
           'platform': that.formInline.platform,
+          'order_no': that.formInline.order_no,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setonline', setonline)
-    }
+    },
+    openForm(row){
+      this.fileData.id = row.id
+      this.dialogFormVisibleM = true
+      this.titleM = '上传图片'
+    },
+    sureM(){
+      let that = this
+      //  this.dialogFormVisibleM = false
+      // this.$refs.formM.resetFields()
+      // getlist(this)
+       request({
+    url: that.public.url + '/payrecharges/uploadPic',
+    method: 'post',
+    data: {
+      id:this.fileData.id,
+      path:this.imgname2
+    },
+  }).then(res => {
+    that.$message({
+              type: 'success',
+              message: res.message
+            })
+            that.$refs.formM.resetFields()
+            that.imgname2 = ''
+            that.dialogFormVisibleM = false
+            getlist(that)
+  }).catch(error => {
+  })
+    },
+    resetM(){
+       this.$refs.formM.resetFields()
+      this.imgname2 = ''
+       this.dialogFormVisibleM = false   
+    },
   }
 }
 
@@ -865,14 +1031,18 @@ function getlist (that) {
     user_id: that.formInline.account.trim(),
     chareg_meth: that.formInline.chareg,
     device: that.formInline.device,
-    apply_time_to: start,
-    apply_time_from: end,
-    arrival_time_to: start1,
-    arrival_time_from: end1,
+    apply_time_to: end,
+    apply_time_from: start,
+    arrival_time_to: end1,
+    arrival_time_from: start1,
     pageno: that.currentPage,
     pagerows: that.pagesize,
     id: that.formInline.rechargeid.trim(),
-    ps_platform: that.formInline.platform.trim()
+    ps_platform: that.formInline.platform.trim(),
+    order_no: that.formInline.order_no.trim(),
+    uid: that.formInline.uid,
+    s_audit_account:that.formInline.s_audit_account,
+    source_id:that.formInline.name
   }
   
   request({
@@ -925,7 +1095,17 @@ function getaccount (that) {
   }).catch(error => {
   })
 }
-
+function getallname (that) {
+  request({
+    url: that.public.url + '/paychannel/getallnames',
+    method: 'post',
+    data: {
+    }
+  }).then(res => {
+    that.allname = res.data
+  }).catch(error => {
+  })
+}
 
 function getrecharge (that) {
   request({
@@ -948,13 +1128,6 @@ function getrecharge (that) {
     margin-right: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-  .line {
-    border-bottom: 1px solid #666;
-    margin-bottom: 20px;
-    font-size: 21px;
-    font-weight: 700;
-    margin-right: -126px;
   }
   .floatright {
     float: right;

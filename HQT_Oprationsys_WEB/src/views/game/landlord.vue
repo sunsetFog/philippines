@@ -20,7 +20,7 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-         <el-tab-pane label="捕获参数" v-if="gamesetroyatlyinfo">
+         <el-tab-pane label="系统抽水率" v-if="gamesetroyatlyinfo">
            <div class="el-table el-table--fit el-table--border el-table--enable-row-transition" style="width: 70%;">
   <div class="el-table__header-wrapper">
     <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width: 100%">
@@ -30,7 +30,7 @@
             <div class="cell"></div>
           </th>
           <th colspan='1' rowspan="1">
-            <div class="cell">抽水率</div>
+            <div class="cell">系统抽水率</div>
           </th>
           <th colspan='1' rowspan="1" style="width:30%;">
             <div class="cell">操作</div>
@@ -48,7 +48,7 @@
             </td>
             <td crowspan="1" colspan="1">
               <div class="cell">
-                <el-input v-if="name" v-model="fishlist2" type="number"></el-input>
+                <el-input v-if="name" v-model="fishlist2"></el-input>
                 <span v-else>{{fishlist | rate}}</span>
               </div>
             </td>
@@ -59,24 +59,95 @@
                 <el-button type="primary" v-else @click="name = true">修改</el-button>
               </div>
             </td>
-        </tr>
-
-        
-        
-  
-        
-        
-        
+        </tr>        
       </tbody>
     </table>
+
+     <div>
+      <P>备注：</P>
+      <p style="margin-left: 27px;">系统抽税率只能输入大于等于0且小于等于1的数据，并且最多支持小数点后四位。</p>
+    </div>
     
   </div>
 </div>
             
 
         </el-tab-pane>
+         <el-tab-pane label="RTP设置">
+             <el-table
+            :data="tableData"
+            border
+            style="width: 100%">
+              <el-table-column
+                label="游戏ID"
+                prop="id">
+              </el-table-column>
+              <el-table-column
+              prop="name"
+              label="场地名称">
+            </el-table-column>
+            <el-table-column
+            width='170'
+              label="RTP设置">
+              <template slot-scope="scope">
+                <el-button @click="rtpgl(scope.row)" type="text" size="small" class="" v-if='gamertpsetgetrtpsetinfo'>RTP管理</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
       </el-tabs>
-
+<el-dialog :title='title3'  :visible.sync="dialogFormVisible3" :before-close="reset3">
+     <el-form :model="form3" :rules="rules3" ref="form3">
+       <el-form-item label="游戏名：" :label-width="formLabelWidth" >
+         <span>{{tablename3}}</span>
+      </el-form-item>
+       <!-- <el-form-item label="牌桌：" :label-width="formLabelWidth">
+         <span>{{betid3}}</span>
+      </el-form-item> -->
+       <el-form-item label="RTP生效投注额：" :label-width="formLabelWidth" prop='rate_input3'>
+         <el-input v-if="rate_active3" v-model="form3.rate_input3" style='width:80%'></el-input>
+        
+         <span v-else>{{form3.rate_input3}}</span>
+         <span>元</span>
+      </el-form-item>
+       <el-form-item label="RTP重置投注额：" :label-width="formLabelWidth" prop='rate_input4'>
+          <el-input v-if="rate_active3" v-model="form3.rate_input4" style='width:80%'></el-input>
+       
+         <span v-else>{{form3.rate_input4}}</span>
+          <span>元</span>
+      </el-form-item>
+       <el-form-item label="RTP上限：" :label-width="formLabelWidth" prop='rate_input5'>
+         <el-input v-if="rate_active3" v-model="form3.rate_input5" style='width:80%'></el-input>
+        
+          <span v-else>{{form3.rate_input5}}</span>
+          <span>%</span>
+      </el-form-item>
+       <el-form-item label="RTP下限：" :label-width="formLabelWidth" prop='rate_input6'>
+          <el-input v-if="rate_active3" v-model="form3.rate_input6" style='width:80%'></el-input>
+         
+          <span v-else>{{form3.rate_input6}}</span>
+         <span>%</span>
+      </el-form-item>
+       <el-form-item label="放水生效概率：" :label-width="formLabelWidth" prop='rate_input7'>
+          <el-input v-if="rate_active3" v-model="form3.rate_input7" style='width:80%'></el-input>
+         
+         <span v-else>{{form3.rate_input7}}</span>
+         <span>%</span>
+      </el-form-item>
+       <el-form-item label="抽水生效概率：" :label-width="formLabelWidth" prop='rate_input8'>
+          <el-input v-if="rate_active3" v-model="form3.rate_input8" style='width:80%'></el-input>
+        
+          <span v-else>{{this.form3.rate_input8}}</span>
+         <span>%</span>
+      </el-form-item>                                 
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      
+      <el-button v-if=" !rate_active3" type="primary" @click="modifyRateTwo(form3)">修改配置</el-button>
+      <el-button  type="primary" v-if="gamertpsetupdatertpset && rate_active3 " @click="sureConfig(form3)" >保存配置</el-button>
+      <el-button @click="reset3(form3)">取 消</el-button>     
+    </div>
+  </el-dialog>
 
   </div>
 </template>
@@ -86,6 +157,20 @@ import request from '@/utils/request'
 import { mapGetters } from 'vuex'
 export default {
   data() {
+     var validateMone =(rule, value, callback)=>{
+     if(value*1<=0 || value.indexOf('.')>0 || isNaN(value)) {
+          callback(new Error('请输入正整数'));
+        } else {
+          callback();
+        }
+   };
+    var validateMtwo =(rule, value, callback)=>{
+     if(value*1<=0 || isNaN(value) ) {
+          callback(new Error('请输入正数'));
+        } else {
+          callback();
+        }
+   };
     return {
       form: {
         depict: '',
@@ -98,17 +183,56 @@ export default {
       name: false,
       formLabelWidth: '180px',
       fishlist: '',
-      fishlist2: ''
+      fishlist2: '',
+       tableData:[
+    {
+      id:401,
+      name:'斗地主1元场'
+    },
+     {
+      id:'402',
+      name:'斗地主10元场'
+    },
+     {
+      id:'403',
+      name:'斗地主20元场'
+    },
+  ],
+   title3: '',
+    form3: {
+          rate_input3:'',
+          rate_input4:'',
+          rate_input5:'',
+          rate_input6:'',
+          rate_input7:'',
+          rate_input8:'',
+      },
+       rate_active3: false,//span改为input的标识
+        rules3: {
+          rate_input3:{required: true,validator:validateMone, trigger:'blur'},
+          rate_input4:{required: true,validator:validateMone, trigger:'blur'},
+          rate_input5:{required: true,validator:validateMtwo, trigger:'blur'},
+          rate_input6:{required: true,validator:validateMtwo, trigger:'blur'},
+          rate_input7:{required: true,validator:validateMtwo, trigger:'blur'},
+          rate_input8:{required: true,validator:validateMtwo, trigger:'blur'},
+      },
+      dialogFormVisible3: false,
+       tablename3:'',
+        betid3:'',
+        rowId:'',
     }
   },
   created() {
     getinfo(this)
   },
+ 
   computed: {
     ...mapGetters([
       'gamesetsavebase',
       'gamesetupdateddzroyalty',
-      'gamesetroyatlyinfo'
+      'gamesetroyatlyinfo',
+      'gamertpsetupdatertpset',
+      'gamertpsetgetrtpsetinfo'
     ])
   },
   watch: {
@@ -152,8 +276,8 @@ export default {
     },
     sure2 () {
       let that = this
-      if (this.fishlist2 * 1 > 1 || this.fishlist2 * 1 < -1 ) {
-        that.$message.error('修改时，请填写-1到1之间，系统将小数转化为百分比。')
+      if (this.fishlist2 * 1 > 1 || this.fishlist2 * 1 < -1 || that.fishlist2.indexOf('.') > 0 && that.fishlist2.split('.')[1].length > 4) {
+        that.$message.error('系统抽税率只能输入大于等于0且小于等于1的数据，并且最多支持小数点后四位。')
         return false
       }
       that.$confirm('', '二次确认', {
@@ -184,7 +308,84 @@ export default {
     reset () {
       getlist(this)
       this.name = false
-    }
+    },
+     rtpgl (row) {
+      let that = this
+      this.title3 = 'RTP管理-查看'
+      this.dialogFormVisible3 = true
+      this.id = row.id
+      this.rowId = row.id
+       request({
+        url: that.public.url + '/gamertpset/getrtpsetinfo',
+        method: 'post',
+        data: {
+              game_id:row.id,
+              type:0,
+              //table_id: row.id
+        }
+      }).then(res => {
+        // that.form3 = res.data
+        this.form3.rate_input3 = res.data.valid_bet_limit
+        this.form3.rate_input4 = res.data.reset_bet_limit
+        this.form3.rate_input5 = res.data.upper_limit*100
+        this.form3.rate_input6 = res.data.lower_limit*100
+        this.form3.rate_input7 = res.data.loss_valid_prob*100
+        this.form3.rate_input8 = res.data.royalty_valid_prob*100      
+        this.tablename3 = res.data.game_name
+        this.betid3 = res.data.table_name
+        this.tableid3 = res.data.table_id
+      }).catch(error => {
+      })
+    },
+     reset3 () {
+      this.dialogFormVisible3 = false
+      this.rate_active3 = false
+      this.$refs.form3.resetFields()
+    },
+     modifyRateTwo(form3){//diolog3的RTP修改配置函数 去除NULL和NAN
+      this.rate_active3 = true;
+      this.rate_input3 = this.form3.valid_bet_limit?this.form3.valid_bet_limit:''
+      this.rate_input4 = this.form3.reset_bet_limit?this.form3.reset_bet_limit:''
+      this.rate_input5 = this.form3.upper_limit? this.form3.upper_limit:''
+      this.rate_input6 = this.form3.lower_limit?this.form3.lower_limit:''
+      this.rate_input7 = this.form3.loss_valid_prob?this.form3.loss_valid_prob:''
+      this.rate_input8 = this.form3.royalty_valid_prob?this.form3.royalty_valid_prob:''
+      // this.rate_input = this.pumping_rate/100;
+    },
+     sureConfig(form3){//RTP管理-查看保存配置
+          let that = this
+           this.$refs.form3.validate((valid) => {
+        if (valid) {
+        request({
+            url: that.public.url + '/gamertpset/updatertpset',
+            method: 'post',
+            data: {
+                  game_id:this.rowId,
+                  type:0,
+                  table_id:this.tableid3,
+                  valid_bet_limit:this.form3.rate_input3*1,
+                  reset_bet_limit:this.form3.rate_input4*1,
+                  upper_limit:this.form3.rate_input5/100,
+                  lower_limit:this.form3.rate_input6/100,
+                  loss_valid_prob:this.form3.rate_input7/100,
+                  royalty_valid_prob:this.form3.rate_input8/100,
+            }
+          }).then(res => {
+           that.$message({
+              type: 'success',
+              message: res.message
+            })
+              that.dialogFormVisible3 = false
+              that.$refs.form3.resetFields()
+              getlist(that)
+              this.rate_active3 = false
+          }).catch(error => {
+          })
+        }else{
+          return false
+        }
+           })
+    },
   }
 }
 

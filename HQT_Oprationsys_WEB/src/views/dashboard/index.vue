@@ -86,17 +86,19 @@ export default {
 .dashboard {
   &-container {
     padding: 10px;
+    .line {
+      border-bottom: 1px solid #999;
+      padding: 30px;
+    }
+    .line .el-button {
+      margin:10px!important;
+    }
   }
   &-text {
     font-size: 30px;
     line-height: 46px;
   }
+  
 }
-.line {
-  border-bottom: 1px solid #999;
-  padding: 30px;
-}
-.line .el-button {
-  margin:10px!important;
-}
+
 </style>

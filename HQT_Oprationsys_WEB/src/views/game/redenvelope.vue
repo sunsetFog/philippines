@@ -20,7 +20,7 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-         <el-tab-pane label="捕获参数" v-if="gamesetredpacketlist">
+         <el-tab-pane label="配置项" v-if="gamesetredpacketlist">
            <div class="el-table el-table--fit el-table--border el-table--enable-row-transition" style="width: 70%;">
   <div class="el-table__header-wrapper">
     <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width: 100%">
@@ -93,6 +93,7 @@
             
 
         </el-tab-pane>
+
       </el-tabs>
 
 
@@ -108,6 +109,19 @@ export default {
       form: {
         depict: '',
         status: ''
+      },
+      form2: {
+        srp_min_interval: '',
+        srp_max_interval: '',
+        srp_incr_interval: '',
+        srp_weight_10b1: '',
+        srp_weight_7b1d5: '',
+        srp_weight_5b2: '',
+        srp_min_money: '',
+        srp_max_money: '',
+        srp_incr_money: '',
+        ai_grp_weight: '',
+        ai_ngrp_weight: ''
       },
       rules: {
         status: {required: true, message: '请选择状态', trigger: 'change'},
@@ -126,7 +140,8 @@ export default {
     ...mapGetters([
       'gamesetsavebase',
       'gamesetredpacketset',
-      'gamesetredpacketlist'
+      'gamesetredpacketlist',
+      'gamesetredpacketaiset'
     ])
   },
   watch: {
@@ -146,6 +161,9 @@ export default {
   methods: {
     tabclick () {
       if (this.actionname === '1') {
+        getlist(this)
+      }
+      if (this.actionname === '2') {
         getlist(this)
       }
     },
@@ -216,6 +234,86 @@ export default {
         }).catch(error => {
         })
     },
+    sure3 () {
+      let that = this
+      let test = /^[1-9][0-9]*0$/
+      if (this.form2.srp_min_interval =='' || this.form2.srp_min_interval*1 < 0) {
+        that.$message.error('请输入最小间隔且值不能小于0')
+        return false
+      }
+      if (this.form2.srp_max_interval =='' || this.form2.srp_max_interval*1 < 0) {
+        that.$message.error('请输入最大间隔且值不能小于0')
+        return false
+      }
+      if (this.form2.srp_incr_interval =='' || this.form2.srp_incr_interval*1 < 0) {
+        that.$message.error('请输入间隔递增幅度且值不能小于0')
+        return false
+      }
+      if (this.form2.srp_weight_10b1 =='' || this.form2.srp_weight_10b1*1 < 0 || this.form2.srp_weight_10b1.indexOf('.') > 0) {
+        that.$message.error('请输入10包1倍且值为正整数')
+        return false
+      }
+      if (this.form2.srp_weight_7b1d5 =='' || this.form2.srp_weight_7b1d5*1 < 0 || this.form2.srp_weight_7b1d5.indexOf('.') > 0) {
+        that.$message.error('请输入7包1.5倍且值为正整数')
+        return false
+      }
+      if (this.form2.srp_weight_5b2 =='' || this.form2.srp_weight_5b2*1 < 0 || this.form2.srp_weight_5b2.indexOf('.') > 0) {
+        that.$message.error('请输入5包两倍且值为正整数')
+        return false
+      }
+      if (this.form2.srp_min_money =='' || this.form2.srp_min_money*1 < 0 || !test.test(this.form2.srp_min_money)) {
+        that.$message.error('请输入最小金额且值为10的倍数')
+        return false
+      }
+      if (this.form2.srp_max_money =='' || this.form2.srp_max_money*1 < 0 || !test.test(this.form2.srp_max_money)) {
+        that.$message.error('请输入最大金额且值为10的倍数')
+        return false
+      }
+      if (this.form2.srp_incr_money =='' || this.form2.srp_incr_money*1 < 0 || !test.test(this.form2.srp_incr_money)) {
+        that.$message.error('请输入金额递增幅度且值为10的倍数')
+        return false
+      }
+      if (this.form2.ai_grp_weight =='' || this.form2.ai_grp_weight*1 < 0  || this.form2.ai_grp_weight.indexOf('.') > 0) {
+        that.$message.error('请输入抢包金额且值为正整数')
+        return false
+      }
+      if (this.form2.ai_ngrp_weight =='' || this.form2.ai_ngrp_weight*1 < 0  || this.form2.ai_ngrp_weight.indexOf('.') > 0) {
+        that.$message.error('请输入不抢包金额且值为正整数')
+        return false
+      }
+      that.$confirm('', '二次确认', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(res => {
+      request({
+            url: that.public.url + '/gameset/redpacketaiset',
+            method: 'post',
+            data: {
+              srp_min_interval: this.form2.srp_min_interval,
+              srp_max_interval: this.form2.srp_max_interval,
+              srp_incr_interval: this.form2.srp_incr_interval,
+              srp_weight_10b1: this.form2.srp_weight_10b1,
+              srp_weight_7b1d5: this.form2.srp_weight_7b1d5,
+              srp_weight_5b2: this.form2.srp_weight_5b2,
+              srp_min_money: this.form2.srp_min_money,
+              srp_max_money: this.form2.srp_max_money,
+              srp_incr_money: this.form2.srp_incr_money,
+              ai_grp_weight: this.form2.ai_grp_weight,
+              ai_ngrp_weight: this.form2.ai_ngrp_weight
+            }
+          }).then(res => {
+            that.$message({
+              type: 'success',
+              message: res.message
+            })
+            getlist(that)
+          }).catch(error => {
+          })
+        }).catch(error => {
+        })
+    },
     reset () {
       getlist(this)
       this.name = false
@@ -270,9 +368,25 @@ function getlist (that) {
     }).then(res => {
       that.fishlist = res.data
       that.fishlist2 = res.data
+      that.form2 = res.data
     }).catch(error => {
     })
 }
+
+
+// function getlist2 (that) {
+//   request({
+//       url: that.public.url + '/gameset/redpacketlist',
+//       method: 'post',
+//       data: {
+//         game_id: 91
+//       }
+//     }).then(res => {
+//       that.fishlist = res.data
+//       that.fishlist2 = res.data
+//     }).catch(error => {
+//     })
+// }
 
 
 

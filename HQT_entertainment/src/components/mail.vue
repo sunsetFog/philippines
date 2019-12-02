@@ -36,7 +36,7 @@
 
 <script>
 export default {
-    name: 'children',
+    name: 'mail',
     data(){
         return{
             rechargeActive: false,

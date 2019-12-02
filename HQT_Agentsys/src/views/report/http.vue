@@ -1,34 +1,35 @@
 <template>
-  <div class="container">
-    <mt-header title="注册链接">
-        <mt-button slot="left" @click="back">
+  <div class="container" id="guanlilianjie">
+    <mt-header title="管理链接">
+        <mt-button slot="left" class="all_palm" @click="back">
         <i class="mintui mintui-back"></i>
         </mt-button>
 
-        <mt-button slot="right"   @click="add">
-        <img src="../../../static/jia.png" style="width:30px;height:30px;">
-        </mt-button>
+        <!-- <mt-button slot="right"   @click="add">
+        <img src="../../../static/jia.png" style="width: 1.875rem;height: 1.875rem">
+        </mt-button> -->
     </mt-header>
 
     <div v-infinite-scroll='loadmore' >
        <div class="card" v-for="(item, index) in newlist" :key="index">
-      <span class="http">{{item.url}}</span>
-      <div class="card">
-        <div style="display: flex; background: white;">
-            <mt-button type="primary" size="small"  style="flex: 1; margin:10px;" @click="copy(item.url)">复制链接</mt-button>
-            <mt-button type="primary" size="small" style="flex: 1;margin:10px;" @click="yulan(item.url)">预览链接</mt-button>
-        </div>
-      </div>
-      <div class="card" style="text-align: center;margin:10px;padding: 10px;background: white;">
-        
+          <span class="http">{{item.url}}</span>
+          <div>
+            <div style="background: white;padding: 0.625rem 0rem;box-sizing: border-box;">
+                <mt-button type="primary" size="small" class="all_palm" @click="copy(item.url)">复制链接</mt-button>
+                <mt-button type="primary" size="small" class="all_palm" @click="yulan(item.url)">预览链接</mt-button>
+                <mt-button type="primary" size="small" class="all_palm" @click="del(item.id)">删除此链接</mt-button>
+            </div>
+          </div>
+          <div class="erweima">
+            
 
-        <!-- <div id="qrcode">二维码位置</div> -->
-        <vueqr :size='text' :text='item.url'></vueqr>
-      </div>
-      <div class="card">
-        <mt-cell title="注册时间" :value="item.create_time">
-        </mt-cell>
-      </div>
+            <!-- <div id="qrcode">二维码位置</div> -->
+            <vueqr :size='text' :text='item.url'></vueqr>
+          </div>
+          <div>
+            <mt-cell title="注册时间" :value="item.create_time">
+            </mt-cell>
+          </div>
       </div>
     </div>
    
@@ -46,6 +47,9 @@ import { request } from '@/utils/request'
 import vueqr from 'vue-qr'
 import { Message } from 'element-ui'
 import { Toast } from 'mint-ui'
+import {
+  getweb
+} from '@/utils/auth'
 export default {
   data () {
     return {
@@ -69,7 +73,44 @@ export default {
   },
   methods: {
     yulan (url) {
-      openWindow(url)
+      if(getweb() == 'true') {
+        openWindow(url)
+      } else {
+        const u = navigator.userAgent;
+        const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+        if (isiOS) {
+          //ios
+          openWindow(url)
+        } else {
+          //andriod
+          document.location = 'js://openUrl?url=' + url
+        }
+        
+      }
+    },
+    del (id) {
+      let that = this
+      request({
+          url: this.public.url + '/agentaccount/delseourl',
+          method: 'post',
+          data: {
+            id: id
+          }
+        }).then(res => {
+          var width = document.body.offsetWidth
+          if (width > 768) {
+            Message({
+            message: '删除成功',
+              type: 'success'
+              })
+          } else {
+            Toast({
+                message: '删除成功'
+              })
+          }
+          getaddlist(that,1)
+        }).catch(error => {
+        })
     },
     add() {
       let that = this
@@ -165,15 +206,28 @@ function getlist (that, pageno) {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .card {
-    margin: 10px;
-    border-top: 1px solid #2e163d;
-    border-bottom: 1px solid #2e163d;
-    border-left: 2px solid #2e163d;
-    border-right: 2px solid #2e163d;
-    border-radius: 12px;
-    position: relative;
-  }
+#guanlilianjie{
+    .mint-button--primary{
+        background: #d4c3b2;
+        border: 1px solid #b02ab5;
+        color: #b00cb3;
+        font-family: 'Microsoft YaHei-Bold';
+        font-size: 14px;
+        font-weight: 600;
+        margin-left: 17px;
+    }
+    .erweima{
+      width: 100%;
+      height: 200px;
+      text-align: center;
+      margin: 10px 0px;
+      background: white;
+      img{
+        width: 200px;
+        height: 200px;
+      }
+    }
+}
   .mark {
     position: absolute;
     left: 120px;
@@ -197,7 +251,6 @@ function getlist (that, pageno) {
     display: block;
     height: 50px;
     line-height: 50px;
-    padding-left: 10px;
   }
     .mint-header {
   background-color: #513663!important;

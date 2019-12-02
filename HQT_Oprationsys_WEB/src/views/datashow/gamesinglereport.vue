@@ -5,12 +5,12 @@
         <el-form :inline="true" label-width="80px">
           <el-col :span="5">
             <el-form-item label="游戏名称">
-                <el-select v-model="formInline.id" multiple filterable>
+                <el-select v-model="formInline.value" filterable clearable @change="selectType">
                 <el-option
                   v-for="(item,key) in gamelist"
                   :key="key"
                   :label="item.name"
-                  :value="item.id">
+                  :value="key">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -43,14 +43,21 @@
             </el-form-item>
           </el-col>
           
-          <el-col :span="4">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gamesinglereportgetlist">查询</el-button>
+          <el-col :span="2">
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gamesinglereportgetlist" :loading="loading">查询</el-button>
+          </el-col>
+          <el-col :span="2">
+            <el-button type="primary"  @click="excel" v-if="gamesinglereportexportlist">导出excel</el-button>
           </el-col>
         </el-form>
       </el-row>
     </div>
     <div class="pagingbox">
-    <div class="paging">
+        <div class="paging">
+    <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+    <el-button type='primary' @click="down" :disabled="tableData.length <20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+  </div>
+    <!-- <div class="paging">
       <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -60,12 +67,11 @@
       layout="prev, next, jumper"
       :total="total">
     </el-pagination>
-    </div>
+    </div> -->
     </div>
 
     <el-table
     :data="tableData"
-    :row-class-name="tableclassname"
     :cell-class-name='cell'
     @sort-change='sort'
     border
@@ -98,27 +104,31 @@
     </el-table-column>
     <el-table-column
       prop="tax"
-      label="税收">
+      label="代理收益">
     </el-table-column>
-    <el-table-column
+    <!-- <el-table-column
       prop="revenue"
       label="营收">
-    </el-table-column>
+    </el-table-column> -->
   </el-table>
 
 <div class="pagingbox">
-  <div class="paging">
+    <div class="paging">
+    <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+    <el-button type='primary' @click="down" :disabled="tableData.length <20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+  </div>
+  <!-- <div class="paging">
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
-  </div>
+  </div> -->
 </div>
 
 
@@ -134,19 +144,24 @@ export default {
   data() {
     return {
       formInline: {
+        time:[],
         starttime: '',
         endtime: '',
         id: '',
-        termno: ''
+        type: 0,
+        termno: '',
+        value: ''
       },
       currentPage: 1,
       tableData: [
       ],
       gamelist: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
+      num: 1,
       havetime: false,
-      havetime1: false
+      havetime1: false,
+      loading: false
     }
   },
   created() {
@@ -162,27 +177,104 @@ export default {
       that.pagesize = this.gamesinglereport.pagesize
       that.formInline.endtime = this.gamesinglereport.endtime
       that.formInline.id = this.gamesinglereport.id
-       getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
+      that.formInline.type = this.gamesinglereport.type
+       getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id,that.formInline.type)
     }
   },
   computed: {
     ...mapGetters([
       'gamesinglereportgetlist',
-      'gamesinglereport'
+      'gamesinglereport',
+      'gamesinglereportexportlist'
     ])
   },
   watch : {
   },
   methods: {
-    query () {
-        let that = this
-        getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
+    up () {
+      let that = this
+      this.num--
+      this.currentPage = this.num
+      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id,that.formInline.type)
         let setgamesinglereport = {
           'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
           'endtime': that.formInline.endtime,
-          'id': that.formInline.id
+          'id': that.formInline.id,
+          'type': that.formInline.type
+        }
+      this.$store.commit('setgamesinglereport', setgamesinglereport)
+    },
+    down () {
+      let that = this
+      this.num++
+      this.currentPage = this.num
+      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id,that.formInline.type)
+        let setgamesinglereport = {
+          'starttime': that.formInline.starttime,
+          'currentPage': that.currentPage,
+          'pagesize': that.pagesize,
+          'endtime': that.formInline.endtime,
+          'id': that.formInline.id,
+          'type': that.formInline.type
+        }
+      this.$store.commit('setgamesinglereport', setgamesinglereport)
+    },
+    excel () {
+      let that = this
+        var timestart = ''
+        var timeend = ''
+        if (that.formInline.starttime) {
+          var start = that.formInline.starttime.getTime() /1000
+          var timestart = parseTime(start)
+        }
+        if (that.formInline.endtime) {
+          var end = that.formInline.endtime.getTime() /1000
+          var timeend = parseTime(end + 24 *60*60 -1)
+        }
+        if (start && end) {
+          if (start > end) {
+            Message({
+              message: '开始时间必须小于结束时间',
+              type: 'error'
+            })
+            return
+          }
+        }
+    request({
+      url: that.public.url + '/backend/gamesinglereport/exportlist',
+      method: 'post',
+      data: {
+        date_from: timestart,
+        date_to: timeend,
+        termno: that.formInline.termno,
+        pageno: that.currentPage,
+        pagerows:that.pagesize,
+        game_id: that.formInline.id,
+        game_type: that.formInline.type
+      }
+    }).then(res => {
+      window.location.href = that.public.url + res.data
+    }).catch(error => {
+    })
+    },
+    selectType(val){
+      // console.log('change',val,this.gamelist[val].type)
+      // console.log(this.formInline.value)
+      this.formInline.type = Number(this.gamelist[val].type);
+      this.formInline.id = Number(this.gamelist[val].id);
+    },
+    query () {
+        let that = this
+        getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id,that.formInline.type)
+        let setgamesinglereport = {
+          'starttime': that.formInline.starttime,
+          'currentPage': that.currentPage,
+          'pagesize': that.pagesize,
+          'endtime': that.formInline.endtime,
+          'id': that.formInline.id,
+          'type': that.formInline.type
         }
       this.$store.commit('setgamesinglereport', setgamesinglereport)
     },
@@ -202,12 +294,6 @@ export default {
       if (columnIndex === 7 && row.revenue*1 < 0) {
         return 'red'
       }
-    },
-    tableclassname ({row, rowIndex}) {
-      if (rowIndex === 0) {
-        return 'success-row'
-      }
-      return ''
     },
     sort ({column, prop, order}) {
       if (this.tableData.length > 0) {
@@ -231,26 +317,28 @@ export default {
       this.pagesize = val
       let that = this
       this.currentPage = 1
-      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
+      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id,that.formInline.type)
       let setgamesinglereport = {
           'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
           'endtime': that.formInline.endtime,
-          'id': that.formInline.id
+          'id': that.formInline.id,
+          'type': that.formInline.type
         }
       this.$store.commit('setgamesinglereport', setgamesinglereport)
     },
     handleCurrentChange(val) {
       this.currentPage = val *1
       let that = this
-      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
+      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id,that.formInline.type)
       let setgamesinglereport = {
           'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
           'endtime': that.formInline.endtime,
-          'id': that.formInline.id
+          'id': that.formInline.id,
+          'type': that.formInline.type
         }
       this.$store.commit('setgamesinglereport', setgamesinglereport)
     }
@@ -261,7 +349,7 @@ export default {
 
 
 
-function getlist (that, starttime, endtime, currentPage, pagesize, id) {
+function getlist (that, starttime, endtime, currentPage, pagesize, id,type) { 
    var timestart = ''
     var timeend = ''
     if (starttime) {
@@ -269,8 +357,8 @@ function getlist (that, starttime, endtime, currentPage, pagesize, id) {
       var timestart = parseTime(start)
     }
     if (endtime) {
-      var end = endtime.getTime() /1000
-      var timeend = parseTime(end + 24 *60*60 -1)
+      var end = endtime.getTime() /1000  
+      var timeend = parseTime(end)
     }
     if (start && end) {
       if (start > end) {
@@ -281,7 +369,7 @@ function getlist (that, starttime, endtime, currentPage, pagesize, id) {
         return
       }
     }
-    var game_id = id.join(',')
+    that.loading = true
   request({
     url: that.public.url + '/backend/gamesinglereport/getlist',
     method: 'post',
@@ -291,23 +379,22 @@ function getlist (that, starttime, endtime, currentPage, pagesize, id) {
       termno: that.formInline.termno,
       pageno: currentPage,
       pagerows: pagesize,
-      game_id: game_id
+      game_id: id,
+      game_type: type
     }
   }).then(res => {
     Message({
         message: res.message,
         type: 'success'
       })
-      if (res.data.list.length === 0) {
-        that.tableData = res.data.list
+      that.loading = false
+      if (res.data.length === 0) {
+        that.tableData = []
       } else {
-         let data = res.data.total[0]
-        data.adate = '总计'
-        that.tableData = res.data.list
-        that.tableData.unshift(data)
+        that.tableData = res.data
       }  
-    that.total = res.data.rownum * 1
-    that.currentPage = res.data.pageno * 1
+    // that.total = res.data.rownum * 1
+    // that.currentPage = res.data.pageno * 1
   }).catch(error => {
   })
 }

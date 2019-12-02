@@ -64,7 +64,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="agentaccountdayreportgetlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="agentaccountdayreportgetlist" :loading="loading">查询</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -176,7 +176,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -207,7 +207,7 @@ export default {
       currentPage: 1,
       tableData: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       nav: [],
       navlist : '',
       pid: '',
@@ -216,7 +216,8 @@ export default {
       statuslist:[
         {id:'0',name:'冻结'},
         {id:'1',name:'正常'}
-      ]
+      ],
+      loading: false
     }
   },
   created() {
@@ -377,9 +378,6 @@ export default {
   filters: {
   }
 }
-
-
-
 function getlist (that) {
   var timestart = ''
   var timeend = ''
@@ -400,6 +398,7 @@ function getlist (that) {
       return
     }
   }
+  that.loading = true
   let data =  {
       start: timestart,
       end: timeend,
@@ -419,11 +418,13 @@ function getlist (that) {
         message: res.message,
         type: 'success'
       })
+      that.loading = false
     that.tableData = res.data.list
     that.total = res.data.rownum * 1
     that.currentPage = res.data.pageno * 1
 
   }).catch(error => {
+    that.loading = false
   })
 }
 

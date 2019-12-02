@@ -1,12 +1,9 @@
 <!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>钻石娱乐</title><meta name=apple-mobile-web-app-capable content=yes><meta name=full-screen content=true><meta name=screen-orientation content=landscape><meta name=x5-fullscreen content=true><meta name=360-fullscreen content=true><style>html, body {
             -ms-touch-action: none;
-            background: #888888;
             padding: 0;
             border: 0;
             margin: 0;
-            height: 100%;
-            background:url("resource/assets/hall_bg.jpg?v=201706131435")no-repeat;
-            background-size: 100% 100%;
+            min-width: 1200px;
         }
         #preloading {
             width: 100%;
@@ -73,11 +70,11 @@
                 transform: scaleY(1.0);
                 -webkit-transform: scaleY(1.0);
             }
-        }</style><div id=preloading><div class=spinner9><div class=rect1>&nbsp;</div><div class=rect2>&nbsp;</div><div class=rect3>&nbsp;</div><div class=rect4>&nbsp;</div><div class=rect5>&nbsp;</div><p class=tip>正在加载必要文件，请稍候...</p></div></div><link href=./static/css/app.46aaf967bb33b7714e99b9a499ccd3b7.css rel=stylesheet></head><body><div id=app></div><div style="position: relative;top: 120px;" class=egret-player data-entry-class=Main data-orientation=landscape data-scale-mode=fixedWidth data-frame-rate=30 data-content-width=1120 data-content-height=630 data-multi-fingered=2 data-show-fps=false data-show-log=false data-show-fps-style=x:0,y:0,size:12,textColor:0xffffff,bgAlpha:0.9></div><script type=text/javascript src=./static/js/manifest.f8f037f05486e4823d83.js></script><script type=text/javascript src=./static/js/vendor.35a624e4756d7d5c2cfe.js></script><script type=text/javascript src=./static/js/app.bfb1a8c6e31fc46b0377.js></script></body><script>var sceneWeb = {type:0};
+        }</style><div id=preloading><div class=spinner9><div class=rect1>&nbsp;</div><div class=rect2>&nbsp;</div><div class=rect3>&nbsp;</div><div class=rect4>&nbsp;</div><div class=rect5>&nbsp;</div><p class=tip>正在加载必要文件，请稍候...</p></div></div><link rel="shortcut icon" href=./favicon.ico><link href=./static/css/app.196b6062c4deeadc870e20827cda2f1d.css rel=stylesheet></head><body><div id=app></div><div style="position: relative;top: 120px;" class=egret-player id=zuanshiyule data-entry-class=Main data-orientation=landscape data-scale-mode=fixedWidth data-frame-rate=30 data-content-width=1120 data-content-height=630 data-multi-fingered=2 data-show-fps=false data-show-log=false data-show-fps-style=x:0,y:0,size:12,textColor:0xffffff,bgAlpha:0.9></div><script type=text/javascript src=./static/js/manifest.a6c67b711c67f637b4d3.js></script><script type=text/javascript src=./static/js/vendor.35ad7bc813c87c73bc46.js></script><script type=text/javascript src=./static/js/app.67cf2560e08e8fea7c51.js></script></body><script>var sceneWeb = {type:0};
     var errorCodeGame = {};
     var refreshWeb = {state: ''};
     var catchGame = {mice: ''};
-    var zoomGames = document.getElementsByClassName('egret-player')[0];
+    var zoomGames = document.getElementById('zuanshiyule');
     function purpleMagic(parameter){
         if(parameter==2){
             zoomGame(630);
@@ -111,7 +108,7 @@
     function web_gameInited() {
         errorCodeGame.refresh = 'init';
         refreshWeb.state = 'init';
-        //console.info("GameInited",refreshWeb.state);
+        console.info("GameInited",refreshWeb.state);
         // loginTest();
     }
 
@@ -155,7 +152,7 @@
     }
     //跑马灯
     function web_broadcast(data){
-        //console.log("web_broadcast",data);
+        // console.log("web_broadcast",data);
         errorCodeGame.move = data.mTxtMsg;
     }
     // 游戏断开连接

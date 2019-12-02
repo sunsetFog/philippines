@@ -43,7 +43,7 @@
       <el-row>
         <el-form :inline="true" label-width="100px">
             <el-col :span="8">
-                <el-form-item label="比倍开奖时间">
+                <!-- <el-form-item label="比倍开奖时间">
                 <el-date-picker
                     v-model="formInline.time2"
                     type="datetimerange"
@@ -52,7 +52,7 @@
                     start-placeholde="开始日期"
                     end-placeholde="结束日期">
                     </el-date-picker>
-                </el-form-item>
+                </el-form-item> -->
           </el-col>
           <el-col :span="8">
                 <el-form-item label="彩金开奖时间">
@@ -66,16 +66,21 @@
                     </el-date-picker>
                 </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="UID">
+              <el-input v-model="formInline.uid" clearable></el-input>
+            </el-form-item>
+          </el-col>
             <el-col :span="2">
-            <el-button type="primary" icon="el-icon-search" @click='query()' v-if="gamewmgplayrecgetlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click='query()' v-if="gamewmgplayrecgetlist" :loading="loading">查询</el-button>
           </el-col>
         </el-form>
       </el-row>
         </div>
 
         <div class="paging">
-          <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-          <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+          <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+          <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
         </div>
           <el-table
         :data="tableData"
@@ -84,6 +89,10 @@
         <el-table-column
           label="ID"
           prop="id">
+        </el-table-column>
+        <el-table-column
+          label="UID"
+          prop="uid">
         </el-table-column>
         <el-table-column
           label="玩家渠道"
@@ -100,18 +109,6 @@
               </template>
             </el-table-column>
         <el-table-column
-          label="比倍下注金额"
-          prop="cm_bet_money">
-        </el-table-column>
-        <el-table-column
-          label="比倍下注代码"
-          prop="cm_bet_code">
-        </el-table-column>
-        <el-table-column
-          label="比倍方式"
-          prop="cm_mode">
-        </el-table-column>
-        <el-table-column
           label="常规奖励金额"
           prop="co_reward">
         </el-table-column>
@@ -119,22 +116,14 @@
           label="彩金奖励金额"
           prop="tg_reward">
         </el-table-column>
-        <el-table-column
-          label="比倍奖励金额"
-          prop="cm_reward">
-        </el-table-column>
+       
         <el-table-column
               label="常规开奖时间">
               <template slot-scope="scope">
                 {{scope.row.co_open_time | time}}
               </template>
             </el-table-column>
-        <el-table-column
-              label="比倍开奖时间">
-              <template slot-scope="scope">
-                {{scope.row.cm_open_time | time}}
-              </template>
-            </el-table-column>
+       
         <el-table-column
               label="彩金开奖时间">
               <template slot-scope="scope">
@@ -145,25 +134,61 @@
           label="比倍骰子点数"
           prop="cm_dice_points">
         </el-table-column>
-        <el-table-column
-          label="常规开奖图案"
-          prop="co_open_pattern">
-        </el-table-column>
+         <el-table-column
+              label="常规开奖图案">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="view(scope.row.co_open_pattern)"  v-if="scope.row.co_open_pattern && scope.row.co_open_pattern!=''">查看</el-button>
+              </template>
+            </el-table-column>
         <el-table-column
           label="彩金开奖次数"
           prop="tg_num">
         </el-table-column>
         <el-table-column
-          label="彩金开奖图案"
-          prop="tg_open_pattern">
+              label="彩金开奖图案">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="view1(scope.row.tg_open_pattern)" v-if="scope.row.tg_open_pattern && scope.row.tg_open_pattern!=''">查看</el-button>
+              </template>
+            </el-table-column>
+             <el-table-column
+          label="比倍下注金额"
+          prop="cm_bet_money">
+        </el-table-column>
+         <el-table-column
+          label="比倍奖励金额"
+          prop="cm_reward">
+        </el-table-column>
+         <el-table-column
+              label="比倍开奖时间">
+              <!-- <template slot-scope="scope">
+                {{scope.row.cm_open_time | time}}
+              </template> -->
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="view2(scope.row.cm_open_time)"  v-if="scope.row.cm_open_time && scope.row.cm_open_time!=''">查看</el-button>
+              </template>
+            </el-table-column>
+              <el-table-column
+          label="比倍下注名称"
+          prop="cm_bet_name">
+        </el-table-column>
+        <el-table-column
+          label="比倍方式"
+          prop="cm_mode">
         </el-table-column>
       </el-table>
 
       
 <div class="paging">
-  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-  <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+  <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
 </div>
+
+
+<el-dialog :title='title'  :visible.sync="dialogFormVisible" :before-close="reset">
+    <div>{{picture}}</div>
+    <el-button @click="reset()" style="margin-top: 20px;">取 消</el-button>
+
+  </el-dialog>
 
     
   
@@ -184,7 +209,7 @@ import { getToken } from '../../utils/auth';
     data() {
       return {
         total: 0,
-        pagesize: 50,
+        pagesize: 20,
         currentPage: 1,
         tableData: [],
         formInline: {
@@ -192,10 +217,15 @@ import { getToken } from '../../utils/auth';
             time1: [],
             time2: [],
             time3: [],
-            id: ''
+            id: '',
+            uid: ''
         },
         statuslist: [],
-        num: 1
+        num: 1,
+        picture: '',
+        title: '',
+        dialogFormVisible: false,
+        loading: false
       }
     },
     created () {
@@ -207,6 +237,7 @@ import { getToken } from '../../utils/auth';
         that.formInline.time1 = this.gamerecord.time1
         that.formInline.time2 = this.gamerecord.time2
         that.formInline.time3 = this.gamerecord.time3
+        that.formInline.uid = this.gamerecord.uid
         that.currentPage = this.gamerecord.currentPage
         that.num = this.gamerecord.currentPage
         that.pagesize = this.gamerecord.pagesize
@@ -242,8 +273,29 @@ import { getToken } from '../../utils/auth';
         'time1': that.formInline.time1,
         'time2': that.formInline.time2,
         'time3': that.formInline.time3,
+        'uid': that.formInline.uid,
       }
       this.$store.commit('setgamerecord', setgamerecord)
+    },
+    view (data) {
+      this.title = '常规开奖图案'
+      this.picture = data
+      this.dialogFormVisible = true
+    },
+    view1 (data) {
+      console.log(data)
+      this.title = '彩金开奖图案'
+      this.picture = data
+      this.dialogFormVisible = true
+    },
+     view2 (data) {
+      this.title = '比倍开奖时间'
+      this.picture = data
+      this.dialogFormVisible = true
+    },
+    reset () {
+       this.picture = ''
+       this.dialogFormVisible = false
     },
     down () {
       let that = this
@@ -258,6 +310,7 @@ import { getToken } from '../../utils/auth';
         'time1': that.formInline.time1,
         'time2': that.formInline.time2,
         'time3': that.formInline.time3,
+        'uid': that.formInline.uid,
       }
       this.$store.commit('setgamerecord', setgamerecord)
     },
@@ -274,6 +327,7 @@ import { getToken } from '../../utils/auth';
         'time1': that.formInline.time1,
         'time2': that.formInline.time2,
         'time3': that.formInline.time3,
+        'uid': that.formInline.uid,
       }
       this.$store.commit('setgamerecord', setgamerecord)
       },
@@ -281,6 +335,7 @@ import { getToken } from '../../utils/auth';
   }
 
   function getlist (that) {
+    that.loading = true
     var start = ''
     var end = '' 
     var start2 = ''
@@ -305,6 +360,7 @@ import { getToken } from '../../utils/auth';
       data: {
         org_id: that.formInline.id,
         user_account: that.formInline.number,
+        uid: that.formInline.uid,
         co_open_time_from: start,
         co_open_time_to: end,
         cm_open_time_from: start2,
@@ -315,6 +371,7 @@ import { getToken } from '../../utils/auth';
         pagerows: that.pagesize
       }
     }).then(res => {
+      that.loading = false
       that.tableData = res.data
     }).catch(error => {
     })

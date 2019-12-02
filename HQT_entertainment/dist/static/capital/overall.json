@@ -1,4 +1,3 @@
 {
-	"http_pre": "paiqu.predyfqp1.com",
-	"http_online": "paiqu.huanlegovip.com"
+	"development": "http://10.1.101.120:502"
 }

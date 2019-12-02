@@ -17,6 +17,18 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="管理渠道">
+                <el-select v-model="formInline.org" filterable clearable>
+                <el-option
+                  v-for="item in orglistAll"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-button type="primary" icon="el-icon-search" @click="query" v-if="accountgetlist">查询</el-button>
           </el-col>
         </el-form>
@@ -56,6 +68,48 @@
     <el-table-column
       prop="nickname"
       label="昵称">
+    </el-table-column>
+     <el-table-column
+      prop="nickname"
+      label="管理渠道"  width="100">
+       <template slot-scope="scope">
+        <el-popover trigger='click' >
+          <p>账号：{{scope.row.login_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色：{{scope.row.role_name}}</p>
+          <p>管理渠道列表</p>
+          <el-tag v-for="(item,key) in orglist"  :key='key' style="margin: 8px;">{{orglist[key].name}}</el-tag>
+          <div slot="reference" v-show="accountgetaccountorginfo && scope.row.agent_org_ids!=''" @click="agentclick(scope.row)">
+            <el-tag size='medium' >查看渠道</el-tag>
+          </div>
+        </el-popover>
+      </template>
+    </el-table-column>
+     <el-table-column
+      prop="mge_real_topagent_ids"
+      label="管理总代" width="100">
+       <template slot-scope="scope">
+        <el-popover trigger='click'>
+          <p>账号：{{scope.row.login_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色：{{scope.row.role_name}}</p>
+          <p>管理总代列表</p>
+          <el-tag v-for="(item,key) in orglist2"  :key='key' style="margin: 8px;">{{orglist2[key].user_account}}</el-tag>
+          <div slot="reference"  v-show="accountgetrealtopagentinfo && scope.row.mge_real_topagent_ids!=''" @click="agentclick2(scope.row)">
+            <el-tag size='medium' >查看总代</el-tag>
+          </div>
+        </el-popover>
+      </template>
+    </el-table-column>
+      <el-table-column
+      prop="mge_virtual_agent_ids"
+      label="管理虚拟代理" width="120">
+       <template slot-scope="scope">
+        <el-popover trigger='click' >
+          <p>账号：{{scope.row.login_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色：{{scope.row.role_name}}</p>
+          <p>管理虚拟代理列表</p>
+          <el-tag v-for="(item,key) in orglist3"  :key='key' style="margin: 8px;">{{orglist3[key].user_account}}</el-tag>
+          <div slot="reference" v-show="accountgetvirtualagentinfo && scope.row.mge_virtual_agent_ids!=''" @click="agentclick3(scope.row)">
+            <el-tag size='medium' >查看虚拟代理</el-tag>
+          </div>
+        </el-popover>
+      </template>
     </el-table-column>
     <el-table-column
       prop="cmoney_total_limit"
@@ -114,7 +168,7 @@
       <template slot-scope="scope">
         <el-button v-if="scope.row.edit" type="warning" size="small" @click="confirmEdit(scope.row)">确定</el-button>
         <el-button type="text" size="small" @click="scope.row.edit=!scope.row.edit" v-if="accountaddCmoney && !scope.row.edit">增加余额</el-button>
-        <el-button @click="edit(scope.row)" type="text" size="small" v-if="accountupdate && scope.row.type != 1">修改</el-button>
+        <el-button @click="edit(scope.row)" type="text" size="small" v-if="accountupdate && scope.row.type != 1 && accountgetrtopagentlist && accountgetitopagentlist">修改</el-button>
         <el-button type="text" size="small" @click="delet(scope.row)" v-if="accountdel && scope.row.type != 1">删除</el-button>
         <el-button type="text" size="small" @click="resetpwd(scope.row)" v-if="accountresetLoginPwd">重设密码</el-button>
       </template>
@@ -126,7 +180,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -139,7 +193,7 @@
   <el-dialog :title='title'  :visible.sync="dialogFormVisible" :before-close="reset">
     <el-form :model="form" :rules="rules" ref="form">
       <el-form-item label="角色" :label-width="formLabelWidth" prop='role'>
-        <el-select v-model="form.role">
+        <el-select v-model="form.role" @change="selectType">
         <el-option
           v-for="item in rolelist"
           :key="item.id"
@@ -178,7 +232,28 @@
         </el-option>
       </el-select>
       </el-form-item>
-
+       <el-form-item label="管理总代" :label-width="formLabelWidth" prop="desc">
+        <el-select  v-model="valueAll"  clearable multiple placeholder="请选择" style="width:303px"> 
+              <el-option
+                v-for="(item,index) in userlist"
+                :key="index"
+                :label="item.user_account"
+                :value="item.user_id">
+              </el-option>
+            </el-select>
+            <el-checkbox v-model="checked" @change="choseAll">全选</el-checkbox>
+      </el-form-item>
+      <el-form-item label="管理虚拟代理" :label-width="formLabelWidth" prop="desc">
+        <el-select  v-model="valueAll2"  clearable multiple placeholder="请选择" style="width:303px"> 
+              <el-option
+                v-for="item in userlist2"
+                :key="item.user_id"
+                :label="item.user_account"
+                :value="item.user_id">
+              </el-option>
+            </el-select>
+             <el-checkbox v-model="checked2" @change="choseAll2">全选</el-checkbox>
+      </el-form-item>
 
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -277,7 +352,10 @@ export default {
       tableData2: [],
       rolelist: [],
       cmoney_balance: '',
+      orglistAll:[],
       dialogFormVisible: false,
+      checked:false,//全选按钮状态
+      checked2:false,//全选按钮状态
       form: {
         login: '',
         pwd: '',
@@ -327,7 +405,7 @@ export default {
       password: false,
       name: '',
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       pwdform: {
         original: '',
         new: '',
@@ -346,11 +424,20 @@ export default {
           {required: true, validator: validatePass2, trigger: 'blur'},
           {min:4, max:18, message: '长度在6到18个字符之间', trigger: 'blur'}
         ]
-      }
+      },
+      orglist:[],
+      orglist2:[],
+      orglist3:[],
+      userlist:[],
+      userlist2:[],
+      valueAll:[],
+      valueAll2:[],
+      choselise:[],
     }
   },
   created() { 
     getrolelist(this)
+    getuserlist(this)
     let that = this
     if (!this.account.length && this.account.length != 0) {
       that.formInline.user = this.account.user
@@ -368,7 +455,12 @@ export default {
       'accountaddCmoney',
       'accountresetLoginPwd',
       'accountgetlist',
-      'account'
+      'account',
+      'accountgetaccountorginfo',
+      'accountgetrealtopagentinfo',
+      'accountgetvirtualagentinfo',
+      'accountgetrtopagentlist',
+      'accountgetitopagentlist'
     ])
   },
   filters: {
@@ -452,7 +544,11 @@ export default {
       });
     },
     reset (form) {
-      this.dialogFormVisible = false
+      this.checked = false
+       this.checked2 = false
+       this.valueAll = []
+       this.valueAll2 = []
+      this.dialogFormVisible = false    
       this.$refs.form.resetFields()
     },
     query () {
@@ -468,11 +564,15 @@ export default {
       this.$store.commit('setaccount', setaccount)
     },
     edit(data) {
+      this.valueAll = []
+      this.valueAll2 = []
       this.title = '编辑账号'
       this.dialogFormVisible = true
       this.disabledname = true
       this.pwdshow = false
       let that = this
+      this.checked = false
+       this.checked2 = false
       request({
             url: that.public.url + '/backend/account/getinfo',
             method: 'post',
@@ -488,10 +588,27 @@ export default {
             that.form.day = res.data.cmoney_day_limit
             that.form.status = res.data.status
             that.id = res.data.id
+             if(res.data.mge_real_topagent_ids){
+              this.valueAll = res.data.mge_real_topagent_ids.split(',')
+            }else{
+              this.valueAll = []
+            }      
+            if(res.data.mge_virtual_agent_ids){
+              this.valueAll2 = res.data.mge_virtual_agent_ids.split(',')
+            }else{
+              this.valueAll2 = []
+            }      
+          this.getagentlist (this)//管理总代
+          this.getxunilist (this)//虚拟代理
           }).catch(error => {
           })
+         
     },
     add () {
+      this.valueAll = [],
+       this.valueAll2 = [],
+        this.userlist = [],
+        this.userlist2 = [],
       this.title = '新增账号'
       this.dialogFormVisible = true
       this.disabledname = false
@@ -499,6 +616,8 @@ export default {
     },
     sure (form) {
       let that = this
+      let mge_real_topagent_ids = that.valueAll.join(',')
+      let mge_virtual_agent_ids = that.valueAll2.join(',')
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.title === '编辑账号') {
@@ -512,10 +631,16 @@ export default {
                     cmoney_total_limit: this.form.total,
                     cmoney_day_limit: this.form.day,
                     status: this.form.status,
-                    id: this.id
+                    id: this.id,
+                    mge_real_topagent_ids:mge_real_topagent_ids,
+                    mge_virtual_agent_ids:mge_virtual_agent_ids,
               }
             }).then(res => {
                that.$alert("用户信息修改成功！")
+               that.checked = false
+               that.checked2 = false
+              that.valueAll = []
+               that.valueAll2 = []
               that.dialogFormVisible = false
               that.$refs.form.resetFields()
               accountlist(that, that.formInline.user, that.currentPage, that.pagesize, that.formInline.region)
@@ -532,7 +657,9 @@ export default {
                   nickname: this.form.name,
                   cmoney_total_limit: this.form.total,
                   cmoney_day_limit: this.form.day,
-                  status: this.form.status
+                  status: this.form.status,
+                   mge_real_topagent_ids:mge_real_topagent_ids,
+                    mge_virtual_agent_ids:mge_virtual_agent_ids,
             }
           }).then(res => {
             that.dialogFormVisible = false
@@ -615,7 +742,129 @@ export default {
     cancelEdit(row) {
       row.edit = false
       this.cmoney_balance = ''
+    },
+     agentclick(row){//查看渠道
+         let that = this       
+        request({
+            url: that.public.url + '/backend/account/getaccountorginfo',
+            method: 'post',
+            data: {
+                id: row.id
+            }
+          }).then(res => {
+            that.orglist = res.data       
+          }).catch(error => {
+          }).catch(() => {
+      });
+    },
+     agentclick2(row){//查看管理总代
+         let that = this       
+        request({
+            url: that.public.url + '/backend/account/getrealtopagentinfo',
+            method: 'post',
+            data: {
+                id: row.id
+            }
+          }).then(res => {
+            that.orglist2 = res.data       
+          }).catch(error => {
+          }).catch(() => {
+      });
+    },
+     agentclick3(row){//查看虚拟代理
+         let that = this       
+        request({
+            url: that.public.url + '/backend/account/getvirtualagentinfo',
+            method: 'post',
+            data: {
+                id: row.id
+            }
+          }).then(res => {
+            that.orglist3 = res.data       
+          }).catch(error => {
+          }).catch(() => {
+      });
+    },
+  getagentlist (that) {//管理总代列表
+  request({
+    url: that.public.url + '/backend/account/getrtopagentlist',
+    method: 'post',
+    data:{
+      role_id:that.form.role
     }
+  }).then(res => {
+     that.userlist = res.data
+  }).catch(error => {
+  })
+},
+ getxunilist (that) {//虚拟代理列表
+  request({
+    url: that.public.url + '/backend/account/getitopagentlist',
+    method: 'post',
+     data:{
+      role_id:that.form.role
+    }
+  }).then(res => {
+     that.userlist2 = res.data
+  }).catch(error => {
+  })
+},
+ selectType(val){//改变角色名
+      this.getagentlist(this)
+      this.getxunilist(this)
+       this.checked = false
+       this.checked2 = false
+      this.valueAll = []
+      this.valueAll2 = []
+      // let result = this.userlist.map(function(item){//获取总代列表的id
+      //   return item.user_id
+      // })
+      //  let result2 = this.userlist2.map(function(item){//获取虚拟列表的id
+      //   return item.user_id
+      // })
+      // let valueAllm = this.valueAll.map(function(n){
+      //   return n
+      // })
+      //  let valueAlln = this.valueAll2.map(function(n){
+      //   return n
+      // })
+      // if(!isContained(result,valueAllm)){
+      //   this.valueAll=[]
+      // }
+      // if(!isContained(result2,valueAlln)){
+      //   this.valueAll2=[]
+      // }
+
+      // console.log(valueAllm)
+      // console.log(result)
+      // // console.log(this.valueAll)
+      // console.log(this.valueAll)
+      // console.log(isContained(result,valueAllm))
+      // // this.valueAll=[]
+      // // this.valueAll2=[]
+    },
+    choseAll(){//全选按钮事件
+       let result = this.userlist.map(function(item){//获取总代列表的id
+        return item.user_id
+      })
+      if(this.checked){
+         this.valueAll = result
+      }else{
+        this.valueAll =[]
+      }
+      
+    },
+     choseAll2(){//全选按钮事件
+       let result = this.userlist2.map(function(item){//获取总代列表的id
+        return item.user_id
+      })
+      if(this.checked2){
+         this.valueAll2 = result
+      }else{
+        this.valueAll2 =[]
+      }
+      
+    },
   }
 }
 
@@ -627,7 +876,8 @@ function accountlist (that, name, currentPage, pagesize, desc) {
       accountName: name.trim(),
       pageno: currentPage,
       pagerows: pagesize,
-      roleName: desc.trim()
+      roleName: desc.trim(),
+      agent_org_id:that.formInline.org
     }
   }).then(res => {
     that.tableData = res.data.list
@@ -640,6 +890,19 @@ function accountlist (that, name, currentPage, pagesize, desc) {
   }).catch(error => {
   })
 }
+function getuserlist (that) {//渠道
+  request({
+    url: that.public.url + '/backend/org/getorglist',
+    method: 'post'
+  }).then(res => {
+    // that.userlist = res.data
+    let all = {id: "", name: "全部"}
+    that.orglistAll = res.data
+    that.orglistAll.unshift(all)
+
+  }).catch(error => {
+  })
+}
 
 function getrolelist (that) {
   request({
@@ -649,6 +912,16 @@ function getrolelist (that) {
     that.rolelist = res.data
   }).catch(error => {
   })
+}
+function isContained(a,b){//a数组是否包含B数组
+  if(!(a instanceof Array) || !(b instanceof Array)) return false;
+  if(a.length<b.length) return false;
+  var aStr = a.toString();
+  for(var i = 0,len = b.length;i<len;i++){
+      if(aStr.indexOf(b[i]) == -1)
+      return false;
+  }
+  return true;
 }
 </script>
 

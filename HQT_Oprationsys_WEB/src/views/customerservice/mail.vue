@@ -6,14 +6,26 @@
           <el-col :span="2">
             <el-button type="info" round @click="add" v-if="gameemailadd">写邮件 </el-button>
           </el-col>
-          <el-col :span="5">
+          <el-col :span="6">
             <el-form-item label="主题">
                 <el-input v-model="formInline.title" placeholder="主题" clearable></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="5">
+          <el-col :span="6">
             <el-form-item label="接收人员">
               <el-input v-model="formInline.receive" placeholder="接收人员" clearable></el-input>
+            </el-form-item>
+          </el-col>
+           <el-col :span="7">
+            <el-form-item label="渠道">
+              <el-select v-model="formInline.user" filterable clearable placeholder="请选择玩家渠道"> 
+              <el-option
+                v-for="item in userlist"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
             </el-form-item>
           </el-col>
 
@@ -53,7 +65,10 @@
             </el-form-item>
           </el-col> -->
           <el-col :span="2">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameemailgetlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameemailgetlist" :loading="loading">查询</el-button>
+          </el-col>
+           <el-col :span="2">
+            <el-button type="primary" icon="el-icon-search" @click="clear" v-if="gameemailclearhistory" :loading="loading2">清理邮件</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -76,6 +91,10 @@
     :data="tableData"
     border
     style="width: 100%">
+    <el-table-column
+      prop="agent_org_name"
+      label="玩家渠道">
+    </el-table-column>
     <el-table-column
       prop="sender_name"
       label="发送人">
@@ -103,7 +122,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -205,9 +224,11 @@ export default {
       formInline: {
         title: '',
         receive: '',
-        time: ''
+        time: '',
+        user:'',
       },
       currentPage: 1,
+      userlist:[],
       tableData: [],
       namelist: [],
       dialogFormVisible: false,
@@ -237,27 +258,31 @@ export default {
       formLabelWidth: '120px',
       title: '',
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       list: {},
       total1: 0,
       currentPage1: 1,
-      pagesize1: 50,
+      pagesize1: 20,
       receiverlist: [],
       nametime: '',
-      nametitle: ''
+      nametitle: '',
+      loading: false,
+      loading2: false
     }
   },
   created() {
     let that = this
     getorglist(that)
+    getuserlist(this)
     if (!this.mail.length && this.mail.length != 0) {
       that.formInline.title = this.mail.title
       that.currentPage = this.mail.currentPage
       that.pagesize = this.mail.pagesize
       that.formInline.receive = this.mail.receive
       that.formInline.time = this.mail.time
-      getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time)
+      that.formInline.user = that.mail.user
+      getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time,that.formInline.user)
     }
   },
   computed: {
@@ -266,6 +291,7 @@ export default {
       'gameemailgetlist',
       'gameemailgetinfo',
       'gameemailgetreceiverlist',
+      'gameemailclearhistory',
       'mail'
     ])
   },
@@ -304,15 +330,44 @@ export default {
     query () {
       let that = this
       this.currentPage = 1
-      getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time)
+      getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time,that.formInline.user)
       let setmail = {
           'title': that.formInline.title,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
           'receive': that.formInline.receive,
-          'time': that.formInline.time
+          'time': that.formInline.time,
+          'user': that.formInline.user,
         }
       this.$store.commit('setmail', setmail)
+    },
+    clear () {
+      let that = this
+      this.$confirm('清理操作后将只会保留最近7日邮件，无法恢复, 确认进行清理操作吗?', '二次确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        that.loading2 = true
+        request({
+          url: that.public.url + '/gameemail/clearhistory',
+          method: 'post',
+          data: {
+          }
+        }).then(res => {
+          that.$message.success(res.message)
+          that.loading2 = false
+          getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time,that.formInline.user)
+          //getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time)
+        }).catch(error => {
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
     sure (form) { 
       let that = this
@@ -333,10 +388,11 @@ export default {
                   org_id: this.form.org
             }
           }).then(res => {
-            if (response.code === 0) {
+            if (res.code == 0) {
             that.dialogFormVisible = false
             that.$refs.form.resetFields()
-             getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time)
+             getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time,that.formInline.user)
+            //  getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time)
             }
           }).catch(error => {
           })
@@ -349,26 +405,28 @@ export default {
       this.pagesize = val
       this.currentPage = 1
       let that = this
-       getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time)
+       getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time,that.formInline.user)
        let setmail = {
           'title': that.formInline.title,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
           'receive': that.formInline.receive,
-          'time': that.formInline.time
+          'time': that.formInline.time,
+          'user': that.formInline.user,
         }
       this.$store.commit('setmail', setmail)
     },
     handleCurrentChange(val) {
       this.currentPage = val *1
       let that = this
-       getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time)
+       getlist(that, that.formInline.title, that.currentPage, that.pagesize, that.formInline.receive, that.formInline.time,that.formInline.user)
        let setmail = {
           'title': that.formInline.title,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
           'receive': that.formInline.receive,
-          'time': that.formInline.time
+          'time': that.formInline.time,
+          'user': that.formInline.user,
         }
       this.$store.commit('setmail', setmail)
     },
@@ -385,12 +443,14 @@ export default {
 }
 
 
-function getlist (that, title, currentPage, pagesize, receive, time) {
+function getlist (that, title, currentPage, pagesize, receive, time,user) {
+  that.loading = true
   let data = {
     title: title.trim(),
     pageno: currentPage,
     pagerows: pagesize,
-    receive_name: receive.trim()
+    receive_name: receive.trim(),
+    agent_org_id: user,   
   }
   if (time && time.length > 0) {
     var start = time[0].getTime() /1000
@@ -404,6 +464,7 @@ function getlist (that, title, currentPage, pagesize, receive, time) {
     method: 'post',
     data: data
   }).then(res => {
+    that.loading = false
     that.tableData = res.data.list
     that.total = res.data.rownum * 1
     that.currentPage = res.data.pageno * 1
@@ -411,7 +472,15 @@ function getlist (that, title, currentPage, pagesize, receive, time) {
   })
 }
 
-
+function getuserlist (that) {
+  request({
+    url: that.public.url + '/backend/org/getorglist',
+    method: 'post'
+  }).then(res => {
+    that.userlist = res.data
+  }).catch(error => {
+  })
+}
 function getreceiverlist (that, id, currentPage1, pagesize1) {
   request({
     url: that.public.url + '/gameemail/getreceiverlist',
@@ -456,7 +525,7 @@ function getorglist(that) {
     margin-bottom: 20px;
     font-size: 21px;
     font-weight: 700;
-    margin-right: -126px;
+    margin-right: -53px;
   }
   .floatright {
     float: right;

@@ -42,3 +42,9 @@ export function validatNumberLowerCase(str) {
   const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/
   return reg.test(str)
 }
+
+//0-20位数字和字母的组合
+export function validatNumberLowerCase2(str) {
+  const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{0,20}$/
+  return reg.test(str)
+}

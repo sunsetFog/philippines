@@ -6,32 +6,32 @@
             <img class="big_fish" src="../../../static/dream/login/fish.png"/>
                 <div class="sign_frame">
                     <div class="code_and_service">
-                        <div class="customer_service" @click="customerService()"></div>
+                        <span @click="customerService()"></span>
                     </div>
                     <div class="form_information">
                         <div class="account">
                             <span>账号:</span>
-                            <input v-model.trim="account_number" maxlength="30" placeholder="请输入账号"></input>
+                            <input v-model.trim="account_number" maxlength="20" placeholder="请输入账号"></input>
                         </div>
                         <div class="password_enter">
                             <span>密码:</span>
-                            <input :type="eyeType" maxlength="25" v-model.trim="password_number" placeholder="请输入登陆密码"></input>
-                            <img v-if="eyeType=='text'" @click="eyeMeans" class="zhengyan" src="../../../static/dream/login/zhengyan.png"/>
-                            <img v-else class="biyan" @click="eyeMeans" src="../../../static/dream/login/biyan.png"/>
+                            <input :type="eyeType" maxlength="12" v-model.trim="password_number" placeholder="请输入登陆密码"></input>
+                            <div @click="eyeMeans">
+                                <img v-if="eyeType=='text'" class="zhengyan" src="../../../static/dream/login/zhengyan.png"/>
+                                <img v-else class="biyan" src="../../../static/dream/login/biyan.png"/>
+                            </div>
                         </div>
                         <div class="remember_and_forget">
                             <div class="rectangle" @click="rememberMeans()"><img v-show="remember_checked" src="../../../static/dream/login/jizhu.png"/></div>
                             <span>记住密码</span>
-                            <!-- <div class="rapid_registration" @click="rapidRegistration('register')">快速注册</div> -->
                             <!-- <span @click="forgetPassword">忘记密码</span> -->
                         </div>
                         <div class="login_register">
-                            <div class="sign_in" @click="signIn"></div>
-                            <div class="is_register" @click="rapidRegistration('register')"></div>
+                            <span @click="signIn"></span>
+                            <span @click="rapidRegistration('register')"></span>
                         </div>
                         <div class="recommend"><span></span><span>推荐最优路线</span><span></span></div>
                         <div class="optimal" @click="rapidRegistration('line')"></div>
-                        <div class="shortcut"></div>
                     </div>
                 </div>
                 
@@ -44,6 +44,7 @@
 <script>
 import footers from '../../components/footer.vue';
 export default{
+    name: 'login',
     components: {footers},
     data(){
         return{
@@ -80,6 +81,14 @@ export default{
 
         this.keyEnter();
     },
+    watch: {
+        password_number(cur,old){
+            if(/[^A-z0-9]/.test(cur)){
+                this.$message.error('不能输入特殊字符！');
+                this.password_number = cur.replace(/[^A-z0-9]/, '');
+            }
+        }
+    },
     methods: {
         eyeMeans(){
             if(this.eyeType == 'password'){
@@ -105,7 +114,8 @@ export default{
                 };
         },
         customerService(){
-            window.open("https://chat32.live800.com/live800/chatClient/chatbox.jsp?companyID=12698&enterurl=&codeType=custom&info=");
+            // window.open("https://chat32.live800.com/live800/chatClient/chatbox.jsp?companyID=12698&enterurl=&codeType=custom&info=");
+            window.open("https://nine.mdihi.com/chat/chatClient/chatbox.jsp?companyID=365033539&configID=2306&jid=4095904748&s=1");
         },
         rapidRegistration(value){
             if(value=='register'){
@@ -116,7 +126,8 @@ export default{
                     sessionStorage.setItem('register','up');
                 }
             }else if(value=='line'){
-                this.$router.push({path: '/line'});
+                this.$message.success("敬请期待！");
+                // this.$router.push({path: '/line'});
             }
         },
         signIn(res){
@@ -195,6 +206,7 @@ export default{
     width: 100%;
     padding-bottom: 115px;
     box-sizing: border-box;
+    overflow: hidden;
     .mixin_image(url('../../../static/dream/login/bg_denglu.jpg'));
     @color_violet: #3d1351;//字体
     @color_label: #dbcbb7;//字体
@@ -229,17 +241,15 @@ export default{
             .code_and_service{
                 width: 100%;
                 height: 40px;
-                position: relative;
-                .customer_service{
+                span:nth-of-type(1){
                     width: 105px;
                     height: 34px;
+                    float: right;
                     .mixin_image(url('../../../static/dream/login/kefu.png'));
                     cursor: pointer;
-                    position: absolute;
-                    top: 3px;
-                    right: 3px;
+                    margin: 3px 3px 0px 0px;
                 }
-                .customer_service:hover{
+                span:nth-of-type(1):hover{
                     .mixin_image(url('../../../static/dream/login/kefu_hover.png'));
                 }
             }
@@ -256,36 +266,42 @@ export default{
                     border-radius: 4px;
                     border: 1px solid #b1923f;
                     span{
-                        .mixin_span(auto,50px,none,@color_label,left);
-                        font-weight: 600;
+                        .mixin_span(85px,50px,none,@color_label,left);
                         font-size: 24px;
                         float: left;
                         font-weight: 600;
-                        text-indent: 13px;
-                        margin-right: 15px;
+                        padding: 0px 0px 0px 13px;
+                        box-sizing: border-box;
                     }
                     input{
-                        .mixin_input(60%,48px);
+                        .mixin_input(250px,48px);
                         background: none;
                         float: left;
                         color: @color_label;
                         font-size: @font_size20;
                     }
-                    .zhengyan{
-                        width: 29px;
-                        height: 16px;
-                        font-size: 20px;
-                        float: right;
-                        margin: 17px 20px 0px 0px;
+                    div{
+                        .mixin_float(70px,50px,right);
                         cursor: pointer;
+                        .zhengyan{
+                            width: 29px;
+                            height: 16px;
+                            font-size: 20px;
+                            float: right;
+                            margin: 17px 20px 0px 0px;
+                        }
+                        .biyan{
+                            width: 34px;
+                            height: 9px;
+                            font-size: 20px;
+                            float: right;
+                            margin: 20.5px 20px 0px 0px;
+                        }
                     }
-                    .biyan{
-                        width: 34px;
-                        height: 9px;
-                        font-size: 20px;
-                        float: right;
-                        margin: 20.5px 20px 0px 0px;
-                        cursor: pointer;
+                }
+                .account{
+                    input{
+                        width: 330px;
                     }
                 }
                 .password_enter{
@@ -329,45 +345,36 @@ export default{
                     span:nth-of-type(2):hover{
                         color: @color_hover;
                     }
-                    .rapid_registration{
-                        height: 25px;
-                        line-height: 25px;
-                        position: absolute;
-                        top: 50%;
-                        left: 280px;
-                        margin-top: -12.5px;
-                        cursor: pointer;
-                        color: @color_violet;
-                    }
                 }
                 .login_register{
                     width: 100%;
                     height: 50px;
-                    .sign_in{
-                        .mixin_button(48%,50px,none,auto);
+                    span:nth-of-type(1){
+                        .mixin_span(48%,50px,none,white,center);
                         float: left;
                         border-radius: 4px;
                         font-size: 16px;
                         font-weight: 600;
                         .mixin_image(url('../../../static/dream/login/denglu.jpg'));
                     }
-                    .sign_in:hover{
-                        .mixin_image(url('../../../static/dream/login/denglu-hover.jpg'));
+                    span:nth-of-type(1):hover{
+                        .mixin_image(url('../../../static/dream/login/denglu_hover.jpg'));
                     }
-                    .is_register{
-                        .mixin_button(48%,50px,none,auto);
+                    span:nth-of-type(2){
+                        .mixin_span(48%,50px,none,white,center);
                         float: right;
                         border-radius: 4px;
                         font-size: 16px;
                         font-weight: 600;
                         .mixin_image(url('../../../static/dream/login/kuaisuzhuce.jpg'));
                     }
-                    .is_register:hover{
-                        .mixin_image(url('../../../static/dream/login/kuaisuzhuce-hover.jpg'));
+                    span:nth-of-type(2):hover{
+                        .mixin_image(url('../../../static/dream/login/kuaisuzhuce_hover.jpg'));
                     }
                 }
                 .recommend{
                     .mixin_div(100%,50px,none,@color_violet,center);
+                    margin: 6px 0px 6px 0px;
                     position: relative;
                     span:nth-of-type(1){
                         .mixin_span(75px,10px,none,@color_violet,left);
@@ -402,17 +409,6 @@ export default{
                 }
                 .optimal:hover{
                     .mixin_image(url('../../../static/dream/login/xuanxian_hover.png'));
-                }
-                .shortcut{
-                    .mixin_div(100%,35px,none,auto,center);
-                    cursor: pointer;
-                    .mixin_image(url('../../../static/dream/login/tuijianxianlu.png'));
-                    font-size: 16px;
-                    font-weight: 600;
-                    margin-top: 20px;
-                }
-                .shortcut:hover{
-                    .mixin_image(url('../../../static/dream/login/tuijianxianlu_hover.png'));
                 }
             }
         }

@@ -4,6 +4,7 @@
 
 <script>
 export default {
+    name: 'game_theme',
     props: ['subject'],
     data(){
         return{
@@ -41,7 +42,10 @@ export default {
                         return;
                     }
                     if(value=='999992'){
-                        that.$router.push({path: '/home'});
+                        // console.log('99222',that.$route.path)
+                        if(that.$route.path!='/neutralgear'){
+                            that.$router.push({path: '/home'});
+                        }
                         web.game_exit_scene(function(value){});
                     }else if(value=='999991'||value=='999993'||value=='999994'||value=='999995'){
                         that.$router.push({path: '/game'});
@@ -95,7 +99,7 @@ export default {
 
                     },
                     set:function(value){
-                        that.$emit('interaction',value);
+                        that.$emit('await',value);
                         if(sessionStorage.getItem('sign_in')&&sessionStorage.getItem('register')){
                             catchGame.mice = 'ok';
                             sessionStorage.removeItem('sign_in');

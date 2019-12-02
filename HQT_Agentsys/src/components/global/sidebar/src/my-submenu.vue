@@ -1,6 +1,6 @@
 <template>
     <div>
-     <li class='treeview'  @click='toggleShowMenu'>
+     <li class='treeview all_palm'  @click='toggleShowMenu'>
           <a href="#" data-show = false  style='color:white'>
           <slot name='icon'></slot>   
           <span class='menutitle'><slot name="submenu-title"></slot></span>

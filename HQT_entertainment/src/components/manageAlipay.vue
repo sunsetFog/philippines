@@ -3,7 +3,7 @@
         <el-dialog
         :visible.sync="rechargeActive"
         width="4.07rem"
-        top="1.41rem"
+        top="1.25rem"
         center>
         <div slot="title">管理支付宝</div>
         <div class="varieties_content">
@@ -28,7 +28,7 @@
 
 <script>
 export default {
-    name: 'children',
+    name: 'manageAlipay',
     data(){
         return{
             rechargeActive: false,
@@ -114,6 +114,7 @@ export default {
                     .mixin_img(30px,28px);
                     float: left;
                     margin: 8px 0px 0px 20px;
+                    cursor: pointer;
                 }
             }
         }

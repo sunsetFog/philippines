@@ -122,6 +122,8 @@ export default {
           this.$store.dispatch('delAllViews')
           removeToken()
           this.$router.push({path: '/login'})
+          console.log(1111)
+          window.location.reload()
         } else {
 
         }

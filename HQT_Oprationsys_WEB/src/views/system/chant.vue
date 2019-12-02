@@ -23,14 +23,20 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="充值方式">
+            <el-form-item label="前端分类">
               <el-select v-model="formInline.type" filterable clearable>
                 <el-option
+                  v-for="item in allpaymode2"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+                <!-- <el-option
                   v-for="item in type"
                   :key="item.type"
                   :label="item.name"
                   :value="item.type">
-                </el-option>
+                </el-option> -->
               </el-select>
             </el-form-item>
           </el-col>
@@ -151,7 +157,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -184,12 +190,12 @@
               </el-select>
       </el-form-item>
       <el-form-item label="银行名称" :label-width="formLabelWidth" prop="name">
-        <el-select v-model="form.name" filterable clearable placeholder='请选择'>
+        <el-select v-model="form.name" filterable clearable placeholder='请选择' @change="selectGet">
               <el-option
                 v-for="item in bankname"
                 :key="item.id"
                 :label="item.name"
-                :value="item.name">
+                :value="item.id">
               </el-option>
             </el-select>
       </el-form-item>
@@ -334,8 +340,9 @@ export default {
       title: '',
       name: '',
       total: 0,
-      pagesize: 50,
-      allpaymode: []
+      pagesize: 20,
+      allpaymode: [],
+      allpaymode2: []
     }
   },
   created() { 
@@ -362,14 +369,22 @@ export default {
       'chant'
     ])
   },
-  
+  // watch: {
+  //   'bankname':{
+  //     handler:function(val,oldval){
+  //       console.log('11'+ val)
+  //       console.log('22'+oldval)
+  //     },
+  //     deep:true
+  //   },
+  // },
   methods: {
     reset (form) {
       this.dialogFormVisible = false
       this.$refs.form.resetFields()
     },
     back () {
-      this.$router.push({path: '/rewithmgr/paychannel'})
+      this.$router.push({path: '/bank/paychannel'})
     },
     query () {
       let that = this
@@ -406,7 +421,7 @@ export default {
           }).then(res => {
             that.form.key = res.data.channel_id
             that.form.web = res.data.paymode_id
-            that.form.name = res.data.name
+            that.form.name = res.data.bank_id
             that.form.code = res.data.code
             that.form.ident = res.data.financial_ident
             that.form.day = res.data.day_in_max_limit
@@ -435,7 +450,7 @@ export default {
               data: {
                     channel_id: that.form.key,
                     paymode_id: that.form.web,
-                    name: that.form.name,
+                    bank_id: that.form.name,
                     code: that.form.code,
                     financial_ident: that.form.ident,
                     day_in_max_limit: that.form.day,
@@ -464,7 +479,7 @@ export default {
             data: {
                   channel_id: that.form.key,
                   paymode_id: that.form.web,
-                  name: that.form.name,
+                  bank_id: that.form.name,
                   code: that.form.code,
                   financial_ident: that.form.ident,
                   day_in_max_limit: that.form.day,
@@ -604,7 +619,19 @@ export default {
         'status': that.formInline.status
       }
       this.$store.commit('setchant', setchant)
-    }
+    },
+    selectGet(vId){
+      if(this.form.name){
+           let obj = {}
+          obj = this.bankname.find((item)=>{
+          return item.id === vId
+        })
+        if(obj.id){
+           this.form.code = obj.code
+        }
+      }
+     
+    },
   },
   filters: {
     status (val) {
@@ -672,6 +699,7 @@ function getallpaymode (that) {
     }
   }).then(res => {
     that.allpaymode = res.data
+     that.allpaymode2 = res.data
   }).catch(error => {
   })
 }

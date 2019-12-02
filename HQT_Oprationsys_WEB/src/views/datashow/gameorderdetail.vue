@@ -68,7 +68,7 @@
     </div> -->
     <div class="paging">
   <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-  <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+  <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
 </div>
 
     <el-table
@@ -98,6 +98,10 @@
     <el-table-column
       prop="bet_data"
       label="下注数据">
+    </el-table-column>
+      <el-table-column
+      prop="bbef_balance"
+      label="下注前余额">
     </el-table-column>
     <el-table-column
       prop="bet_money"
@@ -133,7 +137,7 @@
 </div> -->
 <div class="paging">
   <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-  <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+  <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
 </div>
 
 
@@ -168,7 +172,7 @@ export default {
       tableData: [
       ],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       havetime: false,
       havetime1: false,
       id: '',
@@ -181,6 +185,10 @@ export default {
     // this.formInline.starttime = new Date(week)
     // this.formInline.endtime = new Date(time)
     this.id = this.$route.query.id
+    let that = this
+    this.currentPage = 1
+    this.num = 1
+    getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize)
   },
   computed: {
     ...mapGetters([

@@ -96,7 +96,12 @@
     </el-table-column>
     <el-table-column
       prop="user_account"
-      label="玩家"
+      label="玩家账号"
+      >
+    </el-table-column>
+     <el-table-column
+      prop="uid"
+      label="uid"
       >
     </el-table-column>
     <el-table-column
@@ -150,8 +155,8 @@
   </el-table>
 
   <el-row class="buttoncenter">
-      <el-button type="primary" style="margin-right:30px;" @click="allpass()" v-if="audituserauditaddscore">选中通过</el-button>
-      <el-button type="primary" @click="deletall()" v-if="audituserauditaddscore">选择拒绝</el-button>
+      <el-button type="primary" style="margin-right:30px;" @click="allpass()" v-if="audituserauditaddscore && buttonshow">选中通过</el-button>
+      <el-button type="primary" @click="deletall()" v-if="audituserauditaddscore && buttonshow">选择拒绝</el-button>
   </el-row>
 
 <div class="pagingbox">
@@ -160,7 +165,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -191,7 +196,7 @@ export default {
       currentPage: 1,
       tableData: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       keys: [],
       id: '',
       statuslist: [],
@@ -228,7 +233,8 @@ export default {
           name: '[+]其他'
         }
       ],
-      multipleSelection: []
+      multipleSelection: [],
+      buttonshow: true
     }
   },
   created() {
@@ -253,6 +259,13 @@ export default {
     ])
   },
   watch: {
+    'formInline.status': function (val) {
+        if (val == '2') {
+          this.buttonshow = true
+        } else {
+          this.buttonshow = false
+        }
+      }
   },
   methods: {
     handleSelectionChange(val) {

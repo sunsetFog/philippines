@@ -53,12 +53,12 @@
     :data="tableData"
     border
     style="width: 100%">
-    <!-- <el-table-column
-      label="类型">
+    <el-table-column
+      label="ID">
       <template slot-scope="scope">
-        {{scope.row.type | type}}
+        {{scope.row.id}}
       </template>
-    </el-table-column> -->
+    </el-table-column>
     <el-table-column
       prop="code"
       label="银行编码">
@@ -84,7 +84,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -107,7 +107,7 @@
             </el-select>
       </el-form-item> -->
        <el-form-item label="银行编码" :label-width="formLabelWidth" prop='code'>
-        <el-input v-model="form.code"></el-input>
+        <el-input v-model="form.code" maxlength="20"></el-input>
       </el-form-item>
       <el-form-item label="银行名称" :label-width="formLabelWidth" prop='name'>
         <el-input v-model="form.name"></el-input>
@@ -129,14 +129,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import request from '@/utils/request'
-import { validatAlphabets } from '@/utils/validate'
+import { validatAlphabets,validatNumberLowerCase2 } from '@/utils/validate'
 export default {
   data() {
     const codebank = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入银行编码'))
-      } else if(!validatAlphabets(value)){
-        callback(new Error('银行编码必须为字母'))
+      } else if(!validatAlphabets(value)&&!validatNumberLowerCase2(value)){
+        callback(new Error('银行编码必须为纯字母或字母数字组合'))
       } else {
         callback()
       }
@@ -174,7 +174,7 @@ export default {
       title: '',
       name: '',
       total: 0,
-      pagesize: 50
+      pagesize: 20
     }
   },
   created() { 

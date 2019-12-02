@@ -55,6 +55,7 @@
 <script>
 import footers from '../../components/footer.vue';
 export default{
+    name: 'line',
     components: {footers},
   data(){
     return{
@@ -110,6 +111,7 @@ export default{
     width: 100%;
     padding-bottom: 115px;
     box-sizing: border-box;
+    overflow: hidden;
     .mixin_image(url('../../../static/dream/login/bg_denglu.jpg'));
     @color_violet: #3d1351;//字体
     @color_stroke: #143597;
@@ -154,11 +156,13 @@ export default{
                     margin-right: 5px;
                     font-size: @font_size16;
                     text-shadow: 1px 1px 2px @color_stroke;
+                    cursor: pointer;
                 }
                 img{
                     .mixin_img(50px,50px);
                     float: right;
                     margin-top: 3px;
+                    cursor: pointer;
                 }
             }
             .example_detection{
@@ -208,6 +212,7 @@ export default{
                             .mixin_img(70px,30px);
                             float: left;
                             margin-left: 70px;
+                            cursor: pointer;
                         }
                     }
                 }

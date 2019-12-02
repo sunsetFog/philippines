@@ -47,6 +47,7 @@
 
 <script>
 export default{
+    name: 'lotteryNotice',
     data(){
         return{
             notice_list: [{theme: '健康饮食',active: true},{theme: '营养食谱',active: false},{theme: '绿色食品',active: false}]

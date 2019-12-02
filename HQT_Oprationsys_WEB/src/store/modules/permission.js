@@ -15,12 +15,14 @@ const permission = {
     businessdealday: [],
     gamedealday: [],
     gamesinglereport: [],
+    gamertpset:[],
     gameuserrankreport: [],
     agentorgday: [],
     mail: [],
     notice: [],
     createactivity: [],
     queryactivity: [],
+    registerpayment:[],
     gameuser: [],
     order: [],
     payrecharge: [],
@@ -52,7 +54,12 @@ const permission = {
     diversions: [],
     gamerecord: [],
     agentteam: [],
-    customer: []
+    customer: [],
+    bankcard: [],
+    topupbank: [],
+    agentdomain: [],
+    airole: [],
+    downloadgetter: []
   },
   getters: {
     role: state => state.role,
@@ -70,12 +77,14 @@ const permission = {
     businessdealday: state => state.businessdealday,
     gamedealday: state => state.gamedealday,
     gamesinglereport: state => state.gamesinglereport,
+    gamertpset: state => state.gamertpset,
     gameuserrankreport: state => state.gameuserrankreport,
     agentorgday: state => state.agentorgday,
     mail: state => state.mail,
     notice: state => state.notice,
     createactivity: state => state.createactivity,
     queryactivity: state => state.queryactivity,
+    registerpayment:state => state.registerpayment,
     gameuser: state => state.gameuser,
     order: state => state.order,
     payrecharge: state => state.payrecharge,
@@ -108,6 +117,11 @@ const permission = {
     gamerecord: state => state.gamerecord,
     agentteam: state => state.agentteam,
     customer: state => state.customer,
+    bankcard: state => state.bankcard,
+    topupbank: state => state.topupbank,
+    agentdomain: state => state.agentdomain,
+    airole: state => state.airole,
+    downloadgetter: state => state.downloadgetter
   },
   mutations: {
     setrole: (state, role) => {
@@ -155,6 +169,9 @@ const permission = {
     setgamesinglereport: (state, gamesinglereport) => {
       state.gamesinglereport = gamesinglereport
     },
+    setgamertpset: (state, gamertpset) => {
+      state.gamertpset = gamertpset
+    },
     setgameuserrankreport: (state, gameuserrankreport) => {
       state.gameuserrankreport = gameuserrankreport
     }, 
@@ -172,6 +189,9 @@ const permission = {
     }, 
     setqueryactivity: (state, queryactivity) => {
       state.queryactivity = queryactivity
+    }, 
+    setregisterpayment: (state, registerpayment) => {
+      state.registerpayment = registerpayment
     }, 
     setgameuser: (state, gameuser) => {
       state.gameuser = gameuser
@@ -269,6 +289,21 @@ const permission = {
     setcustomer: (state, customer) => {
       state.customer = customer
     },
+    setbankcard: (state, bankcard) => {
+      state.bankcard = bankcard
+    },
+    settopupbank: (state, topupbank) => {
+      state.topupbank = topupbank
+    },
+    setagentdomain: (state, agentdomain) => {
+      state.agentdomain = agentdomain
+    },
+    setairole: (state, airole) => {
+      state.airole = airole
+    },
+    setdownload(state, download){
+      state.downloadgetter = download;
+    }
   },
   actions: {
     

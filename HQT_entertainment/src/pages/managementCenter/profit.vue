@@ -62,6 +62,7 @@
 
 <script>
 export default{
+    name: 'profit',
     data(){
         return{
             quota_list: [{gear_position: '流水:11.9'},{gear_position: '流水:11.9'},{gear_position: '流水:11.9'},{gear_position: '流水:11.9'},{gear_position: '流水:11.9'},{gear_position: '流水:11.9'},{gear_position: '流水:11.9'},{gear_position: '流水:11.9'}],

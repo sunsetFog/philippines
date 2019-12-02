@@ -657,13 +657,6 @@ function parseTime2(time) {
     margin-bottom: 20px;
     margin-top: 20px;
   }
-  .line {
-    border-bottom: 1px solid #666;
-    margin-bottom: 20px;
-    font-size: 21px;
-    font-weight: 700;
-    margin-right: -126px;
-  }
   .floatright {
     float: right;
   }

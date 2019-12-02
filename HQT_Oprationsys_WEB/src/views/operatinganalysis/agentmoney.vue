@@ -135,7 +135,7 @@
           </el-col>
 
           <el-col :span="2">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="fundchangeagentfundlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="fundchangeagentfundlist" :loading="loading">查询</el-button>
           </el-col>
           <el-col :span="2">
             <el-button type="primary"  @click="excel" v-if="fundchangeexportagentfund">导出excel</el-button>
@@ -161,8 +161,8 @@
 
     
 <div class="paging">
-  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-  <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+  <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
 </div>
 
     <el-table
@@ -186,7 +186,7 @@
       label="玩家账号">
     </el-table-column>
     <el-table-column
-      prop="org_name"
+      prop="agent_org_name"
       label="玩家渠道">
     </el-table-column>
     <el-table-column
@@ -248,8 +248,8 @@
 </div> -->
 
 <div class="paging">
-  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-  <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+  <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
 </div>
 
 
@@ -291,7 +291,7 @@ export default {
         {name: '[+]代理税收', type: '21'},
         {name: '[+]代理提款失败', type: '22'},
         {name: '[-]管理员扣减', type: '53'},
-        {name: '[-]代理提款成功', type: '54'},
+        // {name: '[-]代理提款成功', type: '54'},
         {name: '[-]代理申请提款', type: '60'},
         {name: '[-]提款手续费', type: '59'},
       ],
@@ -305,9 +305,10 @@ export default {
       userlist: [],
       orglist: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
-      num: 1
+      num: 1,
+      loading: false
     }
   },
   created() {
@@ -578,6 +579,7 @@ export default {
 
 
 function getlist (that) {
+  that.loading = true
   var start = ''
   var end = '' 
   if (that.formInline.time && that.formInline.time.length > 0) {
@@ -620,6 +622,7 @@ function getlist (that) {
       pagerows: that.pagesize,
     }
   }).then(res => {
+    that.loading = false
     if (res.data.list.length === 0) {
       that.tableData = []
       that.total = res.data.rownum * 1
@@ -775,13 +778,6 @@ function parseTime(time) {
     margin-right: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-  .line {
-    border-bottom: 1px solid #666;
-    margin-bottom: 20px;
-    font-size: 21px;
-    font-weight: 700;
-    margin-right: -126px;
   }
   .floatright {
     float: right;

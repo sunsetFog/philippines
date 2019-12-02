@@ -28,7 +28,42 @@
               </el-select>
             </el-form-item>
           </el-col>
+
+            <!-- <el-col :span="8">
+            <el-form-item label="日期">
+              <el-date-picker
+              v-model="formInline.time"
+              type="datetimerange"
+              :editable="false"
+              range-separator="-"
+              start-placeholde="开始日期"
+              end-placeholde="结束日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col> -->
           <el-col :span="5">
+            <el-form-item label="开始日期">
+              <el-date-picker
+              v-model="formInline.starttime"
+              :editable="false"
+              type="date"
+              placeholder="选择日期"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="5">
+            <el-form-item label="结束日期">
+              <el-date-picker
+              v-model="formInline.endtime"
+              :editable="false"
+              type="date"
+              placeholder="选择日期"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <!-- <el-col :span="5">
             <el-form-item label="开始日期">
               <el-date-picker
               v-model="formInline.starttime"
@@ -49,10 +84,10 @@
               >
               </el-date-picker>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           
           <el-col :span="2">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gamedealdayreportgetlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gamedealdayreportgetlist" :loading="loading">查询</el-button>
           </el-col>
           <el-col :span="2">
             <el-button type="primary" icon="el-icon-search" @click="excel" v-if="businessdealdayreportgamedatadownload">导出excel</el-button>
@@ -88,8 +123,16 @@
       label="日期">
     </el-table-column>
     <el-table-column
-      prop="game_name"
+      prop="name"
       label="游戏名称">
+    </el-table-column>
+     <el-table-column
+      prop="betnum"
+      label="投注人数">
+    </el-table-column>
+     <el-table-column
+      prop="bet_ptom"
+      label="投注额">
     </el-table-column>
     <el-table-column
       prop="flow"
@@ -98,21 +141,21 @@
       label="流水">
     </el-table-column>
     <el-table-column
-      prop="user_lose"
+      prop="lost_money"
       label="玩家输额">
     </el-table-column>
     <el-table-column
-      prop="user_win"
+      prop="win_money"
       label="玩家赢额">
     </el-table-column>
     <el-table-column
       prop="tax"
       sortable="custom"
       :sort-orders="['ascending','descending']"
-      label="税收">
+      label="代理收益">
     </el-table-column>
     <el-table-column
-      prop="gross_profit"
+      prop="gprofit"
       sortable="custom"
       :sort-orders="['ascending','descending']"
       label="营收">
@@ -125,7 +168,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -147,20 +190,22 @@ export default {
   data() {
     return {
       formInline: {
-        starttime: '',
-        endtime: '',
+        time: [],
         id: '',
-        org: ''
+        org: '',
+         starttime: '',
+        endtime: '',
       },
       currentPage: 1,
       tableData: [
       ],
       gamelist: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       havetime: false,
       havetime1: false,
-      orglist: []
+      orglist: [],
+      loading: false
     }
   },
   created() {
@@ -168,16 +213,18 @@ export default {
     let time = new Date(new Date().toLocaleDateString()).getTime()
     this.formInline.starttime = new Date(week)
     this.formInline.endtime = new Date(time)
+    //this.formInline.time = [new Date(week),new Date(time)]
     getgamelist(this)
     getorglist(this)
     let that = this
     if (!this.gamedealday.length && this.gamedealday.length != 0) {
       that.formInline.starttime = this.gamedealday.starttime
+      that.formInline.endtime = this.gamedealday.endtime
       that.currentPage = this.gamedealday.currentPage
       that.pagesize = this.gamedealday.pagesize
-      that.formInline.endtime = this.gamedealday.endtime
+      that.formInline.time = this.gamedealday.time
       that.formInline.id = this.gamedealday.id
-      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
+      getlist(that,that.formInline.starttime,that.formInline.endtime, that.currentPage, that.pagesize, that.formInline.id)
     }
   },
   computed: {
@@ -193,12 +240,12 @@ export default {
     query () {
         let that = this
         that.currentPage = 1
-        getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
+        getlist(that, that.currentPage, that.pagesize, that.formInline.id,that.formInline.starttime,that.formInline.endtime,)
         let setgamedealday = {
-          'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
-          'endtime': that.formInline.endtime,
+           'starttime': that.formInline.starttime,
+           'endtime': that.formInline.endtime,
           'id': that.formInline.id,
           'org': that.formInline.org
         }
@@ -253,9 +300,11 @@ export default {
     })
     },
     cell ({row, column, rowIndex, columnIndex}) {
-      // if (columnIndex === 2 && row.flow*1 < 0) {
-      //   return 'red'
-      // }
+      if (columnIndex === 8 && row.gprofit*1 < 0) {
+        return 'red'
+      }else if(columnIndex === 8 && row.gprofit*1 > 0){
+        return 'green'
+      }
       // if (columnIndex === 3 && row.user_lose_money*1 < 0) {
       //   return 'red'
       // }
@@ -308,12 +357,12 @@ export default {
       this.pagesize = val
       let that = this
       this.currentPage = 1
-      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
+      getlist(that, that.currentPage, that.pagesize, that.formInline.id,that.formInline.starttime, that.formInline.endtime,)
       let setgamedealday = {
-          'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
-          'endtime': that.formInline.endtime,
+          'starttime': that.formInline.starttime,
+           'endtime': that.formInline.endtime,
           'id': that.formInline.id,
           'org': that.formInline.org
         }
@@ -322,12 +371,12 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val *1
       let that = this
-      getlist(that, that.formInline.starttime, that.formInline.endtime,  that.currentPage, that.pagesize, that.formInline.id)
+      getlist(that, that.currentPage, that.pagesize, that.formInline.id,that.formInline.starttime, that.formInline.endtime,)
       let setgamedealday = {
-          'starttime': that.formInline.starttime,
           'currentPage': that.currentPage,
           'pagesize': that.pagesize,
-          'endtime': that.formInline.endtime,
+          'starttime': that.formInline.starttime,
+           'endtime': that.formInline.endtime,
           'id': that.formInline.id,
           'org': that.formInline.org
         }
@@ -340,44 +389,45 @@ export default {
 
 
 
-function getlist (that, starttime, endtime, currentPage, pagesize, id) {
-   var timestart = ''
-    var timeend = ''
-    if (starttime) {
-      var start = starttime.getTime() /1000
-      var timestart = parseTime(start)
-    }
-    if (endtime) {
-      var end = endtime.getTime() /1000
-      var timeend = parseTime(end + 24 *60*60 -1)
-    }
-    if (start && end) {
-      if (start > end) {
-        Message({
-          message: '开始时间必须小于结束时间',
-          type: 'error'
-        })
-        return
+function getlist (that,  starttime, endtime,currentPage, pagesize, id) {    
+     that.loading = true
+      var timestart = ''
+      var timeend = ''
+      if (that.formInline.starttime) {
+        var start = that.formInline.starttime.getTime() /1000
+        var timestart = parseTime(start)
       }
-    }
+      if (that.formInline.endtime) {
+        var end = that.formInline.endtime.getTime() /1000
+        var timeend = parseTime(end + 24 *60*60 -1)
+      }
+      if (start && end) {
+        if (start > end) {
+          Message({
+            message: '开始时间必须小于结束时间',
+            type: 'error'
+          })
+          return
+        }
+      }
     var game_id = ''
     var game_type = ''
-    if (id != '') {
-      that.gamelist.map(val=>{
-        if (id == val.name) {
-          game_id = val.id
-          game_type = val.type
-        }
-      })
-    }
+      if (that.formInline.id != '') {
+        that.gamelist.map(val=>{
+          if (that.formInline.id == val.name) {
+            game_id = val.id
+            game_type = val.type
+          }
+        })
+      }
   request({
     url: that.public.url + '/backend/businessdealdayreport/getgamedatalist',
     method: 'post',
     data: {
       begindate: timestart,
       enddate: timeend,
-      pageno: currentPage,
-      pagerows: pagesize,
+      pageno: that.currentPage,
+      pagerows:that.pagesize,
       game_id: game_id,
       game_type: game_type,
       org_id: that.formInline.org
@@ -387,13 +437,14 @@ function getlist (that, starttime, endtime, currentPage, pagesize, id) {
         message: res.message,
         type: 'success'
       })
+      that.loading = false
       if (res.data.list.length === 0) {
         that.tableData = res.data.list
       } else {
-         let data = res.data.total
-        data.adate = '总计'
+        //  let data = res.data.total
+        // data.adate = '总计'
         that.tableData = res.data.list
-        that.tableData.unshift(data)
+        // that.tableData.unshift(data)
       }  
     that.total = res.data.rownum * 1
     that.currentPage = res.data.pageno * 1

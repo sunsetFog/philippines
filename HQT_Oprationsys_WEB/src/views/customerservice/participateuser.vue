@@ -66,7 +66,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
-          :page-sizes="[50,100,200]"
+          :page-sizes="[20,50,200]"
           :page-size="pagesize"
           background
           layout="sizes, prev, pager, next, jumper"
@@ -136,7 +136,7 @@
           @size-change="handleSizeChange1"
           @current-change="handleCurrentChange1"
           :current-page.sync="currentPage1"
-          :page-sizes="[50,100,200]"
+          :page-sizes="[20,50,200]"
           :page-size="pagesize1"
           background
           layout="sizes, prev, pager, next, jumper"
@@ -172,8 +172,8 @@ export default {
       tableData1: [],
       total: 0,
       total1: 0,
-      pagesize: 50,
-      pagesize1: 50,
+      pagesize: 20,
+      pagesize1: 20,
       id: ''
     }
   },

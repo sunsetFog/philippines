@@ -13,7 +13,7 @@
                 icon='more'
                 style="color: #dbcbb7;"
                @click="loginout">
-               <span style="font-size:12px;color: #dbcbb7;font-family: 'Microsoft YaHei'">返回游戏</span>
+               <span class="all_palm" style="font-size:0.75rem;color: #dbcbb7;font-family: 'Microsoft YaHei'">返回游戏</span>
     </mt-button>
   </div>
 </template>
@@ -38,34 +38,34 @@ export default {
   },
    watch: {
     'show': function (val) {
-      var width = document.body.offsetWidth
-      if (width < 768) {
-         if (val) {
-          var container = document.getElementById('container')
-          container.style.position = 'fixed'
-          container.style.top = 0
-          container.style.bottom = 0
-          container.style.left = 0
-          container.style.right = 0
-        } else {
-          var container = document.getElementById('container')
-          container.style.position = 'static'
-        }
-      } else {
-        if (val) {
-          var body = document.body
-          var app = document.getElementById('app')
-          app.style.position = 'static'
-          body.style.height = '100%'
-          body.style.overflow = 'hidden'
-        } else {
-          var body = document.body
-          var app = document.getElementById('app')
-          app.style.position = 'absolute'
-          body.style.height = ''
-          body.style.overflow = 'auto'
-        }
-      }
+      // var width = document.body.offsetWidth
+      // if (width < 768) {
+      //    if (val) {
+      //     var container = document.getElementById('container')
+      //     container.style.position = 'fixed'
+      //     container.style.top = 0
+      //     container.style.bottom = 0
+      //     container.style.left = 0
+      //     container.style.right = 0
+      //   } else {
+      //     var container = document.getElementById('container')
+      //     container.style.position = 'static'
+      //   }
+      // } else {
+      //   if (val) {
+      //     var body = document.body
+      //     var app = document.getElementById('app')
+      //     app.style.position = 'static'
+      //     body.style.height = '100%'
+      //     body.style.overflow = 'hidden'
+      //   } else {
+      //     var body = document.body
+      //     var app = document.getElementById('app')
+      //     app.style.position = 'absolute'
+      //     body.style.height = ''
+      //     body.style.overflow = 'auto'
+      //   }
+      // }
     }
   },
   mounted () {
@@ -74,21 +74,21 @@ export default {
     menuShow () {
       // 菜单显示
       const rightmenu = this.$refs.rightmenu
-      rightmenu.style.right = '0px'
+      rightmenu.style.right = '0rem'
     },
     menuHide () {
       // 菜单隐藏
       const rightmenu = this.$refs.rightmenu
       if (rightmenu) {
-        rightmenu.style.right = '-235px'
+        rightmenu.style.right = '-14.6875rem'
       } else {
-        var body = document.body
-        var app = document.getElementById('app')
-        app.style.position = 'absolute'
-        body.style.height = ''
-        body.style.overflow = 'auto'
-        var container = document.getElementById('container')
-        container.style.position = 'static'
+        // var body = document.body
+        // var app = document.getElementById('app')
+        // app.style.position = 'absolute'
+        // body.style.height = ''
+        // body.style.overflow = 'auto'
+        // var container = document.getElementById('container')
+        // container.style.position = 'static'
       }
     },
     loginout () {

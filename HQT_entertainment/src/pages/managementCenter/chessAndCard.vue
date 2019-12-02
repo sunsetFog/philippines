@@ -53,6 +53,7 @@
 
 <script>
 export default{
+    name: 'chessCards',
     data(){
         return{
             quota_list: [{gear_position: '50%'},{gear_position: '45%'},{gear_position: '40%'},{gear_position: '35%'},{gear_position: '30%'},{gear_position: '25%'},{gear_position: '15%'},{gear_position: '10%'}],

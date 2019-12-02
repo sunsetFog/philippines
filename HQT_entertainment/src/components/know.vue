@@ -23,7 +23,7 @@
 
 <script>
 export default {
-    name: 'children',
+    name: 'know',
     data(){
         return{
             rechargeActive: false,

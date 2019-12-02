@@ -1,7 +1,7 @@
 <template>
   <div class="container daydegrees">
     <mt-header title="游戏报表">
-        <mt-button slot="left" @click="back">
+        <mt-button slot="left" class="all_palm" @click="back">
         <i class="mintui mintui-back"></i>
         </mt-button>
     </mt-header>
@@ -9,7 +9,7 @@
   
        <div class="card">
         <mt-cell title="游戏记录" is-link  to="/gamereport">
-        <img slot="icon" src="../../../static/game.png" width="30" height="30">
+        <img slot="icon" src="../../../static/game.png" style="width: 1.875rem;height: 1.875rem">
       </mt-cell>
     </div>
      

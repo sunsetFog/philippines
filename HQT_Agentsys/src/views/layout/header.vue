@@ -18,14 +18,20 @@ export default {
   name: 'mtheader',
   components: { DropDown, LeftMenu },
   created () {
-    let url = window.location.href
-    let token =  ((url.split('?')[1]).split('&')[0]).split('=')[1]
-    setToken(token)
-    this.$store.commit('SET_TOKEN', token)
-    let name =  ((url.split('?')[1]).split('&')[1]).split('=')[1]
-    this.$store.commit('SET_NAME', name)
-    setname(name)
-    if (((url.split('?')[1]).split('&')[2]) == 'web') {
+    // let url = window.location.href
+    
+    let json = this.$route.query;
+    if(!json.hasOwnProperty('token')){
+      return;
+    }
+
+    // let token =  ((url.split('?')[1]).split('&')[0]).split('=')[1]
+    setToken(json.token)
+    this.$store.commit('SET_TOKEN', json.token)
+    // let name =  ((url.split('?')[1]).split('&')[1]).split('=')[1]
+    this.$store.commit('SET_NAME', json.loginname)
+    setname(json.loginname)
+    if(json.hasOwnProperty('web')){
       setweb(true)
     } else {
       setweb(false)

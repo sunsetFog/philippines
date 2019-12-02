@@ -84,7 +84,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -114,7 +114,7 @@ export default {
       tableData: [],
       formLabelWidth: '120px',
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: ''
     }
   },
@@ -139,7 +139,7 @@ export default {
   },
   methods: {
     jion(row) {
-      this.$router.push({path: '/customerservice/participateuser', query: {id:row.id}})
+      this.$router.push({path: '/gamemsgmgr/participateuser', query: {id:row.id}})
     },
     query () {
       let that = this

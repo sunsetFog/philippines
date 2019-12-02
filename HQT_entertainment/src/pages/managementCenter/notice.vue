@@ -1,5 +1,5 @@
 <template>
-<section id="notice">
+<section id="notice_center">
     <div class="cards_frame">
         <div class="cards_title">系统公告</div>
         <div class="cards_content">
@@ -47,6 +47,7 @@
 
 <script>
 export default{
+    name: 'notice_center',
     data(){
         return{
             notice_list: [{theme: '健康饮食',active: true},{theme: '营养食谱',active: false},{theme: '绿色食品',active: false}]
@@ -64,7 +65,7 @@ export default{
 </script>
 
 <style lang="less" scoped>
-#notice{
+#notice_center{
     width: 100%;
     .cards_frame{
         width: 100%;

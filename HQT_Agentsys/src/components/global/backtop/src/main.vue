@@ -1,6 +1,6 @@
 <template>
 <transition name='slide-fade'>
-    <div class='page-component-up' v-show='isShow' @click='getTop'>
+    <div class='page-component-up all_palm' v-show='isShow' @click='getTop'>
     <i class='tri'></i>
   </div>
 </transition>

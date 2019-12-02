@@ -2,17 +2,17 @@
   <div class="app-container mail">
     <div class="query">
       <el-row>
-        <el-form :inline="true" label-width="50px">
-          <el-col :span="5">
+        <el-form :inline="true">
+          <el-col :span="6">
             <el-form-item label="玩家账号" label-width="70px">
             <el-input v-model="formInline.value" placeholder="请输入要查询的关键词" clearable></el-input>
             </el-form-item>
           </el-col>
 
 
-          <el-col :span="5">
-            <el-form-item label="状态">
-                <el-select v-model="formInline.type" filterable clearable>
+          <el-col :span="6">
+            <el-form-item label="账变类型"  label-width="70px">
+                <el-select v-model="formInline.type" multiple filterable clearable >
                 <el-option
                   v-for="item in typelist"
                   :key="item.id"
@@ -23,7 +23,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="5">
+          <el-col :span="6">
             <el-form-item label="开始日期" label-width="70px">
               <el-date-picker
               v-model="formInline.starttime"
@@ -35,7 +35,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="5">
+          <el-col :span="6">
             <el-form-item label="结束日期" label-width="70px">
               <el-date-picker
               v-model="formInline.endtime"
@@ -46,8 +46,36 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="1">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameuserchggetlist">查询</el-button>
+        </el-form>
+      </el-row>
+      <el-row>
+        <el-form :inline="true" label-width="70px">
+
+
+          <el-col :span="6">
+            <el-form-item label="玩家渠道">
+                <el-select v-model="formInline.org" filterable clearable>
+                <el-option
+                  v-for="item in orglist"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-form-item label="UID">
+                <el-input v-model="formInline.uid" placeholder="请输入要查询的关键词" clearable></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameuserchggetlist" :loading="loading">查询</el-button>
+          </el-col>
+          <el-col :span="6">
+            <el-button type="primary"  @click="excel()" :loading="loading2" v-if="gameuserchggetListdownload">导出excel</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -131,8 +159,16 @@
         </template>
     </el-table-column>
     <el-table-column
+      prop="uid"
+      label="UID">
+    </el-table-column>
+    <el-table-column
       prop="user_name"
       label="玩家账号">
+    </el-table-column>
+    <el-table-column
+      prop="agent_org_name"
+      label="玩家渠道">
     </el-table-column>
     <el-table-column
       prop="src_type"
@@ -171,7 +207,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -186,6 +222,7 @@
 <script>
 import request from '@/utils/request'
 import { mapGetters } from 'vuex'
+import { Message, MessageBox } from 'element-ui'
 export default {
   data() {
     return {
@@ -193,7 +230,9 @@ export default {
         type: '',
         value: '',
         starttime: '',
-        endtime: ''
+        endtime: '',
+        org: '',
+        uid: ''
       },
       getrowkey (row) {
           return (row.id)
@@ -210,6 +249,8 @@ export default {
       atime: '',
       currentPage: 1,
       tableData: [],
+      loading: false,
+      loading2: false,
       typelist: [
         // {name: '支付充值', type: '1'},
         // {name: '游戏结算', type: '2'},
@@ -222,13 +263,19 @@ export default {
         // {name: '取保险箱', type: '9'},
       ],
       total: 0,
-      pagesize: 50,
-      info1: []
+      pagesize: 20,
+      info1: [],
+      orglist: []
     }
   },
   created() {
     let that = this
     gettypelist(this)
+    getaccount(this)
+    if (Object.keys(this.$route.query).length > 0) {
+      that.formInline.uid = this.$route.query.uid     
+      //getlist(this)
+    } else {
     if (!this.gameuserchg.length && this.gameuserchg.length != 0) {
       that.formInline.value = this.gameuserchg.value
       that.currentPage = this.gameuserchg.currentPage
@@ -236,13 +283,17 @@ export default {
       that.formInline.type = this.gameuserchg.type
       that.formInline.starttime = this.gameuserchg.starttime
       that.formInline.endtime = this.gameuserchg.endtime
-      getlist(this)
+      that.formInline.org = that.gameuserchg.org
+      that.formInline.uid = that.gameuserchg.uid
+      //getlist(this)
+    }
     }
   },
   computed: {
     ...mapGetters([
       'gameuserchggetlist',
-      'gameuserchg'
+      'gameuserchg',
+      'gameuserchggetListdownload'
     ])
   },
   watch: {
@@ -275,6 +326,8 @@ export default {
           'type': that.formInline.type,
           'starttime': that.formInline.starttime,
           'endtime': that.formInline.endtime,
+          'org': that.formInline.org,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setgameuserchg', setgameuserchg)
     },
@@ -295,6 +348,8 @@ export default {
           'type': that.formInline.type,
           'starttime': that.formInline.starttime,
           'endtime': that.formInline.endtime,
+          'org': that.formInline.org,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setgameuserchg', setgameuserchg)
     },
@@ -309,6 +364,8 @@ export default {
           'type': that.formInline.type,
           'starttime': that.formInline.starttime,
           'endtime': that.formInline.endtime,
+          'org': that.formInline.org,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setgameuserchg', setgameuserchg)
     },
@@ -335,17 +392,16 @@ export default {
         } else {
             this.expands = []
         }
-    }
-  }
-}
-
-
-function getlist (that) {
-  let data = {
+    },
+    excel(){
+      let that = this
+      let data = {
     user_name: that.formInline.value.trim(),
     pageno: that.currentPage,
     pagerows: that.pagesize,
-    src_type: that.formInline.type
+    src_type: that.formInline.type.join(','),
+    agent_org_id: that.formInline.org,
+    uid: that.formInline.uid,
   }
   if (that.formInline.starttime) {
     var start = that.formInline.starttime.getTime() /1000
@@ -353,7 +409,51 @@ function getlist (that) {
   }
   if (that.formInline.endtime) {
     var end = that.formInline.endtime.getTime() /1000
-    data.chg_time_to = parseTime(end)
+    var newEnd = end + 24*3600-1
+    data.chg_time_to = parseTime(newEnd)
+  }
+  if (start && end) {
+          if (start > end) {
+            Message({
+              message: '开始时间必须小于结束时间',
+              type: 'error'
+            })
+            return
+          }
+        }
+  that.loading2 = true
+  request({
+    url: that.public.url + '/gameuserchg/getListdownload',
+    method: 'post',
+    data: data,
+  }).then(res => {
+    that.loading2 = false
+     window.location.href = that.public.url + res.data
+  }).catch(error => {
+  })
+    }
+  }
+}
+
+
+function getlist (that) {
+  that.loading = true
+  let data = {
+    user_name: that.formInline.value.trim(),
+    pageno: that.currentPage,
+    pagerows: that.pagesize,
+    src_type: that.formInline.type.join(','),
+    agent_org_id: that.formInline.org,
+    uid: that.formInline.uid,
+  }
+  if (that.formInline.starttime) {
+    var start = that.formInline.starttime.getTime() /1000  
+    data.chg_time_from = parseTime(start)
+  }
+  if (that.formInline.endtime) {
+    var end = that.formInline.endtime.getTime() /1000
+    var newEnd = end + 24*3600-1
+    data.chg_time_to = parseTime(newEnd)
   }
   
   request({
@@ -361,6 +461,7 @@ function getlist (that) {
     method: 'post',
     data: data
   }).then(res => {
+    that.loading = false
     that.tableData = res.data.list
     that.total = res.data.rownum * 1
     that.currentPage = res.data.pageno * 1
@@ -429,6 +530,21 @@ function gettypelist(that) {
 }
 
 
+function getaccount (that) {
+  request({
+    url: that.public.url + '/backend/org/getorglist',
+    method: 'post',
+    data: {
+    }
+  }).then(res => {
+    let all = {id: "", name: "全部"}
+    that.orglist = res.data
+    that.orglist.unshift(all)
+  }).catch(error => {
+  })
+}
+
+
 
 </script>
 
@@ -438,13 +554,6 @@ function gettypelist(that) {
     margin-right: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-  .line {
-    border-bottom: 1px solid #666;
-    margin-bottom: 20px;
-    font-size: 21px;
-    font-weight: 700;
-    margin-right: -126px;
   }
   .floatright {
     float: right;

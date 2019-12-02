@@ -9,6 +9,7 @@
         :key="tag.path"
         tag="span"
         class="tags-view-item"
+        v-show = "tag.title !== '查看代理详情'"
         @click.middle.native="closeSelectedTag(tag)"
         @contextmenu.prevent.native="openMenu(tag,$event)">
         {{ tag.title }}
@@ -33,7 +34,8 @@ export default {
       visible: false,
       top: 0,
       left: 0,
-      selectedTag: {}
+      selectedTag: {},
+      activtitle:true,
     }
   },
   computed: {

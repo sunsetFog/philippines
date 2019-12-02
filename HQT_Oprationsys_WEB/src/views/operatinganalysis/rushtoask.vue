@@ -8,7 +8,7 @@
 
           <el-col :span="6">
             <el-form-item label="充提账变类型">
-                <el-select v-model="formInline.type" filterable clearable>
+                <el-select v-model="formInline.type" filterable clearable multiple>
                 <el-option
                   v-for="item in typelist"
                   :key="item.type"
@@ -156,8 +156,14 @@
             </el-form-item>
           </el-col>
 
+          <el-col :span="6">
+            <el-form-item label="UID搜索">
+                <el-input v-model="formInline.uid" placeholder="请输入要查询的关键词" clearable></el-input>
+            </el-form-item>
+          </el-col>
+
           <el-col :span="2">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="fundchangerechargewithdrawlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="fundchangerechargewithdrawlist" :loading="loading">查询</el-button>
           </el-col>
           <el-col :span="2">
             <el-button type="primary"  @click="excel" v-if="fundchangeexportrechargewithdraw">导出excel</el-button>
@@ -170,8 +176,8 @@
 
     
 <div class="paging">
-  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-  <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+  <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
 </div>
     <!-- <div class="pagingbox">
     <div class="paging" style="margin-top: 40px;">
@@ -195,6 +201,10 @@
     border
     style="width: 100%">
     <el-table-column
+      prop="uid"
+      label="UID">
+    </el-table-column>
+    <el-table-column
       prop="order_no"
       label="订单号">
     </el-table-column>
@@ -208,7 +218,7 @@
       label="玩家账号">
     </el-table-column>
     <el-table-column
-      prop="org_name"
+      prop="agent_org_name"
       label="玩家渠道">
     </el-table-column>
     <el-table-column
@@ -249,7 +259,7 @@
     <el-table-column
       label="充提方式">
       <template slot-scope="scope">
-        {{scope.row.pay_channel_method}}
+        {{scope.row.pay_method}}
       </template>
     </el-table-column>
     <el-table-column
@@ -277,8 +287,8 @@
 
 
 <div class="paging">
-  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up">上一页</el-button>
-  <el-button type='primary' @click="down" :disabled="tableData.length < 50 ? true : false">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+  <el-button icon='el-icon-arrow-left' type='primary' :disabled="num <=1 ? true : false" @click="up" :loading="loading">上一页</el-button>
+  <el-button type='primary' @click="down" :disabled="tableData.length < 20 ? true : false" :loading="loading">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
 </div>
 
 
@@ -311,7 +321,8 @@ export default {
         time: [],
         money: '',
         money1: '',
-        money2: ''
+        money2: '',
+        uid: ''
       },
       currentPage: 1,
       tableData: [],
@@ -323,7 +334,7 @@ export default {
         {name: '[+]其他', type: '14'},
         {name: '[+]提款失败', type: '15'},
         {name: '[-]人工扣减', type: '50'},
-        {name: '[-]提款成功', type: '51'},
+        // {name: '[-]提款成功', type: '51'},
         {name: '[+]返手续费', type: '16'},
         {name: '[+]保险箱存款', type: '17'},
         {name: '[-]保险箱提款', type: '52'},
@@ -341,13 +352,18 @@ export default {
       orglist: [],
       accountlist: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
-      num: 1
+      num: 1,
+      loading: false
     }
   },
   created() {
-    let that = this
+     let that = this
+    if (Object.keys(this.$route.query).length > 0) {
+      
+     that.formInline.value = that.$route.query.login_name
+    }
     if (!this.rushtoask.length && this.rushtoask.length != 0) {
       that.formInline.type = this.rushtoask.type
       that.currentPage = this.rushtoask.currentPage
@@ -363,10 +379,11 @@ export default {
       that.formInline.dy = this.rushtoask.dy
       that.formInline.remark = this.rushtoask.remark
       that.formInline.org = this.rushtoask.org
-      that.formInline.value = this.rushtoask.value
+      //that.formInline.value = this.rushtoask.value
       that.formInline.radio = this.rushtoask.radio
       that.formInline.account = this.rushtoask.account
       that.formInline.money = this.rushtoask.money
+      that.formInline.uid = this.rushtoask.uid
       getlist(this)
     }
     getuserlist(this)
@@ -423,6 +440,7 @@ export default {
           'radio': that.formInline.radio,
           'account': that.formInline.account,
           'money': that.formInline.money,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setrushtoask', setrushtoask)
     },
@@ -452,6 +470,7 @@ export default {
           'radio': that.formInline.radio,
           'account': that.formInline.account,
           'money': that.formInline.money,
+          'uid': that.formInline.uid,
         }
       this.$store.commit('setrushtoask', setrushtoask)
     },
@@ -460,17 +479,27 @@ export default {
       this.num++
       this.currentPage = this.num
       getlist(this)
-      let setorder = {
-          'value': that.formInline.value,
+      let setrushtoask = {
+          'type': that.formInline.type,
+          'order': that.formInline.order,
+          'ip': that.formInline.ip,
+          'user': that.formInline.user,
           'currentPage': this.num,
           'pagesize': that.pagesize,
-          'termno': that.formInline.termno,
-          'type': that.formInline.type,
-          'starttime': that.formInline.starttime,
-          'endtime': that.formInline.endtime,
-          'user': that.formInline.user,
+          'time': that.formInline.time,
+          'money1': that.formInline.money1,
+          'money2': that.formInline.money2,
+          'xy': that.formInline.xy,
+          'dy': that.formInline.dy,
+          'remark': that.formInline.remark,
+          'org': that.formInline.org,
+          'value': that.formInline.value,
+          'radio': that.formInline.radio,
+          'account': that.formInline.account,
+          'money': that.formInline.money,
+          'uid': that.formInline.uid,
         }
-      this.$store.commit('setorder', setorder)
+      this.$store.commit('setrushtoask', setrushtoask)
     },
     cell ({row, column, rowIndex, columnIndex}) {
         let length = this.tableData.length -2
@@ -507,6 +536,7 @@ export default {
       let that = this
       var start = ''
       var end = '' 
+      var src_typeM =  that.formInline.type.join(',')
       if (that.formInline.time && that.formInline.time.length > 0) {
         let timestart = that.formInline.time[0].getTime() /1000
         start = parseTime(timestart)
@@ -522,7 +552,7 @@ export default {
         url: that.public.url + '/fundchange/exportrechargewithdraw',
         method: 'post',
         data: {
-          src_type: that.formInline.type,
+          src_type: src_typeM,
           order_no: that.formInline.order,
           clientip: that.formInline.ip,
           date_from: start,
@@ -537,7 +567,8 @@ export default {
           user_account: that.formInline.value,
           is_contain_level: level,
           channel_id: that.formInline.account,
-          channel_mode_id: that.formInline.money
+          channel_mode_id: that.formInline.money,
+          uid: that.formInline.uid,
         }
       }).then(res => {
         let url = that.public.url + res.data
@@ -613,6 +644,7 @@ export default {
 function getlist (that) {
   var start = ''
   var end = '' 
+   var src_typeM =  that.formInline.type.join(',')
   if (that.formInline.time && that.formInline.time.length > 0) {
     let timestart = that.formInline.time[0].getTime() /1000
     start = parseTime(timestart)
@@ -623,12 +655,12 @@ function getlist (that) {
   if (that.formInline.radio != '') {
     var level = that.formInline.radio
   }
-  
+  that.loading = true
   request({
     url: that.public.url + '/fundchange/rechargewithdrawlist',
     method: 'post',
     data: {
-      src_type: that.formInline.type,
+      src_type:src_typeM,
       order_no: that.formInline.order,
       clientip: that.formInline.ip,
       date_from: start,
@@ -646,8 +678,10 @@ function getlist (that) {
       channel_mode_id: that.formInline.money,
       pageno: that.currentPage,
       pagerows: that.pagesize,
+      uid: that.formInline.uid,
     }
   }).then(res => {
+    that.loading = false
     if (res.data.list.length === 0) {
       that.tableData = []
       that.total = res.data.rownum * 1
@@ -752,13 +786,6 @@ function parseTime(time) {
     margin-right: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-  .line {
-    border-bottom: 1px solid #666;
-    margin-bottom: 20px;
-    font-size: 21px;
-    font-weight: 700;
-    margin-right: -126px;
   }
   .floatright {
     float: right;

@@ -81,7 +81,7 @@
 
       <el-row>
         <el-form :inline="true" label-width="100px">
-           <el-col :span="8">
+           <el-col :span="12">
             <el-form-item label="申请提款时间">
               <el-date-picker
                 v-model="formInline.time1"
@@ -93,7 +93,7 @@
               ></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="出纳时间">
               <el-date-picker
                 v-model="formInline.time2"
@@ -105,18 +105,30 @@
               ></el-date-picker>
             </el-form-item>
           </el-col>
-
-          <el-col :span="4">
+         
+          <el-col :span="3">
             <el-button
               type="primary"
               icon="el-icon-search"
               @click="query"
               v-if="paywithdrawgetcashlist"
-            >搜素</el-button>
+            >搜索</el-button>
           </el-col>
 
-          <el-col :span="4">
+          <el-col :span="3">
             <el-button type="primary" @click="excel" v-if="paywithdrawgetcashlist">导出</el-button>
+          </el-col>
+           <el-col :span="1">
+            <el-checkbox v-model="formInline.checked">自动刷新</el-checkbox>
+          </el-col>
+          <el-col :span="2">
+            <el-input v-model="formInline.order2" clearable type='number' @change="order2"></el-input>
+          </el-col>
+          <el-col :span="1">
+            <el-form-item label-width="20px">秒 (s)</el-form-item>
+          </el-col>
+          <el-col :span="1">
+            <el-form-item label-width="20px"  class="red">{{num}}</el-form-item>
           </el-col>
         </el-form>
       </el-row>
@@ -171,9 +183,9 @@
         </el-table-column> -->
       <el-table-column label="出纳操作"  width="120">
         <template slot-scope="scope">
-        <el-button @click="edit(scope.row)" type="text" size="small" v-if="scope.row.cash_status === '待出纳' || scope.row.is_self=='1'&& paywithdrawauditwithdraw">操作</el-button>
+        <el-button @click="edit(scope.row)" type="text" size="small" v-if="scope.row.cash_status === '待出纳' || scope.row.cash_status=='发送汇款信息失败' ||  scope.row.cash_status=='第三方汇款失败' || scope.row.is_self=='1' && paywithdrawauditwithdraw">操作</el-button>
         <span v-if="scope.row.btn_display == '1'">{{scope.row.op_status}}</span>
-        <el-button type="text" size="small" v-if="scope.row.cash_status === '待出纳'|| scope.row.is_self=='1'">第三方</el-button>
+        <el-button type="text" size="small" v-if="scope.row.cash_status === '待出纳'|| scope.row.is_self=='1' && paywithdrawsendttpayout" @click="san(scope.row)">第三方</el-button>
        </template>
       </el-table-column>
       <el-table-column label="查看订单">
@@ -364,7 +376,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
-          :page-sizes="[50,100,200]"
+          :page-sizes="[20,50,200]"
           :page-size="pagesize"
           background
           layout="sizes, prev, pager, next, jumper"
@@ -499,7 +511,7 @@
               </div>
             </td>
         </tr>
-        <tr class="applytable">
+        <!-- <tr class="applytable">
             <td crowspan="1" colspan="1">
               <div class="cell">手续费</div>
             </td>
@@ -515,7 +527,7 @@
               <div class="cell">
               </div>
             </td>
-        </tr>
+        </tr> -->
         <tr class="applytable">
             <td crowspan="1" colspan="1">
               <div class="cell">备注</div>
@@ -583,7 +595,9 @@ export default {
         time1: [],
         time2: [],
         money1: "",
-        money2: ""
+        money2: "",
+         checked: true,
+         order2: '30'
       },
       currentPage: 1,
       tableData: [
@@ -594,17 +608,18 @@ export default {
       typelist: [
         { name: "全部", type: "10" },
         { name: "待出纳", type: "-1" },
-        { name: "出纳中", type: "0" }, 
+        { name: "人工出纳中", type: "0" }, 
         { name: "出款成功", type: "1" },
         { name: "出款失败", type: "2" },
-        { name: "1.第三方汇款通过", type: "3" },
-        { name: "2.第三方汇款排队中", type: "4" },
-        { name: "3.发送汇款信息失败", type: "5" },
-        { name: "4.第三方汇款失败", type: "6" }
+        { name: "第三方汇款通过", type: "3" },
+        { name: "第三方汇款排队中", type: "4" },
+        { name: "发送汇款信息失败", type: "5" },
+        { name: "第三方汇款失败", type: "6" },
+        { name: "第三方出纳中", type: "7" },
       ],
       orglist: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: "",
       rules: {},
       form: {
@@ -621,11 +636,13 @@ export default {
       },
       banklist: [],
       number: '',
-      textarea: ''
+      textarea: '',
+      num: 30,
     };
   },
   created() {
     let that = this;
+    this.order2();
     if (!this.drawingcashier.length && this.drawingcashier.length != 0) {
       that.formInline.time1 = this.drawingcashier.time1;
       that.checked = this.drawingcashier.checked;
@@ -651,10 +668,19 @@ export default {
       "paywithdrawgetcashlist",
       "paywithdrawgetinfocash",
       "paywithdrawauditwithdraw",
+      'paywithdrawsendttpayout',
       "drawingcashier"
     ])
   },
-  watch: {},
+  watch: {
+    'formInline.checked': function(val) {
+      if (!val) {
+        window.clearInterval(this.timer)
+        this.formInline.order2 = ''
+        this.num = ''
+      }
+    }
+  },
   filters: {
     time(val) {
       if (val === "-1") {
@@ -708,6 +734,21 @@ export default {
         user: that.formInline.user
       };
       this.$store.commit("setdrawingcashier", setdrawingcashier);
+    },
+    san (row) {
+       let that = this
+        request({
+          url: that.public.url + "/paywithdraw/sendttpayout",
+          method: "post",
+          data: {
+              wdr_id: row.id
+          }
+        })
+          .then(res => {
+            that.$message.success(res.message)
+            getlist(that)
+          })
+          .catch(error => {});
     },
     copy (button) {
       var text =document.getElementById(button).innerText;
@@ -808,6 +849,28 @@ export default {
         that.form2 = res.data
       })
       .catch(error => {});
+    },
+     cancel() {
+      window.clearInterval(this.timer)
+    },
+     order2 () {
+      if (this.formInline.checked) {
+        this.formInline.order2 = this.formInline.order2 * 1
+        if (Number.isInteger(this.formInline.order2) && this.formInline.order2 >=10 && this.formInline.order2 <=100) {
+          this.num = this.formInline.order2 
+          this.cancel()
+          this.timer = window.setInterval(()=>{
+              this.num--
+              if (this.num === 0) {
+                getlist(this)
+                this.num = this.formInline.order2 
+              }
+          },1000)
+        } else {
+          this.$message.warning('请输入10-100的整数')
+        }
+      }
+      
     },
     excel() {
       let that = this
@@ -1007,13 +1070,6 @@ function parseTime(time) {
   margin-right: 10px;
   margin-bottom: 20px;
   margin-top: 20px;
-}
-.line {
-  border-bottom: 1px solid #666;
-  margin-bottom: 20px;
-  font-size: 21px;
-  font-weight: 700;
-  margin-right: -126px;
 }
 .floatright {
   float: right;

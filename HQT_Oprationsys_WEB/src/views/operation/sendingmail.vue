@@ -88,7 +88,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -167,12 +167,12 @@ export default {
       formLabelWidth: '120px',
       title: '',
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       list: {},
       total1: 0,
       currentPage1: 1,
-      pagesize1: 50,
+      pagesize1: 20,
       receiverlist: [],
       nametime: '',
       nametitle: ''
@@ -295,13 +295,6 @@ function getreceiverlist (that, id, currentPage1, pagesize1) {
     margin-right: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-  .line {
-    border-bottom: 1px solid #666;
-    margin-bottom: 20px;
-    font-size: 21px;
-    font-weight: 700;
-    margin-right: -126px;
   }
   .floatright {
     float: right;

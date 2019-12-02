@@ -8,8 +8,20 @@
                 <el-input v-model="formInline.user" clearable></el-input>
             </el-form-item>
           </el-col>
+           <el-col :span="6">
+            <el-form-item label="渠道">
+              <el-select v-model="formInline.agentOrg" filterable clearable placeholder="请选择玩家渠道"> 
+              <el-option
+                v-for="item in userlist"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="4">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="agentteamreportgetlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="agentteamreportgetlist" :loading="loading">查询</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -39,8 +51,16 @@
       label="代理人员">
     </el-table-column>
     <el-table-column
+      prop="agent_org_name"
+      label="渠道">
+    </el-table-column>
+    <el-table-column
       prop="team_flow"
       label="团队总流水">
+    </el-table-column>
+      <el-table-column
+      prop="team_bet_ptom"
+      label="团队人机类用户投注额">
     </el-table-column>
     <el-table-column
       prop="team_tax"
@@ -70,6 +90,7 @@
       prop="add_user_num"
       label="今日新增玩家数">
     </el-table-column>
+   
   </el-table>
 
 <div class="pagingbox">
@@ -78,7 +99,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -123,12 +144,14 @@ export default {
     return {
       formInline: {
         user: '',
-        org: ''
+        org: '',
+        agentOrg:'',
       },
+      userlist:[],
       currentPage: 1,
       tableData: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       orglist: [],
       dialogFormVisible: false,
       form:{
@@ -137,10 +160,12 @@ export default {
       rules:{
         org: [{required: true, message: '请选择渠道', trigger: 'change'},]
       },
-      orgid: ''
+      orgid: '',
+      loading: false
     }
   },
   created() {
+     getuserlist(this)
     let that = this
     if (Object.keys(this.$route.query).length > 0) {
       if (this.$route.query.user) {
@@ -182,10 +207,10 @@ export default {
       this.$store.commit('setagentteam', setagentteam)
     },
     tableclass ({row, rowIndex}) {
-      if (rowIndex === 0) {
-        return 'success-row'
-      }
-      return ''
+      // if (rowIndex === 0) {
+      //   return 'success-row'
+      // }
+      // return ''
     },
     reset () {
       let that = this
@@ -277,6 +302,7 @@ export default {
 
 
 function getlist (that) {
+  that.loading = true
   request({
     url: that.public.url + '/backend/agentteamreport/getlist',
     method: 'post',
@@ -285,10 +311,11 @@ function getlist (that) {
       pagerows: that.pagesize,
       agent_login_name: that.formInline.user.trim(),
       agent_account_id: '',
-      agent_org_id: that.orgid
+      agent_org_id: that.formInline.agentOrg
     }
   }).then(res => {
       that.orgid = ''
+      that.loading = false
       if (res.data.agentlist) {
         that.tableData = []
         that.total = 0
@@ -310,10 +337,10 @@ function getlist (that) {
         })
         that.dialogFormVisible = false
         if (res.data.list) {
-          let data = res.data.total[0]
-          data.user_account = '总计'
+          // let data = res.data.total[0]
+          // data.user_account = '总计'
           that.tableData = res.data.list
-          that.tableData.unshift(data)
+          // that.tableData.unshift(data)
         } else {
           that.tableData = []
         }  
@@ -336,7 +363,15 @@ function parseTime(time) {
     let s = (date.getSeconds()<10?'0'+(date.getSeconds()):date.getSeconds());
     return y+m+d+h+i+s
 }
-
+function getuserlist (that) {
+  request({
+    url: that.public.url + '/backend/role/getorglist',
+    method: 'post'
+  }).then(res => {
+    that.userlist = res.data
+  }).catch(error => {
+  })
+}
 </script>
 
 <style>

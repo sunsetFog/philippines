@@ -3,13 +3,13 @@
     <otherheader title="资金密码"></otherheader>
 
     <div class="card">
-        <mt-field label="旧的密码" v-model="oldpwd" placeholder="如没有，可空置本栏" type='password'></mt-field>
-        <mt-field label="新的密码" v-model="newpwd" placeholder="请输入新的资金密码" type='password'></mt-field>
-        <mt-field label="确认密码" v-model="pwd" placeholder="请再输入一次资金密码" type='password'></mt-field>
+        <mt-field label="旧的密码" v-model="oldpwd" :attr="{ maxlength: 6 }" placeholder="如没有，可空置本栏" type='password'></mt-field>
+        <mt-field label="新的密码" v-model="newpwd" :attr="{ maxlength: 6 }" placeholder="请输入6位数字的资金密码" type='password'></mt-field>
+        <mt-field label="确认密码" v-model="pwd" :attr="{ maxlength: 6 }" placeholder="请输入6位数字的资金密码" type='password'></mt-field>
     </div>
 
      <div class="card">
-         <mt-button type="primary" size="large" @click="sure">修改</mt-button>
+         <mt-button type="primary" size="large" class="all_palm" @click="sure">修改</mt-button>
      </div>
 
 
@@ -35,19 +35,47 @@ export default {
 
   },
   methods: {
-    sure () {
-      let that = this
-      if (this.newpwd=== '') {
+    verifyMeans(){
+      if(this.oldpwd==''){
+        Toast({
+          message: '请输入旧密码'
+        })
+        return false;
+      }else if(/[^\d]/g.test(this.oldpwd)){
+        if(this.oldpwd.match(/[^\d]/g)!=null){
+          Toast({message: '请输入6位数字的旧密码！'});
+        }
+        this.oldpwd = '';
+        return false;
+      }else if(this.newpwd==''){
         Toast({
           message: '请输入新密码'
         })
-        return
-      }
-      if (this.pwd=== '') {
+        return false;
+      }else if(this.newpwd.length!=6){
         Toast({
-          message: '请输入确认密码'
+          message: '请输入6位数字的资金密码'
         })
-        return
+        return false;
+      }else if(/[^\d]/g.test(this.newpwd)){
+        if(this.newpwd.match(/[^\d]/g)!=null){
+          Toast({message: '请输入6位数字的新密码！'});
+        }
+        this.newpwd = '';
+        return false;
+      }else if(this.pwd!=this.newpwd){
+        Toast({
+          message: '新密码与确认密码不一致'
+        })
+        return false;
+      }else{
+        return true;
+      }
+    },
+    sure () {
+      let that = this
+      if(!that.verifyMeans()){
+        return;
       }
     request({
         url: this.public.url + '/account/updatemoneypwd',

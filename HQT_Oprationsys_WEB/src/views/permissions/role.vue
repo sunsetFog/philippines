@@ -17,6 +17,18 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="渠道">
+                <el-select v-model="formInline.org" filterable clearable>
+                <el-option
+                  v-for="item in orglistAll"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-button type="primary" icon="el-icon-search" @click="query" v-if="rolegetlist">查询</el-button>
           </el-col>
         </el-form>
@@ -53,6 +65,19 @@
       label="说明">
     </el-table-column>
     <el-table-column
+      label="渠道">
+      <template slot-scope="scope">
+        <el-popover trigger='click'>
+          <p>角色：{{scope.row.name}}</p>
+          <p>管理渠道列表</p>
+          <el-tag v-for="(item,key) in orglist"  :key='key' style="margin: 8px;">{{orglist[key].name}}</el-tag>
+          <div slot="reference" v-show="scope.row.agent_org_ids && rolegetagentorg" @click="agentclick(scope.row)">
+            <el-tag size='medium' >查看渠道</el-tag>
+          </div>
+        </el-popover>
+      </template>
+    </el-table-column>
+    <el-table-column
       fixed="right"
       label="操作">
       <template slot-scope="scope">
@@ -68,7 +93,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -85,6 +110,16 @@
       </el-form-item>
       <el-form-item label="说明" :label-width="formLabelWidth" prop="desc">
         <el-input v-model="form.desc"></el-input>
+      </el-form-item>
+      <el-form-item label="渠道" :label-width="formLabelWidth" prop="desc">
+        <el-select  v-model="valueAll"  clearable multiple placeholder="请选择玩家渠道" style="width:303px"> 
+              <el-option
+                v-for="item in userlist"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -120,7 +155,8 @@ export default {
     return {
       formInline: {
         user: '',
-        region: ''
+        region: '',
+        org:''
       },
       currentPage: 1,
       tableData: [],
@@ -141,18 +177,23 @@ export default {
       formLabelWidth: '120px',
       title: '',
       data2: [],
+      userlist:[],
       defaultProps: {
         children: 'child',
         label: 'name'
       },
+      valueAll:[], 
+      orglistAll:[],  
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       keys: [],
-      id: ''
+      id: '',
+      orglist:[],
     }
   },
   created() {
     gettreelist(this)
+    getuserlist(this)
     let that = this
     if (!this.role.length && this.role.length != 0) {
       that.formInline.user = this.role.user
@@ -169,7 +210,8 @@ export default {
       'roledel',
       'roleupdate',
       'rolegetlist',
-      'role'
+      'role',
+      'rolegetagentorg'
     ])
   },
   watch: {
@@ -180,6 +222,7 @@ export default {
       this.$refs.form.resetFields()
     },
     edit(row) {
+      this.valueAll = []
       this.title = '编辑角色'
       this.dialogFormVisible = true
       let that = this
@@ -193,6 +236,11 @@ export default {
             that.id = res.data.id
             that.form.name = res.data.name
             that.form.desc = res.data.depict
+            if(res.data.org_ids){
+              this.valueAll = res.data.org_ids.split(',')
+            }else{
+              this.valueAll = []
+            }            
             if (res.data.privilegeids.length > 0) {
               that.keys = res.data.privilegeids.split(',')
               that.$refs.tree.setCheckedKeys(that.keys)
@@ -206,6 +254,7 @@ export default {
     add () {
       this.title = '新增角色'
       this.dialogFormVisible = true
+      this.valueAll = []
     },
     query () {
       let that = this
@@ -221,11 +270,12 @@ export default {
     },
     sure (form) {
       let that = this
-      let key = this.$refs.tree.getCheckedKeys()
+      let key = this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())
       let privilegeid = key.join(',')
+      let agent_org_ids = that.valueAll.join(',')
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.title === '编辑角色') {
+          if (this.title === '编辑角色') {          
              request({
               url: that.public.url + '/backend/role/update',
               method: 'post',
@@ -233,7 +283,8 @@ export default {
                     name: this.form.name,
                     privilege_ids: privilegeid,
                     depict: this.form.desc,
-                    id: this.id
+                    id: this.id,
+                    agent_org_ids:agent_org_ids
               }
             }).then(res => {
               if (res.code === 0) {
@@ -251,7 +302,8 @@ export default {
             data: {
                   name: this.form.name,
                   privilege_id: privilegeid,
-                  depict: this.form.desc
+                  depict: this.form.desc,
+                  agent_org_ids:agent_org_ids
             }
           }).then(res => {
             if (res.code === 0) {
@@ -267,6 +319,20 @@ export default {
           return false
         }
       })
+    },
+    agentclick(row){//查看渠道
+         let that = this       
+        request({
+            url: that.public.url + '/backend/role/getagentorg',
+            method: 'post',
+            data: {
+                role_id: row.id
+            }
+          }).then(res => {
+            that.orglist = res.data.orglist          
+          }).catch(error => {
+          }).catch(() => {
+      });
     },
     delet (row) {
       let that = this
@@ -339,7 +405,8 @@ function getrolelist (that, name, currentPage, pagesize, desc) {
       name: name.trim(),
       pageno: currentPage,
       pagerows: pagesize,
-      depict: desc.trim()
+      depict: desc.trim(),
+      agent_org_id:that.formInline.org
     }
   }).then(res => {
     that.tableData = res.data.list
@@ -348,7 +415,19 @@ function getrolelist (that, name, currentPage, pagesize, desc) {
   }).catch(error => {
   })
 }
+function getuserlist (that) {//渠道
+  request({
+    url: that.public.url + '/backend/org/getorglist',
+    method: 'post'
+  }).then(res => {
+    that.userlist = res.data
+    // let all = {id: "", name: "全部"}
+    that.orglistAll = res.data
+    // that.orglistAll.unshift(all)
 
+  }).catch(error => {
+  })
+}
 </script>
 
 <style>

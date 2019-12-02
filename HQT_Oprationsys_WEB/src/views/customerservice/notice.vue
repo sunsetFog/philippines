@@ -85,7 +85,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -117,7 +117,7 @@
               </el-date-picker>
       </el-form-item>
       <el-form-item label="内容" :label-width="formLabelWidth" prop="desc">
-        <el-input v-model="form.desc" type="textarea"></el-input>
+        <el-input v-model="form.desc" type="textarea" maxlength="200" placeholder="最多只能输入200个字"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -169,7 +169,7 @@ export default {
       formLabelWidth: '120px',
       title: '',
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       timeshow: true,
       // 发送公告日期
@@ -367,7 +367,11 @@ export default {
           'time': that.formInline.time
         }
       this.$store.commit('setnotice', setnotice)
-    }
+    },
+    // checkSize(){//限制内容字数
+    //   var textLength = this.form.desc.length;
+    //   this.titleMaxLength = 50 - textLength;
+    // }
   }
 }
 
@@ -395,7 +399,6 @@ function getlist (that, user, currentPage, pagesize, time) {
   }).catch(error => {
   })
 }
-
 </script>
 
 <style>

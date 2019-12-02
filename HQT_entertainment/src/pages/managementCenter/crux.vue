@@ -27,8 +27,8 @@
                         </div>
                         <div class="nickname_select" v-else>
                             <input type="text" placeholder="请输入昵称" v-model.trim="pet_name" ref="pet_name" @input="changeValue"/>
-                            <button @click="nickname_state = false">取消</button>
                             <button @click="nicknameDetermine">确定</button>
+                            <button @click="nickname_state = false">取消</button>
                         </div>
                     </div>
                     <div class="sex_example">
@@ -47,8 +47,8 @@
                                 :value="item.value">
                                 </el-option>
                             </el-select>
-                            <button @click="sex_state = false">取消</button>
-                            <button @click="sexDetermine()">确定</button>                           
+                            <button @click="sexDetermine()">确定</button>
+                            <button @click="sex_state = false">取消</button>                           
                         </div>
                     </div>
                 </div>
@@ -91,17 +91,17 @@
 import Clipboard from 'clipboard';
 import { mapGetters } from 'vuex';
 export default{
-    name: 'parent',
+    name: 'crux',
     data(){
         return{
             nickname_state: false,
             archives_list: [
-                {theme: '登陆密码',explain: '6-16个字符',modify: '修改登录密码',url: '../../../static/dream/center/denglu.png'},
+                {theme: '登陆密码',explain: '6-12个字符',modify: '修改登录密码',url: '../../../static/dream/center/denglu.png'},
                 // {theme: '绑定银行卡',explain: '最多可绑定5张银行卡',modify: '绑定银行卡',url: '../../../static/dream/center/yinhangka.png'},
-                {theme: '提款密码',explain: '6-16个字符',modify: '设置提款密码',url: '../../../static/dream/center/tikuanmima.png'},
-                {theme: '邮件',explain: '条未读',modify: '查看站内信',url: '../../../static/dream/center/zhanneixin.png'},
+                {theme: '提款密码',explain: '6个数字密码',modify: '设置提款密码',url: '../../../static/dream/center/tikuanmima.png'},
+                {theme: '邮件',explain: '条未读',modify: '查看邮件',url: '../../../static/dream/center/zhanneixin.png'},
                 // {theme: '密保设定',explain: '用于找回密码',modify: '修改密保设定',url: '../../../static/dream/center/baomi.png'},
-                {theme: '公告',explain: '请随时关注最新广告',modify: '查看广告',url: '../../../static/dream/center/xinxi.png'},
+                {theme: '公告',explain: '请随时关注最新公告',modify: '查看公告',url: '../../../static/dream/center/xinxi.png'},
                 {theme: '保险箱',explain: '用于存入和取出资金',modify: '查看保险箱',url: '../../../static/dream/center/baoxianxiang.png'}
             ],
             pet_name: '',
@@ -156,10 +156,17 @@ export default{
         },
         changeValue () {
             let leng = this.$means.validateTextLength(this.pet_name)
-            if (leng >= 6) {
-            this.$refs.pet_name.maxLength = leng
+            if (leng.active) {
+                if(leng.chinese){
+                    this.pet_name = this.pet_name.substring(0,6);
+                    this.$refs.pet_name.maxLength = 6
+                }else{
+                    this.pet_name = this.pet_name.substring(0,8);
+                    this.$refs.pet_name.maxLength = 8
+                }
             } else {
-            this.$refs.pet_name.maxLength = 15
+                this.pet_name = this.pet_name.substring(0,11);
+                this.$refs.pet_name.maxLength = 11
             }
         },
         portraitMeans(){
@@ -293,7 +300,7 @@ export default{
                 line-height: 60px;
             }
             .user_contain{
-                .mixin_div(100%,691px,@color_purple,@color_white,left);
+                .mixin_div(100%,731px,@color_purple,@color_white,left);
                 padding: 0px 20px;
                 box-sizing: border-box;
                 .user_info{
@@ -358,10 +365,12 @@ export default{
                         float: left;
                     }
                     button{
-                        .mixin_button(40px,28px,@color_white2,@color_blueviolet);
+                        .mixin_button(auto,28px,@color_white2,@color_blueviolet);
                         float: right;
                         font-size: @font_size12;
                         border: 1px solid @color_blueviolet;
+                        padding: 0px 8px 0px 8px;
+                        box-sizing: border-box;
                     }
                     button:hover{
                         background: @color_white2_hover;
@@ -381,38 +390,39 @@ export default{
                         }
                     }
                     .nickname_select{
+                        .mixin_float(80%,30px,right);
                         input{
-                            .mixin_input(150px,28px);
+                            .mixin_input(160px,28px);
                             border: 1px solid @color_blueviolet;
                             background: @color_indigo;
                             color: @color_blueviolet;
                             vertical-align: middle;
                             float: left;
-                            margin-top: 1px;
                         }
                     }
                     .sex_select{
-                        .mixin_float(320px,30px,left);
+                        .mixin_float(80%,30px,right);
                     }
                     .nickname_select,.sex_select{
                         button:nth-of-type(1){
-                            .mixin_button(40px,28px,@color_white2,@color_blueviolet);
+                            .mixin_button(auto,28px,@color_white2,@color_blueviolet);
                             border: 1px solid @color_blueviolet;
                             font-size: 12px;
-                            margin-left: 30px;
-                            float: left;
-                            margin-top: 1px;
+                            float: right;
+                            margin-left: 10px;
+                            padding: 0px 8px 0px 8px;
+                            box-sizing: border-box;
                         }
                         button:nth-of-type(1):hover{
                             background: @color_white2_hover;
                         } 
                         button:nth-of-type(2){
-                            .mixin_button(40px,28px,@color_indigo,@color_blueviolet);
+                            .mixin_button(auto,28px,@color_indigo,@color_blueviolet);
                             border: 1px solid @color_blueviolet;
                             font-size: 12px;
-                            margin-left: 10px;
-                            float: left;
-                            margin-top: 1px;
+                            float: right;
+                            padding: 0px 8px 0px 8px;
+                            box-sizing: border-box;
                         }
                         button:nth-of-type(2):hover{
                             background: @color_indigo_hover;
@@ -429,7 +439,7 @@ export default{
             .archives_list{
                 .mixin_div(100%,145px,none,auto,left);
                 float: left;
-                margin-bottom: 10px;
+                margin-bottom: 20px;
                 .archives_header{
                     .mixin_div(100%,45px,@color_darkgray,@color_white,left);
                     border-top: 7px solid @color_blueviolet;
@@ -455,7 +465,7 @@ export default{
                         font-size: @font_size16;
                         position: absolute;
                         left: 100px;
-                        top: 45px;
+                        top: 50px;
                     }
                     span:nth-of-type(3){
                         .mixin_span(auto,25px,none,@color_blueviolet,right);

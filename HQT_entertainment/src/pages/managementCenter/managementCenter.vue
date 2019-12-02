@@ -5,9 +5,11 @@
         <div class="manage_content">
             <router-view v-if="!manage_state"></router-view>
             <div class="manage_content_left" v-if="manage_state">
+                <el-scrollbar>
                     <el-menu
-                    router
-                    default-active="2"
+                    :router="true"
+                    :default-active="$route.path"
+                    :unique-opened="true"
                     class="el-menu-vertical-demo"
                     @open="handleOpen"
                     @close="handleClose"
@@ -52,8 +54,9 @@
                         </section>
 
                     </el-submenu>
-                    </el-menu>       
-            
+                    </el-menu>
+                           
+                </el-scrollbar>
             
             </div>
             <div class="manage_content_right" v-if="manage_state">
@@ -68,6 +71,7 @@
 <script>
 import footers from '../../components/footer.vue';
 export default{
+    name: 'management',
     components: {footers},
     data(){
         return{
@@ -97,10 +101,10 @@ export default{
     },
     methods:{
       handleOpen(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
       }
     }
 }
@@ -111,7 +115,7 @@ export default{
     width: 100%;
     .example_frame{
         width: 100%;
-        height: 1120px;
+        height: 1200px;
         .mixin_image(url('../../../static/dream/center/bg-guanli.jpg'));
         position: relative;
         .big_fish{
@@ -122,7 +126,7 @@ export default{
         }
         .manage_content{
             width: 1200px;
-            height: 1120px;
+            height: 1200px;
             background: rgba(88,51,82,0.6);
             border-left: 1px solid @color_blueviolet;
             border-right: 1px solid @color_blueviolet;
@@ -133,9 +137,10 @@ export default{
             padding: 45px 43px 0px 43px;
             box-sizing: border-box;
             .manage_content_left{
-                .mixin_float(230px,600px,left);
+                .mixin_float(230px,auto,left);
                 background: #513663;
                 margin-right: 40px;
+                min-height: 1130px;
                 .icon_url_margin{
                     .mixin_img(20px,20px);
                     margin-right: 11px;
@@ -144,6 +149,7 @@ export default{
             }
             .manage_content_right{
                 .mixin_float(840px,905px,right);
+                overflow-x: hidden;
             }
         }
     }

@@ -3,7 +3,7 @@
     <otherheader title="个人信息"></otherheader>
     <div class="card">
         <mt-cell :title="name">
-        <img slot="icon" src="../../../static/user.png" width="30" height="30">
+        <img slot="icon" src="../../../static/user.png" style="width: 1.875rem;height: 1.875rem">
       </mt-cell>
     </div>
 
@@ -23,7 +23,7 @@
      <!-- <div class="card">
       <mt-cell title="登录密码修改">
         <span @click="changelogin">
-          <img slot="icon" src="../../../static/edit.png" width="30" height="30">
+          <img slot="icon" src="../../../static/edit.png" style="width: 1.875rem;height: 1.875rem">
         </span>
       </mt-cell>
        <mt-cell title="修改状态">
@@ -40,8 +40,8 @@
 
     <div class="card">
       <mt-cell title="资金密码修改">
-        <span @click="js">
-          <img slot="icon" src="../../../static/edit.png" width="30" height="30">
+        <span class="all_palm" @click="js">
+          <img slot="icon" src="../../../static/edit.png" style="width: 1.875rem;height: 1.875rem">
         </span>
       </mt-cell>
        <mt-cell title="设定状态">
@@ -135,15 +135,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .card {
-    margin: 10px;
-    border-top: 1px solid #2e163d;
-    border-bottom: 1px solid #2e163d;
-    border-left: 2px solid #2e163d;
-    border-right: 2px solid #2e163d;
-    border-radius: 12px;
-    position: relative;
-  }
+
   .buttonposition {
     position: absolute!important;
     left: 86px;

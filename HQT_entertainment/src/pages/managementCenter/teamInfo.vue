@@ -17,6 +17,7 @@
 
 <script>
 export default{
+    name: 'player_information',
     data(){
         return{
             percentage: 0,

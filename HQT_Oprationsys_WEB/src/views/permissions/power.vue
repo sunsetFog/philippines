@@ -157,7 +157,7 @@ export default {
       formLabelWidth: '120px',
       title: '',
       total: 1000,
-      pagesize: 50,
+      pagesize: 20,
       rules: {
         selectedOptions: [
           {type: 'array', required: true, message: '请选父权限id', trigger: 'change'}

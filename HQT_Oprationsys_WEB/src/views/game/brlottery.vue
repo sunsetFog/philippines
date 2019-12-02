@@ -176,7 +176,7 @@ export default {
         status: {required: true, message: '请选择状态', trigger: 'change'},
       },
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       title2: '',
       dialogFormVisible2: false,

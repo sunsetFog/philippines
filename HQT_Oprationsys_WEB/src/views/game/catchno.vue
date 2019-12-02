@@ -107,7 +107,7 @@
       <el-pagination
         :current-page.sync="currentPage"
         :page-size="pagesize"
-        :page-sizes="[50,100,200]"
+        :page-sizes="[20,50,200]"
         :total="total"
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
@@ -136,7 +136,7 @@ import { getToken } from '../../utils/auth';
     data() {
       return {
         total: 0,
-        pagesize: 50,
+        pagesize: 20,
         currentPage: 1,
         tableData: [],
         formInline: {
@@ -160,48 +160,13 @@ import { getToken } from '../../utils/auth';
           }
         ],
         idlist: [
-          {
-            id: '11',
-            name: '加拿大30秒'
-          },
-          {
-            id: '12',
-            name: '意大利PK10'
-          },
-          {
-            id: '13',
-            name: '河内一分'
-          },
-          {
-            id: '14',
-            name: '河内五分'
-          },
-          {
-            id: '15',
-            name: '瑞典一分'
-          },
-          {
-            id: '16',
-            name: '瑞典两分'
-          },
-          {
-            id: '17',
-            name: '多彩腾讯30秒'
-          },
-          {
-            id: '18',
-            name: '多彩重庆30秒'
-          },
-          {
-            id: '19',
-            name: '腾讯分分彩'
-          },
         ],
         flag: true
       }
     },
     created () {
       let that = this
+      getidlist(that)
       if (!this.catchno.length && this.catchno.length != 0) {
         that.formInline.id = this.catchno.id
         that.formInline.status = this.catchno.status
@@ -310,7 +275,17 @@ import { getToken } from '../../utils/auth';
     })
   }
 
-
+  function getidlist (that) {
+    request({
+      url: that.public.url + '/backend/lotteryaward/getnamelist',
+      method: 'post',
+      data: {
+      }
+    }).then(res => {
+      that.idlist = res.data
+    }).catch(error => {
+    })
+  }
   function parseTime(time) {
     var date = new Date(time *1000);
     let y = date.getFullYear() + '-'

@@ -73,7 +73,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameuserrankreportgetlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="gameuserrankreportgetlist" :loading="loading">查询</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -86,9 +86,17 @@
     border
     style="width: 100%">
     <el-table-column
-      label="用户id">
+      prop="agent_org_name"
+      label="玩家渠道">
+    </el-table-column>
+    <el-table-column
+      prop="login_name"
+      label="玩家账号">
+    </el-table-column>
+    <el-table-column
+      label="玩家UID">
       <template slot-scope="scope">
-        <el-button type="text" size="small"  @click="edit(scope.row)" >{{scope.row.user_id}}</el-button>
+        <el-button type="text" size="small"  @click="edit(scope.row)" >{{scope.row.uid}}</el-button>
       </template>
     </el-table-column>
     <el-table-column
@@ -108,12 +116,12 @@
       label="人机类流水">
     </el-table-column>
     <el-table-column
-      prop="gross_profit"
-      label="平台毛利">
+      prop="total_flow"
+      label="总流水">
     </el-table-column>
     <el-table-column
-      prop="gross_profit_ratio"
-      label="平台利润率">
+      prop="user_win_money"
+      label="中奖金额">
     </el-table-column>
   </el-table>
 
@@ -176,9 +184,10 @@ export default {
       ],
       gamelist: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       havetime: false,
-      havetime1: false
+      havetime1: false,
+      loading: false
     }
   },
   created() {
@@ -292,6 +301,7 @@ function getlist (that, starttime, endtime, id) {
         }
       }) 
     }
+    that.loading = true
   request({
     url: that.public.url + '/backend/gameuserrankreport/getlist',
     method: 'post',
@@ -309,6 +319,7 @@ function getlist (that, starttime, endtime, id) {
         message: res.message,
         type: 'success'
       })
+      that.loading = false
     that.tableData = res.data.list
   }).catch(error => {
   })

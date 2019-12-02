@@ -28,6 +28,19 @@
                 :value="item.id">
               </el-option>
             </el-select>
+            <!-- <el-input v-model="formInline.id" clearable></el-input> -->
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="状态">
+              <el-select v-model="formInline.status" filterable>
+              <el-option
+                v-for="item in statuslists"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="2">
@@ -110,7 +123,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -146,13 +159,76 @@
               </el-option>
             </el-select>
       </el-form-item>
-
     <el-form-item label="状态：" :label-width="formLabelWidth" prop="status">
       <el-radio-group v-model="form.status">
         <el-radio :label='0'>禁用</el-radio>
         <el-radio :label='1'>可用</el-radio>
       </el-radio-group>
     </el-form-item>
+     <el-form-item label="是否接入大厅：" :label-width="formLabelWidth">
+      <el-radio-group v-model="form.status2">
+        <el-radio :label='1'>接入</el-radio>
+        <el-radio :label='0'>不接入</el-radio>    
+      </el-radio-group>
+    </el-form-item>
+      <el-form-item label="游戏入口地址：" :label-width="formLabelWidth" >
+        <el-input v-model="form.enturl"></el-input>
+      </el-form-item>
+       <el-form-item label="访问IP限制：" :label-width="formLabelWidth" placeholder="多个IP请用,分隔" >
+        <el-input v-model="form.allow_ip"></el-input>
+      </el-form-item>
+     <el-form-item label="渠道抽水" :label-width="formLabelWidth" prop='reward'>
+        <span>玩家流水的</span><el-input v-model="form.reward" type="number" style="width: 30%;"></el-input><span>%</span>
+      </el-form-item>
+
+       <el-form-item label="返佣比例" :label-width="formLabelWidth" prop="tableData2">
+        <span class="red">所有下级代理的返佣比例必须低于总代</span>
+      
+
+        <el-form :model="form">
+
+        
+       <el-table
+    :data="form.tableData2"
+    border
+    style="width: 100%">
+    <el-table-column
+      label="代理级别"
+      >
+      <template slot-scope="scope">
+        <span v-if="scope.$index == 0">总代</span>
+        <span v-else>{{String.fromCharCode(scope.$index+64)}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="返佣比例"
+      >
+      <template slot-scope="scope">
+        <el-form-item prop='tableData2' :rules="rules.amount(scope.$index)">
+          <el-input v-model="scope.row.reward" type="number" style="width:80%"></el-input><span>%</span>
+        </el-form-item>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="配额数量"
+      >
+      <template slot-scope="scope">
+        <el-input v-model="scope.row.num" type="number"></el-input>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="操作"
+      >
+      <template slot-scope="scope">
+        <el-button @click="addnum(scope.$index,scope.row)" type="text" size="small">添加</el-button>
+        <el-button @click="delnum(scope.$index,scope.row)" type="text" size="small" v-if="scope.$index != 0">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+
+  </el-form>
+
+  </el-form-item>
 
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -202,11 +278,55 @@ import request from '@/utils/request'
 import { isvalidUsername } from '@/utils/validate'
 export default {
   data() {
+    var tableData2rules = (rule, value, callback) => {
+      if(value[0].reward == '' || value[0].num == ''){
+        callback(new Error('请输入返佣比例'));
+      }else {
+        if (value.length >=1) {
+          value.map(val =>{
+            if (val.reward*1 < 0 || val.num*1 < 0  || val.num.indexOf('.') > 0) {
+              callback(new Error('返佣比例为正数和配额数量为正整数'));
+            }
+          })
+          if (!this.rewardflag) {
+            callback(new Error('所有下级代理的返佣比例必须低于总代'));
+          }
+        }
+        callback()
+      }
+   }; 
+   var rewardrules = (rule, value, callback) => {
+     if (value == '') {
+       callback(new Error('请输入渠道抽水'));
+     } else {
+       if (value*1 < 0) {
+          callback(new Error('渠道抽水为正数'));
+        } else {
+          callback()
+        }
+     }
+        
+   }; 
     return {
       formInline: {
         user: '',
-        url: []
+        url: [],
+        status: '-1'
       },
+      statuslists: [
+        {
+          id: '-1',
+          name: '全部'
+        },
+        {
+          id: '0',
+          name: '禁用'
+        },
+        {
+          id: '1',
+          name: '启用'
+        }
+      ],
       currentPage: 1,
       userlist: [],
       tableData: [],
@@ -216,7 +336,18 @@ export default {
         name: '',
         domain: [],
         type: '1',
-        status: ''
+        enturl:'',
+        allow_ip:'',
+        status: '',
+        status2:'',
+        reward: '',
+        tableData2: [
+          {
+            id: '',
+            reward: '',
+            num: ''
+          }
+        ],
       },
       form2: {
         domain: [],
@@ -236,6 +367,25 @@ export default {
         status: [
           {required: true, message: '请选择状态', trigger: 'change'}
         ],
+         status2: [
+          {required: true, message: '请选择状态', trigger: 'change'}
+        ],
+        reward: [
+          {required: true, validator: rewardrules, trigger: 'blur'}
+        ],
+        tableData2: [
+          {required: true, validator: tableData2rules, trigger: 'blur'}
+        ],
+        amount:(index) =>{
+          return {
+            validator: (rule, value, callback) => {
+              this.rewardflag = true
+              if (value[index].reward > value[0].reward) {
+                this.rewardflag = false
+              }
+            }
+          }
+        }
       },
       rules2: {
         domain: [
@@ -244,11 +394,12 @@ export default {
       },
       domainlist: [],
       domainlists: [],
+      rewardflag: true,
       formLabelWidth: '120px',
       title: '',
       name: '',
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       ids: [],
       typelist:[
         {name:'内部公司',id:'1'},
@@ -264,6 +415,8 @@ export default {
       that.currentPage = this.org.currentPage
       that.pagesize = this.org.pagesize
       that.formInline.user = this.org.user
+      that.formInline.url = this.org.url
+      that.formInline.status = this.org.status
       orglist(this)
     }
   },
@@ -280,12 +433,33 @@ export default {
   },
   methods: {
     reset (form) {
+      this.form.enturl = ''
       this.dialogFormVisible = false
       this.$refs.form.resetFields()
+      this.form.tableData2 = [
+          {
+            id: '',
+            reward: '',
+            num: ''
+          }
+      ]
     },
     reset2 (form) {
       this.dialogFormVisible2 = false
       this.$refs.form2.resetFields()
+    },
+    addnum (index) {
+      let num = 65 + index*1
+      this.form.tableData2.push(
+        {
+          id: '',
+          reward: '',
+          num: ''
+        }
+      )
+    },
+    delnum (index, row) {
+      this.form.tableData2.splice(index, 1)
     },
     key (row) {
       let that = this
@@ -336,6 +510,7 @@ export default {
         'pagesize': that.pagesize,
         'user': that.formInline.user,
         'url': that.formInline.url,
+        'status': that.formInline.status,
       }
       this.$store.commit('setorg', setorg)
     },
@@ -354,6 +529,11 @@ export default {
             that.form.name = res.data.name
             that.form.type = res.data.type
             that.form.status = res.data.status * 1
+            that.form.status2 = res.data.incl_game_lobby*1
+            that.form.enturl = res.data.game_ent_url
+            that.form.allow_ip = res.data.allow_ip
+            that.form.tableData2 = res.data.quota
+            that.form.reward = res.data.reward
             if (res.data.url) {
               let domain = res.data.url.split(',')
               var namelist = that.domainlist.map(val => {
@@ -441,6 +621,11 @@ export default {
                     id: this.id,
                     type: this.form.type,
                     status: this.form.status,
+                    reward: this.form.reward,
+                    quota: this.form.tableData2,
+                    allow_ip:this.form.allow_ip,
+                    game_ent_url:this.form.enturl,
+                    incl_game_lobby:this.form.status2
               }
             }).then(res => {
               that.$message({
@@ -449,6 +634,14 @@ export default {
               })
               that.dialogFormVisible = false
               that.$refs.form.resetFields()
+               this.form.enturl = ''
+              that.form.tableData2 = [
+                  {
+                    id: '',
+                    reward: '',
+                    num: ''
+                  }
+              ]
               orglist(that)
             }).catch(error => {
             })
@@ -462,6 +655,11 @@ export default {
                 domain_id: domain_id,
                 type: this.form.type,
                 status: this.form.status,
+                reward: this.form.reward,
+                quota: this.form.tableData2,
+                allow_ip:this.form.allow_ip,
+                game_ent_url:this.form.enturl,
+                incl_game_lobby:this.form.status2
             }
           }).then(res => {
             that.$message({
@@ -470,6 +668,13 @@ export default {
             })
             that.dialogFormVisible = false
             that.$refs.form.resetFields()
+            that.form.tableData2 = [
+                  {
+                    id: '',
+                    reward: '',
+                    num: ''
+                  }
+              ]
             orglist(that)
           }).catch(error => {
           })
@@ -541,6 +746,7 @@ export default {
         'pagesize': that.pagesize,
         'user': that.formInline.user,
         'url': that.formInline.url,
+        'status': that.formInline.status,
       }
       this.$store.commit('setorg', setorg)
     },
@@ -553,6 +759,7 @@ export default {
         'pagesize': that.pagesize,
         'user': that.formInline.user,
         'url': that.formInline.url,
+        'status': that.formInline.status,
       }
       this.$store.commit('setorg', setorg)
     }
@@ -592,6 +799,7 @@ function orglist (that) {
       pagerows: that.pagesize,
       org_id: that.formInline.user,
       domain_id: url,
+      status: that.formInline.status,
     }
   }).then(res => {
     that.tableData = res.data.list
@@ -603,7 +811,7 @@ function orglist (that) {
 
 function getuserlist (that) {
   request({
-    url: that.public.url + '/backend/org/getOrglist',
+    url: that.public.url + '/backend/org/getorglist',
     method: 'post'
   }).then(res => {
     that.userlist = res.data

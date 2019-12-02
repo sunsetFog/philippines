@@ -140,7 +140,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -177,7 +177,7 @@ export default {
         {name:'未开奖',id: '6' }
       ],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
     }
   },
@@ -323,13 +323,6 @@ function parseTime(time) {
     margin-right: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-  .line {
-    border-bottom: 1px solid #666;
-    margin-bottom: 20px;
-    font-size: 21px;
-    font-weight: 700;
-    margin-right: -126px;
   }
   .floatright {
     float: right;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <mt-header :title="title">
-        <mt-button slot="left" @click="back">
+        <mt-button slot="left" class="all_palm" @click="back">
         <i class="mintui mintui-back"></i>
         </mt-button>
     </mt-header>

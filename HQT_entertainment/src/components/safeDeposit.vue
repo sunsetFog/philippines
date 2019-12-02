@@ -42,7 +42,7 @@
 
 <script>
 export default {
-    name: 'children',
+    name: 'safeDeposit',
     data(){
         return{
             rechargeActive: false,
@@ -61,15 +61,35 @@ export default {
     },
     watch:{
         save_money(cur,old){
+            // console.log('current',cur,this.deposited_money);
             if(/[^\d]/g.test(cur)){
-                if(this.save_money.match(/[^\d]/g)!=null){
-                   this.$message.error('请输入纯数字！');
+                if(cur.match(/[^\d]/g)!=null){
+                   this.$message.error('请输入正整数！');
                 }
                 this.save_money = this.save_money.replace(/[^\d]/g, '');
             }
+            this.positiveNumber(cur);
         }
     },
     methods:{
+        positiveNumber(value){
+            if(this.money_total<0){
+                this.$message.error('余额不足！');
+                this.save_money = '';
+                return;
+            }
+            if(this.deposit_index==0){
+                if(value>parseInt(this.money_total)){
+                    this.$message.error('存入金额不能大于账户余额！');
+                    this.save_money = parseInt(this.money_total);
+                }
+            }else if(this.deposit_index==1){
+                if(value>parseInt(this.deposited_money)){
+                    this.$message.error('取出金额不能大于已存金额！');
+                    this.save_money = parseInt(this.deposited_money);
+                }
+            }
+        },
         changeMeans(value,res,save){
             this.rechargeActive = true;
             this.money_total = res;

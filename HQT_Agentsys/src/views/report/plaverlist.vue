@@ -1,7 +1,7 @@
 <template>
   <div class="container plaverreport">
     <mt-header title="玩家列表">
-        <mt-button slot="left" @click="back">
+        <mt-button slot="left" class="all_palm" @click="back">
         <i class="mintui mintui-back"></i>
         </mt-button>
 
@@ -13,7 +13,7 @@
 
     <div class="card">
         <mt-cell :title="name">
-        <img slot="icon" src="../../../static/user.png" width="30" height="30">
+        <img slot="icon" src="../../../static/user.png" style="width: 1.875rem;height: 1.875rem">
       </mt-cell>
     </div>
   
@@ -103,15 +103,6 @@ function getlist (that, pageno) {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .card {
-    margin: 10px;
-    border-top: 1px solid #2e163d;
-    border-bottom: 1px solid #2e163d;
-    border-left: 2px solid #2e163d;
-    border-right: 2px solid #2e163d;
-    border-radius: 12px;
-    position: relative;
-  }
   .mark1 {
     position: absolute;
     left: 80px;
@@ -144,8 +135,9 @@ function getlist (that, pageno) {
     .boxposition {
       position: absolute;
       left: 140px;
-      top: 0;
+      top: 10px;
       font-size: 12px;
+      cursor: pointer;
     }
   }
   .mint-header {

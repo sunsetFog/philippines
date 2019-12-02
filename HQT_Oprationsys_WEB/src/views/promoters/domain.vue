@@ -123,7 +123,6 @@
       label="有效期">
     </el-table-column>
     <el-table-column
-      sortable='custom'
       label="使用状态">
       <template slot-scope="scope">
         {{scope.row.isuse}}
@@ -138,7 +137,6 @@
       label="备注">
     </el-table-column>
     <el-table-column
-      sortable='custom'
       label="启用状态">
       <template slot-scope="scope">
         {{scope.row.status}}
@@ -160,7 +158,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -288,7 +286,7 @@ export default {
       currentPage: 1,
       tableData: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       dialogFormVisible: false,
       form: {
         name: '',

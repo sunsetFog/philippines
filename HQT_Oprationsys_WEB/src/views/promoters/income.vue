@@ -93,7 +93,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -177,7 +177,7 @@ export default {
       title: '',
       name: '',
       total: 0,
-      pagesize: 50
+      pagesize: 20
     }
   },
   created() { 

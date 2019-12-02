@@ -3,7 +3,7 @@
         <el-dialog
         :visible.sync="rechargeActive"
         width="4.07rem"
-        top="1.41rem"
+        top="1.25rem"
         center>
         <div slot="title">绑定支付宝</div>
         <div class="varieties_content">
@@ -29,7 +29,7 @@
 
 <script>
 export default {
-    name: 'children',
+    name: 'addAlipay',
     data(){
         return{
             rechargeActive: false,

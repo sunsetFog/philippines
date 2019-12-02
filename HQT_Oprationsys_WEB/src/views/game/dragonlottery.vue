@@ -116,6 +116,70 @@
           </el-table>
 
         </el-tab-pane>
+
+
+
+        <el-tab-pane label="系统抽水率" v-if="gamesetgetawardsrclist">
+
+           <div class="el-table el-table--fit el-table--border el-table--enable-row-transition" style="width: 70%;">
+  <div class="el-table__header-wrapper">
+    <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width: 100%">
+      <thead class="has-gutter">
+        <tr>
+          <th colspan='1' rowspan="1" style="width:10%;">
+            <div class="cell"></div>
+          </th>
+          <th colspan='1' rowspan="1">
+            <div class="cell">系统抽水率</div>
+          </th>
+          <th colspan='1' rowspan="1" style="width:30%;">
+            <div class="cell">操作</div>
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="el-table__body-wrapper is-scrolling-none">
+    <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="width: 100%;">
+      <tbody>
+        <tr class="el-table__row">
+            <td crowspan="1" colspan="1" style="width:10%;background: #bdd7ee;color: black;font-weight: 600;">
+              <div class="cell">龙虎斗</div>
+            </td>
+            <td crowspan="1" colspan="1">
+              <div class="cell">
+                <el-input v-if="rate_active" v-model="rate_input"></el-input>
+                <span v-else>{{pumping_rate}}%</span>
+              </div>
+            </td>
+            <td crowspan="1" colspan="1" style="width:30%;">
+              <div class="cell">
+                <el-button type="primary" v-if="rate_active && gamesetupdateddzroyalty" @click="sureRate">保存</el-button>
+                <el-button type="primary" v-if="rate_active" @click="cancelRate">取消</el-button>
+                <el-button type="primary" v-else @click="modifyRate">修改</el-button>
+              </div>
+            </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    
+    <div>
+      <P>备注：</P>
+      <p style="margin-left: 27px;">系统抽税率只能输入大于等于0且小于等于1的数据，并且最多支持小数点后四位。</p>
+    </div>
+    
+  </div>
+</div>
+
+
+        </el-tab-pane>
+
+
+
+
+
       </el-tabs>
 
            <el-dialog :title='title2'  :visible.sync="dialogFormVisible2" :before-close="reset2">
@@ -176,7 +240,7 @@ export default {
         status: {required: true, message: '请选择状态', trigger: 'change'},
       },
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       title2: '',
       dialogFormVisible2: false,
@@ -199,7 +263,10 @@ export default {
       formLabelWidth: '180px',
       betcode: '',
       betname: '',
-      betid: ''
+      betid: '',
+      pumping_rate: null,
+      rate_active: false,
+      rate_input: ''
     }
   },
   created() {
@@ -211,7 +278,8 @@ export default {
       'gamesetaddtable',
       'gamesetupdatebetitem',
       'gamesetgetbetitemlist',
-      'gamesetgetawardsrclist'
+      'gamesetgetawardsrclist',
+      'gamesetupdateddzroyalty'
     ])
   },
   watch: {
@@ -224,13 +292,50 @@ export default {
       this.currentPage = 1
       getlist(this)
     },
-    tabclick () {
+    tabclick (val) {
       if (this.actionname === '1') {
         getlist(this)
       }
       if (this.actionname === '2') {
         getaward(this)
       }
+      if(val.index==3){
+        getRate(this)
+      }
+    },
+    modifyRate(){
+      this.rate_active = true;
+      this.rate_input = chumul(this.pumping_rate*1,100);
+    },
+    sureRate(){
+      let that = this;
+      if (that.rate_input * 1 <0 || that.rate_input * 1 >1 || that.rate_input.indexOf('.') > 0 && that.rate_input.split('.')[1].length > 4) {
+        this.$message.error('系统抽税率只能输入大于等于0且小于等于1的数据，并且最多支持小数点后四位。')
+        return false
+      }
+      let json = {
+        game_id: 801,
+        type: 2,
+        royalty: that.rate_input
+      }
+      request({
+        url: that.public.url + '/gamename/setroyatly',
+        method: 'post',
+        data: json
+      }).then(res => {
+        if(res.code==0){
+          that.$message.success('修改成功');
+          that.rate_active = false;
+          that.pumping_rate = accmul(that.rate_input*1,100)
+        }else{
+          that.$message.success(res.message);
+        }
+        
+      }).catch(error => {
+      })
+    },
+    cancelRate(){
+      this.rate_active = false;
     },
     sure () {
        let that = this
@@ -363,6 +468,21 @@ function getlist (that) {
   })
 }
 
+
+function accmul(num1,num2) {
+  var m=0,s1=num1.toString(),s2=num2.toString(); 
+  try{m+=s1.split(".")[1].length}catch(e){};
+  try{m+=s2.split(".")[1].length}catch(e){};
+  return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m);
+}
+
+  function chumul(num1,num2) {
+			var m=0,n=0 ,s1=num1.toString(),s2=num2.toString(); 
+      try{m=s1.split(".")[1].length}catch(e){};
+      try{n=s2.split(".")[1].length}catch(e){};
+      return (Number(s1.replace(".",""))/Number(s2.replace(".","")))*Math.pow(10,n-m);
+	}
+
 function parseTime(time) {
     var date = new Date(time *1000);
     let y = date.getFullYear() + '-'
@@ -404,6 +524,22 @@ function getaward (that) {
     })
 }
 
+function getRate (that) {
+    request({
+      url: that.public.url + '/gamename/getgamenamelist',
+      method: 'post',
+      data: {
+      }
+    }).then(res => {
+      for(let i=0;i<res.data.length;i++){
+        if(res.data[i].id==801&&res.data[i].type==2){
+          that.pumping_rate = res.data[i].royalty/100;
+          // console.log('rate&&',that.pumping_rate);
+        }
+      }
+    }).catch(error => {
+    })
+}
 
 </script>
 

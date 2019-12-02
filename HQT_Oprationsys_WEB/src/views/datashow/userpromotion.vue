@@ -25,8 +25,20 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+           <el-col :span="6">
+            <el-form-item label="管理渠道">
+                <el-select v-model="orgIdlist" filterable multiple clearable>
+                <el-option
+                  v-for="item in orglistAll"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="4">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="keepuserdayreportgetlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="keepuserdayreportgetlist" :loading='loading'>查询</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -52,6 +64,10 @@
     <el-table-column
       prop="adate"
       label="日期">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="渠道">
     </el-table-column>
     <el-table-column
       prop="day1"
@@ -85,7 +101,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -108,14 +124,18 @@ export default {
     return {
       formInline: {
         starttime: '',
-        endtime: ''
+        endtime: '',
+        org:'',
       },
       currentPage: 1,
       tableData: [],
+      orglistAll:[],
+      orgIdlist:[],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       havetime: false,
-      havetime1: false
+      havetime1: false,
+      loading: false
     }
   },
   created() {
@@ -124,6 +144,7 @@ export default {
     this.formInline.starttime = new Date(week)
     this.formInline.endtime = new Date(time)
     let that = this
+    getuserlist (that)
     if (!this.userpromotion.length && this.userpromotion.length != 0) {
       that.formInline.starttime = this.userpromotion.starttime
       that.currentPage = this.userpromotion.currentPage
@@ -183,7 +204,16 @@ export default {
 }
 
 
-
+function getuserlist (that) {//渠道
+  request({
+    url: that.public.url + '/backend/role/getorglist',
+    method: 'post'
+  }).then(res => {
+    // that.userlist = res.data
+    that.orglistAll = res.data
+  }).catch(error => {
+  })
+}
 function getlist (that, starttime, endtime,currentPage, pagesize) {
    var timestart = ''
     var timeend = ''
@@ -204,6 +234,7 @@ function getlist (that, starttime, endtime,currentPage, pagesize) {
         return
       }
     }
+    that.loading = true
   request({
     url: that.public.url + '/backend/keepuserdayreport/getlist',
     method: 'post',
@@ -211,13 +242,15 @@ function getlist (that, starttime, endtime,currentPage, pagesize) {
       date_from: timestart,
       date_to: timeend,
       pageno: currentPage,
-      pagerows: pagesize
+      pagerows: pagesize,
+      agent_org_id:that.orgIdlist.join(',')
     }
   }).then(res => {
     Message({
         message: res.message,
         type: 'success'
       })
+      that.loading = false
     that.tableData = res.data.list
     that.total = res.data.rownum * 1
     that.currentPage = res.data.pageno * 1

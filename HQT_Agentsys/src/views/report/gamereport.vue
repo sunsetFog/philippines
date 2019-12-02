@@ -9,13 +9,14 @@
 
   <div class="card center">
     <mt-cell title="税收记录">
-      <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark" @click="popup = !popup">
+      <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark" @click="popup = !popup">
         <mt-popup
           v-model="popup"
           popup-transition='popup-fade'
         >
-        游戏流水：当前操作提供的游戏流水总额<br/>
-        税收收益：当前操作提供给代理的税收收益总额（游戏流水*计税税率*（代理分红比-下级代理分红比））
+        <div style="text-align: center;line-height: 1.875rem;">税收记录</div>
+        <div style="line-height: 1.25rem;">游戏流水：当前操作提供的游戏流水总额<br/>
+        税收收益：当前操作提供给代理的税收收益总额（游戏流水*计税税率*（代理分红比-下级代理分红比））</div>
         </mt-popup>
     </mt-cell>
   </div>
@@ -118,24 +119,8 @@ function getlist (that, pageno) {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .gamereport .card {
-    margin: 10px;
-    border-top: 1px solid #2e163d;
-    border-bottom: 1px solid #2e163d;
-    border-left: 2px solid #2e163d;
-    border-right: 2px solid #2e163d;
-    border-radius: 12px;
-    position: relative;
-    .mint-popup {
-      position: absolute;
-      width: 80%;
-      left: 50%;
-      top: 120%;
-      background: #26a2ff;
-      color: white;
-          padding: 2% 8%;
-      font-size: 12px;
-    }
+  .gamereport{
+
     .v-modal {
     background: white;
     opacity:0;

@@ -5,6 +5,8 @@ import store from './store'
 
 import '@/styles/fontIcon/iconfont.css'
 
+import '../static/capital/rem';
+
 // mint-ui
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'

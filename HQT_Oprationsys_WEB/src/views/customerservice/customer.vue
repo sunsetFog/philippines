@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container playergamelist">
+  <div class="app-container customer">
     <div class="playerinfo">
       <div class="playergamelistquery">
         <el-form :model="ruleForm" ref="ruleForm" label-width="50px" :inline="true">
@@ -66,7 +66,6 @@
             <el-col :span="6">
               <el-form-item label="排序方式:" label-width="73px" prop="order">
                 <el-select v-model="ruleForm.order" placeholder="全部">
-                  <el-option label="全部" value=""></el-option>
                   <el-option label="创建时间升序" value="1"></el-option>
                   <el-option label="创建时间降序" value="2"></el-option>
                   <el-option label="受理情况" value="3"></el-option>
@@ -122,13 +121,13 @@
             
             
             <el-col :span="2">
-              <el-button class="serchbtn" type="primary" @click="query" v-if="gameusergetlist">搜索</el-button>
+              <el-button class="serchbtn" type="primary" @click="query" v-if="csmmessagegetlist">搜索</el-button>
             </el-col>
             <el-col :span="2">
               <el-button type="primary" @click="resetForm('ruleForm')">清空筛选</el-button>
             </el-col>
             <el-col :span="2">
-              <el-button type="primary" @click="excel">导出excel</el-button>
+              <el-button type="primary" @click="excel" v-if="csmmessageexportgetlist">导出excel</el-button>
             </el-col>
           </el-row>
         </el-form>
@@ -151,9 +150,12 @@
       <div>
 
     </div>
-
+      <div id="wrapper2">
+        <div id="div2"></div>
+      </div>
       <el-table
         :data="tableData"
+        ref="wrappertable"
         border
         style="width: 100%">
         <el-table-column
@@ -184,7 +186,7 @@
           label="查看附件"
         >
           <template slot-scope="scope">
-            <el-button type="text" @click="wj(scope.row)" size="small" v-if="scope.row.attach !=''">查看</el-button>
+            <el-button type="text" @click="view(scope.row)" size="small" v-if="scope.row.attach !=''">查看</el-button>
           </template>
         </el-table-column>
          <el-table-column
@@ -192,7 +194,7 @@
           label="受理时间"
         >
           <template slot-scope="scope">
-            <el-button type="text" @click="accept(scope.row)" size="small" v-if="scope.row.status =='未受理'">受理</el-button>
+            <el-button type="text" @click="accept(scope.row)" size="small" v-if="scope.row.status =='未受理' && csmmessageaccept">受理</el-button>
             <span v-else>{{scope.row.accept_time}}</span>
           </template>
         </el-table-column>
@@ -220,7 +222,7 @@
           label="答复情况"
         >
           <template slot-scope="scope">
-            <el-button type="text" @click="email(scope.row)" size="small" v-if="scope.row.status =='已受理' && scope.row.reply_time <1 && scope.row.accepter_account == name ">邮件</el-button>
+            <el-button type="text" @click="email(scope.row)" size="small" v-if="scope.row.status =='已受理' && scope.row.reply_time <1 && scope.row.accepter_account == name && csmmessagesendemail">邮件</el-button>
             <span v-if="scope.row.status =='未受理' && scope.row.reply_time <1"></span>
             <span v-else>{{scope.row.reply_time}}</span>
           </template>
@@ -232,11 +234,11 @@
           label="查看"
           prop="viewinfo">
           <template slot-scope="scope">
-            <el-button type="text" @click="wj(scope.row)" size="small" v-if="gameusergetimpinfo && scope.row.status !='未受理' && scope.row.accepter_account == name">信息</el-button>
+            <el-button type="text" @click="wj(scope.row)" size="small" v-if="csmmessagegetimpinfo && scope.row.status !='未受理' && scope.row.accepter_account == name">信息</el-button>
             <el-button @click="team(scope.row)" type="text" size="small" v-if="scope.row.status !='未受理' && scope.row.accepter_account == name">团队</el-button>
-            <el-button type="text" size="small" @click="zb" v-if="scope.row.status !='未受理' && scope.row.accepter_account == name">账变</el-button>
+            <el-button type="text" size="small" @click="zb(scope.row)" v-if="scope.row.status !='未受理' && scope.row.accepter_account == name">账变</el-button>
             <el-button type="text" size="small" @click="tax(scope.row)" v-if="fundchangeagentfundlinklist && scope.row.status !='未受理' && scope.row.accepter_account == name">税收</el-button>
-            <el-button type="text" size="small" @click="record(scope.row)" v-if="scope.row.status !='未受理' && scope.row.accepter_account == name">记录</el-button>
+            <el-button type="text" size="small" @click="record(scope.row)" v-if="scope.row.status !='未受理' && scope.row.accepter_account == name && csmmessagegetinfolist">记录</el-button>
           </template>
         </el-table-column>
         <el-table-column
@@ -245,40 +247,54 @@
           label="操作" class="operate">
           <template slot-scope="scope">
             <!--冻结-->
-            <el-button type="text" @click="dj(scope.row)" size="small" v-if="scope.row.freeze==='1' && gameuserfrozeuser && scope.row.status !='未受理' && scope.row.accepter_account == name">
+            <el-button type="text" @click="dj(scope.row)" size="small" v-if="scope.row.freeze==='1' && csmmessagefrozeuser && scope.row.status !='未受理' && scope.row.accepter_account == name">
               冻结
             </el-button>
-            <el-button type='primary' @click="jd(scope.row)" size="small" v-if="scope.row.freeze==='2' && gameuserfrozeuser && scope.row.status !='未受理' && scope.row.accepter_account == name">
+            <el-button type='primary' @click="jd(scope.row)" size="small" v-if="scope.row.freeze==='2' && csmmessagefrozeuser && scope.row.status !='未受理' && scope.row.accepter_account == name">
               解冻
             </el-button>
             <!--人工充值-->
-            <el-button type="text" @click="rgcz(scope.row)" size="small" v-if="paychgmoneyaddmoney && scope.row.status !='未受理' && scope.row.accepter_account == name">
+            <el-button type="text" @click="rgcz(scope.row)" size="small" v-if="csmmessageaddmoney && scope.row.status !='未受理' && scope.row.accepter_account == name">
               充值
             </el-button>
             <!--提现-->
-            <el-button type="text" @click="tx(scope.row)" size="small" v-if="paychgmoneysubmoney && scope.row.status !='未受理' && scope.row.accepter_account == name">
+            <el-button type="text" @click="tx(scope.row)" size="small" v-if="csmmessagesubmoney && scope.row.status !='未受理' && scope.row.accepter_account == name">
               扣减
             </el-button>
-            <el-button type="text" @click="phone(scope.row)" size="small" v-if="scope.row.status !='未受理' && scope.row.accepter_account == name">
+            <el-button type="text" @click="phone(scope.row)" size="small" v-if="csmmessagedelbind && scope.row.status !='未受理' && scope.row.accepter_account == name">
               手机
             </el-button>
-             <el-button type="text" @click="card(scope.row)" size="small" v-if="scope.row.status !='未受理' && scope.row.accepter_account == name">
+             <el-button type="text" @click="card(scope.row)" size="small" v-if="csmmessagebankunbind && scope.row.status !='未受理' && scope.row.accepter_account == name">
               银行卡
             </el-button>
-            <el-button type="text" @click="password(scope.row)" size="small" v-if="scope.row.status !='未受理' && scope.row.accepter_account == name">
+            <el-button type="text" @click="password(scope.row)" size="small" v-if="csmmessagemodifypwd && scope.row.status !='未受理' && scope.row.accepter_account == name">
               密码
             </el-button>
             
-             <el-button type="text" @click="zdl(scope.row)" size="small" v-if="scope.row.type !='2' && gameuserchangeuseragent && scope.row.status !='未受理' && scope.row.accepter_account == name">
+             <el-button type="text" @click="zdl(scope.row)" size="small" v-if="scope.row.type !='2' && csmmessagechangeuseragent && scope.row.status !='未受理' && scope.row.accepter_account == name">
               转代理
             </el-button>
-            <el-button type="text" size="small" @click="bz(scope.row)" v-if="gameuserchangeuserremark && scope.row.status !='未受理' && scope.row.accepter_account == name">备注</el-button>
+            <el-button type="text" size="small" @click="bz(scope.row)" v-if="csmmessagecreateremark && scope.row.status !='未受理' && scope.row.accepter_account == name">备注</el-button>
           </template>
         </el-table-column>
-        <el-table-column
+      <el-table-column
         fixed='right'
         width='100'
-        label="备注">
+        label="玩家备注">
+        <template slot-scope="scope">
+          <el-popover trigger='hover' placement='top'>
+            <span>{{scope.row.user_remark}}</span>
+            <div slot="reference" class="name-wrapper">
+              <span>{{scope.row.user_remark.length > 4 ? scope.row.user_remark.substring(0,4) : scope.row.user_remark}}</span>
+            </div>
+          </el-popover>
+          
+        </template>
+      </el-table-column>
+        <el-table-column
+        fixed='right'
+        width='160'
+        label="问题备注">
         <template slot-scope="scope">
           <el-popover trigger='hover' placement='top'>
             <span>{{scope.row.remark}}</span>
@@ -303,7 +319,7 @@
           <el-pagination
             :current-page.sync="currentPage"
             :page-size="pagesize"
-            :page-sizes="[50,100,200]"
+            :page-sizes="[20,50,200]"
             :total="total"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -422,36 +438,7 @@
                 <el-button type="primary" @click="sure3(form)">确 定</el-button>
               </div>
             </el-dialog>
-      <el-dialog title="属性修改" :visible.sync="dialogFormVisible6" :before-close="reset6">
-              <el-form :model="form6" :rules="rules6" ref="form6">
-                <el-form-item label="玩家渠道:" :label-width="formLabelWidth">
-                  <span>{{gameuser.org_name}}</span>
-                </el-form-item>
-                <el-form-item label="上级代理:" :label-width="formLabelWidth" prop='upname' v-if="dlshow">
-                  <el-input v-model="form6.upname" placeholder="（只能填写代理账号）"></el-input>
-                </el-form-item>
-                <el-form-item label="代理线:" :label-width="formLabelWidth"  v-else>
-                  <div class="parenti" v-for="(item,key) in agentline" :key="key">
-                    <span>{{item.name}}</span>
-                    <i class="el-icon-d-arrow-right"></i>
-                  </div>
-                </el-form-item>
-                <el-form-item label="玩家账号:" :label-width="formLabelWidth" prop="name">
-                  <el-input v-model="form6.name"></el-input>
-                </el-form-item>
-                <el-form-item label="玩家层级:" :label-width="formLabelWidth">
-                  <span>{{gameuser.old_level}}</span>
-                </el-form-item>
-                <el-form-item label="修改类型:" :label-width="formLabelWidth" prop="radio6">
-                  <el-radio v-model="form6.radio6" label="1" size="mini">代理</el-radio>
-                  <el-radio v-model="form6.radio6" label="2" size="mini">会员</el-radio>
-                </el-form-item>
-              </el-form>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="reset6(form)">取 消</el-button>
-                <el-button type="primary" @click="sure6(form)">确 定</el-button>
-              </div>
-            </el-dialog>
+     
       <el-dialog title="玩家详细信息" :visible.sync="dialogFormVisible" :before-close="reset">
             
 
@@ -824,9 +811,16 @@
                       label="问题描述"
                       prop="question">
                     </el-table-column>
-                    <el-table-column
+                    <!-- <el-table-column
                       label="查看附件"
                       prop="attach">
+                    </el-table-column> -->
+                    <el-table-column
+                      label="查看附件"
+                    >
+                      <template slot-scope="scope">
+                        <el-button type="text" @click="view2(scope.row)" size="small" v-if="scope.row.attach !=''">查看</el-button>
+                      </template>
                     </el-table-column>
                     <el-table-column
                       label="受理人员"
@@ -853,7 +847,7 @@
                       @size-change="handleSizeChange15"
                       @current-change="handleCurrentChange15"
                       :current-page.sync="currentPage15"
-                      :page-sizes="[50,100,200]"
+                      :page-sizes="[20,50,200]"
                       :page-size="pagesize15"
                       background
                       layout="sizes, prev, pager, next, jumper"
@@ -866,6 +860,21 @@
               </div>
 
             </el-dialog>
+
+
+            
+  <el-dialog title='查看附件'  :visible.sync="dialogFormVisible16">
+    <img :src="imgsrc" style="width:100%">
+    
+    <el-button @click="reset16()" type="primary">关 闭</el-button> 
+  </el-dialog>
+
+
+  <el-dialog title='查看附件'  :visible.sync="dialogFormVisible17">
+    <img :src="imgsrc2" style="width:100%">
+    
+    <el-button @click="reset17()" type="primary">关 闭</el-button> 
+  </el-dialog>
     </div>
   </div>
 </template>
@@ -876,7 +885,7 @@
   import { validatNumber } from '@/utils/validate'
 
   export default {
-    name: "playergamelist",
+    name: "customer",
     data() {
       var validatePass = (rule, value, callback) => {
         if (value === '') {
@@ -941,7 +950,7 @@
       username: '',
       historydate: [],
       total15: 0,
-      pagesize15: 50,
+      pagesize15: 20,
       currentPage15: 1,
       rules2: {
         radio1: [
@@ -1020,9 +1029,9 @@
         status: '',
         user: '',
         question: '',
-        created: '',
-        accept: '',
-        order: '',
+        created: [],
+        accept: [],
+        order: '1',
         miao: '30',
         checked:true
       },
@@ -1035,7 +1044,7 @@
         {name: '未开奖', id: '6'}
       ],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       currentPage: 1,
       tableData: [
@@ -1119,6 +1128,7 @@
       dialogFormVisible8: false,
       dialogFormVisible9: false,
       dialogFormVisible11: false,
+      dialogFormVisible16: false,
       form11: {
         org: '',
         name: '',
@@ -1154,12 +1164,6 @@
       form10: {
         pay: '',
       },
-      dialogFormVisible6: false,
-      form6: {
-        name: '',
-        upname: '',
-        radio6: ''
-      },
       gameuser: {},
       userdatainfo: {},
       agentline: [],
@@ -1173,6 +1177,9 @@
       dialogFormVisible15: false,
       timer:null,
       num: 30,
+      imgsrc: '',
+      imgsrc2: '',
+      dialogFormVisible17: false
     }
   },
     created(){
@@ -1197,6 +1204,26 @@
         playergamelist(that)
       }
     },
+    mounted () {
+      let dom = this.$refs.wrappertable.$refs.bodyWrapper
+      let wrapper2 = document.getElementById('wrapper2')
+      dom.addEventListener('scroll', this.handlescroll, true)
+      wrapper2.addEventListener('scroll', this.handlescroll2, true)
+    },
+    beforeDestroy(){
+      let dom = this.$refs.wrappertable.$refs.bodyWrapper
+      let wrapper1 = document.getElementById('wrapper1')
+      if(dom){
+         dom.removeEventListener('scroll',this.handlescroll)
+        wrapper1.removeEventListener('scroll',this.handlescroll2)
+      }   
+    },
+    // destroyed() {
+    //   let dom = this.$refs.wrappertable.$refs.bodyWrapper
+    //   let wrapper2 = document.getElementById('wrapper2')
+    //   dom.removeEventListener('scroll',this.handlescroll)
+    //   wrapper2.removeEventListener('scroll',this.handlescroll2)
+    // },
     watch:{
       'form8.radio1': function (val) {
         if (val === '2') {
@@ -1232,19 +1259,23 @@
     ...mapGetters([
         'customer',
         'gameuserresetpassword',
-        'gameuserdelbind',
-        'gameuserfrozeuser',
-        'gameuserchangeusertype',
-        'gameuserchangeuserremark',
-        'gameusergetlist',
-        'gameusergetimpinfo',
-        'paychgmoneyaddmoney',
-        'paychgmoneysubmoney',
+        'csmmessagefrozeuser',
+        'csmmessagegetimpinfo',
+        'csmmessageaddmoney',
+        'csmmessagesubmoney',
+        'csmmessagedelbind',
+        'csmmessagemodifypwd',
+        'csmmessagebankunbind',
         'gameuserbankunbind',
-        'gameuserexportuserdata',
         'fundchangeagentfundlinklist',
-        'gameuserchangeuseragent',
-        'name'
+        'csmmessagechangeuseragent',
+        'name',
+        'csmmessagegetlist',
+        'csmmessageexportgetlist',
+        'csmmessagesendemail',
+        'csmmessagegetinfolist',
+        'csmmessagecreateremark',
+        'csmmessageaccept'
       ])
     },
     filters: {
@@ -1276,6 +1307,32 @@
     methods: {
       team(row) {
         this.$router.push({path: '/analysisdatamgr/agentteam',query:{org:row.agent_org_id,name:row.user_loginname}})
+      },
+      handlescroll(e) {
+        if (this.$refs.wrappertable) {
+          let dom = this.$refs.wrappertable.$refs.bodyWrapper
+          let wrapper2 = document.getElementById('wrapper2')
+          let domleft = this.$refs.wrappertable.$refs.bodyWrapper.scrollLeft
+          let wrapper2left = document.getElementById('wrapper2').scrollLeft
+          wrapper2.scrollTo(domleft,0)
+        }
+      },
+      handlescroll2() {
+        if (this.$refs.wrappertable) {
+          let dom = this.$refs.wrappertable.$refs.bodyWrapper
+          let wrapper2 = document.getElementById('wrapper2')
+          let domleft = this.$refs.wrappertable.$refs.bodyWrapper.scrollLeft
+          let wrapper2left = document.getElementById('wrapper2').scrollLeft
+          dom.scrollTo(wrapper2left,0)
+        }
+      },
+      view (row) {
+        this.imgsrc = row.attach
+        this.dialogFormVisible16 = true
+      },
+      view2 (row) {
+        this.imgsrc2 = row.attach
+        this.dialogFormVisible17 = true
       },
       beforeDestroy () {
         clearInterval(this.timer)
@@ -1336,22 +1393,8 @@
         this.form11.org = row.agent_org_name
         this.form11.name = row.user_loginname
         this.dialogFormVisible11 = true
-        this.userid = row.id
+        this.userid = row.user_id
         getanswerlist(this)
-      },
-      th (row) {
-        let that = this
-        request({
-            url:that.public.url + '/gameuser/blocknum',
-            method:'post',
-            data:{
-              user_id: row.id
-            }
-          }).then(res => {
-            that.$message.success(res.message)
-            playergamelist(that)
-          }).catch(error => {
-          })
       },
       rendercontent (h,{node,data,store}) {
         let num = node.label + '('+ data.sum +')'
@@ -1364,8 +1407,8 @@
       ct () {
         this.$router.push({path: '/analysisdatamgr/rushtoask'})
       },
-      zb () {
-        this.$router.push({path: '/analysisdatamgr/gamedealday'})
+      zb (row) {
+        this.$router.push({path: '/analysisdatamgr/gameuserchg',query:{user: row.user_loginname}})
       },
       znx () {
         this.$router.push({path: '/gamemsgmgr/mail'})
@@ -1381,7 +1424,7 @@
           this.czshow = false
         }
         this.dialogFormVisible4 = true
-        this.userid = row.id
+        this.userid = row.user_id
         request({
             url:that.public.url + '/gameuser/userdetailinfo',
             method:'post',
@@ -1395,17 +1438,17 @@
         // getuserinfo(that)
       },
       phone  (row) {
-        this.userid = row.id
+        this.userid = row.user_id
         this.dialogFormVisible12 = true
         getuserinfo(this)
       },
       card (row) {
-        this.userid = row.id
+        this.userid = row.user_id
         this.dialogFormVisible13 = true
         bankcard(this)
       },
       password (row) {
-        this.userid = row.id
+        this.userid = row.user_id
         this.activeName2 = 'first'
         this.dialogFormVisible14 = true
         getuserinfo(this)
@@ -1446,7 +1489,7 @@
           this.czshow = false
         }
         this.dialogFormVisible3 = true
-        this.userid = row.id
+        this.userid = row.user_id
         // getuserinfo(that)
         request({
             url:that.public.url + '/gameuser/userdetailinfo',
@@ -1465,7 +1508,7 @@
       record (row) {
         let that = this
         this.username = row.user_loginname
-        this.userid = row.id
+        this.userid = row.user_id
         this.dialogFormVisible15 = true
         request({
             url:that.public.url + '/csmmessage/getinfolist',
@@ -1485,43 +1528,14 @@
       dj (row) {
         let that = this
         this.dialogFormVisible2 = true
-        this.userid = row.id
+        this.userid = row.user_id
         getuserinfo(that)
       },
       jd (row) {
         let that = this
         this.dialogFormVisible7 = true
-        this.userid = row.id
+        this.userid = row.user_id
         getuserinfo(that)
-      },
-      sx (row) {
-        let that = this
-        if (row.agent_account_id==='0') {
-          this.dlshow = true
-        } else {
-          this.dlshow = false
-        }
-        this.dialogFormVisible6 = true
-        this.userid = row.id
-        request({
-        url: that.public.url + '/backend/gameuser/getsimpinfo',
-        method: 'post',
-          data: {
-            user_id: that.userid,
-            g_agentline: 1
-          }
-        }).then(res => {
-          that.gameuser = res.data
-          if (res.data.agent_line!='') {
-            that.agentline = res.data.agent_line.map (val => {
-              return {'name': val}
-            })
-          } else {
-            that.agentline = []
-          }
-          
-        }).catch(error => {
-        })
       },
       zdl (row) {
         let that = this
@@ -1531,7 +1545,7 @@
           this.zdflag = true
         }
         this.dialogFormVisible8 = true
-        this.userid = row.id
+        this.userid = row.user_id
         request({
         url: that.public.url + '/backend/gameuser/getsimpinfo',
         method: 'post',
@@ -1915,12 +1929,14 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+        this.ruleForm.miao = ''
+        this.ruleForm.checked = false
       },
       wj (row) {
         let that = this
         this.dialogFormVisible = true
         // this.activeName2 = 'first'
-        this.userid = row.id
+        this.userid = row.user_id
         request({
             url:that.public.url + '/gameuser/userdetailinfo',
             method:'post',
@@ -1960,43 +1976,7 @@
                 that.dialogFormVisible3 = false
                 that.$refs.form3.resetFields()
                 that.text = ''
-                getplayergamelist(that)
-              }).catch(error => {
-              })
-            }).catch(error => {
-              })
-          } else {
-            return false
-          }
-        })
-      },
-      sure6 () {
-        let that = this;
-        this.$refs.form6.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认修改?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning',
-              center: true
-            }).then(res => {
-              request({
-                url:that.public.url + '/gameuser/changeusertype',
-                method:'post',
-                data:{
-                  user_id:this.userid,
-                  login_name:this.form6.name,
-                  modify_type:this.form6.radio6,
-                  parent_agent:this.form6.upname
-                }
-              }).then(res => {
-                this.$message({
-                  type: 'success',
-                  message: res.message
-                })
-                that.dialogFormVisible6 = false
-                that.$refs.form6.resetFields()
-                getplayergamelist(that)
+                playergamelist(that)
               }).catch(error => {
               })
             }).catch(error => {
@@ -2091,7 +2071,7 @@
             that.$refs.form4.resetFields()
             that.dialogFormVisible4 = false
             that.text = ''
-            getplayergamelist(that)
+            playergamelist(that)
           }).catch(error => {
           })
       },
@@ -2113,7 +2093,7 @@
             })
             that.dialogFormVisible11 = false
             that.$refs.form11.resetFields()
-            getplayergamelist(that)
+            playergamelist(that)
           }).catch(error => {
           })
       },
@@ -2170,9 +2150,11 @@
         this.dialogFormVisible15 = false
         this.historydate = []
       },
-      reset6 (form) {
-        this.dialogFormVisible6 = false
-        this.$refs.form6.resetFields()
+      reset16 () {
+        this.dialogFormVisible16 = false
+      },
+      reset17 () {
+        this.dialogFormVisible17 = false
       },
       reset7 (form) {
         this.dialogFormVisible7 = false
@@ -2406,73 +2388,73 @@
 </script>
 
 <style>
-  .playergamelist  .paging {
+  .customer  .paging {
     float: right;
     margin-right: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
   }
 
-  .playergamelist  .el-input--suffix .el-input__inner {
+  .customer  .el-input--suffix .el-input__inner {
     padding-right: 7px;
   }
 
-  .playergamelist  .proxybalance {
+  .customer  .proxybalance {
     width: 75px;
   }
 
-  .playergamelist  .balance {
+  .customer  .balance {
     width: 30%;
   }
 
-  .playergamelist  .green{
+  .customer  .green{
     color: green;
   }
-  .playergamelist  .red{
+  .customer  .red{
     color: red;
   }
 
-  .playergamelist  .playerbalance {
+  .customer  .playerbalance {
     width: 75px;
   }
 
-  .playergamelist  .el-form--inline .el-form-item {
+  .customer  .el-form--inline .el-form-item {
     margin-right: 0;
   }
 
-  .playergamelist  .serchbtn {
+  .customer  .serchbtn {
     padding-left: 42px;
     padding-right: 42px;
   }
 
-  .playergamelist  .el-pagination {
+  .customer  .el-pagination {
     float: right;
   }
 
   /*调整清空筛选和导出excel按钮位置*/
-  .playergamelist  .tree {
+  .customer  .tree {
     float: left;
   }
 
- .playergamelist   .channel {
+ .customer   .channel {
     width: 60%
   }
 
-  .playergamelist  .pchannel {
+  .customer  .pchannel {
     /*background:rgb(69,90,130);*/
     width: 200px;
     margin-bottom: 10px;
   }
 
-  .playergamelist  .playerinfo {
+  .customer  .playerinfo {
     padding-left: 10px;
   }
 
-  .playergamelist  .sizetext {
+  .customer  .sizetext {
     font-size: 14px;
   }
 
-  .playergamelist  .playerlist {
+  .customer  .playerlist {
     background: rgb(140, 161, 193);
     font-weight: bold;
     letter-spacing: 1px;
@@ -2481,17 +2463,17 @@
     font-size: 14px;
   }
 
-  .playergamelist  .freeztype {
+  .customer  .freeztype {
     width: 55%;
   }
 
-  .playergamelist  .operate {
+  .customer  .operate {
     width: 200px;
   }
-  .playergamelist  el-table>el-table-column{
+  .customer  el-table>el-table-column{
     width:100% auto
   }
-  .playergamelist  .positionside{
+  .customer  .positionside{
     width:50%;
     float:left;
   }
@@ -2509,12 +2491,21 @@
   .playergamelistquery .el-form-item {
     margin-bottom: 5px !important;
   }
-  .playergamelist .el-tree{
+  .customer .el-tree{
     width: 100%;
     overflow: auto;
   }
-  .playergamelist .el-tree>.el-tree-node{
+  .customer .el-tree>.el-tree-node{
     min-width: 100%;
     display: inline-block!important;
+  }
+  .customer #div2{
+    height: 10px;
+    width: 2020px;
+  }
+  .customer #wrapper2 {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
   }
 </style>

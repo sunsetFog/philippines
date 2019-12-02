@@ -1,7 +1,7 @@
 <template>
   <div class="container daydegrees">
     <mt-header title="日度报表">
-        <mt-button slot="left" @click="back">
+        <mt-button slot="left" class="all_palm" @click="back">
         <i class="mintui mintui-back"></i>
         </mt-button>
 
@@ -13,16 +13,17 @@
 
     <div class="card">
         <mt-cell :title="name">
-        <img slot="icon" src="../../../static/user.png" width="30" height="30">
+        <img slot="icon" src="../../../static/user.png" style="width: 1.875rem;height: 1.875rem">
         <span>
-          <img slot="icon" src="../../../static/mark.png" width="20" height="20"  @click="show = !show">
+          <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="all_palm" @click="show = !show">
         </span>
         <mt-popup
           v-model="show"
           popup-transition='popup-fade'
         >
-        团队总流水:团队所有玩家提供的流水总额（直属玩家流水+下级团队玩家流水）<br/>
-        团队税收收益:团队的税收收益总额（团队总流水*计税税率*团队最高代理分红额度）
+        <div style="text-align: center;line-height: 1.875rem;">团队总流水</div>
+        <div style="line-height: 1.25rem;">团队所有玩家提供的流水总额（直属玩家流水+下级团队玩家流水）
+        团队税收收益:团队的税收收益总额（团队总流水*计税税率*团队最高代理分红额度）</div>
         </mt-popup>
       </mt-cell>
     </div>
@@ -35,7 +36,7 @@
         </mt-cell>
         <div class="boxposition">
           <p>团队总流水：<span class="fontcolorb">{{item.team_flow}}</span></p>
-          <p>个人税收收益：<span class="fontcolorr">{{item.team_tax}}</span></p>
+          <p>团队税收收益：<span class="fontcolorr">{{item.team_tax}}</span></p>
         </div>
       </div>
         </div>
@@ -109,24 +110,7 @@ function getlist (that, pageno) {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .daydegrees .card {
-    margin: 10px;
-    border-top: 1px solid #2e163d;
-    border-bottom: 1px solid #2e163d;
-    border-left: 2px solid #2e163d;
-    border-right: 2px solid #2e163d;
-    border-radius: 12px;
-    position: relative;
-    .mint-popup {
-      position: absolute;
-      width: 80%;
-      left: 50%;
-      top: 120%;
-      background: #26a2ff;
-      color: white;
-          padding: 2% 8%;
-      font-size: 12px;
-      }
+  .daydegrees{
       .v-modal {
         background: white;
         opacity:0;
@@ -164,8 +148,9 @@ function getlist (that, pageno) {
     .boxposition {
       position: absolute;
       left: 140px;
-      top: 0;
+      top: 10px;
       font-size: 12px;
+      cursor: pointer;
     }
   }
   .mint-header {

@@ -1263,6 +1263,299 @@
           </el-table>
 
         </el-tab-pane>
+          <el-tab-pane label="疯狂斗牛">
+          <div class="query">
+              <el-row>
+                <el-form :inline="true" label-width="80px">
+                   <el-col :span="6">
+                      <el-form-item label="玩家渠道">
+                          <el-select v-model="formInline14.org" clearable>
+                            <el-option
+                              v-for="item in statuslist"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                      </el-form-item>
+                    </el-col>
+                   <el-col :span="8">
+                    <el-form-item label="日期">
+                      <el-date-picker
+                      v-model="formInline14.time"
+                      type="daterange"
+                      :editable="false"
+                      range-separator="-"
+                      start-placeholde="开始日期"
+                      end-placeholde="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="所属模块">
+                        <el-select v-model="formInline14.model" clearable>
+                            <el-option
+                              v-for="(item, key) in modellist"
+                              :key="key"
+                              :label="item.name"
+                              :value="item.code">
+                            </el-option>
+                          </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="3">
+                    <el-button type="primary" icon="el-icon-search" @click="query14" v-if="gameclickstatgetlist">查询</el-button>
+                    <el-button type="primary" icon="el-icon-search" @click="excel14"  v-if="gameclickstatdownloadlist">导出</el-button>
+                  </el-col>
+                </el-form>
+              </el-row>
+            </div>
+            <span>备注：列表仅展示最后7天，可导出90天的记录。</span>
+            <el-table
+            :data="tableData14"
+            :cell-class-name='cell'
+            :span-method="objectmethod14"
+            border
+            style="width: 100%">
+              <el-table-column
+                label="所属模块"
+                prop="module_name">
+              </el-table-column>
+              <el-table-column
+              prop="event_name"
+              label="点击事件">
+            </el-table-column>
+            <el-table-column
+              :prop="seven"
+              :label='seven'>
+            </el-table-column>
+            <el-table-column
+              :prop="six"
+              :label="six">
+            </el-table-column>
+            <el-table-column
+              :prop="five"
+              :label="five">
+            </el-table-column>
+             <el-table-column
+              :prop="four"
+              :label="four">
+            </el-table-column>
+             <el-table-column
+              :prop="three"
+              :label="three">
+            </el-table-column>
+             <el-table-column
+              :prop="two"
+              :label="two">
+            </el-table-column>
+             <el-table-column
+              :prop="one"
+              :label="one">
+            </el-table-column>
+            <el-table-column
+              prop="sum"
+              label="合计">
+            </el-table-column>
+          </el-table>
+
+        </el-tab-pane>
+
+        <el-tab-pane label="彩票牛牛">
+          <div class="query">
+              <el-row>
+                <el-form :inline="true" label-width="80px">
+                   <el-col :span="6">
+                      <el-form-item label="玩家渠道">
+                          <el-select v-model="formInline15.org" clearable>
+                            <el-option
+                              v-for="item in statuslist"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                      </el-form-item>
+                    </el-col>
+                   <el-col :span="8">
+                    <el-form-item label="日期">
+                      <el-date-picker
+                      v-model="formInline15.time"
+                      type="daterange"
+                      :editable="false"
+                      range-separator="-"
+                      start-placeholde="开始日期"
+                      end-placeholde="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="所属模块">
+                        <el-select v-model="formInline15.model" clearable>
+                            <el-option
+                              v-for="(item, key) in modellist"
+                              :key="key"
+                              :label="item.name"
+                              :value="item.code">
+                            </el-option>
+                          </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="3">
+                    <el-button type="primary" icon="el-icon-search" @click="query15" v-if="gameclickstatgetlist">查询</el-button>
+                    <el-button type="primary" icon="el-icon-search" @click="excel15"  v-if="gameclickstatdownloadlist">导出</el-button>
+                  </el-col>
+                </el-form>
+              </el-row>
+            </div>
+            <span>备注：列表仅展示最后7天，可导出90天的记录。</span>
+            <el-table
+            :data="tableData15"
+            :cell-class-name='cell'
+            :span-method="objectmethod15"
+            border
+            style="width: 100%">
+              <el-table-column
+                label="所属模块"
+                prop="module_name">
+              </el-table-column>
+              <el-table-column
+              prop="event_name"
+              label="点击事件">
+            </el-table-column>
+            <el-table-column
+              :prop="seven"
+              :label='seven'>
+            </el-table-column>
+            <el-table-column
+              :prop="six"
+              :label="six">
+            </el-table-column>
+            <el-table-column
+              :prop="five"
+              :label="five">
+            </el-table-column>
+             <el-table-column
+              :prop="four"
+              :label="four">
+            </el-table-column>
+             <el-table-column
+              :prop="three"
+              :label="three">
+            </el-table-column>
+             <el-table-column
+              :prop="two"
+              :label="two">
+            </el-table-column>
+             <el-table-column
+              :prop="one"
+              :label="one">
+            </el-table-column>
+            <el-table-column
+              prop="sum"
+              label="合计">
+            </el-table-column>
+          </el-table>
+
+        </el-tab-pane>
+
+         <el-tab-pane label="抢庄牛牛">
+          <div class="query">
+              <el-row>
+                <el-form :inline="true" label-width="80px">
+                   <el-col :span="6">
+                      <el-form-item label="玩家渠道">
+                          <el-select v-model="formInline16.org" clearable>
+                            <el-option
+                              v-for="item in statuslist"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                      </el-form-item>
+                    </el-col>
+                   <el-col :span="8">
+                    <el-form-item label="日期">
+                      <el-date-picker
+                      v-model="formInline16.time"
+                      type="daterange"
+                      :editable="false"
+                      range-separator="-"
+                      start-placeholde="开始日期"
+                      end-placeholde="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="所属模块">
+                        <el-select v-model="formInline16.model" clearable>
+                            <el-option
+                              v-for="(item, key) in modellist"
+                              :key="key"
+                              :label="item.name"
+                              :value="item.code">
+                            </el-option>
+                          </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="3">
+                    <el-button type="primary" icon="el-icon-search" @click="query16" v-if="gameclickstatgetlist">查询</el-button>
+                    <el-button type="primary" icon="el-icon-search" @click="excel16"  v-if="gameclickstatdownloadlist">导出</el-button>
+                  </el-col>
+                </el-form>
+              </el-row>
+            </div>
+            <span>备注：列表仅展示最后7天，可导出90天的记录。</span>
+            <el-table
+            :data="tableData16"
+            :cell-class-name='cell'
+            :span-method="objectmethod16"
+            border
+            style="width: 100%">
+              <el-table-column
+                label="所属模块"
+                prop="module_name">
+              </el-table-column>
+              <el-table-column
+              prop="event_name"
+              label="点击事件">
+            </el-table-column>
+            <el-table-column
+              :prop="seven"
+              :label='seven'>
+            </el-table-column>
+            <el-table-column
+              :prop="six"
+              :label="six">
+            </el-table-column>
+            <el-table-column
+              :prop="five"
+              :label="five">
+            </el-table-column>
+             <el-table-column
+              :prop="four"
+              :label="four">
+            </el-table-column>
+             <el-table-column
+              :prop="three"
+              :label="three">
+            </el-table-column>
+             <el-table-column
+              :prop="two"
+              :label="two">
+            </el-table-column>
+             <el-table-column
+              :prop="one"
+              :label="one">
+            </el-table-column>
+            <el-table-column
+              prop="sum"
+              label="合计">
+            </el-table-column>
+          </el-table>
+
+        </el-tab-pane>
       </el-tabs>
 
 
@@ -1369,6 +1662,27 @@ export default {
       },
       tableData13: [
       ],
+      formInline14: {
+        model: '',
+        time: '',
+        org: ''
+      },
+      tableData14: [
+      ],
+      formInline15: {
+        model: '',
+        time: '',
+        org: ''
+      },
+      tableData15: [
+      ],
+       formInline16: {
+        model: '',
+        time: '',
+        org: ''
+      },
+      tableData16: [
+      ],
       id: '',
       statuslist: [],
       modellist: [
@@ -1406,7 +1720,13 @@ export default {
       num12: 0,
       spanarry12: [],
       num13: 0,
-      spanarry13: []
+      spanarry13: [],
+       num14: 0,
+      spanarry14: [],
+       num15: 0,
+      spanarry15: [],
+       num16: 0,
+      spanarry16: []
     }
   },
   created() {
@@ -1572,6 +1892,30 @@ export default {
         getlist13(this)
       }
     },
+    query14 () {
+      let that = this
+      if (that.formInline14.time && this.formInline14.time.length > 0) {
+        this.$message.warning('列表仅展示最后7天，可导出90天的记录,请不要输入时间查询')
+      }else {
+        getlist14(this)
+      }
+    },
+    query15 () {
+      let that = this
+      if (that.formInline15.time && this.formInline15.time.length > 0) {
+        this.$message.warning('列表仅展示最后7天，可导出90天的记录,请不要输入时间查询')
+      }else {
+        getlist15(this)
+      }
+    },
+     query16 () {
+      let that = this
+      if (that.formInline16.time && this.formInline16.time.length > 0) {
+        this.$message.warning('列表仅展示最后7天，可导出90天的记录,请不要输入时间查询')
+      }else {
+        getlist16(this)
+      }
+    },
     tabclick () {
       if (this.actionname == 0) {
         getlist(this)
@@ -1611,6 +1955,15 @@ export default {
       }
       if (this.actionname == 12) {
         getlist13(this)
+      }
+       if (this.actionname == 13) {
+        getlist14(this)
+      }
+      if (this.actionname == 14) {
+        getlist15(this)
+      }
+       if (this.actionname == 15) {
+        getlist16(this)
       }
     },
     arry () {
@@ -1847,6 +2200,60 @@ export default {
         }
       })
     },
+     arry14 () {
+      this.spanarry14= []
+      this.tableData14.forEach((item,index) => {
+        item.index = index
+        if (index === 0) {
+          this.spanarry14.push(1)
+          this.num14 = 0
+        } else {
+          if (item.module_name === this.tableData14[index - 1].module_name) {
+            this.spanarry14[this.num14] += 1;
+            this.spanarry14.push(0)
+          } else {
+            this.spanarry14.push(1)
+            this.num14 = index
+          }
+        }
+      })
+    },
+    arry15 () {
+      this.spanarry15= []
+      this.tableData15.forEach((item,index) => {
+        item.index = index
+        if (index === 0) {
+          this.spanarry15.push(1)
+          this.num15 = 0
+        } else {
+          if (item.module_name === this.tableData15[index - 1].module_name) {
+            this.spanarry15[this.num15] += 1;
+            this.spanarry15.push(0)
+          } else {
+            this.spanarry15.push(1)
+            this.num15 = index
+          }
+        }
+      })
+    },
+      arry16 () {
+      this.spanarry16 = []
+      this.tableData16.forEach((item,index) => {
+        item.index = index
+        if (index === 0) {
+          this.spanarry16.push(1)
+          this.num16 = 0
+        } else {
+          if (item.module_name === this.tableData16[index - 1].module_name) {
+            this.spanarry16[this.num16] += 1;
+            this.spanarry16.push(0)
+          } else {
+            this.spanarry16.push(1)
+            this.num16 = index
+          }
+        }
+      })
+    },
     objectmethod ({row, column, rowIndex, columnIndex}) {
       if (columnIndex === 0) {
         let _row = this.spanarry[rowIndex]
@@ -1970,6 +2377,36 @@ export default {
     objectmethod13 ({row, column, rowIndex, columnIndex}) {
       if (columnIndex === 0) {
         let _row = this.spanarry13[rowIndex]
+        let _col = _row>0?1:0
+        return {
+          rowspan: _row,
+          colspan: _col
+        }
+      }
+    },
+     objectmethod14 ({row, column, rowIndex, columnIndex}) {
+      if (columnIndex === 0) {
+        let _row = this.spanarry14[rowIndex]
+        let _col = _row>0?1:0
+        return {
+          rowspan: _row,
+          colspan: _col
+        }
+      }
+    },
+    objectmethod15 ({row, column, rowIndex, columnIndex}) {
+      if (columnIndex === 0) {
+        let _row = this.spanarry15[rowIndex]
+        let _col = _row>0?1:0
+        return {
+          rowspan: _row,
+          colspan: _col
+        }
+      }
+    },
+     objectmethod16 ({row, column, rowIndex, columnIndex}) {
+      if (columnIndex === 0) {
+        let _row = this.spanarry16[rowIndex]
         let _col = _row>0?1:0
         return {
           rowspan: _row,
@@ -2276,6 +2713,75 @@ export default {
       }).catch(error => {
       })
     },
+    excel14 () {
+      let that = this
+      var start = ''
+      var end = ''  
+      if (that.formInline14.time && that.formInline14.time.length > 0) {
+        start = parseTime(that.formInline14.time[0].getTime() /1000)
+        end = parseTime((that.formInline14.time[1].getTime() + (24*60*60*1000 - 1))/1000)
+      }
+      request({
+        url: that.public.url + '/gameclickstat/downloadlist',
+        method: 'post',
+        data: {
+          mid: 901,
+          begindate: start,
+          enddate: end,
+          org_id: that.formInline14.org,
+          module: that.formInline14.model,
+        }
+      }).then(res => {
+        window.location.href = that.public.url + res.data
+      }).catch(error => {
+      })
+    },
+    excel15 () {
+      let that = this
+      var start = ''
+      var end = ''  
+      if (that.formInline15.time && that.formInline15.time.length > 0) {
+        start = parseTime(that.formInline15.time[0].getTime() /1000)
+        end = parseTime((that.formInline15.time[1].getTime() + (24*60*60*1000 - 1))/1000)
+      }
+      request({
+        url: that.public.url + '/gameclickstat/downloadlist',
+        method: 'post',
+        data: {
+          mid: 1001,
+          begindate: start,
+          enddate: end,
+          org_id: that.formInline15.org,
+          module: that.formInline15.model,
+        }
+      }).then(res => {
+        window.location.href = that.public.url + res.data
+      }).catch(error => {
+      })
+    },
+     excel16 () {
+      let that = this
+      var start = ''
+      var end = ''  
+      if (that.formInline16.time && that.formInline16.time.length > 0) {
+        start = parseTime(that.formInline16.time[0].getTime() /1000)
+        end = parseTime((that.formInline16.time[1].getTime() + (24*60*60*1000 - 1))/1000)
+      }
+      request({
+        url: that.public.url + '/gameclickstat/downloadlist',
+        method: 'post',
+        data: {
+          mid: 1101,
+          begindate: start,
+          enddate: end,
+          org_id: that.formInline16.org,
+          module: that.formInline16.model,
+        }
+      }).then(res => {
+        window.location.href = that.public.url + res.data
+      }).catch(error => {
+      })
+    },
     cell ({row, column, rowIndex, columnIndex}) {
       if (columnIndex === 0) {
         return 'bagreen'
@@ -2500,7 +3006,54 @@ function getlist13 (that) {
   }).catch(error => {
   })
 }
-
+function getlist14 (that) {
+  request({
+    url: that.public.url + '/gameclickstat/getlist',
+    method: 'post',
+    data: {
+      mid: 901,
+      org_id: that.formInline14.org,
+      module: that.formInline14.model,
+    }
+  }).then(res => {
+    that.tableData14 = res.data.data
+    that.modellist = res.data.modellist
+    that.arry14()
+  }).catch(error => {
+  })
+}
+function getlist15 (that) {
+  request({
+    url: that.public.url + '/gameclickstat/getlist',
+    method: 'post',
+    data: {
+      mid: 1001,
+      org_id: that.formInline15.org,
+      module: that.formInline15.model,
+    }
+  }).then(res => {
+    that.tableData15 = res.data.data
+    that.modellist = res.data.modellist
+    that.arry15()
+  }).catch(error => {
+  })
+}
+function getlist16 (that) {
+  request({
+    url: that.public.url + '/gameclickstat/getlist',
+    method: 'post',
+    data: {
+      mid: 1101,
+      org_id: that.formInline16.org,
+      module: that.formInline16.model,
+    }
+  }).then(res => {
+    that.tableData16 = res.data.data
+    that.modellist = res.data.modellist
+    that.arry16()
+  }).catch(error => {
+  })
+}
 function parseTime(time) {
     var date = new Date(time *1000);
     let y = date.getFullYear() + '-'

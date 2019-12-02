@@ -3,6 +3,15 @@
     <el-tabs v-model="activeName2" type="border-card" @tab-click="handleClick">
       <div class="batchdown">
         <el-tab-pane label="批量导入" name="first" style="height:auto;padding-bottom: 53px;" v-if="paychgmoneybatchcharge">
+           <span style="float: left;margin-top: 10px;">上传渠道： </span>
+          <el-select v-model="formInline.org" clearable style="float: left;margin-right: 10px;" value-key="id">
+                <el-option
+                  v-for="item in statuslist"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="{name:item.name,id:item.id}">
+                </el-option>
+          </el-select>
           <span style="float: left;margin-top: 10px;">账变类型: </span>
           <el-select filterable v-model="changetype" class="channel" placeholder="请选择账变类型" style="float:left;margin-right:10px;">
             <el-option
@@ -100,7 +109,7 @@
       <el-pagination
         :current-page.sync="currentPage"
         :page-size="pagesize"
-        :page-sizes="[50,100,200]"
+        :page-sizes="[20,50,200]"
         :total="total"
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
@@ -159,6 +168,10 @@
                 {{scope.row.status | status}}
               </template>
             </el-table-column>
+             <el-table-column
+                label="上传渠道"
+                prop="agent_org_name">
+              </el-table-column>
               <el-table-column
                 label="操作"
                 prop="operation">
@@ -174,7 +187,7 @@
               <el-pagination
                 :current-page.sync="currentPage1"
                 :page-size="pagesize1"
-                :page-sizes="[50,100,200]"
+                :page-sizes="[20,50,200]"
                 :total="total1"
                 @current-change="handleCurrentChange1"
                 @size-change="handleSizeChange1"
@@ -198,6 +211,12 @@ import { getToken } from '../../utils/auth';
     name: "accountchange",
     data() {
       return {
+         formInline: {
+            org:{
+              
+            },
+        },
+        statuslist:[],
         showtable:false,
         dialogFormVisible1: false,
         accountnumber: '',
@@ -208,8 +227,8 @@ import { getToken } from '../../utils/auth';
         operation: '',
         total: 0,
         total1: 0,
-        pagesize: 50,
-        pagesize1: 50,
+        pagesize: 20,
+        pagesize1: 20,
         id: '',
         time: [],
         currentPage: 1,
@@ -249,6 +268,7 @@ import { getToken } from '../../utils/auth';
       let week = new Date(new Date().toLocaleDateString()).getTime() - 60*60*24*1000*7
       let time = new Date(new Date().toLocaleDateString()).getTime() + 24*60*60*1000 -1
       this.time = [new Date(week), new Date(time)]
+      getaccount(this)
     },
     computed: {
       token () {
@@ -261,7 +281,9 @@ import { getToken } from '../../utils/auth';
       },
       datatype () {
         return {
-          paytype: this.changetype
+          paytype: this.changetype,
+          agent_org_name:this.formInline.org.name,
+          agent_org_id:this.formInline.org.id
         }
       },
       ...mapGetters([
@@ -555,7 +577,17 @@ import { getToken } from '../../utils/auth';
     })
   }
 
-
+function getaccount (that) {
+  request({
+    url: that.public.url + '/backend/role/getorglist',
+    method: 'post',
+    data: {
+    }
+  }).then(res => {
+    that.statuslist = res.data
+  }).catch(error => {
+  })
+}
   function getchargelogs (that) {
     var start = ''
     var end = '' 

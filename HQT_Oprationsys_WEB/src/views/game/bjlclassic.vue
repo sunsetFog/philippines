@@ -18,6 +18,9 @@
                 <el-radio :label='1'>可用</el-radio>
               </el-radio-group>
             </el-form-item>
+             <el-form-item label="玩家抽水比例" :label-width="formLabelWidth" prop='number'>
+              <el-input v-model="form.number" type='number' style="width:140px"></el-input><span>%</span>
+            </el-form-item>
             <el-form-item :label-width="formLabelWidth">
               <el-button type="primary" @click="sure(form)" v-if="gamesetsavebase">保存配置</el-button>
             </el-form-item>
@@ -85,13 +88,14 @@
               label="桌子状态">
             </el-table-column>
             <el-table-column
-            width='100'
+            width='150'
               label="桌子操作">
               <template slot-scope="scope">
                 <el-button @click="edit(scope.row)" type="text" size="small" v-if='gamesetupdatetable'>修改</el-button>
                 <el-button @click="up(scope.row)" type="text" size="small" class='green' v-if="scope.row.status === '禁用' && gamesetupdatetablestatus">开启</el-button>
                 <el-button @click="down(scope.row)" type="text" size="small" class="red" v-if="scope.row.status === '开启' && gamesetupdatetablestatus">禁用</el-button>
-                <!-- <el-button @click="addtzx(scope.row)" type="text" size="small" v-if="gamesetaddbetitem">增加投注项</el-button> -->
+                <el-button @click="rtpgl(scope.row)" type="text" size="small" class="" v-if='gamertpsetgetrtpsetinfo'>RTP管理</el-button>
+                <el-button @click="del(scope.row)" type="text" size="small" v-if="gamesetdeltable && scope.row.status === '禁用'">删除</el-button>
               </template>
             </el-table-column>
             <el-table-column
@@ -207,7 +211,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPage"
-              :page-sizes="[50,100,200]"
+              :page-sizes="[20,50,200]"
               :page-size="pagesize"
               background
               layout="sizes, prev, pager, next, jumper"
@@ -298,6 +302,59 @@
     </div>
 
   </el-dialog>
+   <el-dialog :title='title3'  :visible.sync="dialogFormVisible3" :before-close="reset3">
+     <el-form :model="form3" :rules="rules3" ref="form3">
+       <el-form-item label="游戏名：" :label-width="formLabelWidth" >
+         <span>{{tablename3}}</span>
+      </el-form-item>
+       <el-form-item label="牌桌：" :label-width="formLabelWidth">
+         <span>{{betid3}}</span>
+      </el-form-item>
+       <el-form-item label="RTP生效投注额：" :label-width="formLabelWidth" prop='rate_input3'>
+         <el-input v-if="rate_active3" v-model="form3.rate_input3" style='width:80%'></el-input>
+         <!-- <span v-else>{{form3.valid_bet_limit}}</span> -->
+         <span v-else>{{form3.rate_input3}}</span>
+         <span>元</span>
+      </el-form-item>
+       <el-form-item label="RTP重置投注额：" :label-width="formLabelWidth" prop='rate_input4'>
+          <el-input v-if="rate_active3" v-model="form3.rate_input4" style='width:80%'></el-input>
+         <!-- <span v-else>{{form3.reset_bet_limit}}</span> -->
+         <span v-else>{{form3.rate_input4}}</span>
+          <span>元</span>
+      </el-form-item>
+       <el-form-item label="RTP上限：" :label-width="formLabelWidth" prop='rate_input5'>
+         <el-input v-if="rate_active3" v-model="form3.rate_input5" style='width:80%'></el-input>
+         <!-- <span v-else>{{form3.upper_limit?form3.upper_limit:''}}</span> -->
+          <span v-else>{{form3.rate_input5}}</span>
+          <span>%</span>
+      </el-form-item>
+       <el-form-item label="RTP下限：" :label-width="formLabelWidth" prop='rate_input6'>
+          <el-input v-if="rate_active3" v-model="form3.rate_input6" style='width:80%'></el-input>
+         <!-- <span v-else>{{form3.lower_limit?form3.lower_limit:''}}</span> -->
+          <span v-else>{{form3.rate_input6}}</span>
+         <span>%</span>
+      </el-form-item>
+       <el-form-item label="放水生效概率：" :label-width="formLabelWidth" prop='rate_input7'>
+          <el-input v-if="rate_active3" v-model="form3.rate_input7" style='width:80%'></el-input>
+         <!-- <span v-else>{{form3.loss_valid_prob?form3.loss_valid_prob:''}}</span> -->
+         <span v-else>{{form3.rate_input7}}</span>
+         <span>%</span>
+      </el-form-item>
+       <el-form-item label="抽水生效概率：" :label-width="formLabelWidth" prop='rate_input8'>
+          <el-input v-if="rate_active3" v-model="form3.rate_input8" style='width:80%'></el-input>
+         <!-- <span v-else>{{form3.royalty_valid_prob?form3.royalty_valid_prob:''}}</span> -->
+          <span v-else>{{this.form3.rate_input8}}</span>
+         <span>%</span>
+      </el-form-item>                                 
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <!-- <el-button type="primary" @click="sure2(form)">确定</el-button> -->
+      <el-button v-if=" !rate_active3" type="primary" @click="modifyRateTwo(form3)">修改配置</el-button>
+      <el-button  type="primary" v-if="gamertpsetupdatertpset && rate_active3 " @click="sureConfig(form3)" >保存配置</el-button>
+      <el-button @click="reset3(form3)">取 消</el-button>     
+    </div>
+  </el-dialog>
+
 
 
   </div>
@@ -319,6 +376,17 @@ export default {
         }
       }
    }; 
+   var royalty = (rule, value, callback) => {
+      if(value === ''){
+        callback(new Error('请输入玩家抽水比例'));
+      }else {
+        if(value*1<0 || value.toString().indexOf('.')>0) {
+          callback(new Error('请输入正整数'));
+        } else {
+          callback();
+        }
+      }
+   }; 
    var solts = (rule, value, callback) => {
       if(value === ''){
         callback(new Error('请填排序'));
@@ -330,6 +398,20 @@ export default {
         }
       }
    }; 
+   var validateMone =(rule, value, callback)=>{
+     if(value*1<=0 || value.indexOf('.')>0 || isNaN(value)) {
+          callback(new Error('请输入正整数'));
+        } else {
+          callback();
+        }
+   };
+    var validateMtwo =(rule, value, callback)=>{
+     if(value*1<=0 || isNaN(value) ) {
+          callback(new Error('请输入正数'));
+        } else {
+          callback();
+        }
+   };
     return {
       formInline: {
         id: '',
@@ -344,7 +426,7 @@ export default {
       tableData: [
       ],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: '',
       title: '',
       dialogFormVisible: false,
@@ -356,7 +438,7 @@ export default {
         sort: ''
       },
       rules: {
-        number: {required: true, message: '请填写投注倒计时长', trigger: 'blur'},
+        number: {required: true, validator: royalty, trigger: 'blur'},
         status: {required: true, message: '请选择状态', trigger: 'change'},
       },
       rules1: {
@@ -388,6 +470,27 @@ export default {
       },
       dialogFormVisible2: false,
       title2: '',
+       form3: {
+          rate_input3:'',
+          rate_input4:'',
+          rate_input5:'',
+          rate_input6:'',
+          rate_input7:'',
+          rate_input8:'',
+      },
+      rules3: {
+          rate_input3:{required: true,validator:validateMone, trigger:'blur'},
+          rate_input4:{required: true,validator:validateMone, trigger:'blur'},
+          rate_input5:{required: true,validator:validateMtwo, trigger:'blur'},
+          rate_input6:{required: true,validator:validateMtwo, trigger:'blur'},
+          rate_input7:{required: true,validator:validateMtwo, trigger:'blur'},
+          rate_input8:{required: true,validator:validateMtwo, trigger:'blur'},
+      },
+      dialogFormVisible3: false,
+      title3: '',
+      tablename3:'',
+      betid3:'',
+      rate_active3: false,//span改为input的标识
       name: false,
       tableid: false,
       tablename: '',
@@ -406,7 +509,10 @@ export default {
       'gamesetupdatetablestatus',
       'gamesetaddbetitem',
       'gamesetupdatebetitem',
-      'gamesetgetbetitemlist'
+      'gamesetgetbetitemlist',
+      'gamesetdeltable',
+      'gamertpsetgetrtpsetinfo',
+      'gamertpsetupdatertpset'
     ])
   },
   watch: {
@@ -428,7 +534,7 @@ export default {
             method: 'post',
             data: {
                   game_id: 201,
-                  // bet_count_down: this.form.number,
+                  royalty: this.form.number,
                   depict: this.form.depict,
                   status: this.form.status,
                   type: 1
@@ -468,6 +574,33 @@ export default {
       this.id = row.id
       this.tablename = row.name
     },
+    rtpgl (row) {
+      let that = this
+      this.title3 = 'RTP管理-查看'
+      this.dialogFormVisible3 = true
+      this.id = row.id
+       request({
+        url: that.public.url + '/gamertpset/getrtpsetinfo',
+        method: 'post',
+        data: {
+              game_id:201,
+              type:1,
+              table_id: row.id
+        }
+      }).then(res => {
+        // that.form3 = res.data
+        this.form3.rate_input3 = res.data.valid_bet_limit
+        this.form3.rate_input4 = res.data.reset_bet_limit
+        this.form3.rate_input5 = res.data.upper_limit*100
+        this.form3.rate_input6 = res.data.lower_limit*100
+        this.form3.rate_input7 = res.data.loss_valid_prob*100
+        this.form3.rate_input8 = res.data.royalty_valid_prob*100      
+        this.tablename3 = res.data.game_name
+        this.betid3 = res.data.table_name
+        this.tableid3 = res.data.table_id
+      }).catch(error => {
+      })
+    },
     edittzx (scope,row) {
       let that = this
       this.title2 = '投注项-修改'
@@ -498,7 +631,7 @@ export default {
     },
     up (row) {
       let that = this
-      this.$confirm('此操作将开启改桌子, 是否继续?', '提示', {
+      this.$confirm('此操作将开启该桌子, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -528,7 +661,7 @@ export default {
     },
     down (row) {
        let that = this
-      this.$confirm('此操作将禁用改桌子, 是否继续?', '提示', {
+      this.$confirm('此操作将禁用该桌子, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -556,6 +689,35 @@ export default {
         });
       });
     },
+     del (row) {
+       let that = this
+      this.$confirm('此操作将删除该桌子, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        request({
+            url: that.public.url + '/gameset/deltable',
+            method: 'post',
+            data: {
+                table_id: row.id
+            }
+          }).then(res => {
+            that.$message({
+              type: 'success',
+              message: res.message
+            })
+            getlist(that)
+          }).catch(error => {
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
     reset1 () {
       this.dialogFormVisible = false
       this.$refs.form1.resetFields()
@@ -563,6 +725,11 @@ export default {
     reset2 () {
       this.dialogFormVisible2 = false
       this.$refs.form2.resetFields()
+    },
+     reset3 () {
+      this.dialogFormVisible3 = false
+      this.rate_active3 = false
+      this.$refs.form3.resetFields()
     },
     sure1 () {
         let that = this
@@ -702,7 +869,51 @@ export default {
       let that = this
       this.currentPage = val *1
       getlist(this)
-    }
+    },
+    modifyRateTwo(form3){//diolog3的RTP修改配置函数 去除NULL和NAN
+      this.rate_active3 = true;
+      this.rate_input3 = this.form3.valid_bet_limit?this.form3.valid_bet_limit:''
+      this.rate_input4 = this.form3.reset_bet_limit?this.form3.reset_bet_limit:''
+      this.rate_input5 = this.form3.upper_limit? this.form3.upper_limit:''
+      this.rate_input6 = this.form3.lower_limit?this.form3.lower_limit:''
+      this.rate_input7 = this.form3.loss_valid_prob?this.form3.loss_valid_prob:''
+      this.rate_input8 = this.form3.royalty_valid_prob?this.form3.royalty_valid_prob:''
+      // this.rate_input = this.pumping_rate/100;
+    },
+    sureConfig(form3){//RTP管理-查看保存配置
+          let that = this
+           this.$refs.form3.validate((valid) => {
+        if (valid) {
+        request({
+            url: that.public.url + '/gamertpset/updatertpset',
+            method: 'post',
+            data: {
+                  game_id:201,
+                  type:1,
+                  table_id:this.tableid3,
+                  valid_bet_limit:this.form3.rate_input3*1,
+                  reset_bet_limit:this.form3.rate_input4*1,
+                  upper_limit:this.form3.rate_input5/100,
+                  lower_limit:this.form3.rate_input6/100,
+                  loss_valid_prob:this.form3.rate_input7/100,
+                  royalty_valid_prob:this.form3.rate_input8/100,
+            }
+          }).then(res => {
+           that.$message({
+              type: 'success',
+              message: res.message
+            })
+              that.dialogFormVisible3 = false
+              that.$refs.form3.resetFields()
+              getlist(that)
+              this.rate_active3 = false
+          }).catch(error => {
+          })
+        }else{
+          return false
+        }
+           })
+    },
   }
 }
 
@@ -735,7 +946,7 @@ function getinfo (that) {
       }
     }).then(res => {
       that.form.depict = res.data.depict
-      // that.form.number = res.data.bet_count_down
+      that.form.number = res.data.royalty
       that.form.status = res.data.status * 1
     }).catch(error => {
     })

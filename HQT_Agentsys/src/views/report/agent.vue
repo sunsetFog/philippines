@@ -1,7 +1,7 @@
 <template>
   <div class="container agent">
     <mt-header title="代理管理">
-        <mt-button slot="left" @click="back">
+        <mt-button slot="left" class="all_palm" @click="back">
         <i class="mintui mintui-back"></i>
         </mt-button>
 
@@ -9,13 +9,13 @@
 
     <div class="card">
         <mt-cell :title="name">
-        <img slot="icon" src="../../../static/user.png" width="30" height="30">
+        <img slot="icon" src="../../../static/user.png" style="width: 1.875rem;height: 1.875rem">
       </mt-cell>
     </div>
 
 
   <div v-infinite-scroll='loadmore'>
-     <div class="card namestyle" v-for="(item, index) in newlist" :key="index" @click="getid(item.user_id,index)">
+     <div class="card namestyle all_palm" v-for="(item, index) in newlist" :key="index" @click="getid(item.user_id,index)">
         <mt-cell :title=item.login_name is-link>
         </mt-cell>
         <div class="boxposition">
@@ -29,40 +29,19 @@
       <mt-popup
       v-model="show"
       class="showposition"
-      id="showposition"
+      style="background: none;"
       popup-transition='popup-fade'
       >
-      <div class="mint-cell" @click="getinfo">
-        <div class="mint-cell-wrapper">
-          <div class="mint-cell-title">
-           <div class="mint-cell-title">
+      <div class="chakanxiangqing" @click="getinfo">
             查看详情
-          </div>
-        </div>
-        </div>
-        
       </div>
 
-      <div class="mint-cell" @click="update">
-        <div class="mint-cell-wrapper">
-          <div class="mint-cell-title">
-           <div class="mint-cell-title">
-            调整分成比例和配额
-          </div>
-        </div>
-        </div>
-        
+      <div class="chakanxiangqing" @click="update">
+            调整税收比例
       </div>
 
-       <div class="mint-cell" @click="show=!show">
-        <div class="mint-cell-wrapper">
-          <div class="mint-cell-title">
-           <div class="mint-cell-title">
+       <div class="chakanxiangqing" @click="show=!show">
             取消
-          </div>
-        </div>
-        </div>
-        
       </div>
       </mt-popup>
      
@@ -117,8 +96,6 @@ export default {
     getid (id,index) {
       this.id = id
       this.show = !this.show
-      var showposition = document.getElementById('showposition')
-      showposition.style.top= 180+(70+10)*(index*1 + 1) + 'px'
     },
     getinfo () {
       this.$router.push({path: '/agentgetinfo', query: {id: this.id}})
@@ -149,15 +126,7 @@ function getlist (that, pageno) {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .agent .card {
-    margin: 10px;
-    border-top: 1px solid #2e163d;
-    border-bottom: 1px solid #2e163d;
-    border-left: 2px solid #2e163d;
-    border-right: 2px solid #2e163d;
-    border-radius: 12px;
-    position: relative;
-  }
+
   .mark1 {
     position: absolute;
     left: 80px;
@@ -171,14 +140,23 @@ function getlist (that, pageno) {
   }
   .agent {
     .showposition {
-          left: 60%;
-    // width: 20%;
     .mint-cell-text {
       font-size: 15px;
     }
     }
     .mint-cell-wrapper {
       height: 70px;
+    }
+    .chakanxiangqing{
+      width: 100%;
+      height: 50px;
+      background: white;
+      text-align: center;
+      line-height: 50px;
+      margin-bottom: 2px;
+      font-size: 15px;
+      color: #732c94;
+      cursor: pointer;
     }
     .fontcolorb .mint-cell-label {
       color: #ffea00;
@@ -200,13 +178,14 @@ function getlist (that, pageno) {
     .boxposition {
       position: absolute;
       left: 26%;
-      top: 0;
+      top: 10px;
       font-size: 12px;
+      cursor: pointer;
       // display: flex;
       // flex-direction: column;
-      p {
-        margin: 5px;
-      }
+      // p {
+      //   margin: 5px;
+      // }
     }
   }
   .mint-header {

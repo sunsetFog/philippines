@@ -3,8 +3,8 @@
     <otherheader title="团队报表"></otherheader>
     <div class="card">
         <mt-cell :title="name">
-          <img slot="icon" src="../../../static/user.png" width="30" height="30">
-          <span @click="back">返回</span>
+          <img slot="icon" src="../../../static/user.png" style="width: 1.875rem;height: 1.875rem">
+          <span class="all_palm" @click="back">返回</span>
       </mt-cell>
     </div>
 
@@ -12,33 +12,36 @@
       <mt-cell title='税收'>
       </mt-cell>
       <mt-cell title='团队总流水'>
-        <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark" @click="show1 = !show1">
+        <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark all_palm" @click="show1 = !show1">
         <mt-popup
           v-model="show1"
           popup-transition='popup-fade'
         >
-        团队总流水：团队所有玩家提供的流水总额（直属玩家流水+下级团队玩家流水）
+        <div style="text-align: center;line-height: 1.875rem;">团队总流水</div>
+        <div style="line-height: 1.25rem;">团队所有玩家提供的流水总额（直属玩家流水+下级团队玩家流水）</div>
         </mt-popup>
         <span>{{team_flow}}</span>
       </mt-cell>
        <mt-cell title="团队税收收益">
-          <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark" @click="show2 = !show2">
+          <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark all_palm" @click="show2 = !show2">
         <mt-popup
           v-model="show2"
           popup-transition='popup-fade'
         >
-        团队税收收益：团队的税收收益总额（团队总流水*计税税率*团队最高代理分红额度）
+        <div style="text-align: center;line-height: 1.875rem;">团队税收收益</div>
+        <div style="line-height: 1.25rem;">团队的税收收益总额（团队总流水*计税税率*团队最高代理分红额度）</div>
         </mt-popup>
         <span>{{team_tax}}</span>
       </mt-cell>
       
       <mt-cell title="个人税收收益">
-        <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark" @click="show3 = !show3">
+        <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark all_palm" @click="show3 = !show3">
         <mt-popup
           v-model="show3"
           popup-transition='popup-fade'
         >
-        个人税收收益：团队税收收益总额-所有直属代理团队税收收益总额
+        <div style="text-align: center;line-height: 1.875rem;">个人税收收益</div>
+        <div style="line-height: 1.25rem;">团队税收收益总额-所有直属代理团队税收收益总额</div>
         </mt-popup>
         <span>{{self_tax}}</span>
       </mt-cell>
@@ -80,9 +83,9 @@
         </mt-cell>
       </div>
     </div>
-
-  <mt-button type='primary' size='large' @click="close">关闭</mt-button>
-
+<div class="card">
+  <mt-button type='primary' size='large' class="all_palm" @click="close">关闭</mt-button>
+</div>
   </div>
 </template>
 
@@ -155,24 +158,8 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .dayinfo .card {
-    margin: 10px;
-    border-top: 1px solid #2e163d;
-    border-bottom: 1px solid #2e163d;
-    border-left: 2px solid #2e163d;
-    border-right: 2px solid #2e163d;
-    border-radius: 12px;
-    position: relative;
-    .mint-popup {
-      position: absolute;
-      width: 80%;
-    left: 50%;
-    top: 120%;
-    background: #26a2ff;
-    color: white;
-        padding: 2% 8%;
-    font-size: 12px;
-    }
+  .dayinfo{
+
     .v-modal {
     background: white;
     opacity:0;

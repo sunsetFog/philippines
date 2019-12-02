@@ -13,13 +13,10 @@
     <style>
         html, body {
             -ms-touch-action: none;
-            background: #888888;
             padding: 0;
             border: 0;
             margin: 0;
-            height: 100%;
-            background:url("resource/assets/hall_bg.jpg?v=201706131435")no-repeat;
-            background-size: 100% 100%;
+            min-width: 1200px;
         }
         #preloading {
             width: 100%;
@@ -109,7 +106,7 @@
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-    <div style="position: relative;top: 120px;" class="egret-player"
+    <div style="position: relative;top: 120px;" class="egret-player" id="zuanshiyule"
          data-entry-class="Main"
          data-orientation="landscape"
          data-scale-mode="fixedWidth"
@@ -129,7 +126,7 @@
     var errorCodeGame = {};
     var refreshWeb = {state: ''};
     var catchGame = {mice: ''};
-    var zoomGames = document.getElementsByClassName('egret-player')[0];
+    var zoomGames = document.getElementById('zuanshiyule');
     function purpleMagic(parameter){
         if(parameter==2){
             zoomGame(630);
@@ -207,7 +204,7 @@
     }
     //跑马灯
     function web_broadcast(data){
-        //console.log("web_broadcast",data);
+        // console.log("web_broadcast",data);
         errorCodeGame.move = data.mTxtMsg;
     }
     // 游戏断开连接

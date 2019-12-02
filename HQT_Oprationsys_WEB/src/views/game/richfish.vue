@@ -56,7 +56,7 @@
       <tbody>
         <tr class="el-table__row">
             <td crowspan="1" colspan="1" style="width:10%;background: #bdd7ee;color: black;font-weight: 600;">
-              <div class="cell">新手场</div>
+              <div class="cell">富豪场</div>
             </td>
             <td crowspan="1" colspan="1">
               <div class="cell">

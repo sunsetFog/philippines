@@ -28,10 +28,26 @@
               </el-select>
             </el-form-item>
           </el-col>
-
+           <el-col :span="6">
+            <el-form-item label="排序">
+              <el-select v-model="formInline.status2" filterable clearable placeholder=""> 
+              <el-option
+                v-for="item in orderlist"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="6">
             <el-form-item label="玩家账号" label-width="100px">
               <el-input v-model="formInline.user" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="订单号" label-width="100px">
+              <el-input v-model="formInline.orderM" clearable></el-input>
             </el-form-item>
           </el-col>
         </el-form>
@@ -121,6 +137,7 @@
       style="width: 100%"
     >
       <el-table-column prop="order_no" label="订单号"  width='200'></el-table-column>
+      <el-table-column prop="user_ip" label="IP"  width='100'></el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
           <el-button @click="edit(scope.row)" type="text" size="small" v-if="scope.row.audit_status==='0' && withdrawpostupdateauditstatus">{{scope.row.audit_status | status}}</el-button>
@@ -180,6 +197,8 @@
         <template slot-scope="scope">
           <el-button @click="pass(scope.row)" type="text" size="small" v-if="scope.row.audit_status==='2' && withdrawpostupdateauditstatus && scope.row.status.indexOf(name) > 0">通过</el-button>
           <el-button @click="refused(scope.row)" type="text" size="small" v-if="scope.row.audit_status==='2' && withdrawpostupdateauditstatus && scope.row.status.indexOf(name) > 0" class="red">拒绝</el-button>
+           <el-button @click="pass2(scope.row)" type="text" size="small" v-if="scope.row.audit_status==='4' && withdrawpostupdateconfirmstatus ">通过</el-button>
+           <el-button @click="refused2(scope.row)" type="text" size="small" v-if="scope.row.audit_status==='4' && withdrawpostupdateconfirmstatus "  class="red">拒绝</el-button>
           <el-button @click="view(scope.row)" type="text" size="small" v-if="scope.row.audit_status==='1' || scope.row.audit_status==='3' && withdrawpostgetinfo">查看</el-button>
         </template>
       </el-table-column>
@@ -194,7 +213,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
-          :page-sizes="[50,100,200]"
+          :page-sizes="[20,50,200]"
           :page-size="pagesize"
           background
           layout="sizes, prev, pager, next, jumper"
@@ -231,7 +250,8 @@
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="sure(form)">确 定</el-button>
+      <el-button v-if="onecesure" type="primary" @click="sure(form)">确 定</el-button>
+      <el-button v-if="tiwcsure" type="primary" @click="sure2(form)">确 定</el-button>
     </div>
 
   </el-dialog>
@@ -459,8 +479,14 @@ export default {
         type: '',
         time: [],
         user: '',
-        order: '30'
+        order: '30',
+        status2:'1',
+        orderM:'',
       },
+       orderlist:[
+        {name:'顺序',value:'1'},
+        {name:'倒叙',value:'2'},
+      ],
       currentPage: 1,
       tableData: [],
       typelist: [
@@ -471,10 +497,11 @@ export default {
         { name: "审核中", type: "2" },
         { name: "通过", type: "1" },
         { name: "拒绝", type: "3" },
+        { name: "二次审核", type: "4" },
       ],
       orglist: [],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       id: "",
       dialogFormVisible: false,
       form: {
@@ -495,7 +522,9 @@ export default {
       dialogFormVisible2: false,
       form2: {
 
-      }
+      },
+      onecesure:false,
+      tiwcsure:false,
     };
   },
   created() {
@@ -507,6 +536,7 @@ export default {
       that.pagesize = this.applywithdrawal.pagesize;
       that.formInline.status = this.applywithdrawal.status;
       that.formInline.user = this.applywithdrawal.user;
+       that.formInline.orderM = this.applywithdrawal.orderM;
       that.formInline.time = this.applywithdrawal.time;
       getlist(this);
     }
@@ -524,7 +554,8 @@ export default {
       'withdrawpostupdateauditstatus',
       'withdrawpostgetinfo',
       'withdrawpostexceptionlist',
-      'name'
+      'name',
+      'withdrawpostupdateconfirmstatus'
     ])
   },
   watch: {
@@ -555,6 +586,9 @@ export default {
       if (val === "3") {
         return "审核拒绝";
       }
+       if (val === "4") {
+        return "二次审核";
+      }
     },
     src(val) {
       if (val === "1") {
@@ -582,6 +616,7 @@ export default {
         type: that.formInline.type,
         status: that.formInline.status,
         user: that.formInline.user,
+        order_no:that.formInline.orderM,
         currentPage: that.currentPage,
         pagesize: that.pagesize,
         time: that.formInline.time
@@ -666,6 +701,7 @@ export default {
         audit_status: that.formInline.status,
         agent_org_id: that.formInline.type,
         user_account: that.formInline.user,
+        order_no:that.formInline.orderM,
         date_from: start,
         date_to: end,
         pageno: that.currentPage,
@@ -694,6 +730,8 @@ export default {
       }
     },
     reset () {
+      this.onecesure = false
+      this.tiwcsure = false
       this.dialogFormVisible = false
       this.$refs.form.resetFields()
     },
@@ -703,6 +741,33 @@ export default {
         if (valid) {
             request({
             url: that.public.url + '/backend/withdrawpost/updateauditstatus',
+            method: 'post',
+            data: {
+                  id: this.id,
+                  status: 3,
+                  audit_reject_cause: this.form.name
+            }
+          }).then(res => {
+            that.$message({
+              type: 'success',
+              message: res.message
+            });
+            that.dialogFormVisible = false
+            that.$refs.form.resetFields()
+            getlist(that)
+          }).catch(error => {
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    sure2 () {
+       let that = this
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+            request({
+            url: that.public.url + '/backend/withdrawpost/updateconfirmstatus',
             method: 'post',
             data: {
                   id: this.id,
@@ -784,7 +849,73 @@ export default {
         });
       });
     },
+     pass2 (row) {
+      let that = this
+      this.$confirm('此操作将通过该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        request({
+            url: that.public.url + '/backend/withdrawpost/updateconfirmstatus',
+            method: 'post',
+            data: {
+                id: row.id,
+                status: 1
+            }
+          }).then(res => {
+             that.$message({
+              type: 'success',
+              message: res.message
+            });
+           getlist(that)
+          }).catch(error => {
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        });
+      });
+    },
+    //   refused2 (row) {
+    //   let that = this
+    //   this.$confirm('此操作将通过该数据, 是否继续?', '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning',
+    //     center: true
+    //   }).then(() => {
+    //     request({
+    //         url: that.public.url + '/backend/withdrawpost/updateconfirmstatus',
+    //         method: 'post',
+    //         data: {
+    //             id: row.id,
+    //             status: 3,
+    //         }
+    //       }).then(res => {
+    //          that.$message({
+    //           type: 'success',
+    //           message: res.message
+    //         });
+    //        getlist(that)
+    //       }).catch(error => {
+    //       })
+    //   }).catch(() => {
+    //     this.$message({
+    //       type: 'info',
+    //       message: '已取消'
+    //     });
+    //   });
+    // },
     refused (row) {
+      this.onecesure = true
+      this.id = row.id
+      this.dialogFormVisible = true
+    },
+     refused2 (row) {
+       this.tiwcsure = true
       this.id = row.id
       this.dialogFormVisible = true
     },
@@ -837,10 +968,12 @@ function getlist(that) {
       audit_status: that.formInline.status,
       agent_org_id: that.formInline.type,
       user_account: that.formInline.user,
+      order_no:that.formInline.orderM,
       date_from: start,
       date_to: end,
       pageno: that.currentPage,
-      pagerows: that.pagesize
+      pagerows: that.pagesize,
+      orderby:that.formInline.status2,
     }
   })
     .then(res => {
@@ -889,13 +1022,6 @@ function parseTime(time) {
   margin-right: 10px;
   margin-bottom: 20px;
   margin-top: 20px;
-}
-.line {
-  border-bottom: 1px solid #666;
-  margin-bottom: 20px;
-  font-size: 21px;
-  font-weight: 700;
-  margin-right: -126px;
 }
 .floatright {
   float: right;

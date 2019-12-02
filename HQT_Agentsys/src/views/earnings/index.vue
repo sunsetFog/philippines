@@ -5,12 +5,13 @@
 
     <div class="card">
       <mt-cell title="我的收益">
-          <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark1" @click="show = !show">
+          <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark1 all_palm" @click="show = !show">
           <mt-popup
           v-model="show"
           popup-transition='popup-fade'
         >
-        我的收益：我的税收收益总和
+        <div style="text-align: center;line-height: 1.875rem;">我的收益</div>
+        <div style="line-height: 1.25rem;">我的税收收益总和</div>
         </mt-popup>
       </mt-cell>
       <div style="display: flex">
@@ -25,12 +26,13 @@
 
     <div class="card">
       <mt-cell title="团队流水">
-          <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark1" @click="show1 = !show1">
+          <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark1 all_palm" @click="show1 = !show1">
           <mt-popup
           v-model="show1"
           popup-transition='popup-fade'
         >
-        团队流水：团队所有玩家提供的流水总额（直属玩家流水+下级团队玩家流水）
+        <div style="text-align: center;line-height: 1.875rem;">团队流水</div>
+        <div style="line-height: 1.25rem;">团队所有玩家提供的流水总额（直属玩家流水+下级团队玩家流水）</div>
         </mt-popup>
       </mt-cell>
       <div style="display: flex">
@@ -45,12 +47,13 @@
 
      <div class="card">
       <mt-cell title="下级流水">
-          <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark1" @click="show2 = !show2">
+          <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark1 all_palm" @click="show2 = !show2">
           <mt-popup
           v-model="show2"
           popup-transition='popup-fade'
         >
-        下级流水：团队流水-直属流水
+        <div style="text-align: center;line-height: 1.875rem;">下级流水</div>
+        <div style="line-height: 1.25rem;">团队流水-直属流水</div>
         </mt-popup>
       </mt-cell>
       <div style="display: flex">
@@ -65,12 +68,13 @@
 
      <div class="card">
       <mt-cell title="直属流水">
-          <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark1" @click="show3 = !show3">
+          <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark1 all_palm" @click="show3 = !show3">
           <mt-popup
           v-model="show3"
           popup-transition='popup-fade'
         >
-        直属流水：直属玩家提供的流水总额
+        <div style="text-align: center;line-height: 1.875rem;">直属流水</div>
+        <div style="line-height: 1.25rem;">直属玩家提供的流水总额</div>
         </mt-popup>
       </mt-cell>
       <div style="display: flex">
@@ -85,12 +89,13 @@
 
      <div class="card">
       <mt-cell title="团队税收">
-          <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark1"  @click="show4 = !show4">
+          <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark1 all_palm"  @click="show4 = !show4">
           <mt-popup
           v-model="show4"
           popup-transition='popup-fade'
         >
-        团队税收：团队的税收收益总额（团队总流水*计税税收*团队最高代理分红额度）
+        <div style="text-align: center;line-height: 1.875rem;">团队税收</div>
+        <div style="line-height: 1.25rem;">团队的税收收益总额（团队总流水*计税税收*团队最高代理分红额度）</div>
         </mt-popup>
       </mt-cell>
       <div style="display: flex">
@@ -105,12 +110,13 @@
 
      <div class="card">
       <mt-cell title="下级税收">
-          <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark1" @click="show5 = !show5">
+          <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark1 all_palm" @click="show5 = !show5">
           <mt-popup
           v-model="show5"
           popup-transition='popup-fade'
         >
-        下级税收：团队税收-直属税收
+        <div style="text-align: center;line-height: 1.875rem;">下级税收</div>
+        <div style="line-height: 1.25rem;">团队税收-直属税收</div>
         </mt-popup>
       </mt-cell>
       <div style="display: flex">
@@ -125,12 +131,13 @@
 
      <div class="card">
       <mt-cell title="直属税收">
-          <img slot="icon" src="../../../static/mark.png" width="20" height="20" class="mark1"  @click="show6 = !show6">
+          <img slot="icon" src="../../../static/mark.png" style="width: 1.25rem;height: 1.25rem" class="mark1 all_palm"  @click="show6 = !show6">
           <mt-popup
           v-model="show6"
           popup-transition='popup-fade'
         >
-        直属税收：直属流水*计税税率*自身代理分红比例
+        <div style="text-align: center;line-height: 1.875rem;">直属税收</div>
+        <div style="line-height: 1.25rem;">直属流水*计税税率*自身代理分红比例</div>
         </mt-popup>
       </mt-cell>
       <div style="display: flex">
@@ -196,15 +203,6 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .card {
-    margin: 10px;
-    border-top: 1px solid #2e163d;
-    border-bottom: 1px solid #2e163d;
-    border-left: 2px solid #2e163d;
-    border-right: 2px solid #2e163d;
-    border-radius: 12px;
-    position: relative;
-  }
   .mark1 {
     position: absolute;
     left: 80px;
@@ -216,16 +214,7 @@ export default {
     border-right: 1px solid #2e163d;
     text-align: center;
   }
-  .earnings .mint-popup {
-      position: absolute;
-      width: 80%;
-    left: 50%;
-    top: 120%;
-    background: #26a2ff;
-    color: white;
-        padding: 2% 8%;
-    font-size: 12px;
-    }
+
     .earnings .v-modal {
     background: white;
     opacity:0;

@@ -38,7 +38,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" icon="el-icon-search" @click="query" v-if="businessdealdayreportgetlist">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="query" v-if="businessdealdayreportgetlist" :loading='loading'>查询</el-button>
           </el-col>
           <el-col :span="2">
             <el-button type="primary" icon="el-icon-search" @click="excel" v-if="businessdealdaygetlistdownload">导出excel</el-button>
@@ -60,7 +60,7 @@
     </div>
     </div>
 
-    <el-table
+    <!-- <el-table
     :data="tableData"
     :row-class-name="tableclassname"
     :cell-class-name='cell'
@@ -151,9 +151,120 @@
       prop="cash_rate"     
       label="现金流利润率">
     </el-table-column>
-    
-    
+  </el-table> -->
+    <el-table
+    :data="tableData"
+    :row-class-name="tableclassname"
+    :cell-class-name='cell'
+    border
+    style="width: 100%">
+    <el-table-column
+      prop="adate"
+      width="100"
+      label="时间">
+    </el-table-column>
+     <el-table-column
+      prop="user_logined_num"
+      label="登录用户">
+    </el-table-column>
+    <el-table-column
+      prop="user_active_num"      
+      label="活跃用户">
+    </el-table-column>
+    <el-table-column
+      prop="user_recharge_num"     
+      label="充值用户">
+    </el-table-column>
+    <el-table-column
+      prop="user_recharge_money"  
+      label="充值金额">
+    </el-table-column>
+    <el-table-column
+      prop="user_withdraw_num"
+      label="提款人数">
+    </el-table-column>
+    <el-table-column
+      prop="user_withdraw_money"
+      label="提款金额">
+    </el-table-column>
+    <el-table-column
+      prop="agent_withdraw_num"
+      label="代理提款人数">
+    </el-table-column>
+    <el-table-column
+      prop="agent_withdraw_money"     
+      label="代理提款金额">
+    </el-table-column>
+    <!-- k -->
+    <el-table-column
+      prop="betnum"      
+      label="投注人数">
+    </el-table-column>
+    <el-table-column
+      prop="flow_ptop_num"      
+      label="人人类投注人数">
+    </el-table-column>
+    <el-table-column
+      prop="flow_ptom_num"      
+      label="人机类投注人数">
+    </el-table-column>
+    <el-table-column
+      prop="flow_ptop"     
+      label="人人类流水">
+    </el-table-column>
+    <el-table-column
+      prop="flow_ptom"     
+      label="人机类流水">
+    </el-table-column>
+    <el-table-column
+      prop="bet_ptom"     
+      label="人机类投注额">
+    </el-table-column>
+    <el-table-column
+      prop="ptop_tax"     
+      label="人人类代理税收">
+    </el-table-column>
+    <el-table-column
+      prop="ptom_tax"     
+      label="人机类代理税收">
+    </el-table-column>
+    <el-table-column
+      prop="ptop_gprofit"     
+      label="人人类毛利"
+      >
+    </el-table-column>
+    <el-table-column
+      prop="ptom_gprofit"     
+      label="人机类毛利">
+    </el-table-column>
+    <el-table-column
+      prop="gprofit"     
+      label="平台毛利">
+    </el-table-column>
+    <el-table-column
+      prop="profit"     
+      label="平台利润率">
+    </el-table-column>
+    <el-table-column
+      prop="chongtoubi"     
+      label="充投比">
+    </el-table-column>
+    <!-- k -->
+    <el-table-column
+      prop="chwi_broker_money"
+      label="手续费">
+    </el-table-column>
+    <el-table-column
+      prop="cprofit"
+      label="平台净利">
+    </el-table-column>
+    <el-table-column
+      prop="lirunlv"     
+      label="现金流利润率">
+    </el-table-column>
   </el-table>
+
+
 
 <div class="pagingbox">
   <div class="paging">
@@ -161,7 +272,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-sizes="[50,100,200]"
+      :page-sizes="[20,50,200]"
       :page-size="pagesize"
       background
       layout="sizes, prev, pager, next, jumper"
@@ -191,10 +302,11 @@ export default {
       tableData: [
       ],
       total: 0,
-      pagesize: 50,
+      pagesize: 20,
       havetime: false,
       havetime1: false,
       statuslist: [],
+      loading: false
     }
   },
   created() {
@@ -273,42 +385,27 @@ export default {
     })
     },
     cell ({row, column, rowIndex, columnIndex}) {
-      // if (columnIndex === 4 && row.user_recharge_money*1 < 0) {
-      //   return 'red'
-      // }
-      // if (columnIndex === 6 && row.user_withdraw_money*1 < 0) {
-      //   return 'red'
-      // }
-      // if (columnIndex === 8 && row.agent_withdraw_money*1 < 0) {
-      //   return 'red'
-      // }
-      // if (columnIndex === 9 && row.flow_money*1 < 0) {
-      //   return 'red'
-      // }
-      // if (columnIndex === 10 && row.user_lose_money*1 < 0) {
-      //   return 'red'
-      // }
-      // if (columnIndex === 11 && row.user_win_money*1 < 0) {
-      //   return 'red'
-      // }
-      // if (columnIndex === 12 && row.tax*1 < 0) {
-      //   return 'red'
-      // }
-      //  if (columnIndex === 14 && row.gross_profit*1 < 0) {
-      //   return 'red'
-      // }
-      //  if (columnIndex === 15 && row.activity_grant_money*1 < 0) {
-      //   return 'red'
-      // }
-      //  if (columnIndex === 16 && row.agent_reward_money*1 < 0) {
-      //   return 'red'
-      // }
-      //  if (columnIndex === 17 && row.agent_bonus_money*1 < 0) {
-      //   return 'red'
-      // }
-      //  if (columnIndex === 18 && row.rewith_broker_rate*1 < 0) {
-      //   return 'red'
-      // }
+      if (columnIndex === 17 && row.ptop_gprofit*1 < 0) {//人人类毛利
+        return 'red'
+      }else if(columnIndex === 17 && row.ptop_gprofit*1 > 0){
+        return 'green'
+      }
+       if (columnIndex === 18 && row.ptom_gprofit*1 < 0) {//人机类毛利
+        return 'red'
+      }else if(columnIndex === 18 && row.ptom_gprofit*1 > 0){
+        return 'green'
+      }
+      
+       if (columnIndex === 19 && parseFloat(row.gprofit) < 0) {//平台毛利
+        return 'red'
+      }else if(columnIndex === 19 && parseFloat(row.gprofit) > 0){
+        return 'green'
+      }
+       if (columnIndex === 20 && parseInt(row.profit)*1 < 0) {//平台利润率
+        return 'red'
+      }else if(columnIndex === 20 && parseInt(row.profit)*1 > 0){
+        return 'green'
+      }
     },
     tableclassname ({row, rowIndex}) {
       // if(row.gross_profit * 1 < (row.flow_money * 1 * 0.05) || row.net_profit * 1 < 0) {
@@ -369,6 +466,7 @@ function getlist (that, starttime, endtime, currentPage, pagesize) {
         return
       }
     }
+    that.loading = true
   request({
     url: that.public.url + '/backend/businessdealdayreport/getlist',
     method: 'post',
@@ -380,6 +478,7 @@ function getlist (that, starttime, endtime, currentPage, pagesize) {
       pagerows: pagesize
     }
   }).then(res => {
+    that.loading = false
     Message({
         message: res.message,
         type: 'success'

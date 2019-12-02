@@ -43,6 +43,7 @@ export default new Router({
     { path: '/line', name: 'Line', meta: { title: '线路检测'}, component: resolve => require(['@/pages/login/line'], resolve) },
     { path: '/register', name: 'Register', meta: { title: '注册'}, component: resolve => require(['@/pages/register/register'], resolve) },
     { path: '/game', name: 'game', meta: { title: '首页'}, component: resolve => require(['@/pages/game/game.vue'], resolve) },
-    { path: '/neutralgear', name: 'neutralGear', meta: { title: '加载中'}, component: resolve => require(['@/pages/neutralGear/neutralGear'], resolve) }
+    { path: '/neutralgear', name: 'neutralGear', meta: { title: '加载中'}, component: resolve => require(['@/pages/neutralGear/neutralGear'], resolve) },
+    { path: '/download', name: 'download', meta: { title: '下载中心'}, component: resolve => require(['@/pages/download/download'], resolve) }
   ]
 })

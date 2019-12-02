@@ -2,20 +2,20 @@
   <div class="container">
     <!-- <otherheader title="银行卡管理"></otherheader> -->
     <mt-header title="银行卡管理">
-        <mt-button slot="left" @click="back">
+        <mt-button slot="left" class="all_palm" @click="back">
         <i class="mintui mintui-back"></i>
         </mt-button>
 
-        <mt-button slot="right"   @click="add">
-        <img src="../../../static/jia.png" style="width:30px;height:30px;">
+        <mt-button slot="right" class="all_palm" @click="add">
+        <img src="../../../static/jia.png" class="all_palm" style="width: 1.875rem;height: 1.875rem">
         </mt-button>
     </mt-header>
 
     <div class="card" v-for="(item, index) in list" :key="index">
       <mt-cell title="银行卡" style="background:#874488;color:white;">
-        <img src="../../../static/moren.png" style="width:30px;height:30px" @click="change(item.bank_id)" v-if="id!=item.bank_id">
-        <img src="../../../static/moren1.png" style="width:30px;height:30px" @click="change(item.bank_id)" v-if="id===item.bank_id">
-        <span :class="id===item.bank_id?'morencard': 'white'" @click="change(item.bank_id)">默认</span>
+        <img src="../../../static/moren.png" class="all_palm" style="width: 1.875rem;height: 1.875rem" @click="change(item.bank_id)" v-if="id!=item.bank_id">
+        <img src="../../../static/moren1.png" class="all_palm" style="width: 1.875rem;height: 1.875rem" @click="change(item.bank_id)" v-if="id===item.bank_id">
+        <span :class="id===item.bank_id?'morencard': 'white'" style="cursor: pointer;" @click="change(item.bank_id)">默认</span>
       </mt-cell>
         <mt-cell title="银行卡号" :value='item.cardno'>
       </mt-cell>
@@ -28,11 +28,11 @@
 
      <div class="card">
           
-         <mt-button type="primary" size="large" @click="add">添加银行卡</mt-button>
+         <mt-button type="primary" size="large" class="all_palm" @click="add">添加银行卡</mt-button>
      </div>
      <div class="card">
           
-         <mt-button type="primary" size="large" @click="del">删除银行卡</mt-button>
+         <mt-button type="primary" size="large" class="all_palm" @click="del">删除银行卡</mt-button>
      </div>
 
 
@@ -112,15 +112,6 @@ function getlist (that) {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .card {
-    margin: 10px;
-    border-top: 1px solid #2e163d;
-    border-bottom: 1px solid #2e163d;
-    border-left: 2px solid #2e163d;
-    border-right: 2px solid #2e163d;
-    border-radius: 12px;
-    position: relative;
-  }
   .mint-header {
   background-color: #513663!important;
   height: 60px!important;
